@@ -51,6 +51,7 @@ Also check for multiple templates in `.github/PULL_REQUEST_TEMPLATE/` directory.
 - Run `gh pr create --draft`
 - Title: use conventional commit format `type(scope): description` (in English)
 - Body: use the PR template if found (step 2), otherwise use default format
+- **For non-trivial PRs** (3+ files with meaningful changes, multiple modules, new abstractions, or non-obvious motivation), delegate body authoring to the `pr-description` skill so the description covers purpose, design, and the design→code mapping. The template/default-format rules above still apply — `pr-description` shapes the *content of each section*.
 
 ### 5. Report Result
 

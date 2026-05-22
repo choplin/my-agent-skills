@@ -6,12 +6,16 @@ Git helper skills for Claude Code.
 
 | Skill | Description |
 |-------|-------------|
+| `branch-commit` | Move uncommitted changes to a new branch and commit them |
 | `draft-pr` | Push and create a draft PR |
+| `pr-description` | Write a review-friendly PR description (purpose, design, design→code map) |
 | `rebase-onto-rewritten` | Rebase onto force-pushed/squashed branches |
 
 ## When Skills Activate
 
-- **draft-pr**: "draft PRを作って", "draft PRを作成", "ドラフトPRを開いて"
+- **branch-commit**: "branch-commit", "move changes to a new branch", "commit on a new branch"
+- **draft-pr**: "create a draft PR", "open a draft PR", "draft pull request"
+- **pr-description**: "write a PR description", "draft the PR body", or delegated from `draft-pr` for non-trivial PRs
 - **rebase-onto-rewritten**: "rebase onto rewritten", "base branch was force pushed", "squash merged base"
 
 ## Use Cases
