@@ -21,7 +21,7 @@ This has happened multiple times. This skill ensures discussion state is properl
 
 ## Storage
 
-- **Location**: `.claude/discussions/`
+- **Location**: `.claude/continuity/`
 - **Filename**: `yyyymmdd-{topic}.md`
 - **Note**: Temporary document, not committed to repository
 
@@ -53,7 +53,7 @@ Clarify → Draft → Review → Approval
 **Why**: Preserve discussion state in a retrievable format.
 
 **How**:
-1. Create file at `.claude/discussions/yyyymmdd-{topic}.md`
+1. Create file at `.claude/continuity/yyyymmdd-{topic}.md`
 2. Follow the format specification below
 3. Ensure:
    - All decided points include rationale
@@ -170,7 +170,7 @@ created-by: continue-discussion skill
 Provide user with a copy-paste prompt for the next session:
 
 ```
-Read .claude/discussions/{filename}.md and continue the discussion.
+Read .claude/continuity/{filename}.md and continue the discussion.
 
 Steps:
 1. Review Goal, Discussion Points, and Current State
