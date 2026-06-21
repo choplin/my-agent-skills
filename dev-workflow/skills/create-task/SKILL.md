@@ -2,6 +2,7 @@
 name: create-task
 description: Internal skill called by kickoff after Task assessment. Creates a task-level plan with full Why/What context for potential Story promotion. Should NOT be invoked directly by users.
 allowed-tools: Read, Write, Glob, Grep
+user-invocable: false
 ---
 
 # Create Task Plan
@@ -109,6 +110,10 @@ If implementation reveals unexpected complexity, promote to Story:
 
 Call ExitPlanMode to request user approval of the plan.
 
+## Machine State (state.json)
+
+A Task does not get a `.claude/dev-workflow/task/{task-dir}/` directory until review time. During implementation the Claude Code plan file is the source of truth; the script falls back to it. The Task's `state.json` is created together with `review.md` when self-review runs (see `dev-workflow:self-review` and `references/state-schema.md`). No `state.json` is written by this skill.
+
 ## Critical: No AI Filling
 
 **Every piece of information in Why/What sections must come from the kickoff interview.**
@@ -152,18 +157,9 @@ User can resume by loading the plan and continuing implementation.
 
 ### Plan Mode During Task Implementation
 
-If EnterPlanMode is used during task implementation, include a `## dev-workflow Context` block in the plan file (see `references/plan-mode-context.md` for full template):
+If EnterPlanMode is used during task implementation, add a `## dev-workflow Context` block to the plan file. Use the template in `references/plan-mode-context.md` with these values:
 
-```markdown
-## dev-workflow Context
-**Active skill**: create-task (Implementation)
-**Phase**: Implementation
-**Work level**: Task
-**Documents**:
-- Plan: (Claude Code plan file)
-
-### After This Plan Completes
-Run tests to confirm no regressions.
-Invoke `dev-workflow:self-review` (it will verify Completion Criteria and code quality).
-After review completes, commit changes.
-```
+- **Active skill**: create-task (Implementation)
+- **Work level**: Task
+- **Documents**: Plan (Claude Code plan file)
+- **After This Plan Completes**: Run tests to confirm no regressions; invoke `dev-workflow:self-review` (verifies Completion Criteria and code quality); after review completes, commit changes.

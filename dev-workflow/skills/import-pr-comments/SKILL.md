@@ -34,10 +34,9 @@ When using draft PRs for bot reviews (e.g., Copilot), review comments arrive on 
      - Self-Review Results: Use SKIPPED row (`| - | Self-review | SKIPPED | Self-review was not performed |`)
      - Set Phase to `REVIEWING`
 
-2. **Check Phase**: Read review.md and check the Phase value.
+2. **Check Phase**: Read review.md and check the Phase value (normalize legacy values per `references/state-schema.md` — e.g. `COLLECTING FEEDBACK` → `REVIEWING`).
    - `REVIEWING`: proceed normally
    - Any other phase: warn the user ("review.md Phase is '{phase}'. Import is intended for REVIEWING phase. Continue anyway?") and wait for confirmation
-   - **Backward compatibility**: Treat `COLLECTING FEEDBACK` as `REVIEWING`
 
 3. **Find open PR**: Run `gh pr view --json number,url,state` for the current branch.
    - If no PR or state is not "OPEN"/"DRAFT": stop and report "No open PR found for the current branch."

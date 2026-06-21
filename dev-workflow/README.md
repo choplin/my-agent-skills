@@ -29,6 +29,14 @@ A plugin that systematizes development workflows with Claude Code. Supports work
 | `user-review` | Facilitate structured user review with appropriate response patterns |
 | `post-task` | Capture knowledge after task completion |
 
+## Dependencies
+
+This plugin depends on the **`discuss-toolkit`** plugin:
+
+- `kickoff` and `user-review` use `discuss-toolkit:dig` as a base skill to clarify ambiguous intent before proceeding.
+
+Install `discuss-toolkit` alongside this plugin. If it is not available, `kickoff` (the entry point) and the Complex-feedback path of `user-review` cannot run their interview step.
+
 ## Templates
 
 | File | Description |

@@ -15,14 +15,15 @@ Display a summary of all active Epics and Stories under `.claude/dev-workflow/`.
 
 ## Process
 
-### Phase 1: Document Discovery
+### Phase 1: Run the State Evaluator
 
-Scan for all existing work documents:
+```
+python3 dev-workflow/scripts/workflow-state.py
+```
 
-1. **Epics**: Glob for `.claude/dev-workflow/epic/*/epic.md`
-2. **Stories**: Glob for `.claude/dev-workflow/story/*/spec.md`
+This returns all work units (epics, stories, **and tasks**) with their derived `state`, `progress`, `review`, and `level`. The state-category and progress rules live in `references/state-schema.md` and the script — do not recompute them.
 
-If no documents are found at all, output:
+If `work_units` is empty, output:
 
 ```
 Active な作業はありません。
@@ -31,54 +32,22 @@ Active な作業はありません。
 
 Then stop.
 
-### Phase 2: Status Extraction
+### Phase 2: Map state to a display label
 
-#### Epic Status
+Use each unit's `state` (and `progress` for in_progress) to pick a human label:
 
-For each `epic.md` found:
+| `state` | Display status |
+|---------|----------------|
+| `review_complete` | Done |
+| `in_review` | Review: In Progress |
+| `potentially_complete` | Implementation Complete |
+| `in_progress` | In Progress ({done}/{total} steps) |
+| `planned` | Planned |
+| `spec_only` | Spec Created |
+| `epic_next_story` | {Done}/{Total} Stories Done (from epic.md Stories table) |
+| `blocked` | Blocked |
 
-1. Read the file
-2. Find the `## Stories` section
-3. Parse the Stories table rows
-4. Count rows where Status column is `Done` vs total rows
-5. Record: `{Done count}/{Total count} Stories Done`
-
-#### Story Status
-
-For each story directory found (containing `spec.md`):
-
-1. Check which files exist in the directory:
-   - `spec.md` (always present — this is how we found the story)
-   - `plan.md`
-   - `review.md`
-
-2. Determine status based on file presence and content:
-
-| Priority | Condition | Status |
-|----------|-----------|--------|
-| 1 | `review.md` exists, Phase = `LGTM` | Done |
-| 2 | `review.md` exists, Phase = `REVIEWING` | Review: In Progress |
-| 3 | `plan.md` exists, all Progress items checked (`[x]`) | Implementation Complete |
-| 4 | `plan.md` exists, some Progress items checked | In Progress ({done}/{total} steps) |
-| 5 | `plan.md` exists, no Progress items checked | Planned |
-| 6 | `spec.md` only | Spec Created |
-
-**How to check review.md Phase**:
-- Read `review.md` and find the line matching `- **Phase**: {value}`
-- Extract the value (REVIEWING, LGTM, or legacy values: COLLECTING FEEDBACK, READY FOR IMPLEMENTATION, IMPLEMENTING — all non-LGTM values map to REVIEWING)
-
-**How to check plan.md Progress**:
-- Read `plan.md` and find the `## Progress` section
-- Count lines matching `- [x]` (done) and `- [ ]` (pending)
-- Total = done + pending
-- If total is 0, treat as Planned
-
-#### Epic-Story Association
-
-For each story, determine if it belongs to an epic:
-- Read each `epic.md` Stories table
-- If a story name appears in an epic's Stories table, associate it with that epic
-- If a story does not appear in any epic, it is independent (Epic = `-`)
+**Epic-Story association**: For each story/task, read each `epic.md` Stories table; if the unit name appears there, associate it with that epic, else independent (Epic = `-`).
 
 ### Phase 3: Display
 
@@ -91,24 +60,21 @@ Output the status overview in this format:
 |------|--------|
 | {epic-name} | {done}/{total} Stories Done |
 
-## Stories
+## Stories & Tasks
 
-| Story | Epic | Status |
-|-------|------|--------|
-| {story-name} | {epic-name or -} | {status} |
+| Work Unit | Level | Epic | Status |
+|-----------|-------|------|--------|
+| {unit-name} | Story/Task | {epic-name or -} | {status} |
 ```
 
 **Display rules**:
-- Sort Epics alphabetically by name
-- Sort Stories alphabetically by name
-- If no Epics exist, omit the Epics section entirely
-- If no Stories exist, omit the Stories section entirely
-- Epic name is the directory name (from the path `.claude/dev-workflow/epic/{epic-dir}/epic.md`), formatted as `{yyyy-mm-dd}-{epic-name}`
-- Story name is the directory name (from the path `.claude/dev-workflow/story/{story-dir}/spec.md`), formatted as `{yyyy-mm-dd}-{prefix}-{story-name}`
+- Sort Epics alphabetically by name; sort Stories & Tasks alphabetically by name
+- Omit a section entirely if it has no entries
+- Names are the directory names from each unit's `path` (e.g. `{yyyy-mm-dd}-{prefix}-{story-name}`, `{yyyy-mm-dd}-{epic-name}`)
 
 ## Success Criteria
 
-- [ ] All existing epics and stories under `.claude/dev-workflow/` are discovered
-- [ ] Each item's status is correctly determined based on file presence and content
+- [ ] All existing epics, stories, **and tasks** under `.claude/dev-workflow/` are discovered (via the state evaluator)
+- [ ] Each item's status comes from the script's derived `state` (no hand-recomputation)
 - [ ] Output is displayed as a clear, readable table
 - [ ] When no work exists, a helpful empty-state message is shown

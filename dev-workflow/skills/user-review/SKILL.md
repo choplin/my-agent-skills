@@ -77,14 +77,9 @@ Before starting, check for existing review state:
 1. Look for `review.md` at:
    - `.claude/dev-workflow/story/{story-dir}/review.md` (Story)
    - `.claude/dev-workflow/task/{task-dir}/review.md` (Task — includes both "with plan" and "no plan")
-2. If **review.md exists**, read it and resume based on Phase:
+2. If **review.md exists**, read it and resume based on the normalized Phase (legacy phase and item-status values are normalized per `references/state-schema.md`; e.g. `COLLECTING FEEDBACK`→`REVIEWING`, `APPROACH RECORDED`→`APPROACH PROPOSED`):
    - `REVIEWING`: Show summary of items and their states — including any items that are `OPEN` or `APPROACH PROPOSED` (re-present their approach for agreement) — then wait for next feedback
    - `LGTM`: Proceed to post-task
-   - **Backward compatibility**: Map old phase values to current phases:
-     - `COLLECTING FEEDBACK` → treat as `REVIEWING`
-     - `READY FOR IMPLEMENTATION` → treat as `REVIEWING`
-     - `IMPLEMENTING` → treat as `REVIEWING`
-   - **Backward compatibility for item status**: Treat `APPROACH RECORDED` as `APPROACH PROPOSED` (approach exists but needs user agreement)
 3. If **review.md does not exist**, continue to step 1 (normal flow)
 
 ### 1. Present Review Summary (Independent Entry Point)
@@ -332,52 +327,12 @@ For each remaining item with Status = `APPROACH AGREED`:
 
 #### Plan Mode Context Preservation
 
-If you use EnterPlanMode during implementation of review items, include a `## dev-workflow Context` block in the plan file (see `references/plan-mode-context.md` for full template):
+If you use EnterPlanMode during implementation of review items, add a `## dev-workflow Context` block to the plan file. Use the template in `references/plan-mode-context.md` with these values:
 
-For Story:
-```markdown
-## dev-workflow Context
-**Active skill**: user-review (Implementation)
-**Phase**: User-Review
-**Work level**: Story
-**Documents**:
-- Spec: .claude/dev-workflow/story/{story-dir}/spec.md
-- Plan: .claude/dev-workflow/story/{story-dir}/plan.md
-- Review: .claude/dev-workflow/story/{story-dir}/review.md
-
-### After This Plan Completes
-Continue resolving remaining review items in review.md.
-After all items resolved: present implementation summary to user.
-```
-
-For Task (with plan):
-```markdown
-## dev-workflow Context
-**Active skill**: user-review (Implementation)
-**Phase**: User-Review
-**Work level**: Task
-**Documents**:
-- Plan: {path to plan file}
-- Review: .claude/dev-workflow/task/{task-dir}/review.md
-
-### After This Plan Completes
-Continue resolving remaining review items in review.md.
-After all items resolved: present implementation summary to user.
-```
-
-For Task (no plan):
-```markdown
-## dev-workflow Context
-**Active skill**: user-review (Implementation)
-**Phase**: User-Review
-**Work level**: Task (no plan)
-**Documents**:
-- Review: .claude/dev-workflow/task/{task-dir}/review.md
-
-### After This Plan Completes
-Continue resolving remaining review items in review.md.
-After all items resolved: present implementation summary to user.
-```
+- **Active skill**: user-review (Implementation)
+- **Work level**: Story / Task / Task (no plan) — match the current flow
+- **Documents**: the relevant docs for the work level, always including `review.md` — Story: Spec + Plan + Review; Task (with plan): the plan file + Review; Task (no plan): Review only
+- **After This Plan Completes**: Continue resolving remaining review items in review.md; after all items resolved, present implementation summary to user.
 
 #### 5c. Completion
 
@@ -449,9 +404,16 @@ All {N} items resolved. LGTM to proceed, or provide additional feedback.
 
 ## Session Persistence
 
-Review state is persisted in `review.md`. After completing each review item:
+Review state is persisted in two files that must be kept in sync:
 
-1. Inform the user that review state is saved to `review.md`
+- **`review.md`** — human-readable record of each item (feedback, approach, resolution).
+- **`state.json`** — machine state (see `references/state-schema.md`). Whenever you change an item's Status or the review Phase in review.md, mirror it into `state.json` (`review.phase`, `review.items[].status/classification/source`). This is the source the state evaluator reads.
+
+Do **not** hand-maintain a "Resolved X / Y" counter as authoritative — the count is derived by `scripts/workflow-state.py` from item statuses. A counter line in review.md, if present, is only an informational hint.
+
+After completing each review item:
+
+1. Inform the user that review state is saved (review.md + state.json)
 2. Mention that they can clear the session and resume later with `resume-work`
 3. Do not force session clear — leave the decision to the user
 

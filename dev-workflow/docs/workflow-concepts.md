@@ -141,7 +141,7 @@ The Story directory name (e.g., `add-auth`) becomes the branch name (e.g., `feat
        │          │          │
        │      create plan  └→ Return to [Understand] (each Story)
        │          │
-       │   [Session clear]
+       │   [Session clear?] ← optional (documents are self-complete)
        │          │
        │   [Resume Work] ← Re-entry point (branch checkout)
        │          │
@@ -162,7 +162,7 @@ The Story directory name (e.g., `add-auth`) becomes the branch name (e.g., `feat
 
 1. **Understand**: Grasp task content and assess volume
 2. **Document creation**: For Story/Epic, create spec/plan/epic
-3. **Session clear**: For Story/Epic, clear session before implementation
+3. **Session clear (optional)**: For Story/Epic, clearing before implementation is available but not required — documents are self-complete, so resume works with or without a clear (see Design Principle 2)
 4. **Resume Work**: Re-entry point for existing work (evaluates progress, identifies gaps, recommends next action)
 5. **Implement**: Proceed with implementation based on documents
 6. **Test/AI Review**: Self-review based on acceptance criteria
@@ -235,12 +235,16 @@ All spec/plan documents should be autonomously executable without conversation h
    - Post-work actions are specified (e.g., "invoke self-review", "update Progress section")
    - Instructions are actionable without session history
 
-### 2. Session-clear Prerequisite
+### 2. Resumable State (not session-clear)
 
-Always clear the session when starting the implementation phase.
+Keep work in a state that can be interrupted and resumed at any time. Documents (spec + plan + state) are the single source of truth, so a fresh session can pick up from them.
 
-- Task: Claude Code Plan feature internally maintains state
-- Story/Epic: spec + plan are the single source of truth
+Clearing the session before implementation is **optional**, not required:
+
+- It helps when the planning context is large or noisy, giving implementation a clean context.
+- It is unnecessary when the model sustains a long coherent context on its own. The need for a hard reset is model-dependent — newer models reduce it (see `docs/research-2026-06-loop-engineering.md` §2) — so treat `/clear` as a tool the user may use, not a mandatory step.
+
+What matters is that the documents stay self-complete (Principle 1), so resumption never depends on conversation history regardless of whether the session was cleared.
 
 ### 3. AI-verifiable Acceptance Criteria
 

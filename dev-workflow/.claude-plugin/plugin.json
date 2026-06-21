@@ -11,5 +11,8 @@
     "spec",
     "review",
     "task-management"
+  ],
+  "dependencies": [
+    "discuss-toolkit"
   ]
 }

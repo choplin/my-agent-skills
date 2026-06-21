@@ -165,6 +165,17 @@ Create `.claude/dev-workflow/story/{story-dir}/spec.md` where `{story-dir}` is t
 {Items that need clarification later, if any}
 ```
 
+#### 5c. Create state.json
+
+Create `.claude/dev-workflow/story/{story-dir}/state.json` next to spec.md. See `references/state-schema.md` for the full schema. Initialize:
+
+- `level`: `"story"`, `title`, `branch` (from step 5a)
+- `criteria`: one entry per Acceptance Criteria scenario. For each, set `name`, decide `verify` (an executable pass/fail command if the criterion is machine-verifiable, else `null`), and initialize `passes: false`, `evidence: null` (**Default-FAIL** — see schema).
+- `steps`: `[]` (filled by create-plan)
+- `review`: `null` (filled when review starts)
+
+This is the machine-managed mirror of the spec. Do **not** store derived values (counters, state category).
+
 ### 6. User Review
 
 Present spec to user for approval before proceeding.

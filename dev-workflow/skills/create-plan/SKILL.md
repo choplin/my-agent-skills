@@ -121,6 +121,10 @@ Create `.claude/dev-workflow/story/{story-dir}/plan.md`:
 {Decisions made during planning, if any}
 ```
 
+### 4b. Update state.json
+
+Update `.claude/dev-workflow/story/{story-dir}/state.json` (created by create-spec). Populate `steps` with one entry per plan Step: `{id, name, done: false}`. Keep it in sync with the plan's `## Progress` checklist (same order/count). See `references/state-schema.md`. Do not add derived fields.
+
 ### 5. User Review
 
 Present plan to user for approval before proceeding.

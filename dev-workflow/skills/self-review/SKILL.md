@@ -29,9 +29,11 @@ Comprehensive review of implementation through specialized reviewers. The review
 
 ### 0. Determine Work Level
 
-1. Check if `.claude/dev-workflow/story/*/spec.md` exists (glob match)
-   - If found → **Story flow** (proceed to Step 1)
-2. If not found → **Task flow**
+Determine the level from the **active work unit**, not a glob over all stories (a leftover completed Story directory must never hijack the current work).
+
+1. Run `python3 dev-workflow/scripts/workflow-state.py` and read `active_path` (the unit with `active: true`). The script resolves it by current branch when possible, else by most-recent modification — so it works with or without per-unit branches (see `references/state-schema.md`).
+   - If the active unit is a **Story** → **Story flow** (proceed to Step 1). Use its `path` as `{story-dir}`.
+2. If the active unit is a **Task** (or there is no active Story) → **Task flow**:
    - Identify the active plan file: Glob `.claude/plans/*.md` and find the plan with `**Work level**: Task` in its `## Workflow Context` section
    - If active Task plan found → **Task (with plan)** flow (proceed to Step 1T)
    - If no active Task plan found → **Task (no plan)** flow (proceed to Step 1T, skip 1T-a)
@@ -137,51 +139,23 @@ After fixing, re-run self-review.
 
 #### Plan Mode Context Preservation
 
-If you use EnterPlanMode to fix issues, include a `## dev-workflow Context` block in the plan file (see `references/plan-mode-context.md` for full template):
+If you use EnterPlanMode to fix issues, add a `## dev-workflow Context` block to the plan file. Use the template in `references/plan-mode-context.md` with these values:
 
-For Story:
-```markdown
-## dev-workflow Context
-**Active skill**: self-review (Self-Correct)
-**Phase**: Self-Review
-**Work level**: Story
-**Documents**:
-- Spec: .claude/dev-workflow/story/{story-dir}/spec.md
-- Plan: .claude/dev-workflow/story/{story-dir}/plan.md
-
-### After This Plan Completes
-Re-run self-review to verify fixes are effective.
-```
-
-For Task (with plan):
-```markdown
-## dev-workflow Context
-**Active skill**: self-review (Self-Correct)
-**Phase**: Self-Review
-**Work level**: Task
-**Documents**:
-- Plan: {path to active plan file}
-
-### After This Plan Completes
-Re-run self-review to verify fixes are effective.
-```
-
-For Task (no plan):
-```markdown
-## dev-workflow Context
-**Active skill**: self-review (Self-Correct)
-**Phase**: Self-Review
-**Work level**: Task (no plan)
-**Documents**:
-- Review: .claude/dev-workflow/task/{task-dir}/review.md
-
-### After This Plan Completes
-Re-run self-review to verify fixes are effective.
-```
+- **Active skill**: self-review (Self-Correct)
+- **Work level**: Story / Task / Task (no plan) — match the current flow
+- **Documents**: the relevant docs for the work level — Story: Spec + Plan; Task (with plan): the active plan file; Task (no plan): `.claude/dev-workflow/task/{task-dir}/review.md`
+- **After This Plan Completes**: Re-run self-review to verify fixes are effective.
 
 ### 5. Create review.md (if no FAIL remains)
 
-When all results are PASS or NEEDS REVIEW (no FAIL), create review.md for the upcoming user-review phase:
+When all results are PASS or NEEDS REVIEW (no FAIL), create review.md for the upcoming user-review phase.
+
+**Also create/update `state.json`** in the same work-unit directory (see `references/state-schema.md`):
+
+- **Story**: `state.json` already exists (from create-spec/create-plan). Set `criteria[].passes`/`evidence` from the verification results, and initialize `review` = `{ "phase": "REVIEWING", "mode": "ITERATIVE", "items": [] }`.
+- **Task (with plan / no plan)**: the Task has no `state.json` yet — create it now alongside review.md. Set `level: "task"`, `title`, `branch` (current branch, or `null` for no-plan without a dedicated branch), `criteria` (from the plan's Completion Criteria if present, else `[]`), `steps` (from the plan if present, else `[]`), and `review` = `{ "phase": "REVIEWING", "mode": "ITERATIVE", "items": [] }`. Use the same `{task-dir}` as review.md.
+
+Do not store a resolved counter — it is derived by the script.
 
 #### Story Flow
 

@@ -34,4 +34,6 @@
 
 - **Phase**: REVIEWING
 - **Mode**: ITERATIVE
-- **Resolved**: 0 / 0
+- **Resolved**: 0 / 0 <!-- informational only; authoritative count is derived by scripts/workflow-state.py from state.json item statuses -->
+
+<!-- Machine state lives in state.json (see references/state-schema.md). Keep Phase and item statuses in sync between this file and state.json. -->

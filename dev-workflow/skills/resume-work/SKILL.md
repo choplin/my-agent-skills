@@ -77,25 +77,17 @@ Read the selected document(s) and extract:
 
 ### Phase 3: State Evaluation
 
-Assess actual state by:
-1. Reading Progress section from documents
-2. Checking actual file changes (if referenced files exist)
-3. Running any verification commands if defined in acceptance criteria
+Run the state evaluator and use its output — do not re-derive state by hand:
 
-**State categories** (evaluated in priority order):
+```
+python3 dev-workflow/scripts/workflow-state.py
+```
 
-| Priority | State | Condition |
-|----------|-------|-----------|
-| 1 | `review_complete` | review.md exists and Phase = LGTM |
-| 2 | `in_review` | review.md exists and Phase ≠ LGTM (REVIEWING, or legacy values: COLLECTING FEEDBACK, READY FOR IMPLEMENTATION, IMPLEMENTING) |
-| 3 | `potentially_complete` | plan.md exists and all Progress items are `[x]` |
-| 4 | `in_progress` | plan.md exists and some Progress items are `[x]` |
-| 5 | `planned` | plan.md exists but no Progress items are `[x]` |
-| 6 | `spec_only` | spec.md exists but no plan.md |
-| 7 | `epic_next_story` | epic.md with Stories that have "Not Started" status |
-| 8 | `blocked` | Implementation cannot proceed (missing dependencies, etc.) |
+This returns every work unit's derived `state`, `progress`, `review`, `active`, and `next_action`, plus a top-level `active_path`. The state-category priority order, legacy-value mappings, progress-counting rules, and active-unit resolution are defined once in `references/state-schema.md` and implemented by the script. Use the path passed as argument if given; otherwise use the `active` entry (`active_path`). Active resolution prefers a current-branch match and falls back to the most recently modified unit, so it works with or without per-unit branches.
 
-**Task directories**: For `.claude/dev-workflow/task/{task-dir}/`, the only local file is `review.md`. Use its Phase value for state evaluation (same logic as Story: priorities 1-2). If no review.md exists in a Task directory, the Task has no reviewable state yet.
+Then cross-check against reality (the script reads documents, not the working tree):
+1. Confirm referenced files actually exist / changed
+2. Run verification commands if criteria define them
 
 ### Phase 4: Gap Analysis
 
@@ -205,21 +197,12 @@ When the state is `planned` or `in_progress`, there is no dedicated implementati
 
 ##### Plan Mode Context Preservation
 
-If you use EnterPlanMode during implementation, include a `## dev-workflow Context` block in the plan file (see `references/plan-mode-context.md` for full template):
+If you use EnterPlanMode during implementation, add a `## dev-workflow Context` block to the plan file. Use the template in `references/plan-mode-context.md` with these values:
 
-```markdown
-## dev-workflow Context
-**Active skill**: resume-work (Implementation Handoff)
-**Phase**: Implementation
-**Work level**: Story
-**Documents**:
-- Spec: .claude/dev-workflow/story/{story-dir}/spec.md
-- Plan: .claude/dev-workflow/story/{story-dir}/plan.md
-
-### After This Plan Completes
-Continue with remaining plan.md steps, updating Progress.
-After all steps complete: invoke `dev-workflow:self-review` skill.
-```
+- **Active skill**: resume-work (Implementation Handoff)
+- **Work level**: Story
+- **Documents**: Spec + Plan (`.claude/dev-workflow/story/{story-dir}/`)
+- **After This Plan Completes**: Continue remaining plan.md steps, updating Progress; after all steps complete, invoke `dev-workflow:self-review` skill.
 
 ## Anti-Patterns
 

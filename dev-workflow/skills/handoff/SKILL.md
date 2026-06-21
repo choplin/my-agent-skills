@@ -36,9 +36,11 @@ Then stop.
 
 ### Phase 2: Work Unit Selection
 
+Run `python3 dev-workflow/scripts/workflow-state.py` (also used in Phase 3).
+
 **If exactly one work unit found**: Use it directly, no user interaction needed.
 
-**If multiple work units found**: Present all discovered work units to the user with `AskUserQuestion` and let them select which one to hand off.
+**If multiple work units found**: Present all discovered work units to the user with `AskUserQuestion` and let them select which one to hand off. Default the selection to the `active` unit (`active_path`).
 
 Display format for each option:
 - Label: directory name (e.g., `add-auth`)
@@ -46,56 +48,15 @@ Display format for each option:
 
 ### Phase 3: State Snapshot
 
-For the selected work unit, collect the following information:
+Run the state evaluator and read the entry for the selected work unit:
 
-#### 3a. Determine Type
+```
+python3 dev-workflow/scripts/workflow-state.py
+```
 
-| Condition | Type |
-|-----------|------|
-| `epic.md` exists in directory | Epic |
-| `spec.md` exists in directory | Story |
-| Directory is under `task/` | Task |
+Each entry provides everything needed for the handoff prompt: `level` (Epic/Story/Task), `state` (derived category), `progress` (`{done, total}`), `review.phase`, `branch`, and `next_action`. The current git branch is in the top-level `current_branch`.
 
-#### 3b. Determine State Category
-
-Evaluate in priority order:
-
-| Priority | State | Condition |
-|----------|-------|-----------|
-| 1 | `review_complete` | `review.md` exists and Phase = `LGTM` |
-| 2 | `in_review` | `review.md` exists and Phase ≠ `LGTM` |
-| 3 | `potentially_complete` | `plan.md` exists and all Progress items are `[x]` |
-| 4 | `in_progress` | `plan.md` exists and some Progress items are `[x]` |
-| 5 | `planned` | `plan.md` exists but no Progress items are `[x]` |
-| 6 | `spec_only` | `spec.md` exists but no `plan.md` |
-| 7 | `epic_next_story` | `epic.md` with Stories that have "Not Started" status |
-| 8 | `blocked` | Implementation cannot proceed |
-
-**How to check review.md Phase**:
-- Read `review.md` and find the line matching `- **Phase**: {value}`
-- Extract the value (REVIEWING, LGTM, or legacy values: COLLECTING FEEDBACK, READY FOR IMPLEMENTATION, IMPLEMENTING)
-
-**How to check plan.md Progress**:
-- Read `plan.md` and find the `## Progress` section
-- Count lines matching `- [x]` (done) and `- [ ]` (pending)
-- Total = done + pending
-
-#### 3c. Collect Progress Summary
-
-If `plan.md` exists:
-- Count completed (`[x]`) and total progress items
-- Format as `{done}/{total} steps completed`
-
-#### 3d. Get Branch Info
-
-If `spec.md` contains a `## Branch` section:
-- Extract the branch name from spec
-- Run `git branch --show-current` to get current branch
-
-#### 3e. Get Review Phase
-
-If `review.md` exists:
-- Extract the Phase value
+The state-category priority order, legacy-value mappings, and progress-counting rules live in `references/state-schema.md` and the script — do not restate or recompute them here.
 
 ### Phase 4: Session Notes
 

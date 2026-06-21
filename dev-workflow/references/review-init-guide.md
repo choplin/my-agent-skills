@@ -62,5 +62,6 @@ The content of the Self-Review Results table depends on which skill creates `rev
    - **Review Items**: Empty (no feedback yet)
    - **Phase**: `REVIEWING`
    - **Mode**: `ITERATIVE`
-   - **Resolved**: `0 / 0`
+   - **Resolved**: `0 / 0` (informational only — derived by the state evaluator)
 4. Write to the resolved `review.md` path
+5. Ensure a `state.json` exists in the same directory (see `references/state-schema.md`). If missing (e.g. a Task created at review time), create it with `review` = `{ "phase": "REVIEWING", "mode": "ITERATIVE", "items": [] }`; otherwise set its `review` block to the same.
