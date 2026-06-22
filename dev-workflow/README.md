@@ -29,6 +29,17 @@ A plugin that systematizes development workflows with Claude Code. Supports work
 | `user-review` | Facilitate structured user review with appropriate response patterns |
 | `post-task` | Capture knowledge after task completion |
 
+## Hooks
+
+Two command hooks (in `hooks/`) move workflow adherence from prompt instructions to mechanism. Both delegate state to `scripts/workflow-state.py` and are best-effort — any failure leaves the session untouched, and they stay silent when there is no active dev-workflow work.
+
+| Hook | Event | Behavior |
+|------|-------|----------|
+| `session-start.py` | SessionStart | Injects a short summary of the active work unit (state, progress, next action) so a fresh session resumes with context — replacing the handoff copy-paste ritual for the common case. |
+| `stop-gate.py` | Stop | When the active unit is `potentially_complete` (all plan steps done, no review started), reminds you to run `/dev-workflow:self-review`. Blocks at most twice in a row, then yields — a reminder, not a loop engine. |
+
+> Hooks load at session start; after installing or changing them, restart Claude Code. See `docs/2026-06-22-hooks-design.md` for the design.
+
 ## Dependencies
 
 This plugin depends on the **`discuss-toolkit`** plugin:

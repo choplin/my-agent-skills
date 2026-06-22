@@ -1,0 +1,29 @@
+{
+  "description": "dev-workflow automation: inject active work-unit state on session start, and remind to run self-review before stopping when implementation is complete.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/hooks/stop-gate.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
