@@ -47,13 +47,24 @@ Use the Skill tool to call `discuss-toolkit:dig` as a base skill to clarify user
 
 | Level | Criterion | Output |
 |-------|-----------|--------|
+| **Autonomous-Task** | Task **and** every criterion is machine-verifiable (an executable pass/fail) — the "answer" lives in a runnable check, not in the user's head | Use Skill tool: `dev-workflow:create-task` (autonomous variant — see "If Autonomous-Task") |
 | **Task** | Criteria writable directly from User Needs (no Requirements clarification needed) | Use Skill tool: `dev-workflow:create-task` |
 | **Story** | Requirements clarification needed before Criteria (need to decide "what kind" before "done") | Use Skill tool: `dev-workflow:create-spec` |
 | **Epic** | Multiple independent Stories (What has multiple parts) | Use Skill tool: `dev-workflow:create-epic` |
 
 **Examples**:
+- Autonomous-Task: "Make the failing tests in `auth/` pass" / "Port module X to match reference Y" → done = a command exits 0; the oracle is external
 - Task: "Fix this bug" → Criteria "Bug fixed, tests pass" - directly writable
 - Story: "Add authentication" → Need to decide "what kind of auth?" before defining "done"
+
+### The oracle test (Task → Autonomous-Task)
+
+Once something is a Task, ask one more question: **can every completion criterion be a command that returns pass/fail?** This is the oracle test — does the "right answer" live in the world (a test suite, a build, a reference implementation, a benchmark) or only in the user's head (taste, product judgment, UX)?
+
+- **Answer in the world → Autonomous-Task.** The loop can close on its own; an up-front approval gate is pure overhead. Write goal + predicates and let the implement→verify loop run to green; the human reviews only the finished artifact.
+- **Answer in the user's head → ordinary Task/Story.** Keep the spec/approval as a human contract; predicates alone cannot capture intent (see `docs/2026-06-11-loop-engineering-research.md` §3, "where the oracle lives").
+
+When in doubt (some criteria predicate-able, some not), it is **not** Autonomous-Task — fall back to Task/Story.
 
 ### Detailed Criteria
 
@@ -73,6 +84,18 @@ Use the Skill tool to call `discuss-toolkit:dig` as a base skill to clarify user
 - Requires coordination document across Stories
 
 ## Output by Assessment Result
+
+### If Autonomous-Task
+
+The work is a Task whose every criterion is an executable predicate. The point is to **skip the up-front approval gate** and let the loop close on the predicates.
+
+**You MUST use the Skill tool** to call `dev-workflow:create-task`, telling it this is the **autonomous variant**:
+1. Write the completion criteria as executable `Verify:` commands (no `human` criteria — if any criterion would be `human`, this is not Autonomous-Task).
+2. State the goal + predicates; do **not** request plan approval via ExitPlanMode (the gate is what we are skipping).
+3. Run the implement → verify loop until every predicate exits 0. Prefer the built-in `/goal` command if available (a generator/evaluator loop on the completion condition); otherwise iterate implement → `self-review` (its Step 0M machine pass runs the predicates) until green.
+4. Present the **finished artifact** for human review (the human reviews output, not the plan).
+
+If during implementation a criterion turns out to need human judgment after all, stop the autonomous loop and fall back to ordinary Task (request approval, involve the user).
 
 ### If Task
 

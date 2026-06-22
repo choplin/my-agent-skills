@@ -110,6 +110,16 @@ If implementation reveals unexpected complexity, promote to Story:
 
 Call ExitPlanMode to request user approval of the plan.
 
+#### Autonomous variant (from kickoff's Autonomous-Task route)
+
+When kickoff routed here as **Autonomous-Task** (every criterion is an executable predicate, the oracle is external):
+
+- Write every Completion Criterion as an executable `Verify:` command (no `human` criteria).
+- **Do not call ExitPlanMode** — skipping the up-front approval gate is the whole point.
+- Run the implement → verify loop until every predicate exits 0: prefer the built-in `/goal` command if available; otherwise iterate implement → `dev-workflow:self-review` (its Step 0M machine pass runs the predicates) until green.
+- Then present the finished artifact for human review.
+- If a criterion turns out to need human judgment, abort the autonomous loop and fall back to the normal approval flow above.
+
 ## Machine State (state.json)
 
 A Task does not get a `.claude/dev-workflow/task/{task-dir}/` directory until review time. During implementation the Claude Code plan file is the source of truth; the script falls back to it. The Task's `state.json` is created together with `review.md` when self-review runs (see `dev-workflow:self-review` and `references/state-schema.md`). No `state.json` is written by this skill.
