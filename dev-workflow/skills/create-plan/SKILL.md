@@ -60,6 +60,7 @@ Create steps following these principles:
 - **Dependency-aware**: Start with prerequisites
 - **One deliverable per step**: Each step produces a clear result
 - **Verifiable**: Completion can be confirmed
+- **Walking skeleton first**: Make **Step 1** a thin vertical slice that produces the first *reviewable real artifact* — the smallest end-to-end thing the user can actually look at and react to. Most rework comes from spec omissions and wrong direction, which are only visible once something runs; the earlier the user sees a real artifact, the cheaper that correction (see `docs/2026-06-11-loop-engineering-research.md` §3, §5). Do not back-load all visible behavior into the final step.
 
 ### 4. Create Plan Document
 
@@ -84,6 +85,7 @@ Create `.claude/dev-workflow/story/{story-dir}/plan.md`:
 - Follow Steps sequentially
 - Update `## Progress` section as each step completes (`- [ ]` → `- [x]`)
 - Refer to Spec's Acceptance Criteria as the source of truth for verification
+- **Slice checkpoint**: after Step 1 (the walking skeleton) is done, briefly show the user the running artifact and ask if the direction looks right, before building the rest. This surfaces spec omissions and wrong-direction early, when they are cheap to fix. Keep it lightweight — a quick "here's the slice, on track?", not a full review.
 
 ### After All Steps Complete
 1. Invoke `dev-workflow:self-review` skill — verifies against acceptance criteria in spec
@@ -97,6 +99,17 @@ Create `.claude/dev-workflow/story/{story-dir}/plan.md`:
 
 ## Approach
 {High-level implementation approach}
+
+## Approach Decisions
+{The implementation-direction choices the user should be able to review at plan
+approval — not just files and steps. For each significant decision: the options
+considered and why this one was chosen. Wrong direction (the "(b)" rework class
+in the research note) is expensive once it is code; expose it here while it is
+still cheap to change. Omit only if the approach is genuinely obvious.}
+
+| Decision | Options considered | Chosen + why |
+|----------|--------------------|--------------|
+| {e.g. state storage} | {A vs B} | {choice and rationale} |
 
 ## Files to Change
 

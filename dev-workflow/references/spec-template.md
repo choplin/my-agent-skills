@@ -27,6 +27,7 @@ Each criterion must be user-confirmed and AI-verifiable.
    - Given: {Preconditions - what exists/is prepared}
    - When: {Action - specific action to perform}
    - Then: {Verifiable result - confirmable in code or files}
+   - Verify: {executable command that exits 0 on PASS, or `human`}
 
 ## Out of Scope
 

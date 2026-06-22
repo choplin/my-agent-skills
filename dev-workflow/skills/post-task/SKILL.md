@@ -34,6 +34,7 @@ Review what happened during the session to identify knowledge worth preserving:
 - Decisions made during implementation
 - Specs/plans with lasting value
 - Review feedback patterns (from review.md if exists)
+- **Spec omissions surfaced late**: items the user raised in user-review that were classified as Design Change, or gaps that only appeared once something ran. These are the outer-loop signal — what the spec/kickoff failed to ask up front.
 
 ### 2. Propose Knowledge Capture
 
@@ -47,6 +48,9 @@ Present a list of items to capture, categorized by type:
 | Project-specific knowledge or code snippets | Document | CLAUDE.md |
 | Decision future developers should know | Create ADR | docs/adr/ |
 | Spec/plan has lasting value | Preserve as Design Doc | docs/ |
+| **Recurring spec omission / late Design Change** | Propose a new interview question or a spec-template prompt so the next spec asks about it up front | `kickoff` SKILL / `references/spec-template.md` |
+
+**Outer-loop feedback (C-3)**: when the same kind of omission keeps surfacing in user-review across tasks, the fix is not in this task's code — it is in what the workflow asks before implementing. Propose the concrete addition (a kickoff question, or a checklist line in the spec template) and, if approved, make the edit. This is how the outer loop learns; see `docs/2026-06-11-loop-engineering-research.md` §3, §5.
 
 ### 3. User Approval
 
@@ -60,6 +64,7 @@ For each approved item:
 - **CLAUDE.md**: Append to appropriate section
 - **ADR**: Create in docs/adr/ following ADR format
 - **Design Doc**: Copy spec/plan to docs/ with appropriate naming
+- **Workflow improvement (C-3)**: edit `kickoff` SKILL (add an interview question) or `references/spec-template.md` (add a prompt/checklist line) so future specs ask about the recurring omission up front
 
 ## Output Format
 
