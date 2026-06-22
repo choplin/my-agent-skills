@@ -1,0 +1,13 @@
+{
+  "name": "dev-workflow",
+  "description": "Claude Code add-on for the dev-workflow skills: SessionStart/Stop hooks for work-unit state tracking, and the acceptance-reviewer / plan-compliance-reviewer subagents. The workflow skills themselves are distributed separately via the skills CLI.",
+  "version": "2.1.0",
+  "author": {
+    "name": "choplin"
+  },
+  "keywords": [
+    "workflow",
+    "hooks",
+    "review"
+  ]
+}

@@ -88,20 +88,35 @@ copies (`--copy`) each `opts/<agent>/` subtree into that agent's config home.
 ## Rollout (incremental, non-destructive until validated)
 
 - **Step 0** — scaffold `skills/`, `opts/`, `scripts/install-opts.sh`, this doc. ✅
-- **Step 1** — pilot one small agent-bearing plugin end-to-end (**skill-authoring**)
-  to validate skills-via-vercel + opts-via-script + the subagent fallback. ⏳
-- **Step 2** — migrate **dev-workflow** (the hard case: shared `references/` +
-  `scripts/workflow-state.py`, `acceptance-reviewer` / `plan-compliance-reviewer`
-  subagents, and `hooks/` using `${CLAUDE_PLUGIN_ROOT}`). Refine fallback wording here.
-- **Step 3** — migrate the remaining skills-only plugins, then retire the plugin
-  format (`.claude-plugin/`, stale `marketplace.json`) and refresh the root README.
+- **Step 1** — pilot **skill-authoring** end-to-end (skill + extracted
+  `skill-quality-review` skill + thin `opts/claude/agents/` wrapper). ✅
+  Discovery validated with `skills add ./skills --list`.
+- **Step 2** — migrate **dev-workflow**. ✅
+  - 13 skills → `skills/dev-workflow/`; shared `references/` + `workflow-state.py`
+    + `workflow-concepts.md` → `dev-workflow-base` skill (delegated by name).
+  - `acceptance-reviewer` / `plan-compliance-reviewer` → `acceptance-review` /
+    `plan-compliance-review` skills + thin wrappers in the Claude add-on.
+  - hooks → the **minimal plugin** `opts/claude/skills/dev-workflow/` (with
+    `.claude-plugin/` + `hooks/` + a symlink to the base skill's
+    `workflow-state.py`). Claude Code v2.1.157 auto-loads plugins placed under
+    `~/.claude/skills/`, so `${CLAUDE_PLUGIN_ROOT}` resolves and hooks need no
+    rewrite. Placing the plugin there also preserves the `dev-workflow:` namespace
+    for the reviewer subagents.
+- **Step 3** — migrate the remaining skills-only plugins (ai-council,
+  discuss-toolkit, discussion-continuity, git-helpers, jira-cli, lang-reference,
+  moonbit, writing-toolkit), then retire the plugin format and refresh the root
+  README + `marketplace.json`.
 
 ## Notes / open issues
 
 - `.claude-plugin/marketplace.json` and the root `README.md` are already stale
   (list removed plugins, wrong skill names). Refresh as part of Step 3.
-- `dev-workflow` hooks depend on `${CLAUDE_PLUGIN_ROOT}`; under `opts/claude/hooks/`
-  that variable no longer resolves. Path handling for hooks is a Step 2 problem.
-- Actually running `npx skills add` requires network (npm registry) and is best
-  run by the user or outside the sandbox; the structure is validated here, the
-  install is validated in real use.
+- dev-workflow's state tracking is intrinsically Claude-Code-specific (it uses
+  `$CLAUDE_CODE_SESSION_ID` and the hooks). Other agents get the portable
+  workflow guidance; the session-binding mechanics degrade gracefully.
+- Cross-skill delegation phrasing (`` `dev-workflow-base` skill (`references/X`) ``,
+  `dev-workflow-base/scripts/...`) is a convention, not a spec mechanism — refine
+  with real use.
+- Running the skills CLI / `install-opts.sh` against real agent homes is validated
+  in real use; the repo structure and discovery (`skills add ./skills --list`)
+  are validated here.
