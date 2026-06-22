@@ -88,10 +88,10 @@ Create `.claude/dev-workflow/story/{story-dir}/plan.md`:
 - **Slice checkpoint**: after Step 1 (the walking skeleton) is done, briefly show the user the running artifact and ask if the direction looks right, before building the rest. This surfaces spec omissions and wrong-direction early, when they are cheap to fix. Keep it lightweight — a quick "here's the slice, on track?", not a full review.
 
 ### After All Steps Complete
-1. Invoke `dev-workflow:self-review` skill — verifies against acceptance criteria in spec
-2. Invoke `dev-workflow:user-review` skill — presents results and collects user feedback
+1. Invoke `self-review` skill — verifies against acceptance criteria in spec
+2. Invoke `user-review` skill — presents results and collects user feedback
 3. After user LGTM: commit changes
-4. Invoke `dev-workflow:post-task` skill — capture knowledge
+4. Invoke `post-task` skill — capture knowledge
 
 ### If Session Clears
 - Use `/resume-work` to evaluate progress and resume from the correct point

@@ -27,7 +27,7 @@ If `work_units` is empty, output:
 
 ```
 Active な作業はありません。
-`/dev-workflow:kickoff` で新しい作業を開始できます。
+`/kickoff` で新しい作業を開始できます。
 ```
 
 Then stop.

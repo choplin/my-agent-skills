@@ -247,7 +247,7 @@ Follow `dev-workflow-base` skill (`references/review-init-guide.md`) to resolve 
 After review.md is created:
 
 1. Notify user: "review.md を作成しました。handoff プロンプトを生成します。"
-2. Invoke `Skill(skill: "dev-workflow:handoff")`
+2. Invoke `Skill(skill: "handoff")`
 3. Handoff detects `in_review` state and generates a resume-work prompt for the next session
 
 The user can then copy the prompt, `/clear`, and paste to start user-review in a clean session.

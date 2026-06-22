@@ -58,12 +58,12 @@ Write to the plan file with this structure:
 
 ### After All Steps Complete
 1. Run tests to confirm no regressions
-2. Invoke `dev-workflow:self-review` (it will verify Completion Criteria and code quality)
+2. Invoke `self-review` (it will verify Completion Criteria and code quality)
 3. After review completes, commit changes
 
 ### If Complexity Grows
 If implementation reveals unexpected complexity, promote to Story:
-- Invoke `dev-workflow:create-spec` with Why/What from this plan
+- Invoke `create-spec` with Why/What from this plan
 - See `dev-workflow-base/references/workflow-concepts.md` for promotion flow
 
 ### If Session Clears
@@ -116,13 +116,13 @@ When kickoff routed here as **Autonomous-Task** (every criterion is an executabl
 
 - Write every Completion Criterion as an executable `Verify:` command (no `human` criteria).
 - **Do not call ExitPlanMode** — skipping the up-front approval gate is the whole point.
-- Run the implement → verify loop until every predicate exits 0: prefer the built-in `/goal` command if available; otherwise iterate implement → `dev-workflow:self-review` (its Step 0M machine pass runs the predicates) until green.
+- Run the implement → verify loop until every predicate exits 0: prefer the built-in `/goal` command if available; otherwise iterate implement → `self-review` (its Step 0M machine pass runs the predicates) until green.
 - Then present the finished artifact for human review.
 - If a criterion turns out to need human judgment, abort the autonomous loop and fall back to the normal approval flow above.
 
 ## Machine State (state.json)
 
-A Task does not get a `.claude/dev-workflow/task/{task-dir}/` directory until review time. During implementation the Claude Code plan file is the source of truth; the script falls back to it. The Task's `state.json` is created together with `review.md` when self-review runs (see `dev-workflow:self-review` and `dev-workflow-base` skill (`references/state-schema.md`)). No `state.json` is written by this skill.
+A Task does not get a `.claude/dev-workflow/task/{task-dir}/` directory until review time. During implementation the Claude Code plan file is the source of truth; the script falls back to it. The Task's `state.json` is created together with `review.md` when self-review runs (see `self-review` and `dev-workflow-base` skill (`references/state-schema.md`)). No `state.json` is written by this skill.
 
 ## Critical: No AI Filling
 
@@ -172,4 +172,4 @@ If EnterPlanMode is used during task implementation, add a `## dev-workflow Cont
 - **Active skill**: create-task (Implementation)
 - **Work level**: Task
 - **Documents**: Plan (Claude Code plan file)
-- **After This Plan Completes**: Run tests to confirm no regressions; invoke `dev-workflow:self-review` (verifies Completion Criteria and code quality); after review completes, commit changes.
+- **After This Plan Completes**: Run tests to confirm no regressions; invoke `self-review` (verifies Completion Criteria and code quality); after review completes, commit changes.

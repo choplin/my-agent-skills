@@ -279,7 +279,7 @@ For **Task** (check plan file):
 1. Read the plan file (path from review.md's `## Related Files`)
 2. Compare feedback against plan's "Completion Criteria"
 3. If feedback requires NEW or CHANGED Completion Criteria → Design Change
-4. When a Design Change is identified in a Task, suggest **promoting to Story** (invoke `dev-workflow:create-spec` with Why/What from the plan)
+4. When a Design Change is identified in a Task, suggest **promoting to Story** (invoke `create-spec` with Why/What from the plan)
 
 **Concrete examples**:
 

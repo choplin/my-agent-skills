@@ -123,4 +123,4 @@ After post-task completes:
 
 **If standalone Story/Task**:
 - **Reference**: None
-- **Next phase**: Done (or start new task with `/dev-workflow:kickoff`)
+- **Next phase**: Done (or start new task with `/kickoff`)

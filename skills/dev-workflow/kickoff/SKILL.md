@@ -47,10 +47,10 @@ Use the Skill tool to call `discuss-toolkit:dig` as a base skill to clarify user
 
 | Level | Criterion | Output |
 |-------|-----------|--------|
-| **Autonomous-Task** | Task **and** every criterion is machine-verifiable (an executable pass/fail) — the "answer" lives in a runnable check, not in the user's head | Use Skill tool: `dev-workflow:create-task` (autonomous variant — see "If Autonomous-Task") |
-| **Task** | Criteria writable directly from User Needs (no Requirements clarification needed) | Use Skill tool: `dev-workflow:create-task` |
-| **Story** | Requirements clarification needed before Criteria (need to decide "what kind" before "done") | Use Skill tool: `dev-workflow:create-spec` |
-| **Epic** | Multiple independent Stories (What has multiple parts) | Use Skill tool: `dev-workflow:create-epic` |
+| **Autonomous-Task** | Task **and** every criterion is machine-verifiable (an executable pass/fail) — the "answer" lives in a runnable check, not in the user's head | Use Skill tool: `create-task` (autonomous variant — see "If Autonomous-Task") |
+| **Task** | Criteria writable directly from User Needs (no Requirements clarification needed) | Use Skill tool: `create-task` |
+| **Story** | Requirements clarification needed before Criteria (need to decide "what kind" before "done") | Use Skill tool: `create-spec` |
+| **Epic** | Multiple independent Stories (What has multiple parts) | Use Skill tool: `create-epic` |
 
 **Examples**:
 - Autonomous-Task: "Make the failing tests in `auth/` pass" / "Port module X to match reference Y" → done = a command exits 0; the oracle is external
@@ -89,7 +89,7 @@ When in doubt (some criteria predicate-able, some not), it is **not** Autonomous
 
 The work is a Task whose every criterion is an executable predicate. The point is to **skip the up-front approval gate** and let the loop close on the predicates.
 
-**You MUST use the Skill tool** to call `dev-workflow:create-task`, telling it this is the **autonomous variant**:
+**You MUST use the Skill tool** to call `create-task`, telling it this is the **autonomous variant**:
 1. Write the completion criteria as executable `Verify:` commands (no `human` criteria — if any criterion would be `human`, this is not Autonomous-Task).
 2. State the goal + predicates; do **not** request plan approval via ExitPlanMode (the gate is what we are skipping).
 3. Run the implement → verify loop until every predicate exits 0. Prefer the built-in `/goal` command if available (a generator/evaluator loop on the completion condition); otherwise iterate implement → `self-review` (its Step 0M machine pass runs the predicates) until green.
@@ -99,7 +99,7 @@ If during implementation a criterion turns out to need human judgment after all,
 
 ### If Task
 
-**You MUST use the Skill tool** to call `dev-workflow:create-task`. Do NOT proceed with implementation yourself.
+**You MUST use the Skill tool** to call `create-task`. Do NOT proceed with implementation yourself.
 
 The create-task skill will:
 1. Receive Why/What context from this interview (via session history)
@@ -108,13 +108,13 @@ The create-task skill will:
 
 ### If Story
 
-**You MUST use the Skill tool** to call `dev-workflow:create-spec`. Do NOT proceed with spec creation yourself.
+**You MUST use the Skill tool** to call `create-spec`. Do NOT proceed with spec creation yourself.
 
 The create-spec skill will receive the interview context via session history.
 
 ### If Epic
 
-**You MUST use the Skill tool** to call `dev-workflow:create-epic`. Do NOT proceed with epic decomposition yourself.
+**You MUST use the Skill tool** to call `create-epic`. Do NOT proceed with epic decomposition yourself.
 
 The create-epic skill will receive the interview context via session history.
 
@@ -134,7 +134,7 @@ Task → Story promotion is a **normal flow**, not a failure.
 **When promoting**:
 - Why/What from Plan carry over to spec (this is why create-task includes full Why/What)
 - Document the How decisions made so far
-- Use the Skill tool to call `dev-workflow:create-spec` with existing Plan context
+- Use the Skill tool to call `create-spec` with existing Plan context
 
 ## Success Criteria
 
@@ -149,4 +149,4 @@ Task → Story promotion is a **normal flow**, not a failure.
 If session is cleared before completing this skill:
 
 **Reference**: None (interview context is lost)
-**Next phase**: Restart with `kickoff` (invoke `/dev-workflow:kickoff`)
+**Next phase**: Restart with `kickoff` (invoke `/kickoff`)
