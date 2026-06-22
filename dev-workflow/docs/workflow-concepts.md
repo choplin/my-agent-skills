@@ -242,7 +242,7 @@ Keep work in a state that can be interrupted and resumed at any time. Documents 
 Clearing the session before implementation is **optional**, not required:
 
 - It helps when the planning context is large or noisy, giving implementation a clean context.
-- It is unnecessary when the model sustains a long coherent context on its own. The need for a hard reset is model-dependent — newer models reduce it (see `docs/research-2026-06-loop-engineering.md` §2) — so treat `/clear` as a tool the user may use, not a mandatory step.
+- It is unnecessary when the model sustains a long coherent context on its own. The need for a hard reset is model-dependent — newer models reduce it (see `docs/2026-06-11-loop-engineering-research.md` §2) — so treat `/clear` as a tool the user may use, not a mandatory step.
 
 What matters is that the documents stay self-complete (Principle 1), so resumption never depends on conversation history regardless of whether the session was cleared.
 
