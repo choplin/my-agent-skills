@@ -171,9 +171,9 @@ A one-time migration is **not** performed; fallback keeps existing work units re
 | Field | Meaning |
 |-------|---------|
 | `current_branch` | `git branch --show-current`. |
-| `active_path` | Path of the single unit currently being worked on (or `null`). See resolution rule below. |
+| `active_path` | Path of the unit bound to `--session` (or `null` when the session is unbound). See resolution rule below. |
 | `work_units[]` | One entry per discovered epic/story/task. |
-| `.matches_current_branch` | `branch` equals `current_branch`. An input to active resolution, not the sole selector. |
+| `.matches_current_branch` | `branch` equals `current_branch`. A display hint for interactive skills only; **not** used to select the active unit. |
 | `.active` | `true` for the unit equal to `active_path`. **This is what consumers use to pick the unit to act on.** |
 | `.state` | Derived category (priority table above). |
 | `.progress` | `{done, total}` from steps. |
@@ -183,13 +183,28 @@ A one-time migration is **not** performed; fallback keeps existing work units re
 
 ### Active-unit resolution
 
-The unit to act on is not identified by branch alone (that assumes one branch per unit, which need not hold — e.g. a repo that works entirely on `main`):
+The active unit is **bound per session, never guessed**. Branch matching is unreliable (a repo may work entirely on `main`, or run several units on one branch), and "most recently modified" leaks a stale unit into every unrelated session in the repo. Instead:
 
-1. If exactly one unit's `matches_current_branch` is `true` → that unit.
-2. Otherwise (zero or several branch matches) → the most recently modified unit (by document mtime), preferring story/task over epic.
+- Each session records which unit it is working on in `root/active/<session_id>.json` (`{"unit": "<abspath>"}`). Skills write this the moment they know their target unit (see _Session binding_).
+- `workflow-state.py --session <id>` resolves `active_path` to that pointer's unit (when the directory still exists); a session with **no pointer resolves to `null`** — so passive hooks stay silent in unrelated sessions.
+- `matches_current_branch` is reported as a hint but does not select the active unit.
 
-This makes identification work with or without per-unit branches.
+Pointer files are session-local and ephemeral. `--prune` (run on session start) drops pointers whose unit is gone or whose file has aged past 7 days; `post-task` clears its own on completion.
+
+### Session binding
+
+The session id is the same value on both sides: hooks read `session_id` from their stdin payload (falling back to `$CLAUDE_CODE_SESSION_ID`), and skills read `$CLAUDE_CODE_SESSION_ID`. A skill binds or clears with a single command (no manual file writes):
+
+```bash
+# Bind this session to a unit (idempotent; run when the target unit is known)
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --set ".claude/dev-workflow/{level}/{unit-dir}"
+
+# Clear this session's binding (on task completion)
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --clear
+```
+
+Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review, import-pr-comments, reply-to-pr-comments) **bind** at the point the unit is identified. A Task has no directory until self-review creates one, so a Task session is first bound there. `post-task` **clears**. Read-only overviews (workflow-status) and `handoff` do not bind; a handed-off unit is rebound by `resume-work` in the next session.
 
 ### Consumer rule
 
-Skills that need state (resume-work, handoff, workflow-status, self-review) **run the script and read its output**, selecting the unit via `active` / `active_path`. They must not restate the priority table, legacy mappings, progress-counting rules, or the active-resolution rule — those live only here and in the script.
+Skills that need state (resume-work, handoff, workflow-status, self-review) **run the script and read its output**, selecting the unit via `active` / `active_path`. They run the bind/clear command shown above where needed, but must not restate the priority table, legacy mappings, progress-counting rules, or the active-resolution rule — those live only here and in the script.

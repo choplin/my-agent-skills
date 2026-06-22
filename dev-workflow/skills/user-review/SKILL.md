@@ -82,6 +82,12 @@ Before starting, check for existing review state:
    - `LGTM`: Proceed to post-task
 3. If **review.md does not exist**, continue to step 1 (normal flow)
 
+Once the work-unit directory is known, **bind this session** to it so dev-workflow hooks track only this work (see `references/state-schema.md` § Session binding):
+
+```bash
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --set "<work-unit-dir>"
+```
+
 ### 1. Present Review Summary (Independent Entry Point)
 
 > **Note**: In the normal workflow, self-review creates review.md before invoking handoff. Step 0 detects the existing review.md and resumes from `REVIEWING`, skipping this step entirely. Step 1 serves as an independent entry point for when user-review is invoked directly without prior self-review (e.g., manual invocation, skipping self-review).

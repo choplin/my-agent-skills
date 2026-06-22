@@ -20,6 +20,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 
 # --- State contract (see references/state-schema.md) -------------------------
 
@@ -69,6 +70,86 @@ def current_branch():
         return out.stdout.strip() or None
     except Exception:
         return None
+
+
+# --- Active-session pointers -------------------------------------------------
+#
+# The active work unit is bound per session, not guessed. Each dev-workflow
+# skill records "this session is working on <unit>" the moment it knows its
+# target unit, by writing root/active/<session_id>.json. Hooks pass their
+# session id and act only on that session's unit; an unbound session is a
+# no-op. See references/state-schema.md (Active-unit resolution).
+
+POINTER_MAX_AGE_S = 7 * 24 * 3600  # stale-pointer cutoff for --prune
+
+
+def active_dir(root):
+    return os.path.join(root, "active")
+
+
+def pointer_path(root, session_id):
+    return os.path.join(active_dir(root), session_id + ".json")
+
+
+def set_active(root, session_id, unit_path):
+    d = active_dir(root)
+    os.makedirs(d, exist_ok=True)
+    with open(pointer_path(root, session_id), "w", encoding="utf-8") as f:
+        json.dump({"unit": os.path.abspath(unit_path)}, f)
+
+
+def clear_active(root, session_id):
+    try:
+        os.remove(pointer_path(root, session_id))
+    except OSError:
+        pass
+
+
+def read_active_path(root, session_id):
+    """Return the abspath of the unit bound to this session, or None.
+
+    None when there is no session id, no pointer, an unreadable pointer, or
+    the pointer targets a directory that no longer exists.
+    """
+    if not session_id:
+        return None
+    try:
+        with open(pointer_path(root, session_id), encoding="utf-8") as f:
+            target = json.load(f).get("unit")
+    except Exception:
+        return None
+    if target and os.path.isdir(target):
+        return os.path.abspath(target)
+    return None
+
+
+def prune_pointers(root):
+    """Drop pointers whose unit is gone or whose file has aged out.
+
+    Live sessions refresh their pointer's mtime on every skill use, so only
+    orphans (ended sessions, deleted units) are removed. Best-effort.
+    """
+    d = active_dir(root)
+    if not os.path.isdir(d):
+        return
+    now = time.time()
+    for name in os.listdir(d):
+        if not name.endswith(".json"):
+            continue
+        fp = os.path.join(d, name)
+        try:
+            with open(fp, encoding="utf-8") as f:
+                target = json.load(f).get("unit")
+            missing = not (target and os.path.isdir(target))
+            aged = (now - os.path.getmtime(fp)) > POINTER_MAX_AGE_S
+            stale = missing or aged
+        except Exception:
+            stale = True  # unreadable -> remove
+        if stale:
+            try:
+                os.remove(fp)
+            except OSError:
+                pass
 
 
 # --- Markdown fallback parsers ----------------------------------------------
@@ -304,49 +385,59 @@ def discover(root, branch_now):
     return units
 
 
-def unit_mtime(unit_dir):
-    """Most recent mtime among a unit's known documents (0.0 if none)."""
-    latest = 0.0
-    for fname in ("state.json", "review.md", "plan.md", "spec.md", "epic.md"):
-        try:
-            latest = max(latest, os.path.getmtime(os.path.join(unit_dir, fname)))
-        except OSError:
-            pass
-    return latest
+def resolve_active(units, active_path):
+    """Return the work unit this session is bound to, or None.
 
-
-def resolve_active(units):
-    """Pick the single work unit currently being worked on.
-
-    Identification does not depend on one-branch-per-unit: a unique
-    current-branch match wins; otherwise fall back to the most recently
-    modified unit, preferring story/task over epic. Returns a path or None.
+    Identification is explicit, not guessed: `active_path` is the unit recorded
+    for the current session (see read_active_path). An unbound session resolves
+    to None so passive hooks stay quiet. `matches_current_branch` is reported
+    on each unit as a hint for interactive skills, but never selects here.
     """
-    if not units:
+    if not active_path:
         return None
-    matches = [u for u in units if u["matches_current_branch"]]
-    if len(matches) == 1:
-        return matches[0]["path"]
-    pool = matches if matches else units
-    non_epic = [u for u in pool if u["level"] != "epic"]
-    candidates = non_epic if non_epic else pool
-    return max(candidates, key=lambda u: unit_mtime(u["path"]))["path"]
+    for u in units:
+        if os.path.abspath(u["path"]) == active_path:
+            return u["path"]
+    return None
 
 
 def main():
     ap = argparse.ArgumentParser(description="dev-workflow state evaluator")
     ap.add_argument("--root", default=".claude/dev-workflow",
                     help="root of dev-workflow documents (default: .claude/dev-workflow)")
+    ap.add_argument("--session",
+                    help="session id; binds active resolution to this session")
+    ap.add_argument("--set", dest="set_unit", metavar="UNIT_PATH",
+                    help="bind --session to this unit, then exit (no output)")
+    ap.add_argument("--clear", action="store_true",
+                    help="clear --session's binding, then exit (no output)")
+    ap.add_argument("--prune", action="store_true",
+                    help="drop stale session pointers before evaluating")
     args = ap.parse_args()
+
+    # Mutating actions are terminal: bind/clear then exit without evaluating.
+    if args.set_unit or args.clear:
+        if not args.session:
+            sys.stderr.write("--set/--clear require --session\n")
+            sys.exit(2)
+        if args.set_unit:
+            set_active(args.root, args.session, args.set_unit)
+        else:
+            clear_active(args.root, args.session)
+        return
+
+    if args.prune:
+        prune_pointers(args.root)
 
     branch_now = current_branch()
     units = discover(args.root, branch_now) if os.path.isdir(args.root) else []
-    active_path = resolve_active(units)
+    active_path = read_active_path(args.root, args.session)
+    active_resolved = resolve_active(units, active_path)
     for u in units:
-        u["active"] = (u["path"] == active_path)
+        u["active"] = (u["path"] == active_resolved)
     out = {
         "current_branch": branch_now,
-        "active_path": active_path,
+        "active_path": active_resolved,
         "work_units": units,
     }
     json.dump(out, sys.stdout, ensure_ascii=False, indent=2)

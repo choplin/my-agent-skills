@@ -12,7 +12,12 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _common import active_unit, drain_stdin, evaluator_paths  # noqa: E402
+from _common import (  # noqa: E402
+    active_unit,
+    evaluator_paths,
+    read_stdin,
+    session_id,
+)
 
 MAX_BLOCKS = 2
 
@@ -55,10 +60,10 @@ def reset(path):
 
 
 def main():
-    drain_stdin()
+    sid = session_id(read_stdin())
     path = counter_path()
     try:
-        unit = active_unit()
+        unit = active_unit(sid)
     except Exception:
         return allow()
 

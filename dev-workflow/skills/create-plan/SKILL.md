@@ -138,6 +138,14 @@ still cheap to change. Omit only if the approach is genuinely obvious.}
 
 Update `.claude/dev-workflow/story/{story-dir}/state.json` (created by create-spec). Populate `steps` with one entry per plan Step: `{id, name, done: false}`. Keep it in sync with the plan's `## Progress` checklist (same order/count). See `references/state-schema.md`. Do not add derived fields.
 
+### 4c. Bind this session to the Story
+
+Bind so dev-workflow hooks track only this work during implementation (see `references/state-schema.md` § Session binding):
+
+```bash
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --set ".claude/dev-workflow/story/{story-dir}"
+```
+
 ### 5. User Review
 
 Present plan to user for approval before proceeding.

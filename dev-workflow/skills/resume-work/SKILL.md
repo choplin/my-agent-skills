@@ -80,14 +80,22 @@ Read the selected document(s) and extract:
 Run the state evaluator and use its output — do not re-derive state by hand:
 
 ```
-python3 dev-workflow/scripts/workflow-state.py
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID"
 ```
 
-This returns every work unit's derived `state`, `progress`, `review`, `active`, and `next_action`, plus a top-level `active_path`. The state-category priority order, legacy-value mappings, progress-counting rules, and active-unit resolution are defined once in `references/state-schema.md` and implemented by the script. Use the path passed as argument if given; otherwise use the `active` entry (`active_path`). Active resolution prefers a current-branch match and falls back to the most recently modified unit, so it works with or without per-unit branches.
+This returns every work unit's derived `state`, `progress`, `review`, and `next_action` in `work_units[]`. The state-category priority order, legacy-value mappings, and progress-counting rules are defined once in `references/state-schema.md` and implemented by the script.
+
+resume-work is the skill that **establishes** the session binding, so do not rely on `active`/`active_path` to pre-exist (a fresh session is unbound). Select the unit to resume from: the path passed as argument if given; otherwise the unit the user selected in Phase 1. `matches_current_branch` is a useful hint when presenting candidates, but the user's choice governs.
 
 Then cross-check against reality (the script reads documents, not the working tree):
 1. Confirm referenced files actually exist / changed
 2. Run verification commands if criteria define them
+
+**Bind this session** to the selected unit so dev-workflow hooks track only this work (see `references/state-schema.md` § Session binding):
+
+```bash
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --set "<selected-unit-dir>"
+```
 
 ### Phase 4: Gap Analysis
 

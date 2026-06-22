@@ -36,11 +36,11 @@ Then stop.
 
 ### Phase 2: Work Unit Selection
 
-Run `python3 dev-workflow/scripts/workflow-state.py` (also used in Phase 3).
+Run `python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID"` (also used in Phase 3).
 
 **If exactly one work unit found**: Use it directly, no user interaction needed.
 
-**If multiple work units found**: Present all discovered work units to the user with `AskUserQuestion` and let them select which one to hand off. Default the selection to the `active` unit (`active_path`).
+**If multiple work units found**: Present all discovered work units to the user with `AskUserQuestion` and let them select which one to hand off. Default the selection to the `active` unit (`active_path`) when this session is bound to one; otherwise leave the default unset. handoff does not bind — the receiving session rebinds via `resume-work`.
 
 Display format for each option:
 - Label: directory name (e.g., `add-auth`)
@@ -51,7 +51,7 @@ Display format for each option:
 Run the state evaluator and read the entry for the selected work unit:
 
 ```
-python3 dev-workflow/scripts/workflow-state.py
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID"
 ```
 
 Each entry provides everything needed for the handoff prompt: `level` (Epic/Story/Task), `state` (derived category), `progress` (`{done, total}`), `review.phase`, `branch`, and `next_action`. The current git branch is in the top-level `current_branch`.

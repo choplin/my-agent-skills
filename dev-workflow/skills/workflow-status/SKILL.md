@@ -18,10 +18,10 @@ Display a summary of all active Epics and Stories under `.claude/dev-workflow/`.
 ### Phase 1: Run the State Evaluator
 
 ```
-python3 dev-workflow/scripts/workflow-state.py
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID"
 ```
 
-This returns all work units (epics, stories, **and tasks**) with their derived `state`, `progress`, `review`, and `level`. The state-category and progress rules live in `references/state-schema.md` and the script — do not recompute them.
+This returns all work units (epics, stories, **and tasks**) with their derived `state`, `progress`, `review`, and `level`. `--session` marks the unit this session is bound to as `active` (if any); workflow-status only reports — it does not bind. The state-category and progress rules live in `references/state-schema.md` and the script — do not recompute them.
 
 If `work_units` is empty, output:
 

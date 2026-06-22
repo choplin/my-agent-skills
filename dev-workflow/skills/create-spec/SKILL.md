@@ -200,6 +200,14 @@ Create `.claude/dev-workflow/story/{story-dir}/state.json` next to spec.md. See 
 
 This is the machine-managed mirror of the spec. Do **not** store derived values (counters, state category).
 
+#### 5d. Bind this session to the Story
+
+Now that the unit directory exists, bind this session so dev-workflow hooks track only this work (see `references/state-schema.md` § Session binding):
+
+```bash
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --set ".claude/dev-workflow/story/{story-dir}"
+```
+
 ### 6. User Review
 
 Present spec to user for approval before proceeding.

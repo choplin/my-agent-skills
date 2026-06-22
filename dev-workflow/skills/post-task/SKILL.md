@@ -66,6 +66,14 @@ For each approved item:
 - **Design Doc**: Copy spec/plan to docs/ with appropriate naming
 - **Workflow improvement (C-3)**: edit `kickoff` SKILL (add an interview question) or `references/spec-template.md` (add a prompt/checklist line) so future specs ask about the recurring omission up front
 
+### 5. Clear the session binding
+
+The work is complete, so release this session's active-unit binding (see `references/state-schema.md` § Session binding) — otherwise this session's Stop hook would keep treating the finished unit as in progress:
+
+```bash
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --clear
+```
+
 ## Output Format
 
 ```markdown

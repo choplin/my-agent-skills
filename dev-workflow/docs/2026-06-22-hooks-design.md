@@ -35,7 +35,9 @@ Both hooks are **command hooks** (deterministic) that shell out to the already-b
 python3 "$CLAUDE_PLUGIN_ROOT/scripts/workflow-state.py" --root "$CLAUDE_PROJECT_DIR/.claude/dev-workflow"
 ```
 
-They read `active_path` and the matching unit's `state`, `progress`, `next_action`. The evaluator already resolves the active unit branch-independently (unique branch match, else most-recently-modified). All state logic stays in the script; the hooks only format/act on its output.
+They read `active_path` and the matching unit's `state`, `progress`, `next_action`. All state logic stays in the script; the hooks only format/act on its output.
+
+> **Superseded (2026-06-23)**: the active unit was originally resolved branch-independently (unique branch match, else most-recently-modified). That guess leaked a stale unit into every unrelated session in the repo. Active resolution is now **bound per session** (`--session`); an unbound session resolves to `null` and the hooks stay silent. The hooks pass their `session_id`, and the design below now requires `--session` on each evaluator call. See `references/state-schema.md` § Active-unit resolution / Session binding.
 
 **Invariants for both hooks:**
 - Fast and silent when there is no dev-workflow work (`active_path` is null) → exit 0, no output.

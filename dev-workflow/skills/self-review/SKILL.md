@@ -31,7 +31,7 @@ Comprehensive review of implementation through specialized reviewers. The review
 
 Determine the level from the **active work unit**, not a glob over all stories (a leftover completed Story directory must never hijack the current work).
 
-1. Run `python3 dev-workflow/scripts/workflow-state.py` and read `active_path` (the unit with `active: true`). The script resolves it by current branch when possible, else by most-recent modification — so it works with or without per-unit branches (see `references/state-schema.md`).
+1. Run `python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID"` and read `active_path` (the unit bound to this session). If `active_path` is `null` (this session was never bound — e.g. you implemented after a `/clear`), identify the unit from `work_units[]` by `matches_current_branch`; if still ambiguous, ask the user. See `references/state-schema.md`.
    - If the active unit is a **Story** → **Story flow** (proceed to Step 1). Use its `path` as `{story-dir}`.
 2. If the active unit is a **Task** (or there is no active Story) → **Task flow**:
    - Identify the active plan file: Glob `.claude/plans/*.md` and find the plan with `**Work level**: Task` in its `## Workflow Context` section
@@ -181,6 +181,12 @@ When all results are PASS or NEEDS REVIEW (no FAIL), create review.md for the up
 - **Task (with plan / no plan)**: the Task has no `state.json` yet — create it now alongside review.md. Set `level: "task"`, `title`, `branch` (current branch, or `null` for no-plan without a dedicated branch), `criteria` (from the plan's Completion Criteria if present, else `[]`), `steps` (from the plan if present, else `[]`), and `review` = `{ "phase": "REVIEWING", "mode": "ITERATIVE", "items": [] }`. Use the same `{task-dir}` as review.md.
 
 Do not store a resolved counter — it is derived by the script.
+
+**Bind this session** to the work unit now that its directory exists (idempotent; this is the first binding point for a Task, see `references/state-schema.md` § Session binding):
+
+```bash
+python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --set "<work-unit-dir>"
+```
 
 #### Story Flow
 

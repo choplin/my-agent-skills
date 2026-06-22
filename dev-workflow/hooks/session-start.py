@@ -10,13 +10,15 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _common import active_unit, drain_stdin  # noqa: E402
+from _common import active_unit, read_stdin, session_id  # noqa: E402
 
 
 def main():
-    drain_stdin()
+    sid = session_id(read_stdin())
+    # A fresh session has no binding yet, so this usually injects nothing; the
+    # prune sweep is the real work here, clearing pointers from ended sessions.
     try:
-        unit = active_unit()
+        unit = active_unit(sid, prune=True)
     except Exception:
         return
     if not unit:

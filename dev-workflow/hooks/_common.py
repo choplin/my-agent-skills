@@ -22,8 +22,12 @@ def evaluator_paths():
     return script, root
 
 
-def active_unit():
-    """Run the evaluator and return the active work unit dict, or None.
+def active_unit(session_id, prune=False):
+    """Run the evaluator and return the session's active work unit, or None.
+
+    The active unit is bound per session (root/active/<session_id>.json); with
+    no session id, or no binding, this returns None and the hook stays quiet.
+    Pass prune=True to drop stale pointers first (session-start only).
 
     Self-contained best-effort: any failure (subprocess error, timeout,
     non-zero exit, empty/partial output, bad JSON) returns None rather than
@@ -34,10 +38,14 @@ def active_unit():
     script, root = evaluator_paths()
     if not script:
         return None
+    cmd = [sys.executable, script, "--root", root]
+    if session_id:
+        cmd += ["--session", session_id]
+    if prune:
+        cmd.append("--prune")
     try:
         out = subprocess.run(
-            [sys.executable, script, "--root", root],
-            capture_output=True, text=True, timeout=8,
+            cmd, capture_output=True, text=True, timeout=8,
         )
     except Exception:
         return None
@@ -53,8 +61,19 @@ def active_unit():
     return None
 
 
-def drain_stdin():
+def read_stdin():
     try:
         return sys.stdin.read()
     except Exception:
         return ""
+
+
+def session_id(stdin_raw):
+    """Resolve the current session id from hook stdin, then the environment."""
+    try:
+        sid = json.loads(stdin_raw).get("session_id")
+        if sid:
+            return sid
+    except Exception:
+        pass
+    return os.environ.get("CLAUDE_CODE_SESSION_ID") or None

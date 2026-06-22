@@ -29,6 +29,11 @@ After addressing review items imported from a PR, the developer needs to reply t
    - `.claude/dev-workflow/task/*/review.md`
 
    - If not found: stop and report "review.md not found."
+   - Once found, **bind this session** to the review.md's work-unit directory so dev-workflow hooks track only this work (see `references/state-schema.md` § Session binding):
+
+     ```bash
+     python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --set "<work-unit-dir>"
+     ```
 
 2. **Extract PR info**: Parse PR number from Source fields (e.g., `PR #42 comment:123`).
 
