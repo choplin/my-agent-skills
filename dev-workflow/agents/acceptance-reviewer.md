@@ -13,19 +13,23 @@ tools:
 
 # Acceptance Criteria Reviewer
 
-Internal agent that verifies implementation against acceptance criteria defined in spec.
+Internal agent that verifies implementation against the **human-judged** acceptance criteria in a spec — the ones that cannot be checked by a command.
 
 ## Input
 
 You will receive:
 - `spec_path`: Path to spec.md file
 
+## Scope
+
+Each criterion has a `Verify:` line. Criteria with an executable `Verify:` command are checked deterministically by self-review's machine-verification pass **before** you run — do not re-judge them. **Only evaluate criteria whose `Verify:` is `human`** (subjective/UX/judgment). For those, you cannot produce a hard PASS programmatically, so mark them PASS only with clear evidence, otherwise NEEDS REVIEW. Never guess.
+
 ## Process
 
 ### 1. Load Spec
 
 Read the spec file and extract:
-- **Acceptance Criteria** section (Given-When-Then format)
+- **Acceptance Criteria** section (Given-When-Then format) — focus on `Verify: human` criteria
 - **Out of Scope** section (to avoid false negatives)
 
 ### 2. Verify Each Criterion

@@ -38,14 +38,26 @@ Determine the level from the **active work unit**, not a glob over all stories (
    - If active Task plan found → **Task (with plan)** flow (proceed to Step 1T)
    - If no active Task plan found → **Task (no plan)** flow (proceed to Step 1T, skip 1T-a)
 
+### 0M. Machine-Verification Pass (run first — cheap & deterministic)
+
+Before spending any LLM reviewers, run the criteria predicates. This closes the cheap, certain cases first and surfaces hard FAILs without paying for review.
+
+1. Read the active unit's `state.json` `criteria[]` (Story/Task with plan). For each criterion with a non-null `verify` command:
+   - Run the command (Bash). Exit 0 → PASS; non-zero → FAIL.
+   - Write the result back to `state.json`: set `passes` and fill `evidence` (a one-line summary of the command + outcome). **Default-FAIL**: never set `passes: true` without having run the command and captured evidence.
+2. Criteria with `verify: null` (i.e. `Verify: human`) are **not** guessed here — they go to the acceptance-reviewer / human as NEEDS REVIEW.
+3. If any predicate FAILs → this is a hard FAIL. Go straight to Self-Correct (Step 4) and fix, then re-run from 0M. Do not launch the LLM reviewers until predicates pass (no point reviewing code that fails its own tests).
+
+Once all machine predicates PASS (or there are none), proceed to the LLM review pass.
+
 ### 1. Invoke Reviewers — Story Flow (Parallel)
 
-Launch three reviewers in parallel using Task tool:
+Launch reviewers in parallel using Task tool. Every reviewer must **classify each finding** (see "Finding Classification" below) so non-gating noise doesn't force rework.
 
 ```
 Task 1: acceptance-reviewer (internal agent)
 - subagent_type: dev-workflow:acceptance-reviewer
-- prompt: "Review implementation against acceptance criteria. spec_path: {spec_path}"
+- prompt: "Review implementation against acceptance criteria. spec_path: {spec_path}. Only judge criteria whose Verify is `human` (machine-verifiable criteria were already checked). Classify each as PASS / NEEDS REVIEW."
 
 Task 2: plan-compliance-reviewer (internal agent)
 - subagent_type: dev-workflow:plan-compliance-reviewer
@@ -53,9 +65,20 @@ Task 2: plan-compliance-reviewer (internal agent)
 
 Task 3: feature-dev:code-reviewer (external agent)
 - subagent_type: feature-dev:code-reviewer
-- prompt: "Review code quality for the changes in this implementation"
+- prompt: "Review code quality for the changes. For EACH finding, label it `correctness` (a real bug or a violated requirement) or `improvement` (style/refactor/nice-to-have). Only correctness findings gate; report improvements separately."
 - Note: Skip if agent not available
 ```
+
+#### Finding Classification
+
+Reviewers prompted to find gaps will report some even when the work is sound; chasing every finding causes over-engineering (Anthropic best-practices, see `docs/2026-06-11-loop-engineering-research.md` §2). So each finding is one of:
+
+| Class | Meaning | Effect |
+|-------|---------|--------|
+| `correctness` | A real bug, broken behavior, or a violated spec requirement | **Gates** — counts as FAIL until fixed |
+| `improvement` | Style, refactor, naming, optional hardening | **Does not gate** — recorded in review.md as an improvement note for the user to consider |
+
+When a finding's class is genuinely unclear, treat it as `correctness` (fail safe), but state the uncertainty.
 
 ### 1C. Codex Code Review (All Flows)
 
@@ -71,11 +94,13 @@ Skill(skill: "codex:review", args: "--wait")
 
 #### Verdict Mapping
 
-| Codex Verdict | Finding Severities | Self-Review Status |
+Apply Finding Classification to Codex findings too: a finding only gates if it is a `correctness` issue (real bug / violated requirement). Severity is a hint, not the gate.
+
+| Codex Verdict | Findings after classification | Self-Review Status |
 |---|---|---|
 | `approve` | (none) | PASS |
-| `needs-attention` | any `critical` or `high` | FAIL |
-| `needs-attention` | only `medium`/`low` | NEEDS REVIEW |
+| `needs-attention` | any `correctness` finding | FAIL |
+| `needs-attention` | only `improvement` findings | NEEDS REVIEW (record, don't gate) |
 | Skipped/Error | N/A | PASS (not counted) |
 
 ### 1T. Invoke Reviewers — Task Flow
@@ -86,9 +111,10 @@ For Task-level work, run two review steps:
 
 > **Skip this step if Task (no plan)** — proceed directly to 1T-b.
 
-Read the plan file's `### Completion Criteria` section. For each `- [ ]` item:
-1. Examine the implementation to determine if the criterion is met
-2. Mark as PASS, FAIL, or NEEDS REVIEW
+The machine-verification pass (Step 0M) already ran any criteria with a `verify` command and wrote results to `state.json`. Here, handle only the remainder:
+
+1. For criteria with `verify: human` (or plan `### Completion Criteria` items without a command), examine the implementation and mark PASS / NEEDS REVIEW.
+2. Any machine-predicate FAIL from 0M is already a hard FAIL → Self-Correct.
 
 This check is performed inline (no agent needed).
 
@@ -105,33 +131,32 @@ Task: feature-dev:code-reviewer (external agent)
 
 ### 2. Aggregate Results
 
-Combine outputs from all reviewers into unified report.
+Combine outputs from all reviewers into a unified report. Keep `correctness` findings and `improvement` findings in separate lists.
 
 ### 3. Determine Overall Status
 
-| Reviewer | PASS Condition |
-|----------|----------------|
-| Acceptance | All criteria PASS or NEEDS REVIEW |
-| Plan Compliance | All items COMPLETE or NEEDS REVIEW |
-| Code: Bugs | No issues found |
-| Code: Logic Errors | No issues found |
-| Code: Security | No issues found |
-| Code: Code Quality | No HIGH severity issues |
-| Code: Conventions | No issues found |
-| Codex Review | Verdict "approve", or skipped, or only medium/low findings |
+A reviewer gates (can produce FAIL) only on machine-predicate failures, missing requirements, or `correctness` findings. `improvement` findings never gate.
 
-Overall PASS requires all reviewers to pass.
+| Source | PASS Condition |
+|--------|----------------|
+| Machine Verification (0M) | All criteria predicates exited 0 |
+| Acceptance (human criteria) | All `Verify: human` criteria PASS or NEEDS REVIEW |
+| Plan Compliance | All items COMPLETE or NEEDS REVIEW |
+| Code Review | No `correctness` findings (improvements are recorded, not gated) |
+| Codex Review | Verdict "approve", or skipped, or only `improvement` findings |
+
+Overall PASS requires every gating source to pass. `improvement` findings are listed for the user but do not block reaching user-review.
 
 ### 4. Self-Correct (if FAIL)
 
 This is a feedback loop. If any FAIL exists:
 
-1. **Acceptance FAIL**: Fix implementation to meet criteria
-2. **Plan FAIL**: Complete missing steps/file changes
-3. **Code Quality FAIL**: Fix identified issues
-4. **Codex Review FAIL**: Fix critical/high severity findings identified by Codex
+1. **Machine-predicate FAIL**: Fix the implementation until the criterion's `verify` command exits 0. This is the cheapest, most certain signal — fix these first.
+2. **Acceptance FAIL** (human criteria): Fix implementation to meet the criterion.
+3. **Plan FAIL**: Complete missing steps/file changes.
+4. **Code/Codex `correctness` finding**: Fix it. `improvement` findings are recorded but not fixed here unless the user asks.
 
-After fixing, re-run self-review.
+After fixing, re-run self-review from Step 0M.
 
 **Escalation rule**: If the same FAIL occurs twice consecutively, promote it to NEEDS REVIEW.
 

@@ -95,6 +95,29 @@ Each criterion must be:
 - **User-confirmed**: Traceable to user statement
 - **Essential**: Necessary to verify User Need is met
 
+#### Predicate-ize each criterion
+
+For every criterion, decide **how it will be verified** and record it on a `Verify:` line right after the scenario:
+
+- **Machine-verifiable** → write an executable command that exits 0 on PASS, non-zero on FAIL (a test invocation, build, `rg -q ...`, a script). This becomes the criterion's predicate; self-review runs it deterministically before any LLM review.
+- **Not machine-verifiable** (UX, subjective quality, judgment) → write `Verify: human` — the criterion is routed to human review from the start, never guessed by an LLM.
+
+```gherkin
+Scenario: Login redirects to dashboard
+  Given a registered user on the login page
+  When valid credentials are submitted
+  Then the response redirects to /dashboard
+  Verify: npm test -- auth/login.redirect
+```
+
+```gherkin
+Scenario: Error copy reads clearly
+  ...
+  Verify: human
+```
+
+The `Verify:` value is mirrored into `state.json` `criteria[].verify` (the command, or `null` for `human`). Prefer machine-verifiable criteria — the more pass/fail is a command, the more self-review closes on its own (see `docs/2026-06-11-loop-engineering-research.md` §3).
+
 ### 4. Define Out of Scope
 
 Explicitly state what this spec does NOT include. This prevents scope creep during implementation.
@@ -157,6 +180,7 @@ Create `.claude/dev-workflow/story/{story-dir}/spec.md` where `{story-dir}` is t
 - Given: {preconditions}
 - When: {action}
 - Then: {verifiable result}
+- Verify: {executable command that exits 0 on PASS, or `human`}
 
 ## Out of Scope
 {What this spec explicitly does NOT include}
