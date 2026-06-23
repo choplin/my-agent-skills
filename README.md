@@ -27,9 +27,9 @@ docs/                        # research + decision records
 **Skills** (works for Claude Code, Codex, Cursor, Kimi, and 70+ agents):
 
 ```bash
-skills add <owner>/my-agent-skills --list          # browse
-skills add <owner>/my-agent-skills --skill '*'     # install all
-skills add <owner>/my-agent-skills --skill dev-workflow-kickoff   # one
+skills add choplin/my-agent-skills --list          # browse
+skills add choplin/my-agent-skills --skill '*'     # install all
+skills add choplin/my-agent-skills --skill dev-workflow-kickoff   # one
 ```
 
 **Claude-Code add-ons** (subagents + dev-workflow hooks) — not carried by the skills CLI:
