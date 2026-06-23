@@ -167,7 +167,7 @@ dig will dynamically determine what questions to ask based on user responses and
 
 **Concrete actions:**
 - Check against `references/anti-patterns.md`
-- Validate with the `skill-authoring-quality-review` skill for comprehensive review. Under Claude Code you can dispatch the `skill-quality-reviewer` subagent (a thin wrapper around that skill) to run the review in an isolated context; on agents without subagents, apply the `skill-authoring-quality-review` skill inline.
+- Validate with the `skill-authoring-quality-review` skill for comprehensive review. Under Claude Code you can dispatch the `skill-authoring-quality-reviewer` subagent (a thin wrapper around that skill) to run the review in an isolated context; on agents without subagents, apply the `skill-authoring-quality-review` skill inline.
 - Verify all Three Principles are satisfied
 
 **Validation checklist:**

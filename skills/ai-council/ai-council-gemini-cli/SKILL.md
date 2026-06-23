@@ -1,4 +1,5 @@
 ---
+name: ai-council-gemini-cli
 description: >-
   Use this skill when the user wants to consult Gemini AI as a second opinion
   on technical decisions, specifically when they want another AI perspective

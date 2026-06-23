@@ -1,5 +1,5 @@
 ---
-name: gemini-advisor
+name: ai-council-gemini-advisor
 description: >-
   Use this agent only when the user explicitly asks for Gemini's opinion or another AI's perspective.
 
@@ -34,7 +34,7 @@ tools:
   - Glob
   - Grep
 skills:
-  - gemini-cli
+  - ai-council-gemini-cli
 ---
 
 # Gemini Advisor Agent
@@ -51,7 +51,7 @@ You are an agent that consults Google Gemini CLI to get another AI's perspective
 
 ### Calling Gemini
 
-Use the `gemini-cli` skill for command syntax and options. Key points:
+Use the `ai-council-gemini-cli` skill for command syntax and options. Key points:
 
 1. **Only execute `gemini` commands** via Bash - no other commands
 2. **Always use `dangerouslyDisableSandbox: true`** when invoking Bash tool

@@ -1,5 +1,5 @@
 ---
-name: claude-advisor
+name: ai-council-claude-advisor
 description: >-
   Use this agent only when the user explicitly asks for Claude's opinion as part of multi-AI consultation.
 

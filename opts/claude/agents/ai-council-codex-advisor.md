@@ -1,5 +1,5 @@
 ---
-name: codex-advisor
+name: ai-council-codex-advisor
 description: >-
   Use this agent only when the user explicitly asks for Codex's opinion or another AI's perspective.
 
@@ -34,7 +34,7 @@ tools:
   - Glob
   - Grep
 skills:
-  - codex-cli
+  - ai-council-codex-cli
 ---
 
 # Codex Advisor Agent
@@ -51,7 +51,7 @@ You are an agent that consults OpenAI Codex CLI to get another AI's perspective 
 
 ### Calling Codex
 
-Use the `codex-cli` skill for command syntax and options. Key points:
+Use the `ai-council-codex-cli` skill for command syntax and options. Key points:
 
 1. **Only execute `codex` or `codex-xhigh` commands** via Bash - no other commands
 2. **Always use `dangerouslyDisableSandbox: true`** when invoking Bash tool

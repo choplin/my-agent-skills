@@ -54,11 +54,11 @@ Before consulting the AIs, formulate a question that includes these three elemen
 ### Step 2: Gather Opinions in Parallel
 
 Launch three Task tool calls simultaneously with the following agents:
-- `claude-advisor` - Claude's perspective (direct analysis)
-- `gemini-advisor` - Gemini's perspective (via Gemini CLI)
-- `codex-advisor` - Codex's perspective (via Codex CLI)
+- `ai-council-claude-advisor` - Claude's perspective (direct analysis)
+- `ai-council-gemini-advisor` - Gemini's perspective (via Gemini CLI)
+- `ai-council-codex-advisor` - Codex's perspective (via Codex CLI)
 
-**Important**: Use `run_in_background: true` for gemini-advisor and codex-advisor to allow parallel execution. Claude-advisor can run in foreground.
+**Important**: Use `run_in_background: true` for ai-council-gemini-advisor and ai-council-codex-advisor to allow parallel execution. Claude-advisor can run in foreground.
 
 Provide each agent with:
 - The same clear question

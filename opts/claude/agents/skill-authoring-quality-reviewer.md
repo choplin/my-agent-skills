@@ -1,5 +1,5 @@
 ---
-name: skill-quality-reviewer
+name: skill-authoring-quality-reviewer
 description: |
   Use this agent when the user wants to review skill quality, check if a skill is effective for AI use, validate skill criteria, or improve a skill that isn't producing expected results. Also use proactively during skill creation (Step 5 of skill-development process) to validate before user approval.
 

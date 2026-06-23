@@ -1,4 +1,5 @@
 ---
+name: ai-council-codex-cli
 description: >-
   Use this skill when the user asks about Codex CLI, wants to get another AI's
   opinion, or needs guidance on using Codex for code review. Triggers on phrases
