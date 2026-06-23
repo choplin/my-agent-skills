@@ -123,19 +123,20 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
     `~/.claude/skills/`, so `${CLAUDE_PLUGIN_ROOT}` resolves and hooks need no
     rewrite. Placing the plugin there also preserves the `dev-workflow:` namespace
     for the reviewer subagents.
-- **Step 3** — migrate the remaining plugins. Done: discuss-toolkit,
-  discussion-continuity, git-helpers, jira-cli, lang-reference, writing-toolkit
-  (skills-only) ✅. Remaining: ai-council (has advisor agents). **moonbit was
-  dropped**, not migrated — it was a vendored submodule of upstream
+- **Step 3** — migrate the remaining plugins. ✅ Done: discuss-toolkit,
+  discussion-continuity, git-helpers, jira-cli, lang-reference, writing-toolkit,
+  ai-council (advisor agents → flat group-prefixed agents under `opts/claude/agents/`).
+  **moonbit was dropped**, not migrated — it was a vendored submodule of upstream
   `moonbitlang/skills`, which is directly installable (`skills add moonbitlang/skills`,
   9 skills, already `moonbit-*` namespaced and more current than our snapshot).
-  No reason to re-host it. Then retire the plugin format and refresh the root
-  README + `marketplace.json`.
+  Plugin format retired: removed all `.claude-plugin/` manifests and the root
+  `marketplace.json`; refreshed the root `README.md` and `CLAUDE.md`.
+
+All groups are now skill-first. Top level is just `skills/`, `opts/`, `scripts/`,
+`docs/`.
 
 ## Notes / open issues
 
-- `.claude-plugin/marketplace.json` and the root `README.md` are already stale
-  (list removed plugins, wrong skill names). Refresh as part of Step 3.
 - dev-workflow's state tracking is intrinsically Claude-Code-specific (it uses
   `$CLAUDE_CODE_SESSION_ID` and the hooks). Other agents get the portable
   workflow guidance; the session-binding mechanics degrade gracefully.

@@ -4,21 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This repository is a collection of Claude Code plugins. It is not an executable application - plugins are loaded by Claude Code as documentation and skill definitions.
+This repository is a collection of **agent-agnostic [Agent Skills](https://agentskills.io)**, distributed via the `vercel-labs/skills` CLI, plus Claude-Code-specific add-ons. It is not an executable application — skills are markdown + optional resources loaded by coding agents. See [`docs/skill-first-architecture.md`](./docs/skill-first-architecture.md) for the full model.
 
-## Plugin Structure
+## Structure
 
-Each plugin follows this structure:
 ```
-plugin-name/
-├── .claude-plugin/plugin.json    # Plugin metadata (name, version, author)
-├── README.md                      # Plugin documentation
-├── skills/                        # Skill definitions
-│   └── skill-name/SKILL.md
-├── commands/                      # Slash commands (optional)
-├── agents/                        # Subagents (optional)
-└── references/                    # Templates and reference docs (optional)
+skills/<group>/<group>-<skill>/SKILL.md   # portable skills (source of truth)
+opts/<agent>/...                           # agent-specific add-ons (subagents, hooks)
+scripts/install-opts.sh                    # distributes opts/ per agent
+docs/                                      # research + decision records
 ```
+
+Key conventions (details in the architecture doc):
+- **Namespace by prefix.** No namespace exists in the standard or the CLI, so skill `name` = `<group>-<skill>` (the leaf dir matches `name`; the `<group>/` folder is organization only). A group's root skill may keep the bare group name.
+- **Portable SKILL.md.** No plugin-root paths or `${CLAUDE_PLUGIN_ROOT}`; share across skills by delegating to a base skill by name; cross-skill references use the full prefixed name.
+- **Agent-specific = opt-in.** Subagents/hooks live under `opts/` and install via `install-opts.sh`. `dev-workflow` keeps a minimal opt-plugin (for hooks; its subagents stay `dev-workflow:`-namespaced); agent-only groups distribute flat, group-prefixed agents.
 
 ## Recommended Skills
 
