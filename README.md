@@ -1,12 +1,12 @@
-# 🛠️ my-claude-marketplace
+# my-claude-marketplace
 
 A personal collection of **agent-agnostic [Agent Skills](https://agentskills.io)**, plus the Claude-Code-specific add-ons that layer on top of them.
 
 Skills are the portable primitive — distributed to any coding agent via the [`vercel-labs/skills`](https://github.com/vercel-labs/skills) CLI. Agent-specific extras (subagents, hooks) are kept separate and installed per agent.
 
-> 📐 Design rationale and the full distribution model: [`docs/skill-first-architecture.md`](./docs/skill-first-architecture.md)
+> Design rationale and the full distribution model: [`docs/skill-first-architecture.md`](./docs/skill-first-architecture.md)
 
-## 📂 Structure
+## Structure
 
 ```
 skills/                      # portable, agent-agnostic skills (the source of truth)
@@ -22,7 +22,7 @@ docs/                        # research + decision records
 
 **Naming / namespace:** Neither the Agent Skills standard nor the skills CLI has a namespace mechanism (installs are flat by `name`; same names overwrite). So skills are namespaced by a `<group>-` prefix baked into the flat name (e.g. `dev-workflow-create-spec`). See the architecture doc for details.
 
-## 📦 Install
+## Install
 
 **Skills** (works for Claude Code, Codex, Cursor, Kimi, and 70+ agents):
 
@@ -39,7 +39,7 @@ scripts/install-opts.sh claude        # symlink opts/claude/* into ~/.claude/
 scripts/install-opts.sh --dry-run     # preview
 ```
 
-## 🧩 Skill groups
+## Skill groups
 
 | Group | Skills |
 |-------|--------|
