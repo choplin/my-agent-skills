@@ -43,7 +43,7 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 | Hook | Event | Behavior |
 |------|-------|----------|
 | `session-start.py` | SessionStart | Injects a short summary of the active work unit (state, progress, next action) so a fresh session resumes with context — replacing the handoff copy-paste ritual for the common case. |
-| `stop-gate.py` | Stop | When the active unit is `potentially_complete` (all steps done, no review started), reminds you to run `/dev-workflow:self-review`. Blocks at most twice in a row, then yields — a reminder, not a loop engine. |
+| `stop-gate.py` | Stop | When the active unit is `potentially_complete` (all steps done, no review started), reminds you to run `/dev-workflow-self-review`. Blocks at most twice in a row, then yields — a reminder, not a loop engine. |
 
 > Hooks load at session start; after installing or changing them, restart Claude Code. See `docs/2026-06-22-hooks-design.md`.
 
@@ -67,7 +67,7 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 
 This plugin depends on the **`discuss-toolkit`** plugin:
 
-- `dev-workflow-kickoff` and `dev-workflow-user-review` use `discuss-toolkit:dig` as a base skill to clarify ambiguous intent before proceeding.
+- `dev-workflow-kickoff` and `dev-workflow-user-review` use `discuss-toolkit-dig` as a base skill to clarify ambiguous intent before proceeding.
 
 Install `discuss-toolkit` alongside this plugin. If it is not available, `dev-workflow-kickoff` (the entry point) and the Complex-feedback path of `dev-workflow-user-review` cannot run their interview step.
 

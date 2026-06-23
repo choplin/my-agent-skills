@@ -1,6 +1,0 @@
-{
-  "name": "jira-cli",
-  "description": "jira-cli command reference for managing Jira from the terminal",
-  "version": "1.0.0",
-  "keywords": ["jira", "cli", "project-management", "issue-tracking"]
-}

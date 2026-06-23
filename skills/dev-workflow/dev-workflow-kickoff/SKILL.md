@@ -34,7 +34,7 @@ Rules:
 
 ### Use dig for Intent Clarification
 
-Use the Skill tool to call `discuss-toolkit:dig` as a base skill to clarify user intent.
+Use the Skill tool to call `discuss-toolkit-dig` as a base skill to clarify user intent.
 
 **Context to provide to dig**:
 - Subject: User's development task requirements

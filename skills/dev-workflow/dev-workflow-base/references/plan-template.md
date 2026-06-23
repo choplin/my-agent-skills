@@ -14,10 +14,10 @@
 - Refer to Spec's Acceptance Criteria as the source of truth for verification
 
 ### After All Steps Complete
-1. Invoke `dev-workflow:self-review` skill — verifies against acceptance criteria in spec
-2. Invoke `dev-workflow:user-review` skill — presents results and collects user feedback
+1. Invoke `dev-workflow-self-review` skill — verifies against acceptance criteria in spec
+2. Invoke `dev-workflow-user-review` skill — presents results and collects user feedback
 3. After user LGTM: commit changes
-4. Invoke `dev-workflow:post-task` skill — capture knowledge
+4. Invoke `dev-workflow-post-task` skill — capture knowledge
 
 ### If Session Clears
 - Use `/dev-workflow-resume-work` to evaluate progress and resume from the correct point

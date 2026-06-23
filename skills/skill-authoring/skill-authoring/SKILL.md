@@ -133,7 +133,7 @@ to understand it (without feedback intent), or security-specific audits
 
 **Use dig skill for structured interview:**
 
-Load `discuss-toolkit:dig` and provide context:
+Load `discuss-toolkit-dig` and provide context:
 - **Subject**: "skill requirements for [skill name]"
 - **Context for dig**: Creating a skill that satisfies Three Principles requires understanding:
   1. User's experiential rationale (not generic best practices) - lessons learned from specific problems or failures
