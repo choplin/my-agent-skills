@@ -1,4 +1,4 @@
-# my-claude-marketplace
+# my-agent-skills
 
 A personal collection of **agent-agnostic [Agent Skills](https://agentskills.io)**, plus the Claude-Code-specific add-ons that layer on top of them.
 
@@ -27,9 +27,9 @@ docs/                        # research + decision records
 **Skills** (works for Claude Code, Codex, Cursor, Kimi, and 70+ agents):
 
 ```bash
-skills add <owner>/my-claude-marketplace --list          # browse
-skills add <owner>/my-claude-marketplace --skill '*'     # install all
-skills add <owner>/my-claude-marketplace --skill dev-workflow-kickoff   # one
+skills add <owner>/my-agent-skills --list          # browse
+skills add <owner>/my-agent-skills --skill '*'     # install all
+skills add <owner>/my-agent-skills --skill dev-workflow-kickoff   # one
 ```
 
 **Claude-Code add-ons** (subagents + dev-workflow hooks) — not carried by the skills CLI:
