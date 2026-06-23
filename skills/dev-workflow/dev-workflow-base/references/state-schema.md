@@ -109,13 +109,13 @@ Evaluated top-down; first match wins.
 
 | State | Action | Dispatch |
 |-------|--------|----------|
-| `spec_only` | Create implementation plan | `create-plan` |
+| `spec_only` | Create implementation plan | `dev-workflow-create-plan` |
 | `planned` | Begin implementation from step 1 | implementation handoff (no skill) |
 | `in_progress` | Continue from first unchecked step | implementation handoff (no skill) |
-| `potentially_complete` | Run self-review | `self-review` |
-| `in_review` | Resume user review | `user-review` |
-| `review_complete` | Run post-task | `post-task` |
-| `epic_next_story` | Start next Story | `create-spec` |
+| `potentially_complete` | Run self-review | `dev-workflow-self-review` |
+| `in_review` | Resume user review | `dev-workflow-user-review` |
+| `review_complete` | Run post-task | `dev-workflow-post-task` |
+| `epic_next_story` | Start next Story | `dev-workflow-create-spec` |
 | `blocked` | Report blockers | (depends on blocker) |
 
 ### Legacy value mappings (backward compatibility)
@@ -189,7 +189,7 @@ The active unit is **bound per session, never guessed**. Branch matching is unre
 - `workflow-state.py --session <id>` resolves `active_path` to that pointer's unit (when the directory still exists); a session with **no pointer resolves to `null`** — so passive hooks stay silent in unrelated sessions.
 - `matches_current_branch` is reported as a hint but does not select the active unit.
 
-Pointer files are session-local and ephemeral. `--prune` (run on session start) drops pointers whose unit is gone or whose file has aged past 7 days; `post-task` clears its own on completion.
+Pointer files are session-local and ephemeral. `--prune` (run on session start) drops pointers whose unit is gone or whose file has aged past 7 days; `dev-workflow-post-task` clears its own on completion.
 
 ### Session binding
 
@@ -203,7 +203,7 @@ python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_I
 python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --clear
 ```
 
-Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review, import-pr-comments, reply-to-pr-comments) **bind** at the point the unit is identified. A Task has no directory until self-review creates one, so a Task session is first bound there. `post-task` **clears**. Read-only overviews (workflow-status) and `handoff` do not bind; a handed-off unit is rebound by `resume-work` in the next session.
+Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review, import-pr-comments, reply-to-pr-comments) **bind** at the point the unit is identified. A Task has no directory until self-review creates one, so a Task session is first bound there. `dev-workflow-post-task` **clears**. Read-only overviews (workflow-status) and `dev-workflow-handoff` do not bind; a handed-off unit is rebound by `dev-workflow-resume-work` in the next session.
 
 ### Consumer rule
 

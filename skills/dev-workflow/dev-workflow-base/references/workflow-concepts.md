@@ -107,8 +107,8 @@ Each Story maps to a single git branch. Branch lifecycle is managed by skills:
 
 | Timing | Skill | Action |
 |--------|-------|--------|
-| After spec approval | `create-spec` | Create branch `{prefix}/{story-name}` and checkout |
-| Session resume | `resume-work` | Detect spec branch, confirm checkout with user |
+| After spec approval | `dev-workflow-create-spec` | Create branch `{prefix}/{story-name}` and checkout |
+| Session resume | `dev-workflow-resume-work` | Detect spec branch, confirm checkout with user |
 
 **Branch naming convention**: `{prefix}/{story-name}`
 
@@ -174,16 +174,16 @@ The Story directory name (e.g., `add-auth`) becomes the branch name (e.g., `feat
 
 | Phase | Skill | Purpose |
 |-------|-------|---------|
-| Understand | `kickoff` | Explore user needs, route to Task/Story/Epic |
-| Document (Task) | `create-task` | Create task-level plan with Why/What context |
-| Document (Story) | `create-spec` → `create-plan` | Create spec then implementation plan |
-| Document (Epic) | `create-epic` | Decompose into Stories |
-| Resume Work | `resume-work` | Evaluate progress, identify gaps, recommend resumption point |
-| Test/AI Review | `self-review` | Verify against acceptance criteria |
-| User Review | `user-review` | Structured feedback handling |
-| Commit + Knowledge Capture | `post-task` | Commit and capture learnings |
+| Understand | `dev-workflow-kickoff` | Explore user needs, route to Task/Story/Epic |
+| Document (Task) | `dev-workflow-create-task` | Create task-level plan with Why/What context |
+| Document (Story) | `dev-workflow-create-spec` → `dev-workflow-create-plan` | Create spec then implementation plan |
+| Document (Epic) | `dev-workflow-create-epic` | Decompose into Stories |
+| Resume Work | `dev-workflow-resume-work` | Evaluate progress, identify gaps, recommend resumption point |
+| Test/AI Review | `dev-workflow-self-review` | Verify against acceptance criteria |
+| User Review | `dev-workflow-user-review` | Structured feedback handling |
+| Commit + Knowledge Capture | `dev-workflow-post-task` | Commit and capture learnings |
 
-**Note**: Skills are invoked in sequence. Some transitions are automatic (e.g., `self-review` → `user-review`), others require explicit invocation or user decision.
+**Note**: Skills are invoked in sequence. Some transitions are automatic (e.g., `dev-workflow-self-review` → `dev-workflow-user-review`), others require explicit invocation or user decision.
 
 ---
 

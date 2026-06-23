@@ -20,7 +20,7 @@
 4. Invoke `dev-workflow:post-task` skill — capture knowledge
 
 ### If Session Clears
-- Use `/resume-work` to evaluate progress and resume from the correct point
+- Use `/dev-workflow-resume-work` to evaluate progress and resume from the correct point
 - Or read this plan and the spec, then continue from the last completed step
 
 ## Approach

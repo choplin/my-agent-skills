@@ -10,13 +10,13 @@ tools:
   - Grep
   - Bash
 skills:
-  - acceptance-review
+  - dev-workflow-acceptance-review
 ---
 
-You run in an isolated context. Apply the `acceptance-review` skill and follow
+You run in an isolated context. Apply the `dev-workflow-acceptance-review` skill and follow
 its procedure end-to-end for the given `spec_path`, then return the report in the
 exact format that skill specifies.
 
 This agent is a thin Claude Code wrapper that exists only to run that skill in a
-separate context. The review logic lives in the `acceptance-review` skill — do
+separate context. The review logic lives in the `dev-workflow-acceptance-review` skill — do
 not duplicate it here.

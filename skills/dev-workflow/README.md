@@ -13,7 +13,7 @@ Work state lives in documents and a small `state.json`, so a task survives `/cle
 
 ## Workflow Levels
 
-`kickoff` interviews you and routes the work to the right level. The core question is **"can you write the completion criteria directly from your need?"** — and, for tasks, **"can every criterion be a command that returns pass/fail?"**
+`dev-workflow-kickoff` interviews you and routes the work to the right level. The core question is **"can you write the completion criteria directly from your need?"** — and, for tasks, **"can every criterion be a command that returns pass/fail?"**
 
 | Level | When | Approach |
 |-------|------|----------|
@@ -34,7 +34,7 @@ The split is about **where the "right answer" lives**: in the world (tests, a sp
 
 **self-review.** Runs the machine predicates first (cheap, certain); only then launches LLM reviewers. Every reviewer finding is classified `correctness` (a real bug or violated requirement — blocks) or `improvement` (style/refactor — recorded, doesn't block), so review noise doesn't force needless rework.
 
-**Outer-loop shortening.** Plans start with a walking skeleton (the first reviewable real artifact) and a quick "is this the right direction?" checkpoint, and record their `Approach Decisions` so you can review the *direction*, not just the file list. Omissions found in review are fed back into the spec template / kickoff questions by `post-task`.
+**Outer-loop shortening.** Plans start with a walking skeleton (the first reviewable real artifact) and a quick "is this the right direction?" checkpoint, and record their `Approach Decisions` so you can review the *direction*, not just the file list. Omissions found in review are fed back into the spec template / kickoff questions by `dev-workflow-post-task`.
 
 ## Hooks
 
@@ -51,25 +51,25 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 
 | Skill | Description |
 |-------|-------------|
-| `kickoff` | Explore the need through dialogue and route to the right level (incl. the oracle test → Autonomous-Task) |
-| `create-task` | Create a task-level plan with full Why/What (and the autonomous variant) |
-| `create-epic` | Create an epic document coordinating multiple stories |
-| `create-spec` | Create a spec with predicate-ized (`Verify:`) acceptance criteria |
-| `create-plan` | Create a self-contained implementation plan (walking skeleton first, approach decisions) |
-| `resume-work` | Resume existing work from the evaluator's view of progress |
-| `handoff` | Generate a handoff prompt (mostly superseded by the SessionStart hook; use for session notes) |
-| `self-review` | Machine-verification pass, then classified LLM review |
-| `user-review` | Structured handling of user feedback during review |
-| `post-task` | Capture knowledge and feed omissions back into the workflow |
-| `workflow-status` | Overview of all active epics, stories, and tasks |
+| `dev-workflow-kickoff` | Explore the need through dialogue and route to the right level (incl. the oracle test → Autonomous-Task) |
+| `dev-workflow-create-task` | Create a task-level plan with full Why/What (and the autonomous variant) |
+| `dev-workflow-create-epic` | Create an epic document coordinating multiple stories |
+| `dev-workflow-create-spec` | Create a spec with predicate-ized (`Verify:`) acceptance criteria |
+| `dev-workflow-create-plan` | Create a self-contained implementation plan (walking skeleton first, approach decisions) |
+| `dev-workflow-resume-work` | Resume existing work from the evaluator's view of progress |
+| `dev-workflow-handoff` | Generate a handoff prompt (mostly superseded by the SessionStart hook; use for session notes) |
+| `dev-workflow-self-review` | Machine-verification pass, then classified LLM review |
+| `dev-workflow-user-review` | Structured handling of user feedback during review |
+| `dev-workflow-post-task` | Capture knowledge and feed omissions back into the workflow |
+| `dev-workflow-workflow-status` | Overview of all active epics, stories, and tasks |
 
 ## Dependencies
 
 This plugin depends on the **`discuss-toolkit`** plugin:
 
-- `kickoff` and `user-review` use `discuss-toolkit:dig` as a base skill to clarify ambiguous intent before proceeding.
+- `dev-workflow-kickoff` and `dev-workflow-user-review` use `discuss-toolkit:dig` as a base skill to clarify ambiguous intent before proceeding.
 
-Install `discuss-toolkit` alongside this plugin. If it is not available, `kickoff` (the entry point) and the Complex-feedback path of `user-review` cannot run their interview step.
+Install `discuss-toolkit` alongside this plugin. If it is not available, `dev-workflow-kickoff` (the entry point) and the Complex-feedback path of `dev-workflow-user-review` cannot run their interview step.
 
 ## Templates
 
@@ -82,14 +82,14 @@ Install `discuss-toolkit` alongside this plugin. If it is not available, `kickof
 
 ## Typical Workflow (Story Level)
 
-1. `kickoff` — explore the need, assess the level.
-2. `create-spec` — write requirements and predicate-ized acceptance criteria (`Verify:` commands, or `human`).
-3. `create-plan` — sequence the steps; Step 1 is a walking skeleton; record approach decisions.
+1. `dev-workflow-kickoff` — explore the need, assess the level.
+2. `dev-workflow-create-spec` — write requirements and predicate-ized acceptance criteria (`Verify:` commands, or `human`).
+3. `dev-workflow-create-plan` — sequence the steps; Step 1 is a walking skeleton; record approach decisions.
 4. Implement, updating progress. Show the walking-skeleton slice early for a quick direction check. (Clearing the session is optional — documents + `state.json` are the source of truth.)
-5. `self-review` — runs the `Verify:` predicates first, then classified LLM review. Fix `correctness` findings; `improvement` findings are noted, not forced.
-6. `user-review` — present results; handle feedback.
+5. `dev-workflow-self-review` — runs the `Verify:` predicates first, then classified LLM review. Fix `correctness` findings; `improvement` findings are noted, not forced.
+6. `dev-workflow-user-review` — present results; handle feedback.
 7. After LGTM, commit.
-8. `post-task` — capture knowledge; feed any late-surfacing omissions back into the spec template / kickoff.
+8. `dev-workflow-post-task` — capture knowledge; feed any late-surfacing omissions back into the spec template / kickoff.
 
 For an **Autonomous-Task**, steps 2-7 collapse: write goal + predicates, run the implement→verify loop to green, then review the finished artifact.
 

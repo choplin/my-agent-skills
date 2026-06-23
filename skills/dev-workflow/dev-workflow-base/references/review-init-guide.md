@@ -1,6 +1,6 @@
 # Review.md Initialization Guide
 
-Shared procedure for creating `review.md` when it does not yet exist. Referenced by `self-review`, `user-review`, and `import-pr-comments` skills.
+Shared procedure for creating `review.md` when it does not yet exist. Referenced by `dev-workflow-self-review`, `dev-workflow-user-review`, and `dev-workflow-import-pr-comments` skills.
 
 ## 1. Determine Work Level
 

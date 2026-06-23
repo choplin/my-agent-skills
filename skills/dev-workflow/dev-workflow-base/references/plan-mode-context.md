@@ -6,7 +6,7 @@ When Claude Code autonomously enters Plan Mode (EnterPlanMode) during dev-workfl
 
 This causes Claude Code to lose its place in the workflow after executing the plan, skipping post-implementation steps like self-review.
 
-**Note**: This is distinct from the `plan.md` document created by the `create-plan` skill, which already includes a `## Workflow Context` section. This concerns Claude Code's built-in `.claude/plans/` files.
+**Note**: This is distinct from the `plan.md` document created by the `dev-workflow-create-plan` skill, which already includes a `## Workflow Context` section. This concerns Claude Code's built-in `.claude/plans/` files.
 
 ## Rule
 

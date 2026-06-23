@@ -167,7 +167,7 @@ dig will dynamically determine what questions to ask based on user responses and
 
 **Concrete actions:**
 - Check against `references/anti-patterns.md`
-- Validate with the `skill-quality-review` skill for comprehensive review. Under Claude Code you can dispatch the `skill-quality-reviewer` subagent (a thin wrapper around that skill) to run the review in an isolated context; on agents without subagents, apply the `skill-quality-review` skill inline.
+- Validate with the `skill-authoring-quality-review` skill for comprehensive review. Under Claude Code you can dispatch the `skill-quality-reviewer` subagent (a thin wrapper around that skill) to run the review in an isolated context; on agents without subagents, apply the `skill-authoring-quality-review` skill inline.
 - Verify all Three Principles are satisfied
 
 **Validation checklist:**
@@ -213,7 +213,7 @@ After AI determines the skill is ready (validation passed), seek user approval:
 
 ### Improvement Loop (during Step 5)
 
-After `skill-quality-review` validation:
+After `skill-authoring-quality-review` validation:
 1. Review findings
 2. Fix identified issues
 3. Re-validate

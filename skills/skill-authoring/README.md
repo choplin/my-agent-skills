@@ -51,11 +51,11 @@ Evaluates existing skills against the three principles. Use after creating a ski
 Skills are distributed via the [vercel-labs/skills](https://github.com/vercel-labs/skills) CLI:
 
 ```bash
-# install the skills in this group (skill-authoring + skill-quality-review)
-npx skills add <owner>/my-claude-marketplace --skill 'skill-authoring' --skill 'skill-quality-review'
+# install the skills in this group (skill-authoring + skill-authoring-quality-review)
+npx skills add <owner>/my-claude-marketplace --skill 'skill-authoring' --skill 'skill-authoring-quality-review'
 ```
 
-The Claude Code subagent that wraps `skill-quality-review` (`skill-quality-reviewer`)
+The Claude Code subagent that wraps `skill-authoring-quality-review` (`skill-quality-reviewer`)
 is an agent-specific add-on under `opts/claude/`; install it with:
 
 ```bash

@@ -53,6 +53,27 @@ Skills install into each agent's skill directory (e.g. `~/.claude/skills/`).
 `opts/` is **not** the skills CLI's job — `install-opts.sh` symlinks (default) or
 copies (`--copy`) each `opts/<agent>/` subtree into that agent's config home.
 
+## Naming / namespace convention
+
+Neither the Agent Skills standard nor the vercel CLI provides skill namespacing
+(verified 2026-06-23: the standard `name` is a flat slug with no slash/scope, and
+in-spec proposals #109/#312 and CLI PRs #250/#1464 are all unmerged; the CLI
+installs flat to `.agents/skills/<name>` and same-name skills overwrite). So we
+namespace by **baking a `<group>-` prefix into the flat `name`**:
+
+- Skill `name` = `<group>-<skill>` (e.g. `dev-workflow-create-spec`). The
+  group's "root" skill may keep the bare group name (e.g. `skill-authoring`).
+- Directory layout keeps the group folder: `skills/<group>/<group>-<skill>/`
+  (the leaf equals `name`, so it stays spec-conformant; the `<group>/` folder is
+  for repo organization only and is discarded on install).
+- **Cross-skill references use the full prefixed name** — a tool-side `--prefix`
+  cannot rewrite references inside skill bodies, so this is necessarily an
+  author-side convention.
+- Forward-compatible: if the standard later adopts slash namespaces (#109-style
+  `name: group/skill`), migration is renaming `-` to `/`.
+- Claude-Code subagents in `opts/` keep the real plugin namespace
+  (`dev-workflow:acceptance-reviewer`); only flat skills need the prefix.
+
 ## Authoring conventions
 
 1. **SKILL.md must be portable.** Do not reference plugin-root paths (`../`,
@@ -89,13 +110,13 @@ copies (`--copy`) each `opts/<agent>/` subtree into that agent's config home.
 
 - **Step 0** — scaffold `skills/`, `opts/`, `scripts/install-opts.sh`, this doc. ✅
 - **Step 1** — pilot **skill-authoring** end-to-end (skill + extracted
-  `skill-quality-review` skill + thin `opts/claude/agents/` wrapper). ✅
+  `skill-authoring-quality-review` skill + thin `opts/claude/agents/` wrapper). ✅
   Discovery validated with `skills add ./skills --list`.
 - **Step 2** — migrate **dev-workflow**. ✅
   - 13 skills → `skills/dev-workflow/`; shared `references/` + `workflow-state.py`
     + `workflow-concepts.md` → `dev-workflow-base` skill (delegated by name).
-  - `acceptance-reviewer` / `plan-compliance-reviewer` → `acceptance-review` /
-    `plan-compliance-review` skills + thin wrappers in the Claude add-on.
+  - `acceptance-reviewer` / `plan-compliance-reviewer` → `dev-workflow-acceptance-review` /
+    `dev-workflow-plan-compliance-review` skills + thin wrappers in the Claude add-on.
   - hooks → the **minimal plugin** `opts/claude/skills/dev-workflow/` (with
     `.claude-plugin/` + `hooks/` + a symlink to the base skill's
     `workflow-state.py`). Claude Code v2.1.157 auto-loads plugins placed under
