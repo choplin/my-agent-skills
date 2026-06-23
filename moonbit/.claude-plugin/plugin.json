@@ -1,9 +1,0 @@
-{
-  "name": "moonbit",
-  "description": "MoonBit language development skills for Claude Code",
-  "version": "1.0.0",
-  "author": {
-    "name": "MoonBit (restructured)"
-  },
-  "keywords": ["moonbit", "language", "ffi", "testing"]
-}
