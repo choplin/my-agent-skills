@@ -1,62 +1,50 @@
 # skill-authoring
 
-Create high-quality skills that AI can use effectively through deep interview and concrete criteria extraction.
+Create skills whose **content** an agent can actually act on — grounded in real expertise, economical with context, and self-evaluable.
 
 ## Problem
 
-Standard skill creation focuses on format and structure. Skills created this way often contain generic advice that AI cannot act on autonomously—they look correct but produce disappointing results.
+Standard skill creation focuses on format and structure. Skills made that way often contain generic advice ("write clean code", "follow best practices") that an agent already knows and cannot act on — they look correct but produce disappointing results.
 
 ## Solution
 
-This plugin provides the **Three Principles** for effective skill authoring:
+This group distills the [agentskills.io best practices](https://agentskills.io/skill-creation/best-practices) into a working guide, organized around two independent axes:
 
-| Principle | Purpose | Key Element |
-|-----------|---------|-------------|
-| **Why & Concrete Criteria** | AI can make decisions | Specific rules with rationale |
-| **Self-Complete** | AI can self-evaluate | Binary success checklist |
-| **Clear Triggers** | AI activates correctly | Intent-based with exclusions |
+| Axis | What it covers |
+|------|----------------|
+| **Layer A — Authoring lifecycle** | Where content comes from (ground in real expertise → draft → refine from execution traces) |
+| **Layer B — Content quality** | What goes in the skill: context economy, why & concrete criteria, self-evaluable output, triggering description, calibrated control |
+
+It complements `plugin-dev:skill-development`, which owns file structure and formatting. Load both together when authoring.
 
 ## Components
 
 ### Skill: `skill-authoring`
 
-Provides detailed guidance on the three principles. Triggers when you want to understand how to create effective skills.
+The content-quality guide (Layers A and B) plus a pre-ship quality checklist. Triggers when you want to create or improve a skill, or a skill isn't producing expected results.
 
-**Trigger phrases:** "create a high-quality skill", "make skill effective", "skill isn't working", "AI doesn't follow the skill"
+References (loaded on demand):
+- `references/instruction-patterns.md` — concrete templates for gotchas, output templates, checklists, validation loops, plan-validate-execute, and bundled scripts
+- `references/anti-patterns.md` — common content failure modes with detection cues
+- `references/agentskills-best-practices.md` — the upstream source these guidelines distill
 
-### Command: `/skill-authoring:create-skill`
+### Skill: `skill-authoring-quality-review`
 
-Guided workflow for creating skills:
+A portable review procedure that evaluates a target skill against the content-quality guidelines (B1–B5). Use after creating a skill or when one isn't producing expected results.
 
-```
-[Interview] → [Summary] → [Approval] → [Generation]
-     ↑______________|
-      (if rejected)
-```
+### Agent (Claude Code): `skill-authoring-quality-reviewer`
 
-**Usage:**
-```
-/skill-authoring:create-skill code-review
-/skill-authoring:create-skill
-```
-
-### Agent: `skill-quality-reviewer`
-
-Evaluates existing skills against the three principles. Use after creating a skill or when a skill isn't producing expected results.
-
-**Triggers automatically** after `/create-skill` or when you ask to review skill quality.
+A thin subagent wrapper that runs `skill-authoring-quality-review` in an isolated context. Agent-specific add-on under `opts/claude/`.
 
 ## Installation
 
 Skills are distributed via the [vercel-labs/skills](https://github.com/vercel-labs/skills) CLI:
 
 ```bash
-# install the skills in this group (skill-authoring + skill-authoring-quality-review)
 npx skills add choplin/my-agent-skills --skill 'skill-authoring' --skill 'skill-authoring-quality-review'
 ```
 
-The Claude Code subagent that wraps `skill-authoring-quality-review` (`skill-quality-reviewer`)
-is an agent-specific add-on under `opts/claude/`; install it with:
+Install the Claude Code subagent wrapper with:
 
 ```bash
 scripts/install-opts.sh claude
@@ -64,70 +52,11 @@ scripts/install-opts.sh claude
 
 See [docs/skill-first-architecture.md](../../docs/skill-first-architecture.md) for the distribution model.
 
-## Usage Examples
+## Recommended workflow
 
-### Create a New Skill
-
-```
-/skill-authoring:create-skill
-
-> What problem will this skill solve?
-"I need to review PRs for logic errors before they reach production"
-
-> Walk me through a concrete example...
-[Interview continues through 4 rounds]
-
-> Does this summary capture your intent?
-"Yes, looks good"
-
-[Skill generated with success checklist and clear triggers]
-```
-
-### Review an Existing Skill
-
-```
-"Can you review my documentation skill for quality?"
-
-[skill-quality-reviewer evaluates against three principles]
-
-# Skill Quality Review: documentation-writer
-
-## Overall Assessment: Needs Improvement
-
-### Principle 1: Why & Concrete Criteria
-Score: Weak
-- "Write clear documentation" lacks specific criteria
-- Recommended: Define what "clear" means (sentence length, structure, etc.)
-
-### Principle 2: Self-Complete
-Score: Weak
-- No success checklist exists
-- Recommended checklist provided...
-```
-
-## Relationship with plugin-dev
-
-This plugin **complements** `plugin-dev`:
-
-| Aspect | plugin-dev | skill-authoring |
-|--------|-----------|-----------------|
-| Focus | Structure & format | Content & quality |
-| Checks | File organization, word count | Concrete criteria, checklist |
-| Interview | Basic requirements | Deep intent extraction |
-| Success | Structural validation | Binary self-evaluation |
-
-**Recommended workflow:**
-1. `/skill-authoring:create-skill` → Deep interview and generation
-2. `plugin-dev:skill-reviewer` → Structure validation
-3. `skill-authoring:skill-quality-reviewer` → Three principles validation
-
-## References
-
-The skill includes detailed reference files:
-
-- `references/interview-framework.md` - Deep interview methodology
-- `references/success-criteria-patterns.md` - Checklist templates by domain
-- `references/anti-patterns.md` - Common mistakes with fixes
+1. **Ground & draft** — apply `skill-authoring` (Layer A1: extract from a real task or existing artifacts; dig as fallback) and write the content (Layer B), alongside `plugin-dev:skill-development` for structure.
+2. **Validate** — run the pre-ship checklist and `skill-authoring-quality-review` (or dispatch the `skill-authoring-quality-reviewer` subagent under Claude Code).
+3. **Refine** — run the skill against a real task, read the execution trace, and fold every correction back in — especially into the Gotchas section (Layer A3).
 
 ## License
 

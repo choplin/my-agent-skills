@@ -6,243 +6,143 @@ user-invocable: true
 
 # Skill Authoring: Content Quality Guide
 
+This skill is about *what to put in a skill so an agent uses it effectively*. It distills the upstream guidance at [agentskills.io best practices](https://agentskills.io/skill-creation/best-practices) (reproduced in `references/agentskills-best-practices.md`).
+
 ## Relationship with plugin-dev:skill-development
 
 > [!IMPORTANT]
 > This skill is incomplete without plugin-dev:skill-development.
 > Always load both skills together when creating or improving skills.
 
-This skill complements plugin-dev:skill-development:
-
 | Component | Responsibility |
 |-----------|----------------|
-| **plugin-dev:skill-development** | File structure, YAML frontmatter, writing style, progressive disclosure |
-| **skill-authoring (this skill)** | Content quality based on Three Principles |
+| **plugin-dev:skill-development** | File structure, YAML frontmatter, writing style, mechanics of progressive disclosure |
+| **skill-authoring (this skill)** | Content quality: what the skill should actually say |
 
-When creating a skill, both skills should be used together. plugin-dev:skill-development provides the structure; this skill ensures the content is effective.
+## Two independent axes
 
-## Three Principles for Effective Skills
+Skill quality has two axes that are genuinely orthogonal — work them separately:
 
-### Principle 1: "Why" and Concrete Criteria
+- **Layer A — Authoring lifecycle**: *how you build* the skill (where the content comes from, how you refine it). A process over time.
+- **Layer B — Content quality**: *what goes in* the finished skill (what to say, what to omit, how prescriptive to be). Properties of the artifact.
 
-**Goal**: Capture what the user wants and the context behind their decisions - not general best practices.
+A skill can be built with a great process but still say the wrong things, or say the right things but never be tested. You need both.
 
-**Key insight**: AI already knows general best practices. Writing "follow best practices" or "write clean code" adds zero information. Skills must go beyond what AI already knows to capture:
-1. **Lessons from experience** - judgment criteria learned from specific problems or failures
-2. **The basis for those judgments** - why a particular approach worked or didn't work in practice
+---
 
-**The Problem with Generic Guidance**:
-- "Write clean code" - AI already knows this; adds no experiential insight
-- "Follow best practices" - AI knows many practices; which worked/failed in actual projects?
-- "Be concise" - AI can be concise in many ways; what trade-offs proved effective?
+## Layer A — Authoring lifecycle
 
-**What Concrete Criteria Look Like**:
-- Experience-based judgment: "We prioritize readability over brevity"
-- The problem that led to it: "Because junior developers struggled with terse code and made more bugs"
-- Rule derived from that problem: "Always add explanatory comments for non-obvious logic"
+### A1. Ground in real expertise
 
-**Example Transformation**:
+The most common failure is asking an LLM to generate a skill from its general training knowledge alone. The result is generic ("handle errors appropriately", "follow best practices") instead of the specific API patterns, edge cases, and project conventions that make a skill worth having. Feed real, domain-specific context into the creation process. In order of preference:
 
-Bad (vague, no criteria):
-```
-Write clean, maintainable code.
-```
+1. **Extract from a hands-on task.** Complete the real task with an agent first, then extract the reusable pattern. Capture: the steps that worked, the *corrections you made* mid-task (these become rules and gotchas), the actual input/output formats, and the project-specific facts the agent didn't already know.
+2. **Synthesize from existing project artifacts.** Feed real material — runbooks, internal docs, API specs/schemas, code review comments, version-control history (patches/fixes reveal real patterns), past incident reports — and synthesize. Project-specific material beats generic reference articles.
+3. **Interview the user (fallback when no artifacts exist).** When there is no hands-on trace or artifact to mine, load `discuss-toolkit-dig` to extract intent. Subject: "skill requirements for [name]". Let dig explore through its axes (Intent & Motivation, Use Cases & Edge Cases, Constraints & Priorities) rather than prescribing fixed questions. Probe specifically for *experiential* rationale: "When did this approach fail before? What did you have to correct?"
 
-Bad (has criteria, but generic rationale without user's context):
-```
-Functions should:
-- Not exceed 20 lines (split if longer)
-- Have a single responsibility (one reason to change)
+> A skill the agent already performs well *without* may not be worth writing. Sanity-check that the skill adds something the agent lacks.
 
-Rationale: Cognitive load research shows working memory handles 7±2 items.
-```
-This looks concrete but AI has no basis for "20 lines" - it's not from the user's experience. AI cannot judge edge cases (is 21 lines really a problem for THIS user?).
+### A2. Draft
 
-Good (reflects lessons learned from actual experience):
-```
-Problem: When functions handle multiple concerns, changing one part often
-breaks another part unexpectedly.
+Write the first version applying Layer B. Expect it to be wrong in places — drafting is not the end.
 
-Rule: Functions should have a single responsibility
-- "Single responsibility" = only one reason to change the function
-- If fixing a bug in validation could break pricing logic, split them
-- Example: processOrder() doing validation + pricing + inventory
-  → split into validate(), calculatePrice(), updateInventory()
-```
+### A3. Refine with real execution
 
-The key difference: The rule exists because of actual problems encountered,
-not because "best practices say so." The interview revealed this is
-a recurring pain point with concrete examples - AI now understands the
-experiential basis for this rule.
+The first draft almost always needs refinement. Run the skill against real tasks, then feed *all* the results back — not just the failures:
 
-### Principle 2: Self-Complete (Success Criteria for Deliverables)
+- **Read execution traces, not just final outputs.** Wasted steps reveal problems: vague instructions (agent tries several approaches before one works), inapplicable instructions (agent follows them anyway), or too many options with no clear default.
+- Ask of each run: What triggered false positives? What was missed? What could be cut?
+- **When you correct an agent's mistake, add the correction to the skill's Gotchas section.** This is the single most direct way to improve a skill over time.
 
-**Why this matters**: AI's self-feedback loop is essential for high-quality output. Without clear success criteria for the deliverable, AI cannot evaluate its own work - it completes all steps, assumes success, but the output misses user expectations. Clear deliverable criteria enable AI to iterate internally before presenting to user.
+Even one execute-then-revise pass noticeably improves quality; complex domains need several.
 
-**Goal**: Define success criteria for the **deliverable** (not the process) so AI can self-evaluate its output and iterate toward improvement.
+---
 
-**Critical Distinction**:
-- Process verification: "Did I complete step 1? step 2? step 3?" → All steps done, but output may still be wrong
-- Deliverable verification: "Does my output meet the user's expectations?" → Enables self-correction before user sees it
+## Layer B — Content quality
 
-Process steps can all complete successfully while still producing a deliverable that misses user expectations. Success criteria must evaluate the **final output**.
+### B1. Spend context wisely
 
-**Checklist Requirements**:
-Each criterion must be (without these, AI's self-feedback loop cannot function):
-- **Binary**: Answerable with Yes or No (not "somewhat" or "mostly")
-- **Observable**: Verifiable by reading the output (not requiring external testing)
-- **Specific**: No ambiguity in interpretation (two people would agree on the answer)
+Once a skill activates, its full body loads into the context window and competes for attention with everything else. Be economical:
 
-### Principle 3: Clear Trigger Conditions
+- **Add what the agent lacks; omit what it knows.** Don't explain what a PDF is, how HTTP works, or what a migration does. Jump straight to project-specific conventions, non-obvious edge cases, and the particular tools/APIs to use. Test for each line: *"Would the agent get this wrong without this instruction?"* If no, cut it.
+- **Design coherent units.** Scope a skill like a function — one coherent unit of work that composes with others. "Query a database and format results" is coherent; adding "database administration" is too much. Too narrow forces many skills to co-load; too broad is hard to trigger precisely.
+- **Aim for moderate detail.** Concise stepwise guidance with one working example beats exhaustive documentation. When you find yourself covering every edge case, ask whether the agent's own judgment handles most of them.
+- **Use progressive disclosure with explicit load triggers.** Keep `SKILL.md` lean (the spec recommends <500 lines / <5,000 tokens); move detailed material to `references/`. Crucially, tell the agent *when* to load each file: "Read `references/api-errors.md` if the API returns a non-200 status" beats a generic "see references/ for details."
 
-**Why this matters**: Skill activation timing varies greatly by skill nature. Triggers that are too broad result in "always available but never used" - the skill gets ignored because it's not specific enough to be useful. Triggers must be derived from user intent through interview.
+### B2. Capture the "why" and concrete criteria
 
-**Goal**: Define when the skill should activate based on user INTENT, not just keywords.
+The highest-value content is what the agent can't infer: experiential judgment and environment-specific facts.
 
-**What Clear Triggers Look Like**:
-- **Intent-based**: Describes the problem user is trying to solve
-- **Context-aware**: Includes relevant situational details
-- **Exclusion-defined** (optional): Only needed when trigger is ambiguous; if trigger is sufficiently specific, exclusions are just noise
+- **Concrete criteria, not adjectives.** "Write clean code" / "follow best practices" add zero information — the agent already knows them. Replace with the specific rule *and the experience behind it*: not "functions should be small" but "split a function when fixing a bug in one part could break another — e.g. `processOrder()` doing validation + pricing → split into `validate()` and `calculatePrice()`."
+- **Explain why.** A rule with its rationale lets the agent handle edge cases the rule didn't anticipate. Prefer "because [specific problem that occurred]" over "because best practices say so." A threshold the agent has no basis for (e.g. an arbitrary "20 lines") leaves it unable to judge the 21-line case.
+- **Gotchas are gold.** Maintain a Gotchas section of environment-specific facts that defy reasonable assumptions (e.g. "the `users` table uses soft deletes — queries must include `WHERE deleted_at IS NULL`"). Keep gotchas in `SKILL.md`, not a reference file — the agent must read them *before* hitting the situation, and may not recognize the trigger to load a file. See `references/instruction-patterns.md`.
 
-**Invocation Settings** (also require user intent):
-- `user-invocable`: Whether skill appears in slash command menu (user can invoke directly)
-- `disable-model-invocation`: Whether AI should auto-invoke this skill based on context
-- These settings reflect HOW the skill fits into user's workflow - ask during interview
+### B3. Make the skill self-evaluable
 
-**Example Transformation**:
+Without success criteria for the *deliverable*, an agent completes every step, assumes success, and ships output that misses expectations. Give it what it needs to check its own work and iterate before the user sees it.
 
-Weak:
-```yaml
-description: This skill should be used when the user mentions "code review"
-```
+- **Define success criteria for the deliverable, not the process.** "Did I run step 1, 2, 3?" can all be Yes while the output is wrong. Criteria must evaluate the final output.
+- **Each criterion must be binary, observable, and specific:** answerable Yes/No (not "mostly"), verifiable by reading the output (no external test required), and unambiguous (two people would agree on the answer).
+- **Add validation loops** where it helps: do the work → run a validator (script, reference checklist, or self-check) → fix → repeat until it passes. See `references/instruction-patterns.md`.
 
-Strong:
-```yaml
-description: This skill should be used when the user wants to review code
-changes for quality issues, specifically asking to "review my PR",
-"check this code for bugs", "find problems in this implementation",
-or wants feedback on code they've written. Should NOT trigger for:
-reviewing documentation, reviewing architectural designs, reading code
-to understand it (without feedback intent), or security-specific audits
-(use security-review skill instead).
-```
+### B4. Write a triggering description
 
-## Integration with plugin-dev:skill-development Process
+The `description` decides whether the skill activates at the right time. Too broad → "always available, never used."
 
-### At Step 1 (Understanding the Skill)
+- **Intent-based, not keyword-based.** Describe the problem the user is solving, not bare keywords. "Triggers on 'code review'" misfires on "review this code *tutorial*."
+- **Add exclusions when the trigger is ambiguous** ("Should NOT trigger for …"). If the trigger is already specific, exclusions are just noise.
+- Set invocation flags from the user's workflow: `user-invocable` (appears in the slash menu), `disable-model-invocation` (suppress auto-activation).
 
-**Use dig skill for structured interview:**
+Weak: `description: used when the user mentions "code review"`
+Strong: `description: ...when the user wants to review code changes for quality issues — "review my PR", "check this code for bugs". Should NOT trigger for: reviewing docs, reading code to understand it, or security-specific audits (use security-review).`
 
-Load `discuss-toolkit-dig` and provide context:
-- **Subject**: "skill requirements for [skill name]"
-- **Context for dig**: Creating a skill that satisfies Three Principles requires understanding:
-  1. User's experiential rationale (not generic best practices) - lessons learned from specific problems or failures
-  2. Binary/observable success criteria for the deliverable
-  3. Intent-based trigger conditions with clear exclusions
+### B5. Calibrate control
 
-dig will dynamically determine what questions to ask based on user responses and the above context. Do NOT prescribe specific questions like "What are the trigger conditions?" - let dig explore the subject naturally through its three axes (Intent & Motivation, Use Cases & Edge Cases, Constraints & Priorities).
+Match the prescriptiveness of each part to the fragility of the task — most skills are a mix, so calibrate part by part.
 
-**After dig completes, verify Three Principles are covered:**
+- **Give freedom** where multiple approaches are valid and variation is fine; here, explaining *why* beats rigid steps. (A code-review checklist can say *what* to look for without prescribing exact steps.)
+- **Be prescriptive** where operations are fragile, consistency matters, or a sequence must hold — e.g. "Run exactly this command; do not add flags."
+- **Provide defaults, not menus.** Pick one tool and mention alternatives briefly as escape hatches: "Use pdfplumber for text; for scanned PDFs needing OCR, use pdf2image + pytesseract" — not "you can use pypdf, pdfplumber, PyMuPDF, or pdf2image…".
+- **Favor procedures over declarations.** Teach *how to approach* a class of problems, not the answer to one instance. "Read the schema, join on the `_id` convention, apply filters as WHERE clauses" generalizes; "join orders to customers on customer_id where region='EMEA'" doesn't. (Specific details — output templates, "never output PII", tool-specific commands — are still fine; it's the *approach* that should generalize.)
 
-- [ ] **Principle 1**: Experiential rationale extracted (not just best practices). Ask "when did this fail in the past?" if not covered.
-- [ ] **Principle 2**: Success criteria are binary and observable.
-- [ ] **Principle 3**: Triggers are intent-based with exclusions.
+### B6. Reusable instruction patterns
 
-### At Step 4 (Edit the Skill)
+When a task calls for one of these structures, read `references/instruction-patterns.md` for the concrete template:
 
-**Concrete actions:**
-- Apply Three Principles when writing SKILL.md content:
-  - Include thresholds and decision criteria (not "write clean code")
-  - Include rationale ("because...") so AI can handle edge cases
-  - Include binary/observable success checklist
-  - Include "Should NOT trigger" in description
+- **Gotchas** — environment facts that defy assumptions (keep in `SKILL.md`)
+- **Output templates** — give a concrete format to pattern-match against, rather than describing it in prose
+- **Checklists** — track progress across multi-step workflows with dependencies/gates
+- **Validation loops** — do → validate → fix → repeat until pass
+- **Plan-validate-execute** — for batch/destructive ops: build a plan, validate against a source of truth, then execute
+- **Bundled scripts** — if traces show the agent reinventing the same logic each run, write a tested script once and bundle it in `scripts/`
 
-**Content checklist:**
-- [ ] Every rule has specific threshold or decision logic
-- [ ] Every rule includes rationale for edge case handling
-- [ ] Success criteria are binary and observable
-- [ ] Description includes intent AND exclusions
+---
 
-### At Step 5 (Validate and Test)
+## Quality checklist before you ship
 
-**Concrete actions:**
-- Check against `references/anti-patterns.md`
-- Validate with the `skill-authoring-quality-review` skill for comprehensive review. Under Claude Code you can dispatch the `skill-authoring-quality-reviewer` subagent (a thin wrapper around that skill) to run the review in an isolated context; on agents without subagents, apply the `skill-authoring-quality-review` skill inline.
-- Verify all Three Principles are satisfied
+Run this against the skill you authored (or dispatch the review — see below):
 
-**Validation checklist:**
-- [ ] No vague guidance (adjectives without measurable rules)
-- [ ] No unmeasurable success criteria
-- [ ] No keyword-only triggers
-- [ ] No rules without rationale
+- [ ] **Adds value**: content is what the agent *wouldn't* know on its own (no "write clean code", no explaining what a PDF is)
+- [ ] **Concrete + rationale**: every non-obvious rule has a specific criterion and a "because [real problem]"
+- [ ] **Gotchas present** (if the domain has them) and kept in `SKILL.md`
+- [ ] **Self-evaluable**: deliverable success criteria are binary, observable, specific
+- [ ] **Triggering description**: intent-based, with exclusions where ambiguous
+- [ ] **Calibrated**: prescriptive where fragile, free where flexible; defaults not menus; procedures not one-off answers
+- [ ] **Context-economical**: lean `SKILL.md`; heavy material in `references/` with explicit load triggers
+- [ ] **Refined**: run against ≥1 real task and revised from the trace (Layer A3)
 
-## Additional Steps (skill-authoring specific)
+For a structured review, use the `skill-authoring-quality-review` skill. Under Claude Code, dispatch the `skill-authoring-quality-reviewer` subagent to run it in an isolated context; otherwise apply the skill inline. Also check against `references/anti-patterns.md`.
 
-### Between Step 5 and Step 6: User Approval
+## How this maps onto the skill-development process
 
-**Purpose**: Pre-usage final confirmation (distinct from Step 6's "usage-based improvement")
-
-After AI determines the skill is ready (validation passed), seek user approval:
-
-1. Present the created skill to user with summary:
-   ```markdown
-   ## Skill Summary: [name]
-
-   ### Purpose
-   [2-3 sentences: WHY this skill exists, what problem it solves]
-
-   ### Core Decision Rules
-   - [Rule 1]: [Criterion with rationale]
-   - [Rule 2]: [Criterion with rationale]
-
-   ### Success Criteria
-   - [ ] [Criterion 1]: [Verification method]
-   - [ ] [Criterion 2]: [Verification method]
-
-   ### Trigger Conditions
-   **Should trigger when**: [Intent-based conditions]
-   **Should NOT trigger when**: [Exclusions]
-   ```
-
-2. **If user approves**: Skill is ready for use (may later enter Step 6 based on actual usage)
-3. **If user denies**: Return to relevant phase (interview or editing) - this is pre-usage iteration, not Step 6
-
-**Distinction from Step 6:**
-- User Approval: Post-creation, pre-usage confirmation (AI's judgment verified by user)
-- Step 6 (Iterate): Post-usage improvement (based on actual usage experience)
-
-### Improvement Loop (during Step 5)
-
-After `skill-authoring-quality-review` validation:
-1. Review findings
-2. Fix identified issues
-3. Re-validate
-4. Repeat until all principles pass
-5. Then seek User Approval
-
-## Quality Indicators
-
-A well-authored skill enables AI to:
-
-1. **Make decisions without clarification**: Given a novel situation, AI can determine the correct action using provided rules and rationale
-2. **Self-evaluate output**: AI can verify each success criterion and identify what needs fixing
-3. **Know exactly when to activate**: AI can distinguish intended triggers from false positives
-4. **Explain reasoning**: AI can articulate WHY a particular approach is correct, citing the skill's rationale
-
-**Warning Signs of Poor Quality**:
-- AI frequently asks for clarification when using the skill
-- Output "seems fine" but doesn't match user expectations
-- Skill triggers in unintended contexts
-- AI cannot explain why it chose a particular approach
-
-## Success Criteria for This Skill
-
-- [ ] Three Principles explained: SKILL.md body explicitly states and explains all three principles with concrete examples
-- [ ] Concrete criteria: Every rule in created skill has specific threshold or decision logic
-- [ ] Self-complete: Created skill contains binary success checklist
-- [ ] Clear triggers: Description includes intent AND exclusions
-- [ ] No generic advice: No adjectives (clean, good, proper, appropriate, reasonable) appear without accompanying measurable criteria
+- **Step 1 (Understand)** → Layer A1: ground in real expertise (prefer task/artifact extraction; dig as fallback).
+- **Step 4 (Edit)** → Layer B: write content economically, concretely, calibrated, self-evaluable.
+- **Step 5 (Validate)** → the Quality checklist + `skill-authoring-quality-review` + `references/anti-patterns.md`.
+- **After validation, before use** → present a short summary (Purpose / core rules with rationale / success criteria / trigger + exclusions) and get user approval; iterate if rejected.
+- **Step 6 (Iterate)** → Layer A3: refine from real execution traces; fold every correction into Gotchas.
 
 ## References
 
-- `references/anti-patterns.md` - Common mistakes with before/after fixes
+- `references/instruction-patterns.md` — concrete templates for gotchas, output templates, checklists, validation loops, plan-validate-execute, and bundled scripts. *Read when implementing one of these patterns.*
+- `references/anti-patterns.md` — common content failure modes with detection cues. *Read when reviewing a skill's content.*
+- `references/agentskills-best-practices.md` — the upstream source these guidelines distill. *Read for the full original treatment.*
