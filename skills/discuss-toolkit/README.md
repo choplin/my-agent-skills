@@ -28,7 +28,7 @@ quick-chat (independent - for quick decisions)
 ## Core Principle
 
 Never fill gaps with general best practices. When information is missing:
-1. Ask using AskUserQuestion (dig skill)
+1. Ask the user via the host agent's user-input mechanism (dig skill — `AskUserQuestion` on Claude Code, the host's equivalent elsewhere)
 2. Present hypotheses for user confirmation
 3. Only proceed when intent is verified
 

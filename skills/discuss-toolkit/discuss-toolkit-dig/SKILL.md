@@ -77,7 +77,20 @@ Questions adapt based on user responses - not predetermined from caller's contex
 When information is missing:
 1. Do NOT fill with assumptions or general practices
 2. Do NOT proceed with guesses
-3. DO ask using AskUserQuestion tool
+3. DO ask the user using the host agent's available user-input mechanism (see below)
+
+## User-Input Mechanism (host-adaptive)
+
+"Ask" means a real round-trip with the user, never an internal guess. Use the
+strongest mechanism the host agent provides:
+
+1. Prefer the host's structured user-input tool when one is available:
+   - Claude Code: `AskUserQuestion`
+   - Codex: `request_user_input` when the current mode allows it; otherwise ask in the normal assistant reply
+   - Other agents: the agent's equivalent confirmation or question tool, if one exists
+2. If no structured tool is available, ask one concise question in the assistant reply and wait for the answer.
+3. Ask at most three questions at once. Use a single question when the answer will materially change the next step.
+4. Do not treat tool unavailability as permission to guess. If a required answer cannot be obtained, stop and state what is blocked.
 
 When making hypotheses based on general knowledge:
 1. Present as hypothesis: "Generally X applies, but for your case..."
@@ -97,7 +110,7 @@ Identify what's unclear in user's request:
 
 **Critical**: Continue until quality indicators in Phase 3 are satisfied. No upper limit on questions.
 
-Use AskUserQuestion tool repeatedly. **AI decides when to move to Phase 3** by self-evaluating quality indicators after each answer. User can say "done" or "complete" to end early (because prolonged questioning may frustrate users who already know their intent), but the default is AI-driven progression.
+Use the host's user-input mechanism repeatedly (see "User-Input Mechanism (host-adaptive)"). **AI decides when to move to Phase 3** by self-evaluating quality indicators after each answer. User can say "done" or "complete" to end early (because prolonged questioning may frustrate users who already know their intent), but the default is AI-driven progression.
 
 **Interview Rounds**:
 
