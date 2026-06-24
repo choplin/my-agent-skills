@@ -57,8 +57,7 @@ denies direct edits to `state.json`, making the contract structural on top of th
 already-safe core. The hook is an optimization, never a prerequisite.
 
 Why: "asking politely in a prompt does not reliably prevent false 'done'
-reports. The harness makes 'done' structural"
-(see `docs/2026-06-11-loop-engineering-research.md` §2).
+reports. The harness makes 'done' structural".
 
 ## Stall detection (why a converging loop is not killed)
 

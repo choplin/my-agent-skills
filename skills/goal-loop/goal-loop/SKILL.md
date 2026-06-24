@@ -23,9 +23,8 @@ completion oracle lives outside the user's head.
 
 This skill is a portable, predicate-gated counterpart to Codex `/goal`. It keeps
 the same Goal Contract shape, but where `/goal` lets the model declare completion,
-this skill gates completion on executable predicates (see
-`docs/2026-06-24-goal-loop-design.md` D2). When the host provides a native goal
-mechanism, use it — but keep the same Goal Contract and Default-FAIL evidence
+this skill gates completion on executable predicates. When the host provides a
+native goal mechanism, use it — but keep the same Goal Contract and Default-FAIL evidence
 discipline so the workflow works on agents without `/goal`.
 The bundled scripts are **shell + `jq` only** (no Python, no compiled binary), so
 the loop runs anywhere a shell and `jq` exist.
@@ -38,8 +37,7 @@ executable predicate or an external reference.
 Why: a loop can converge on a fixed target, but it cannot discover hidden
 alignment information. If "done" requires the user to judge direction, taste, UX,
 or product fit, that missing information belongs in a spec-driven workflow before
-implementation — not in a predicate
-(`docs/2026-06-11-loop-engineering-research.md` §3, "where the oracle lives").
+implementation — that is where the oracle lives, not in a predicate.
 
 ## How completion is kept honest (works without hooks)
 
@@ -142,8 +140,8 @@ the builder as a fresh process, so it never reviews its own prior work.
    `passes` directly; do **not** delete or weaken predicates or tests.
 3. Run `verify.sh <goal-dir>` (the only sanctioned state writer).
 4. Fix only failures that affect the Goal Contract. Do not chase optional
-   refactors or reviewer suggestions outside the contract
-   (`docs/...research.md` warns that chasing every finding over-engineers).
+   refactors or reviewer suggestions outside the contract (chasing every
+   finding over-engineers).
 5. Repeat until `status` is `complete` or `blocked`. Respect the bounds:
    `max_iterations` and the stall rule (same error twice in a row → `blocked`).
 

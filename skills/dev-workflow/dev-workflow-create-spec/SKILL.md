@@ -116,7 +116,7 @@ Scenario: Error copy reads clearly
   Verify: human
 ```
 
-The `Verify:` value is mirrored into `state.json` `criteria[].verify` (the command, or `null` for `human`). Prefer machine-verifiable criteria — the more pass/fail is a command, the more self-review closes on its own (see `docs/2026-06-11-loop-engineering-research.md` §3).
+The `Verify:` value is mirrored into `state.json` `criteria[].verify` (the command, or `null` for `human`). Prefer machine-verifiable criteria — the more pass/fail is a command, the more self-review closes on its own.
 
 ### 4. Define Out of Scope
 

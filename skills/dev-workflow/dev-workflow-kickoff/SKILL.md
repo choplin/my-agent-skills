@@ -62,7 +62,7 @@ Use the Skill tool to call `discuss-toolkit-dig` as a base skill to clarify user
 Once something is a Task, ask one more question: **can every completion criterion be a command that returns pass/fail?** This is the oracle test — does the "right answer" live in the world (a test suite, a build, a reference implementation, a benchmark) or only in the user's head (taste, product judgment, UX)?
 
 - **Answer in the world → Autonomous-Task.** The loop can close on its own; an up-front approval gate is pure overhead. Write goal + predicates and let the implement→verify loop run to green; the human reviews only the finished artifact.
-- **Answer in the user's head → ordinary Task/Story.** Keep the spec/approval as a human contract; predicates alone cannot capture intent (see `docs/2026-06-11-loop-engineering-research.md` §3, "where the oracle lives").
+- **Answer in the user's head → ordinary Task/Story.** Keep the spec/approval as a human contract; predicates alone cannot capture intent — the oracle lives in the user's head.
 
 When in doubt (some criteria predicate-able, some not), it is **not** Autonomous-Task — fall back to Task/Story.
 

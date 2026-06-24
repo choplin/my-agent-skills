@@ -60,7 +60,7 @@ Create steps following these principles:
 - **Dependency-aware**: Start with prerequisites
 - **One deliverable per step**: Each step produces a clear result
 - **Verifiable**: Completion can be confirmed
-- **Walking skeleton first**: Make **Step 1** a thin vertical slice that produces the first *reviewable real artifact* — the smallest end-to-end thing the user can actually look at and react to. Most rework comes from spec omissions and wrong direction, which are only visible once something runs; the earlier the user sees a real artifact, the cheaper that correction (see `docs/2026-06-11-loop-engineering-research.md` §3, §5). Do not back-load all visible behavior into the final step.
+- **Walking skeleton first**: Make **Step 1** a thin vertical slice that produces the first *reviewable real artifact* — the smallest end-to-end thing the user can actually look at and react to. Most rework comes from spec omissions and wrong direction, which are only visible once something runs; the earlier the user sees a real artifact, the cheaper that correction. Do not back-load all visible behavior into the final step.
 
 ### 4. Create Plan Document
 

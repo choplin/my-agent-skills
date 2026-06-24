@@ -50,7 +50,7 @@ Present a list of items to capture, categorized by type:
 | Spec/plan has lasting value | Preserve as Design Doc | docs/ |
 | **Recurring spec omission / late Design Change** | Propose a new interview question or a spec-template prompt so the next spec asks about it up front | `dev-workflow-kickoff` SKILL / `dev-workflow-base` skill (`references/spec-template.md`) |
 
-**Outer-loop feedback (C-3)**: when the same kind of omission keeps surfacing in user-review across tasks, the fix is not in this task's code — it is in what the workflow asks before implementing. Propose the concrete addition (a kickoff question, or a checklist line in the spec template) and, if approved, make the edit. This is how the outer loop learns; see `docs/2026-06-11-loop-engineering-research.md` §3, §5.
+**Outer-loop feedback (C-3)**: when the same kind of omission keeps surfacing in user-review across tasks, the fix is not in this task's code — it is in what the workflow asks before implementing. Propose the concrete addition (a kickoff question, or a checklist line in the spec template) and, if approved, make the edit. This is how the outer loop learns.
 
 ### 3. User Approval
 
