@@ -44,6 +44,7 @@ scripts/install-opts.sh --dry-run     # preview
 | Group | Skills |
 |-------|--------|
 | `dev-workflow` | kickoff, create-epic/spec/plan/task, self-review, user-review, acceptance-review, plan-compliance-review, handoff, resume-work, post-task, workflow-status, import/reply-pr-comments, base |
+| `goal-loop` | goal-loop, goal-loop-base (Codex /goal-style bounded autonomous loop; shell + jq, hooks opt-in) |
 | `skill-authoring` | skill-authoring, skill-authoring-quality-review |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-gemini-cli |
 | `discuss-toolkit` | dig, name-project, quick-chat |

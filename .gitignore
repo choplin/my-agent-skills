@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+
+# wtm creates a per-worktree symlink to the repo-root .claude config
+.claude

@@ -79,6 +79,9 @@ for agent in "${agents[@]}"; do
 
   echo "==> $agent  ($mode -> $dst_base)"
   # Walk every file under opts/<agent> and place it at the mirrored path.
+  # Include symlinks (-type l): some opts resources are symlinks to a base
+  # skill's bundled script (e.g. scripts/verify.sh), and those must be
+  # distributed too.
   while IFS= read -r -d '' src; do
     rel="${src#"$src_base"/}"
     dst="$dst_base/$rel"
@@ -89,5 +92,5 @@ for agent in "${agents[@]}"; do
       run ln -sfn "$src" "$dst"
     fi
     echo "    $rel"
-  done < <(find "$src_base" -type f -print0)
+  done < <(find "$src_base" \( -type f -o -type l \) -print0)
 done
