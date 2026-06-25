@@ -116,8 +116,19 @@ alternates a fresh-context **builder pass** (implement the smallest change set
 that can make a failing predicate pass) with a **verify pass** (the only writer
 of predicate results in `state.json`).
 
-**If a loop driver is available**, use it. The `goal-loop-base` skill bundles
-`scripts/loop.sh`:
+**Default to the driver.** The fresh-context separation is not a convenience — it
+is part of how completion stays honest. A driver runs each builder pass as a
+separate process, so the builder never sees the verifier's context and cannot
+quietly shape the implementation to its own pass/fail reasoning. Inline execution
+(below) collapses builder and verifier into one context; there, `verify.sh` still
+blocks direct `state.json` edits, but a builder that *weakens a predicate or test*
+to make it pass can review its own change and miss it. So use the driver whenever
+the host can launch a fresh-context agent non-interactively.
+
+A driver is "available" when both hold: `goal-loop-base` is installed (so
+`scripts/loop.sh` exists), **and** the host can supply a `--builder-cmd` that
+starts a fresh-context agent non-interactively (`claude -p`, `codex exec`, a make
+target, a shell function). When both hold, use it:
 
 ```bash
 loop.sh --goal-dir .agents/goals/{yyyy-mm-dd}-{slug} \
@@ -132,7 +143,12 @@ prompt>'`; on Codex use `codex exec`; on any host, any command that reads
 `GOAL_FILE`/`GOAL_STATE`/`NEXT_FINDINGS` and edits the codebase. Each round runs
 the builder as a fresh process, so it never reviews its own prior work.
 
-**If no driver is available**, run the loop inline in this session (bounded):
+**Only if a driver genuinely cannot be provided** — the host has no way to launch
+a fresh-context agent non-interactively — fall back to running the loop inline in
+this session (bounded). This is a last resort, not a peer mode: builder and
+verifier share one context, so the fresh-context integrity guarantee is lost and
+predicate-weakening can go uncaught. Treat the rules below as hard constraints,
+not suggestions:
 
 1. Read `goal.md`, `state.json`, and `NEXT_FINDINGS.md` if present. Pick a
    predicate that is still `false`.
