@@ -1,6 +1,6 @@
 ---
 name: git-helpers-branch-commit
-description: This skill should be used when the user wants to move current changes to a new branch and commit them. Triggers on phrases like "branch-commit", "ブランチを作ってコミット", "変更をブランチに切り出し", "新しいブランチにコミット", "この変更を別ブランチに", or when the user wants to create a branch from uncommitted changes. Should NOT trigger when: committing to current branch (use /commit), creating empty branch, or switching branches without changes.
+description: This skill should be used when the user wants to move current changes to a new branch and commit them. Triggers on phrases like "branch-commit", "ブランチを作ってコミット", "変更をブランチに切り出し", "新しいブランチにコミット", "この変更を別ブランチに", or when the user wants to create a branch from uncommitted changes. Should NOT trigger when committing to current branch (use /commit), creating empty branch, or switching branches without changes.
 allowed-tools: Bash(git *)
 user-invocable: true
 ---

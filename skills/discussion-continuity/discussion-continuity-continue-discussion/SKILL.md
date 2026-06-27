@@ -1,6 +1,6 @@
 ---
 name: discussion-continuity-continue-discussion
-description: Use this skill to save discussion state for continuation in a future session. Triggers on phrases like "save this discussion", "let's continue later", "preserve discussion state", or when a design/planning discussion needs to span sessions. Should NOT trigger for: saving code snippets, bookmarking files, saving implementation progress (use git commit instead), or TODO lists.
+description: Use this skill to save discussion state for continuation in a future session. Triggers on phrases like "save this discussion", "let's continue later", "preserve discussion state", or when a design/planning discussion needs to span sessions. Should NOT trigger for saving code snippets, bookmarking files, saving implementation progress (use git commit instead), or TODO lists.
 allowed-tools: Read, Write, Glob, AskUserQuestion, Task
 user-invocable: true
 ---
