@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentskills.io/inception/graph.schema.json",
+  "title": "Inception thinking graph",
+  "description": "The single source of truth for an inception session. PRD / decisions / action-items / open-questions documents are projections rendered from this graph.",
+  "type": "object",
+  "required": ["session", "nodes"],
+  "additionalProperties": false,
+  "properties": {
+    "session": {
+      "type": "object",
+      "required": ["phase"],
+      "additionalProperties": false,
+      "description": "The PRD fields. Together they render a foundational PRD meant to be a long-term anchor, not a thin summary. Write all of them in plain, clear English.",
+      "properties": {
+        "topic": { "type": "string", "description": "Short kebab-case slug for the idea/project." },
+        "summary": { "type": "string", "description": "One or two sentences: what this is and the role it plays. The elevator pitch." },
+        "background": { "type": "string", "description": "Context and why now — the situation that makes this worth doing." },
+        "problem": { "type": "string", "description": "The core problem/pain being addressed. Stated from the user's perspective, not as a solution." },
+        "purpose": { "type": "string", "description": "Purpose / long-term vision — the lasting positioning this is meant to hold." },
+        "centralQuestion": { "type": "string", "description": "The single question the session is organized around (problem-first)." },
+        "targetUsers": { "type": "string", "description": "Who this is for — primary and secondary users, with enough specificity to be falsifiable." },
+        "valueProposition": { "type": "string", "description": "The core value and differentiation — why this is better than the status quo or alternatives." },
+        "goal": { "type": "string", "description": "The destination / state to reach." },
+        "nonGoals": { "type": "string", "description": "What is explicitly out of scope — bounds that keep the concept focused." },
+        "phase": {
+          "type": "string",
+          "enum": ["framing", "diverge", "structure", "deepen", "converge"],
+          "description": "Current phase. The AI proposes transitions; the user approves."
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/node" }
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "required": ["id", "type", "content", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^n[0-9]+$", "description": "Stable id, e.g. n1, n2." },
+        "type": {
+          "type": "string",
+          "enum": ["Question", "Idea", "Insight", "Counter", "Decision", "Action"],
+          "description": "Idea/Question: raised material. Insight: something learned. Counter: an objection/premise attack. Decision: a settled choice (see decision field). Action: concrete work."
+        },
+        "content": { "type": "string" },
+        "parentId": {
+          "type": ["string", "null"],
+          "description": "Issue-tree parent. null for a root-level node."
+        },
+        "dependsOn": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "Ids this node is blocked by. Used to find the most foundational open node to discuss next."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["open", "resolved", "deferred", "dropped"],
+          "description": "open: still in the queue. resolved: closed and its outcome captured (often as a Decision/Action). deferred: intentionally postponed. dropped: won't pursue."
+        },
+        "nextMove": {
+          "type": ["string", "null"],
+          "enum": ["decide", "investigate", "validate", "deepen", null],
+          "description": "For OPEN nodes: the planned next move. Not an intrinsic type — it changes as the point matures. decide=user picks an option; investigate=find out; validate=test cheaply; deepen=discuss further."
+        },
+        "deferReason": {
+          "type": "string",
+          "description": "Required in spirit for status=deferred: why it is postponed."
+        },
+        "decision": {
+          "type": "object",
+          "description": "Present only for type=Decision. Records rejected alternatives so the choice does not get re-litigated later.",
+          "required": ["chosen"],
+          "additionalProperties": false,
+          "properties": {
+            "chosen": { "type": "string" },
+            "rejected": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["option", "reason"],
+                "additionalProperties": false,
+                "properties": {
+                  "option": { "type": "string" },
+                  "reason": { "type": "string" }
+                }
+              }
+            },
+            "rationale": { "type": "string" }
+          }
+        },
+        "source": {
+          "type": "string",
+          "enum": ["user", "ai"],
+          "description": "Who originated this node."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+---
+name: inception-framing
+description: The framing (構想) phase of the inception family — invoked by the inception orchestrator at the start of a session to find the real problem before any solution. Establishes the purpose, background, and central question. Should NOT be invoked directly by the user; the inception orchestrator delegates here.
+user-invocable: false
+allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
+---
+
+# Inception — Framing (構想)
+
+> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Full method: `inception-base/references/phases.md`.
+
+**Stance: Socratic. Find the real problem before any solution.** At the start, the highest-leverage move is reframing the problem, not answering it. The first framing a user offers is rarely the sharpest one.
+
+## What this phase produces
+
+- The top of the foundational PRD set in the graph: `session.summary`, `session.background`, `session.problem`, `session.purpose`, `session.centralQuestion`, and a first cut at `session.targetUsers`. See `inception-base/references/prd-template.md` for what a good answer to each looks like.
+- Root-level `Question` nodes for the genuinely open problems.
+
+Fill each field from the user's own words via dig — never the AI's guess. A field you cannot fill stays empty and renders `_not yet defined_`, which correctly keeps the PRD from looking done. Write the content in plain, clear English.
+
+## How to run it
+
+- Elicit the user's actual intent and the problem behind it via `discuss-toolkit-dig` (subject: "the real problem behind this idea"). Don't supply the framing yourself.
+- Pressure-test the framing: restate the problem two or three different ways and ask which is truest. Ask "what would not be solved even if we did the obvious thing?"
+- **Guard against solutioning-too-early.** If the user jumps to *how* before *why/what*, capture the how as an `Idea` node and pull back to the problem. Solutions are welcome later; here they are clues to the real question, not the answer.
+- Use So-What / Why-So to move between the symptom and the underlying need.
+
+## Exit
+
+When the user recognizes the central question as the right one to be asking, set it in the graph and propose moving to **Diverge** (`inception-diverge`). The user approves the transition.
