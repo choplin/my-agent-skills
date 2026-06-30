@@ -1,11 +1,11 @@
 ---
 name: ai-council
-description: This skill should be used when the user wants to gather opinions from multiple AI systems (Claude, Gemini, Codex) for better decision-making. Triggers on "AI council", "ask the council", "multiple AI opinions", "different AI perspectives", "council discussion", "consult all AIs", "what do all AIs think". Should NOT trigger for single-AI consultation (use individual advisor agents instead), CLI syntax questions, or troubleshooting AI CLI errors.
+description: This skill should be used when the user wants to gather opinions from multiple AI systems (Claude, Codex) for better decision-making. Triggers on "AI council", "ask the council", "multiple AI opinions", "different AI perspectives", "council discussion", "consult all AIs", "what do all AIs think". Should NOT trigger for single-AI consultation (use individual advisor agents instead), CLI syntax questions, or troubleshooting AI CLI errors.
 ---
 
 # AI Council Skill
 
-Gather opinions from multiple AI systems (Claude, Gemini, Codex) to get diverse perspectives on technical decisions.
+Gather opinions from multiple AI systems (Claude, Codex) to get diverse perspectives on technical decisions.
 
 ## Why This Skill Exists
 
@@ -53,12 +53,11 @@ Before consulting the AIs, formulate a question that includes these three elemen
 
 ### Step 2: Gather Opinions in Parallel
 
-Launch three Task tool calls simultaneously with the following agents:
+Launch two Task tool calls simultaneously with the following agents:
 - `ai-council-claude-advisor` - Claude's perspective (direct analysis)
-- `ai-council-gemini-advisor` - Gemini's perspective (via Gemini CLI)
 - `ai-council-codex-advisor` - Codex's perspective (via Codex CLI)
 
-**Important**: Use `run_in_background: true` for ai-council-gemini-advisor and ai-council-codex-advisor to allow parallel execution. Claude-advisor can run in foreground.
+**Important**: Use `run_in_background: true` for ai-council-codex-advisor to allow parallel execution. Claude-advisor can run in foreground.
 
 Provide each agent with:
 - The same clear question
@@ -67,11 +66,9 @@ Provide each agent with:
 
 ### Step 3: Synthesize and Report
 
-After collecting all three opinions, create a unified report using this process:
+After collecting both opinions, create a unified report using this process:
 
-1. **Extract consensus**: Identify points where 2 or more AIs agree
-   - Strong consensus: All 3 AIs agree
-   - Majority consensus: 2 AIs agree
+1. **Extract consensus**: Identify points where both AIs agree
 
 2. **Document divergence**: When AIs disagree, present each view fairly
    - State each AI's position clearly
@@ -96,9 +93,6 @@ After collecting all three opinions, create a unified report using this process:
 #### Claude (Anthropic)
 {Summary of Claude's key points and recommendations}
 
-#### Gemini (Google)
-{Summary of Gemini's key points and recommendations}
-
 #### Codex (OpenAI)
 {Summary of Codex's key points and recommendations}
 
@@ -121,9 +115,9 @@ After collecting all three opinions, create a unified report using this process:
 
 A complete AI Council consultation includes:
 - [ ] Question includes all three elements: (1) specific target, (2) decision context, (3) feedback focus
-- [ ] All three AI opinions collected (Claude, Gemini, Codex) - or documented reason if one failed
+- [ ] Both AI opinions collected (Claude, Codex) - or documented reason if one failed
 - [ ] Each opinion section explicitly states the AI source (e.g., "#### Claude (Anthropic)")
-- [ ] Consensus analysis explicitly states agreement level: "All 3 AIs agree on..." or "2/3 AIs agree on..."
+- [ ] Consensus analysis explicitly states whether the AIs agree or diverge
 - [ ] Divergent views section presents each AI's position with its reasoning when disagreements exist
 - [ ] Recommendation section: (1) cites specific AI opinions, (2) explains reasoning, (3) notes unresolved disagreements
 

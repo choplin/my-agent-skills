@@ -15,7 +15,7 @@ description: >-
   <example>
   Context: User is using ai-council skill for multi-AI consultation
   user: "Let's ask the AI council about this approach"
-  assistant: "I'll gather opinions from Claude, Gemini, and Codex"
+  assistant: "I'll gather opinions from Claude and Codex"
   <commentary>
   AI council consultation requires Claude's perspective alongside other AIs
   </commentary>

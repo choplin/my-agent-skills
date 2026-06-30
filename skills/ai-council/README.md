@@ -4,7 +4,7 @@ Ask other AI agents for opinions during code review and discussions.
 
 ## Overview
 
-This plugin enables Claude Code to consult other AI agents (OpenAI Codex CLI and Google Gemini CLI) for alternative perspectives on code, design decisions, and technical questions.
+This plugin enables Claude Code to consult other AI agents (OpenAI Codex CLI, and Sakana AI Fugu via the Codex interface) for alternative perspectives on code, design decisions, and technical questions.
 
 ## Components
 
@@ -13,9 +13,8 @@ This plugin enables Claude Code to consult other AI agents (OpenAI Codex CLI and
 | Skill | codex-cli | Learn how to use Codex CLI |
 | Agent | codex-advisor | Autonomously query Codex for opinions |
 | Reference | codex-reference.md | Detailed Codex CLI documentation |
-| Skill | gemini-cli | Learn how to use Gemini CLI |
-| Agent | gemini-advisor | Autonomously query Gemini for opinions |
-| Reference | gemini-reference.md | Detailed Gemini CLI documentation |
+| Skill | fugu-cli | Learn how to use Fugu (Sakana AI) via `codex-fugu` |
+| Agent | fugu-advisor | Autonomously query Fugu for opinions |
 
 ## Prerequisites
 
@@ -33,21 +32,13 @@ This plugin enables Claude Code to consult other AI agents (OpenAI Codex CLI and
    export OPENAI_API_KEY="your-api-key"
    ```
 
-### Gemini CLI
+### Fugu (Sakana AI)
 
-1. **Install Gemini CLI**
-   ```bash
-   npm install -g @google/gemini-cli
-   ```
-
-2. **Configure authentication**
-   ```bash
-   gcloud auth application-default login
-   ```
-   or set environment variable:
-   ```bash
-   export GOOGLE_API_KEY="your-api-key"
-   ```
+Fugu runs through the Codex interface via the `codex-fugu` command. Install the Fugu
+setup separately and verify with:
+```bash
+codex-fugu --status
+```
 
 ### Additional Setup
 
@@ -66,7 +57,7 @@ This plugin enables Claude Code to consult other AI agents (OpenAI Codex CLI and
      "sandbox": {
        "enabled": true,
        "allowUnsandboxedCommands": true,
-       "excludedCommands": ["codex", "codex-xhigh"]
+       "excludedCommands": ["codex", "codex-xhigh", "codex-fugu"]
      }
    }
    ```
@@ -85,15 +76,19 @@ Codexにこのコードをレビューしてもらって
 Ask Codex what it thinks about this design
 ```
 
-### Ask Gemini for an opinion
+### Ask Fugu (Sakana AI) for an opinion
 
 ```
-Geminiにこのアーキテクチャについて聞いて
+Fuguにこのコードをレビューしてもらって
 ```
 
 ```
-Get Gemini's opinion on this implementation
+Ask Fugu what it thinks about this design
 ```
+
+Fugu runs through the Codex interface via the `codex-fugu` command. It requires the
+Fugu setup to be installed (`codex-fugu --status` to verify). Because it shares the
+Codex CLI, add `codex-fugu` to the Claude Code sandbox `excludedCommands` list as well.
 
 ### Get CLI usage help
 
@@ -102,7 +97,7 @@ Codexの使い方を教えて
 ```
 
 ```
-Geminiの使い方を教えて
+Fuguの使い方を教えて
 ```
 
 ## Example Interactions
