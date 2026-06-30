@@ -22,13 +22,14 @@ Agree a rough goal, then run as far as you can on your own — and bring the
 decisions that were too big to make alone back for one batched discussion at the
 end.
 
-This adapts OpenAI's ExecPlan / PLANS.md format — self-contained, self-driving
-plans (https://developers.openai.com/cookbook/articles/codex_exec_plans) — with
-**one deliberate change**: it does *not* resolve every ambiguity autonomously.
-Reversible, low-impact calls are decided on the spot and logged; high-stakes calls
-are parked and reviewed together at the end. Everything else (single living plan,
-embedded knowledge, observable acceptance, frequent commits) is kept, because that
-is what makes a plan drivable without a human in the loop.
+This drives the self-contained ExecPlan-style plan file defined in
+`exec-plan-base` (read it for the format, location, and the properties that keep a
+plan restartable), with **one deliberate change** to the ExecPlan model: it does
+*not* resolve every ambiguity autonomously. Reversible, low-impact calls are
+decided on the spot and logged; high-stakes calls are parked and reviewed together
+at the end. Everything else (single living plan, embedded knowledge, observable
+acceptance, frequent commits) is kept, because that is what makes a plan drivable
+without a human in the loop.
 
 ## Core idea
 
@@ -84,9 +85,11 @@ Settle just three things and write them into the plan file:
   target, *not* a machine gate; if you need completion gated on executable
   predicates, use `goal-loop` instead.
 
-Persist the plan at `.agents/exec-plans/{yyyy-mm-dd}-{slug}.md` (ensure `.agents/`
-is git-ignored). Use the template under "Plan file" below. Confirm the direction
-with the user at a "good enough to start" level — not a sign-off gate.
+Write the plan to the location and format defined in `exec-plan-base` (read it
+first). In this skill's terms, **Decision Log** holds the two-way-door calls you
+make while driving, and **Parking Lot** holds the one-way-door calls you defer for
+the end. Confirm the direction with the user at a "good enough to start" level —
+not a sign-off gate.
 
 ### 2. Drive autonomously, deferring the big calls
 
@@ -123,42 +126,6 @@ Stop and bring it all back together:
 The user reviews a finished-as-far-as-possible artifact plus a tight list of real
 decisions — not an up-front plan, and not a stream of mid-run questions.
 
-## Plan file
-
-A single self-contained Markdown file. No external references — embed what's
-needed. Repo-relative paths. Acceptance is observable behavior, not internal code
-properties.
-
-```markdown
-# {Goal title}
-
-## Purpose / Big Picture
-{What we want and why — the agreed direction. What a human sees when it works.}
-
-## Boundaries
-- Free to decide: {scope the agent may resolve on its own and log}
-- Park for review: {kinds of calls to defer — anything high-impact or hard to undo}
-- Out of scope: {what not to touch}
-
-## Acceptance
-- {Observable behavior a human can verify. Self-checked, not a machine gate.}
-
-## Progress
-- [ ] {step}
-- [x] (YYYY-MM-DDThh:mmZ) {done step}
-- [ ] {step} — blocked by Parking Lot: {which entry}
-
-## Decision Log
-- (YYYY-MM-DD) {decision} — {why}; two-way door (reversible, low blast radius).
-
-## Parking Lot  (decide together at the end)
-- [ ] {the open decision} — parked because {high blast radius / hard to reverse};
-      blocks {which Progress steps}; options: {A / B}; leaning: {if any}.
-
-## Surprises & Discoveries
-- {unexpected behavior + evidence}
-```
-
 ## Gotchas
 
 - **Don't fake a one-way decision with a default.** A high-stakes call doesn't
@@ -187,4 +154,6 @@ properties.
 - Completion can and should be gated on executable predicates → `goal-loop`.
 - Requirements must be decided before "done" can be defined → `dev-workflow-create-spec`.
 - The concept itself is still fuzzy and needs shaping → `inception`.
+- You only want to write down where the current session has gotten to — goal,
+  decisions, progress, what's left — without driving anything → `exec-plan-record`.
 - A quick one-off change with nothing to defer → just do it.
