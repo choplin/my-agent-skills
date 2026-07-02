@@ -19,12 +19,12 @@ How each Linear primitive is treated here:
 | Primitive | Treatment | Why |
 |---|---|---|
 | **Team** | Single team. Don't create more. | Solo workspace; extra teams only buy separate issue-ID prefixes, not needed. |
-| **Project** | A **finite outcome/goal** with a target ("ship X"), not a repo or a permanent bucket. | Linear projects have target dates and a completed state; a permanent project makes all of that formless. A project must be able to *complete*. |
+| **Project** | A **finite outcome/goal** with a target ("ship X"), not a repo or a permanent bucket. Always tagged with its repo via the **Repo** project-label group (required; single-select — `1 Project = 1 repo`). | Linear projects have target dates and a completed state; a permanent project makes all of that formless. A project must be able to *complete*. The mandatory Repo tag makes "which repo does this outcome target" directly queryable. |
 | **Milestone** | Phases **within** a project. Use only when a project has distinct stages. | Structure only when it earns its keep; skip for small projects. |
 | **Cycle** | **Not used** (leave disabled). | Solo velocity tracking has little value; priority + status already order work. |
 | **Issue** | The unit of work. **1 Issue = 1 atomic deliverable** — for implementation that is **1 PR = 1 branch**; for design it is 1 decision (ADR), for research 1 document. Always **self-complete** (see below). | Keeps each deliverable reviewable and lets a context-free executor pick up any Todo. |
 | **Sub-issue** | Avoid by default. Use **only** to group a small multi-PR effort (see grouping). | Prevents needless hierarchy; solo work rarely needs it. |
-| **Label** | Two single-select groups: **Type** (deliverable kind — also drives executor-model choice) and **Repo** (see Label groups). | Cheap, queryable classification; single-select keeps each axis unambiguous. |
+| **Label** | Issues: two single-select groups, **Type** (deliverable kind — also drives executor-model choice) and **Repo**. Projects: a **Repo** project-label group (single-select), **required on every Project**. See Label groups. | Cheap, queryable classification; single-select keeps each axis unambiguous. A Project targets one repo (multi-repo projects are rare and out of this model). |
 | **Status** | Keep the 6 defaults; each carries a distinct machine-meaning (see Lifecycle). | The agent maintains status, so granularity costs nothing and aids agent decisions. |
 | **Priority** | Used simply: 1=Urgent, 2=High, 3=Medium, 4=Low, 0=None. | Lightweight ordering signal. |
 | **Estimate** | **Not used.** | Point estimation has no payoff solo. |
@@ -120,7 +120,11 @@ Two single-select groups (a Linear label group makes its members mutually exclus
   - `research` — deliverable is a document/findings. Exploratory → executes on the **expensive** model.
 
   The executor **picks the issues that match its capability**: a cheap-model session takes `impl`, an expensive-model session takes `design`/`research`. Start with these three; add a Type only when a recurring deliverable is a genuinely different artefact from PR/decision/document (e.g. a throwaway `spike`), never merely to describe a variation of one. A documentation change that ships as a PR (README etc.) is `impl`; an independent design/research document is `design`/`research`.
-- **Repo** (one per issue): one label per repository the issue targets. Add labels as new repos appear.
+- **Repo**: which repository work targets. In Linear, issue labels and project labels are **separate namespaces**, so this axis is maintained as a **`Repo` group in each**:
+  - **On issues** (single-select group, one per issue) — the repo an issue's deliverable lands in. `1 issue = 1 repo`.
+  - **On Projects** (single-select `Repo` group, **required on every Project**) — the one repo the outcome targets. `1 Project = 1 repo`; multi-repo projects are rare and deliberately out of this model. This is what lets a repo resolve directly to its active Project(s) (see the `linear-start` skill).
+
+  **The agent cannot create project labels.** The Linear MCP exposes issue-label *creation* and project-label *assignment*, but not project-label creation — a new repo's Repo project-label must be created once in the Linear UI. When a needed one is missing, ask the user to create it, then assign it. Issue Repo labels the agent creates itself. Add the matching label in both namespaces as new repos appear.
 
 **Exception — `deep` override (defer until observed):** `impl` defaults to the cheap model, but some implementations need deep judgement despite producing a PR. Rather than a new Type, mark these with a single non-grouped **`deep`** label that overrides the executor choice back to the expensive model. This is an **exception patch, not a primary axis** — introduce it only once real usage shows how often `impl` issues actually need it; until then leave it out and rely on Type alone.
 
@@ -128,10 +132,11 @@ Branch/PR linkage is **not** a label — individual branches/PRs attach to their
 
 ### Initial setup
 
-Create both label groups (`isGroup: true`, then members with `parent: <group>` — both supported by the label-create MCP tool):
+Create the issue label groups (`isGroup: true`, then members with `parent: <group>` — both supported by the label-create MCP tool):
 
-1. Create the **Type** group and its 3 members (`impl` / `design` / `research`).
-2. Create the **Repo** group; add a member per active repository on demand.
+1. Create the issue **Type** group and its 3 members (`impl` / `design` / `research`).
+2. Create the issue **Repo** group; add a member per active repository on demand.
+3. Create the **Repo** project-label group in the project-label namespace (mirror the issue Repo group and its members). **This is a manual UI step — the MCP cannot create project labels.** Every Project must carry exactly one Repo label; when a repo's label is missing, ask the user to add it in the UI.
 
 ## Deferred (out of scope for this base skill)
 
