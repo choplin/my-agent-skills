@@ -24,6 +24,17 @@ docs/                        # research + decision records
 
 ## Install
 
+**Everything at once** (skills + Claude-Code add-ons, via the Makefile):
+
+```bash
+make install        # = install-skills + install-opts, from this working tree
+make help           # list all targets; SOURCE/AGENT/SKILL/SCOPE are overridable
+```
+
+`make install` symlinks skills from `./skills` for `claude-code` globally, so edits to this repo take effect without re-running. To install the published repo instead, override `SOURCE=choplin/my-agent-skills`.
+
+Or run each piece directly:
+
 **Skills** (works for Claude Code, Codex, Cursor, Kimi, and 70+ agents):
 
 ```bash
