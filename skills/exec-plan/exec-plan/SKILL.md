@@ -1,7 +1,8 @@
 ---
 name: exec-plan
 description: >-
-  Invoked explicitly by the user (e.g. /exec-plan); does not auto-activate. Agree on a rough goal
+  Invoked by the user (e.g. /exec-plan) or auto-activated when a task clearly fits; also reachable via
+  dispatch-work. Agree on a rough goal
   and direction, then run autonomously as far as possible. Write a self-contained, ExecPlan-style
   plan and drive it inline: resolve low-risk, reversible decisions on your own (recorded in a
   Decision Log) and park high-impact or hard-to-reverse decisions in a Parking Lot for a single
@@ -12,7 +13,6 @@ description: >-
   executable predicates (use goal-loop), where requirements must be decided up front (use
   dev-workflow-create-spec), or for shaping a still-fuzzy concept (use inception).
 user-invocable: true
-disable-model-invocation: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
 ---
 

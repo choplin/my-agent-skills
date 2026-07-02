@@ -1,7 +1,8 @@
 ---
 name: goal-loop
 description: >-
-  Invoked explicitly by the user (e.g. /goal-loop); this skill does NOT auto-activate. Run a bounded
+  Invoked by the user (e.g. /goal-loop) or auto-activated when a task clearly fits; also reachable via
+  dispatch-work. Run a bounded
   autonomous implement->verify loop after the user's What is clear and completion can be checked by
   executable predicates. A portable, predicate-gated counterpart to Codex /goal (completion is gated on
   executable predicates, not asserted by the model): clarify the What with dig,
@@ -12,7 +13,6 @@ description: >-
   command-verifiable. Not for cases where the right answer depends on unexpressed product judgment, taste,
   UX review, or human-only acceptance; route those to a spec-driven workflow (dev-workflow-kickoff) instead.
 user-invocable: true
-disable-model-invocation: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 ---
 
