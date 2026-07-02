@@ -60,11 +60,8 @@ Set the selected issue's `state` to **In Progress**. (Todo → In Progress, or B
 
 ### 6. Hand off to an execution skill
 
-The issue is now In Progress with a worktree ready. Present these ways to carry it out and let the user choose (suggest one based on the issue's Type/size, but don't decide for them):
+The issue is now In Progress with a worktree ready. **Delegate the execution-mode choice to `dispatch-work`** (Skill tool): it recommends among `inception` / `goal-loop` / `exec-plan` / `dev-workflow-kickoff` based on how "done" is decided, presents the recommendation, and lets the user make the final call before handing off. The issue context (identifier, title, Type, size) is available via session history to inform its recommendation.
 
-- **`dev-workflow-kickoff`** — structured spec → plan → implement → self-review → commit. Best for a substantial Story/Task, or anything where the requirements still need shaping.
-- **`goal-loop`** — a bounded autonomous loop against a verifiable Goal Contract. Best when "done" is machine-checkable (tests/commands) and you want hands-off iteration.
-- **`exec-plan`** — a self-contained, restartable plan file you drive step by step. Best for a known multi-step change you want tracked and resumable across sessions.
-- **Directly, no skill** — just implement inline. Best for a small, obvious change.
+One escape `dispatch-work` does not cover: for a **small, obvious change**, implementing inline with no skill is also fine — offer that too when the issue is trivial.
 
-After the user picks, invoke that skill (or start implementing directly). Remember the later lifecycle transitions owned by `linear`: **In Progress → In Review** when a PR opens, **In Review → Done** when it merges.
+Whichever way it goes, remember the later lifecycle transitions owned by `linear`: **In Progress → In Review** when a PR opens, **In Review → Done** when it merges.
