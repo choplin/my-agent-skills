@@ -2,7 +2,7 @@
 
 Skills for the **start of a project** — think a fuzzy idea into a solid footing through a phase-driven, dialogic facilitation. The session grows a single thinking graph that is projected into a PRD, a decision record, action items, and open questions.
 
-> Scope: inception shapes the founding concept. It does **not** track project progress — once actions are concrete, hand them to `dev-workflow`.
+> Scope: inception shapes the founding concept. It does **not** track project progress or execute the actions — once actions are concrete, hand them to whatever execution/tracking workflow fits (e.g. `dev-workflow`, `goal-loop`, `exec-plan`), the user's choice.
 
 ## The model
 

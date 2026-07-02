@@ -30,4 +30,4 @@ Run `check`, confirm the four above, then **summarize the state and ask the user
 
 ## Handoff
 
-Once confirmed, offer to hand the action items to `dev-workflow-kickoff`. The concept is now shaped; tracking the work happens elsewhere. If new uncertainty surfaced, propose looping back to **Deepen** or **Diverge** instead.
+Once confirmed, the concept is shaped and executing the actions happens elsewhere. Present the action items and let the user pick how to carry them out — don't assume one path. Options depend on the work: `dev-workflow-kickoff` (spec/plan/review-driven delivery of a defined task), `goal-loop` (a bounded autonomous loop toward a verifiable goal), `exec-plan` (a self-contained, restartable execution plan), or simply handing the list off as-is. Offer the fitting choices and let the user decide. If new uncertainty surfaced, propose looping back to **Deepen** or **Diverge** instead.
