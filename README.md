@@ -52,6 +52,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
 | `lang-reference` | go, java, python, scala, typescript |
 | `discussion-continuity` | continue-discussion |
+| `project-notes` | project-notes-capture, project-notes-distill, project-notes-base (raw→distilled project notes in an Obsidian vault) |
 | `jira-cli` | jira-cli |
 
 > MoonBit skills are **not** vendored here — install them straight from upstream: `skills add moonbitlang/skills`.
