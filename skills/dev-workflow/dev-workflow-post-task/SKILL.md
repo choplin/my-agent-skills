@@ -33,8 +33,8 @@ Review what happened during the session to identify knowledge worth preserving:
 - Project-specific conventions discovered
 - Decisions made during implementation
 - Specs/plans with lasting value
-- Review feedback patterns (from review.md if exists)
-- **Spec omissions surfaced late**: items the user raised in user-review that were classified as Design Change, or gaps that only appeared once something ran. These are the outer-loop signal — what the spec/kickoff failed to ask up front.
+- Review feedback patterns (from `review.md` / the `review-tools-report` summary if present)
+- **Spec omissions surfaced late**: items the user raised in review that were `postponed` (needed a spec/design-level change), or gaps that only appeared once something ran. These are the outer-loop signal — what the spec/kickoff failed to ask up front.
 
 ### 2. Propose Knowledge Capture
 

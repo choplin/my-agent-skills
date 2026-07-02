@@ -54,7 +54,8 @@ scripts/install-opts.sh --dry-run     # preview
 
 | Group | Skills |
 |-------|--------|
-| `dev-workflow` | kickoff, create-epic/spec/plan/task, self-review, user-review, acceptance-review, plan-compliance-review, handoff, resume-work, post-task, workflow-status, import/reply-pr-comments, base |
+| `dev-workflow` | kickoff, create-epic/spec/plan, self-review, user-review, acceptance-review, plan-compliance-review, handoff, resume-work, post-task, workflow-status, base |
+| `review-tools` | ai-review, import-pr, import-ci, resolve, reply-pr, report, base (portable review process: a review.md record of items fed by ingestion sources — AI review / PR / CI / direct — and worked to resolution; used by dev-workflow and other flows) |
 | `goal-loop` | goal-loop, goal-loop-base (Codex /goal-style bounded autonomous loop; shell + jq, hooks opt-in) |
 | `skill-authoring` | skill-authoring, skill-authoring-quality-review |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |

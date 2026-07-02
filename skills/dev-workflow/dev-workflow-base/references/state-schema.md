@@ -30,16 +30,16 @@ Epics do **not** use `state.json` (status is derived from the `## Stories` table
   ],
   "steps": [
     { "id": 1, "name": "Prune plan-mode-context duplication", "done": false }
-  ],
-  "review": {
-    "phase": "REVIEWING",
-    "mode": "ITERATIVE",
-    "items": [
-      { "id": 1, "status": "OPEN", "classification": "Minor", "source": null }
-    ]
-  }
+  ]
 }
 ```
+
+**Review state is not in `state.json`.** The review phase (`open`/`done`) and item
+statuses (`open`/`resolved`/`skipped`/`postponed`) live in `review.md`, owned by the
+`review-tools` skill family (see `review-tools-base` skill (`references/review-state.md`)).
+`scripts/workflow-state.py` reads them by parsing `review.md`. dev-workflow's review
+phase delegates to review-tools (`review-tools-ai-review`, `review-tools-resolve`,
+`review-tools-report`), which never write to `state.json`.
 
 ### Field reference
 
@@ -59,20 +59,10 @@ Epics do **not** use `state.json` (status is derived from the `## Stories` table
 | `steps[].id` | int | Stable id. |
 | `steps[].name` | string | Step name. |
 | `steps[].done` | bool | Completion flag. Mirrors plan.md `## Progress`. |
-| `review` | object \| null | Review state. `null` until review starts. |
-| `review.phase` | string | `"REVIEWING"` or `"LGTM"`. |
-| `review.mode` | string | `"ITERATIVE"` or `"BATCH"`. |
-| `review.items[]` | array | Review items. |
-| `review.items[].id` | int | Stable id. |
-| `review.items[].status` | string | See item-status enum below. |
-| `review.items[].classification` | string | `"Minor"`, `"Complex"`, or `"Design Change"`. |
-| `review.items[].source` | string \| null | Origin (e.g. `"PR #42 comment:123 (inline)"`) or `null` for direct user feedback. |
 
-### Enums
-
-- **review.phase**: `REVIEWING`, `LGTM`
-- **review.items[].status**: `OPEN`, `APPROACH PROPOSED`, `APPROACH AGREED`, `IMPLEMENTING`, `RESOLVED`, `SKIPPED`
-- **review.items[].classification**: `Minor`, `Complex`, `Design Change`
+Review phase/mode/item fields are **not** part of `state.json` — they live in
+`review.md` (see `review-tools-base` skill (`references/review-state.md`)). The
+evaluator parses `review.md` for the review phase and item statuses.
 
 ### Default-FAIL contract
 
@@ -202,7 +192,7 @@ python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_I
 python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --clear
 ```
 
-Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review, import-pr-comments, reply-to-pr-comments) **bind** at the point the unit is identified — normally at create-spec, when the Story directory is created. `dev-workflow-post-task` **clears**. Read-only overviews (workflow-status) and `dev-workflow-handoff` do not bind; a handed-off unit is rebound by `dev-workflow-resume-work` in the next session.
+Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review) **bind** at the point the unit is identified — normally at create-spec, when the Story directory is created. (The `review-tools` skills that self-review/user-review delegate to do not bind; the dev-workflow wrapper binds before delegating.) `dev-workflow-post-task` **clears**. Read-only overviews (workflow-status) and `dev-workflow-handoff` do not bind; a handed-off unit is rebound by `dev-workflow-resume-work` in the next session.
 
 ### Consumer rule
 

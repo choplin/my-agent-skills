@@ -25,10 +25,16 @@ skill, then read/run the named file from its own root):
 | Spec template | `references/spec-template.md` | Creating spec.md |
 | Plan template | `references/plan-template.md` | Creating plan.md |
 | Epic template | `references/epic-template.md` | Creating epic.md |
-| Review template | `references/review-template.md` | Creating review.md |
-| Review init guide | `references/review-init-guide.md` | Resolving review metadata and paths |
 | Plan-mode context | `references/plan-mode-context.md` | The `## dev-workflow Context` block added to Claude Code plan files |
 | Workflow concepts | `references/workflow-concepts.md` | Epic/Story/Task model and promotion flow |
+
+> **Review resources moved.** `review.md` and its templates now live in the
+> **`review-tools`** skill family (`review-tools-base` skill: `references/review-template.md`,
+> `references/review-init-guide.md`, `references/review-state.md`). dev-workflow's
+> review phase delegates to review-tools (`review-tools-ai-review` to record findings,
+> `review-tools-resolve` to work them, `review-tools-report` to summarize). The state
+> evaluator reads the review phase (`open`/`done`) and item statuses from `review.md` —
+> there is no `review` block in `state.json`.
 
 ## State evaluator script
 

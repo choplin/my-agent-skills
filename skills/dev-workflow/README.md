@@ -59,10 +59,20 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 | `dev-workflow-create-plan` | Create a self-contained implementation plan (walking skeleton first, approach decisions) |
 | `dev-workflow-resume-work` | Resume existing work from the evaluator's view of progress |
 | `dev-workflow-handoff` | Generate a handoff prompt (mostly superseded by the SessionStart hook; use for session notes) |
-| `dev-workflow-self-review` | Machine-verification pass, then classified LLM review |
-| `dev-workflow-user-review` | Structured handling of user feedback during review |
+| `dev-workflow-self-review` | Story wrapper: the completion gate (machine-verification + plan-compliance — fix, don't itemize), then seeds an AI code review into `review.md` via `review-tools-ai-review` |
+| `dev-workflow-user-review` | Story wrapper: applies the human acceptance criteria, delegates item resolution to `review-tools-resolve`, drives `postponed` items via create-spec, then `review-tools-report` → post-task |
+| `dev-workflow-acceptance-review` | Judge the spec's `Verify: human` acceptance criteria (invoked by user-review) |
+| `dev-workflow-plan-compliance-review` | Verify the plan's Files-to-Change and Steps are complete (the completion gate in self-review) |
 | `dev-workflow-post-task` | Capture knowledge and feed omissions back into the workflow |
 | `dev-workflow-workflow-status` | Overview of all active epics and stories |
+
+The generic review process — a `review.md` record of items fed by ingestion sources
+(AI review, PR comments, CI, direct feedback) and worked to resolution — lives in the
+**`review-tools`** skill family, which dev-workflow's review phase delegates to. It is
+reusable by non-dev-workflow flows too (`goal-loop`, `exec-plan`, or ad-hoc). dev-workflow's
+machine-verification and plan-compliance are its **completion gate** (implementation must
+be complete before review — never review items), and the `Verify: human` acceptance
+criteria are the human acceptance judgment in user-review. See `review-tools-base`.
 
 ## Dependencies
 

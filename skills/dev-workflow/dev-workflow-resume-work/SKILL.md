@@ -15,17 +15,17 @@ Resume work on an existing Epic or Story by evaluating current state and identif
 
 | State | Action | Dispatch |
 |-------|--------|----------|
-| `spec_only` | Create implementation plan | `Skill(skill: "create-plan")` |
+| `spec_only` | Create implementation plan | `Skill(skill: "dev-workflow-create-plan")` |
 | `planned` | Begin implementation from step 1 | _(No skill — see Phase 8: Implementation Handoff)_ |
 | `in_progress` | Continue from last completed step | _(No skill — see Phase 8: Implementation Handoff)_ |
-| `potentially_complete` | Run self-review | `Skill(skill: "self-review")` |
-| `in_review` | Resume user review | `Skill(skill: "user-review")` |
-| `review_complete` | Run post-task | `Skill(skill: "post-task")` |
-| `epic_next_story` | Start next Story | `Skill(skill: "create-spec")` |
+| `potentially_complete` | Run self-review | `Skill(skill: "dev-workflow-self-review")` |
+| `in_review` | Resume user review | `Skill(skill: "dev-workflow-user-review")` |
+| `review_complete` | Run post-task | `Skill(skill: "dev-workflow-post-task")` |
+| `epic_next_story` | Start next Story | `Skill(skill: "dev-workflow-create-spec")` |
 | `blocked` | Report blockers, suggest resolution | _(depends on blocker)_ |
-| Major divergence | Suggest plan update first | `Skill(skill: "create-plan")` |
-| Update spec requested | Update spec | `Skill(skill: "create-spec")` |
-| Update plan requested | Update plan | `Skill(skill: "create-plan")` |
+| Major divergence | Suggest plan update first | `Skill(skill: "dev-workflow-create-plan")` |
+| Update spec requested | Update spec | `Skill(skill: "dev-workflow-create-spec")` |
+| Update plan requested | Update plan | `Skill(skill: "dev-workflow-create-plan")` |
 
 ## Tool Usage Constraints
 
@@ -197,7 +197,7 @@ When the state is `planned` or `in_progress`, there is no dedicated implementati
 3. **Identify resumption point**: From `## Progress`, find the first unchecked `- [ ]` step
 4. **Begin/continue implementation**: Follow the plan steps sequentially
 5. **Track progress**: Update `## Progress` as each step completes (`- [ ]` → `- [x]`)
-6. **After all steps complete**: Invoke `Skill(skill: "self-review")` — this is specified in plan's Workflow Context and MUST NOT be skipped
+6. **After all steps complete**: Invoke `Skill(skill: "dev-workflow-self-review")` — this is specified in plan's Workflow Context and MUST NOT be skipped
 
 ##### Plan Mode Context Preservation
 

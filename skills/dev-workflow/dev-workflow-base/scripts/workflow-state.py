@@ -24,24 +24,34 @@ import time
 
 # --- State contract (see references/state-schema.md) -------------------------
 
+# review.md (owned by the review-tools family) uses phase open/done and item
+# statuses open/resolved/skipped/postponed. Map any legacy value onto those.
 LEGACY_PHASE = {
-    "COLLECTING FEEDBACK": "REVIEWING",
-    "READY FOR IMPLEMENTATION": "REVIEWING",
-    "IMPLEMENTING": "REVIEWING",
+    "REVIEWING": "open",
+    "COLLECTING FEEDBACK": "open",
+    "READY FOR IMPLEMENTATION": "open",
+    "IMPLEMENTING": "open",
+    "LGTM": "done",
 }
 LEGACY_ITEM_STATUS = {
-    "APPROACH RECORDED": "APPROACH PROPOSED",
+    "OPEN": "open",
+    "APPROACH PROPOSED": "open",
+    "APPROACH RECORDED": "open",
+    "APPROACH AGREED": "open",
+    "IMPLEMENTING": "open",
+    "RESOLVED": "resolved",
+    "SKIPPED": "skipped",
 }
 
 # state -> (label, skill or None) for next-action dispatch
 DISPATCH = {
-    "spec_only": ("Create implementation plan", "create-plan"),
+    "spec_only": ("Create implementation plan", "dev-workflow-create-plan"),
     "planned": ("Begin implementation from step 1", None),
     "in_progress": ("Continue from first unchecked step", None),
-    "potentially_complete": ("Run self-review", "self-review"),
-    "in_review": ("Resume user review", "user-review"),
-    "review_complete": ("Run post-task", "post-task"),
-    "epic_next_story": ("Start next Story", "create-spec"),
+    "potentially_complete": ("Run self-review", "dev-workflow-self-review"),
+    "in_review": ("Resume user review", "dev-workflow-user-review"),
+    "review_complete": ("Run post-task", "dev-workflow-post-task"),
+    "epic_next_story": ("Start next Story", "dev-workflow-create-spec"),
     "blocked": ("Report blockers", None),
 }
 
@@ -258,7 +268,7 @@ def review_summary(items):
         st = it.get("status")
         counts[st] = counts.get(st, 0) + 1
     total = len(items)
-    resolved = counts.get("RESOLVED", 0) + counts.get("SKIPPED", 0)
+    resolved = sum(counts.get(k, 0) for k in ("resolved", "skipped", "postponed"))
     return counts, f"{resolved}/{total}"
 
 
@@ -274,7 +284,7 @@ def derive_state(level, has_spec, steps_done, steps_total,
         # Some stories past "Not Started" but not all "Done".
         return "in_progress"
     if review_phase is not None:
-        return "review_complete" if review_phase == "LGTM" else "in_review"
+        return "review_complete" if review_phase == "done" else "in_review"
     if steps_total > 0 and steps_done == steps_total:
         return "potentially_complete"
     if steps_done > 0:
@@ -309,14 +319,14 @@ def build_unit(unit_dir, level, branch_now):
         steps = state_obj.get("steps") or []
         steps_total = len(steps)
         steps_done = sum(1 for s in steps if s.get("done"))
-        review = state_obj.get("review")
-        if review:
-            review_phase = normalize_phase(review.get("phase"))
-            items = [
-                {"status": normalize_item_status(i.get("status", ""))}
-                for i in (review.get("items") or [])
-            ]
         has_spec = has_spec or bool(state_obj.get("criteria"))
+
+    # Review state is read from review.md — the single source of truth owned by
+    # the review-tools skills. state.json carries no `review` block; parse
+    # review.md whenever it exists, regardless of state.json.
+    if review_txt:
+        review_phase = parse_phase_from_review_md(review_txt)
+        items = parse_review_items_from_md(review_txt)
 
     if level == "epic":
         if epic_txt:
@@ -332,9 +342,6 @@ def build_unit(unit_dir, level, branch_now):
         if not state_obj:
             if plan_txt:
                 steps_done, steps_total = parse_progress_from_plan_md(plan_txt)
-            if review_txt:
-                review_phase = parse_phase_from_review_md(review_txt)
-                items = parse_review_items_from_md(review_txt)
         if branch is None and spec_txt:
             m = re.search(r"^- \*\*Name\*\*:\s*`?([^`\n]+?)`?\s*$",
                           spec_txt, re.MULTILINE)
