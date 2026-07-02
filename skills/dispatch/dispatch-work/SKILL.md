@@ -4,7 +4,8 @@ description: >-
   Single front door for STARTING a piece of work when you are unsure which execution mode fits.
   Invoked explicitly by the user (e.g. /dispatch-work); does not auto-activate. Assesses one thing —
   how "done" is decided and how much you stay in the loop — then RECOMMENDS an execution mode and lets
-  the user make the final call: a fuzzy concept to shape (inception), a task whose completion is fully
+  the user make the final call: a small obvious change to just implement in-session with no skill,
+  a fuzzy concept to shape (inception), a task whose completion is fully
   checkable by executable predicates (goal-loop), a rough goal to self-drive with the big calls batched
   for you at the end (exec-plan), or work that needs an up-front spec and approval/review gates,
   possibly across sessions (dev-workflow-kickoff). Use for "start this / which mode should I use /
@@ -48,12 +49,18 @@ Evaluate top to bottom; take the first row that fits.
 
 | The work looks like… | Route to | Why |
 |---|---|---|
+| Small, obvious, low-risk — the change is self-evident and completion is checkable at a glance; any execution skill would only add ceremony | **no skill** — implement directly in-session | Nothing to route; the cheapest correct path is to just do it and keep the session going |
 | Still fuzzy — you don't yet know *what* to build; needs shaping before any execution | `inception` | No defined What means no oracle yet; shape the concept first |
 | A clear task whose **every** completion criterion is an executable pass/fail (tests, build, a reference impl, a benchmark), and you want to hand it off | `goal-loop` | The oracle lives outside the user's head; a bounded implement→verify loop can close it |
 | A rough goal you want driven **as far as possible autonomously**, with the few high-impact / hard-to-reverse decisions parked and batch-reviewed at the end — no up-front spec wanted | `exec-plan` | Most calls are reversible and cheap to self-drive; only the one-way doors need the user, once |
 | Work that needs requirements **decided up front**, or benefits from a durable spec/plan, approval gates, self-review, or spans multiple sessions / a PR-review flow | `dev-workflow-kickoff` | The oracle is a human-authored contract; keep the human in the loop with tracked artifacts |
 
 Tie-breakers:
+- **no-skill vs any engine**: the inline route is only for changes that are *both*
+  small and obvious — self-evident completion, low blast radius, nothing to spec or
+  verify beyond a glance. The moment there is real uncertainty, a decision worth
+  parking, or a completion criterion that isn't self-evident, prefer a real engine.
+  When unsure, do **not** pick no-skill.
 - **goal-loop vs dev-workflow**: if *any* completion criterion needs human taste,
   UX, or product judgment, it is **not** goal-loop → route to dev-workflow-kickoff.
 - **exec-plan vs dev-workflow**: does the work need a durable spec/plan and approval
@@ -70,9 +77,10 @@ your best-fit row into a recommendation, then hand the decision to the user.
 ## Present the recommendation and let the user choose
 
 Always ask, using a single `AskUserQuestion`. Put your recommended mode first and
-mark it as the recommendation with a one-line reason; list the other three as
+mark it as the recommendation with a one-line reason; list the others as
 selectable alternatives so the user can override. Adapt the wording to the task:
 
+- **小さく明白な変更なので、スキルを使わずこのまま実装する** → no skill（このセッションで直接）
 - **実行可能なチェックで完了判定できる／任せきりにしたい** → goal-loop
 - **だいたい任せて、重い決定だけ最後にまとめて相談したい** → exec-plan
 - **先に仕様を固め、承認・レビューしながら進めたい（複数セッションを跨ぐ）** → dev-workflow-kickoff
@@ -83,11 +91,19 @@ the decision is theirs.
 
 ## Handoff (only after the user has chosen)
 
-Once the **user** has picked a mode, hand off — never start the work yourself, and
-never dispatch before the user has decided. All four targets (`inception`,
-`goal-loop`, `exec-plan`, `dev-workflow-kickoff`) are model-invocable: use the
-**Skill tool** to invoke the chosen one directly. It receives the task context via
-session history.
+Once the **user** has picked a mode, hand off — never start the work yourself before
+the user has decided. The four engine targets (`inception`, `goal-loop`, `exec-plan`,
+`dev-workflow-kickoff`) are model-invocable: use the **Skill tool** to invoke the
+chosen one directly. It receives the task context via session history.
+
+The fifth option is different in kind: **no-skill returns control to the normal
+session** — there is no skill to invoke and nothing to hand off to. Once the user
+picks it, simply proceed to implement the change in-session. This is the one route
+where `dispatch-work` does not launch another skill; it still is not the executor —
+it just steps out of the way so the ordinary session can do the small change. (The
+"never implement yourself" anti-pattern below still holds: it forbids doing the work
+*inside a routing that should have gone to an engine*, not this deliberate,
+user-chosen inline route.)
 
 ## Anti-patterns
 
