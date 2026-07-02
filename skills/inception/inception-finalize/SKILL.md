@@ -16,7 +16,7 @@ Both routes converge here, so the durable output is the same shape regardless of
 ## What it produces
 
 - **One consolidated PRD note** in the Project Notes vault (durable, keep-forever).
-- **Concrete actions handed to a tracker** (Linear issues, or another workflow) — not kept in the PRD.
+- **Concrete actions handed to a tracker** (a Linear Project with its Issues, or another workflow) — not kept in the PRD.
 - Nothing else persists. The live open-questions queue is a snapshot and dies with the session.
 
 ## Inputs — where the PRD comes from
@@ -35,7 +35,7 @@ Locate the session under `.claude/inception/<topic-slug>/` (Glob if the slug is 
    - If the user has no Project Notes vault at all, `project-notes-base` says to ask for a path. If they decline a vault, ask where to persist instead (or keep it in `.claude/` and tell them it stays transient). Do not silently drop the durable output.
 3. **Write the PRD note** to `<anchor>/Notes/PRD - <concise title>.md` with the light frontmatter below. Use a human-readable title (not the kebab slug). **Never clobber** — if a same-title PRD note already exists, show it and ask whether to update or write under a new title.
 4. **Hand off the actions (full route only).** Present the `Action` nodes and let the user choose how to carry them out — do not decide for them:
-   - **Linear issues** — delegate to the `linear` skill. This writes to an external system, so **show the proposed issues and get explicit approval before creating any**. Optional and per-action: some actions are still too coarse to be issues; only promote the ones the user picks.
+   - **Linear (Project + Issues)** — delegate to the `linear` skill. A finalized inception footing is a **finite outcome/goal**, which in Linear's model is a **Project** — so **create a Project for this footing first, then register the promoted actions as Issues under that Project** (never as loose issues with no project). Use the PRD's title/purpose for the Project name and description. This writes to an external system, so **show the proposed Project and its issues, and get explicit approval before creating anything**. Issue promotion stays per-action — some actions are still too coarse to be issues; only promote the ones the user picks — but every promoted issue goes under the Project.
    - **`dev-workflow-kickoff`** — for a spec/plan/review-driven task.
    - Or hand the list off as-is. Actions do not stay in the PRD; the PRD records direction, not the to-do list.
 5. **Retire the transient layer.** State plainly: the live open-questions queue is a point-in-time snapshot and is **not** persisted; the vault PRD is now the authoritative footing and the `.claude/inception/` graph is a spent working note. Leave the `.claude/` files in place (they are gitignored and harmless); delete them only if the user asks.
@@ -56,8 +56,9 @@ Get `created` and `repo-name` the same way `project-notes-base` does (`date +%F`
 
 - [ ] The vault PRD is written under `<anchor>/Notes/` with the `PRD - ` prefix, not left only in `.claude/`.
 - [ ] For a full session: the Direction section preserves **rejected alternatives + rationale** (not just the chosen option).
+- [ ] **Background is permanent context** — it reads as standing project context that is still true months from now, with no session-process narration ("in this session we questioned/decided…", which duplicates Direction) and no progress snapshot ("implemented X", "collected N months of data", which belongs to the tracker). If it drifts, fix it before persisting; this is a keep-forever anchor. See the "Background: permanent context" contrast table in `inception-base/references/prd-template.md`.
 - [ ] No PRD field was fabricated — sections not filled from the user's input still read `_not yet defined_`.
-- [ ] Actions were offered to a tracker with the user's choice; no Linear issue was created without explicit approval.
+- [ ] Actions were offered to a tracker with the user's choice; no Linear issue was created without explicit approval. If Linear was chosen, a **Project** was created for the footing and every promoted issue was registered under it (not as loose, project-less issues).
 - [ ] The user was told the live queue is discarded and the graph is now spent.
 
 ## Gotchas
