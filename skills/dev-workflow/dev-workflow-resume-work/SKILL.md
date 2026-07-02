@@ -1,13 +1,13 @@
 ---
 name: dev-workflow-resume-work
-description: Use this skill to resume work on an existing Epic, Story, or Task. Triggers on phrases like "resume work", "continue previous task", "pick up where I left off", "what was I working on", or when user wants to continue existing development work. Should NOT trigger for starting new tasks (use kickoff), or for discussion continuity without implementation artifacts.
+description: Use this skill to resume work on an existing Epic or Story. Triggers on phrases like "resume work", "continue previous work", "pick up where I left off", "what was I working on", or when user wants to continue existing development work. Should NOT trigger for starting new tasks (use kickoff), Task-level work that left dev-workflow (resume it via goal-loop/exec-plan or its own plan file), or for discussion continuity without implementation artifacts.
 allowed-tools: Read, Glob, Grep, AskUserQuestion, Skill, Bash
 user-invocable: true
 ---
 
 # Resume Work
 
-Resume work on an existing Epic, Story, or Task by evaluating current state and identifying the appropriate resumption point.
+Resume work on an existing Epic or Story by evaluating current state and identifying the appropriate resumption point. (Task-level work runs outside dev-workflow — resume it through `goal-loop` / `exec-plan` or its own plan file.)
 
 ## Core Rule: Skill Dispatch
 
@@ -50,22 +50,18 @@ If no path provided:
   │     ├── spec.md
   │     ├── plan.md
   │     └── review.md
-  ├── task/{yyyy-mm-dd}-{branch-with-dashes}/
-  │     └── review.md (only — plan is a Claude Code plan file)
   └── epic/{yyyy-mm-dd}-{epic-name}/
         └── epic.md
 ```
 
-**Directory naming**: Directories are prefixed with creation date (`yyyy-mm-dd`) and Story/Task directories match the branch name (with `/` replaced by `-`).
-
-**Note**: For `task/` directories, the plan file is a Claude Code plan (not in the dev-workflow directory). Read `review.md`'s `## Related Files` section to find the plan path.
+**Directory naming**: Directories are prefixed with creation date (`yyyy-mm-dd`) and Story directories match the branch name (with `/` replaced by `-`).
 
 ### Phase 2: Document Loading
 
 Read the selected document(s) and extract:
-- **Type**: Epic / Story / Task
+- **Type**: Epic / Story
 - **Spec path**: If exists (Story/Epic only)
-- **Plan path**: If exists (Story: `plan.md` in dev-workflow dir; Task: from review.md `## Related Files`)
+- **Plan path**: If exists (Story: `plan.md` in dev-workflow dir)
 - **Review path**: If exists
 - **Review Phase**: Phase value from review.md (REVIEWING / LGTM)
 - **Review Items**: Count of OPEN, APPROACH PROPOSED, APPROACH AGREED, IMPLEMENTING, RESOLVED, and SKIPPED items
@@ -129,7 +125,7 @@ Output structured report:
 ## Resume Work Report
 
 ### Document Summary
-- **Type**: [Epic/Story/Task]
+- **Type**: [Epic/Story]
 - **Spec**: [path or N/A]
 - **Plan**: [path or N/A]
 - **Branch**: [spec branch name] (current: [current git branch])

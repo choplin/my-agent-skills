@@ -21,7 +21,7 @@ Display a summary of all active Epics and Stories under `.claude/dev-workflow/`.
 python3 dev-workflow-base/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID"
 ```
 
-This returns all work units (epics, stories, **and tasks**) with their derived `state`, `progress`, `review`, and `level`. `--session` marks the unit this session is bound to as `active` (if any); workflow-status only reports — it does not bind. The state-category and progress rules live in `dev-workflow-base` skill (`references/state-schema.md`) and the script — do not recompute them.
+This returns all work units (epics and stories) with their derived `state`, `progress`, `review`, and `level`. `--session` marks the unit this session is bound to as `active` (if any); workflow-status only reports — it does not bind. The state-category and progress rules live in `dev-workflow-base` skill (`references/state-schema.md`) and the script — do not recompute them.
 
 If `work_units` is empty, output:
 
@@ -47,7 +47,7 @@ Use each unit's `state` (and `progress` for in_progress) to pick a human label:
 | `epic_next_story` | {Done}/{Total} Stories Done (from epic.md Stories table) |
 | `blocked` | Blocked |
 
-**Epic-Story association**: For each story/task, read each `epic.md` Stories table; if the unit name appears there, associate it with that epic, else independent (Epic = `-`).
+**Epic-Story association**: For each story, read each `epic.md` Stories table; if the unit name appears there, associate it with that epic, else independent (Epic = `-`).
 
 ### Phase 3: Display
 
@@ -60,21 +60,21 @@ Output the status overview in this format:
 |------|--------|
 | {epic-name} | {done}/{total} Stories Done |
 
-## Stories & Tasks
+## Stories
 
 | Work Unit | Level | Epic | Status |
 |-----------|-------|------|--------|
-| {unit-name} | Story/Task | {epic-name or -} | {status} |
+| {unit-name} | Story | {epic-name or -} | {status} |
 ```
 
 **Display rules**:
-- Sort Epics alphabetically by name; sort Stories & Tasks alphabetically by name
+- Sort Epics alphabetically by name; sort Stories alphabetically by name
 - Omit a section entirely if it has no entries
 - Names are the directory names from each unit's `path` (e.g. `{yyyy-mm-dd}-{prefix}-{story-name}`, `{yyyy-mm-dd}-{epic-name}`)
 
 ## Success Criteria
 
-- [ ] All existing epics, stories, **and tasks** under `.claude/dev-workflow/` are discovered (via the state evaluator)
+- [ ] All existing epics and stories under `.claude/dev-workflow/` are discovered (via the state evaluator)
 - [ ] Each item's status comes from the script's derived `state` (no hand-recomputation)
 - [ ] Output is displayed as a clear, readable table
 - [ ] When no work exists, a helpful empty-state message is shown

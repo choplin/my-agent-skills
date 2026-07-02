@@ -24,9 +24,7 @@ After addressing review items imported from a PR, the developer needs to reply t
 
 ### 1. Locate review.md and PR
 
-1. **Find review.md** at:
-   - `.claude/dev-workflow/story/*/review.md`
-   - `.claude/dev-workflow/task/*/review.md`
+1. **Find review.md** at `.claude/dev-workflow/story/*/review.md`
 
    - If not found: stop and report "review.md not found."
    - Once found, **bind this session** to the review.md's work-unit directory so dev-workflow hooks track only this work (see `dev-workflow-base` skill (`references/state-schema.md`) § Session binding):

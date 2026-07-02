@@ -24,7 +24,8 @@ Scan for all existing work documents:
 
 1. **Epics**: Glob for `.claude/dev-workflow/epic/*/epic.md`
 2. **Stories**: Glob for `.claude/dev-workflow/story/*/spec.md`
-3. **Tasks**: Glob for `.claude/dev-workflow/task/*/review.md`
+
+(Task-level work runs outside dev-workflow — hand it off through its own plan file, not here.)
 
 If no documents are found, output:
 
@@ -54,7 +55,7 @@ Run the state evaluator and read the entry for the selected work unit:
 python3 dev-workflow-base/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID"
 ```
 
-Each entry provides everything needed for the handoff prompt: `level` (Epic/Story/Task), `state` (derived category), `progress` (`{done, total}`), `review.phase`, `branch`, and `next_action`. The current git branch is in the top-level `current_branch`.
+Each entry provides everything needed for the handoff prompt: `level` (Epic/Story), `state` (derived category), `progress` (`{done, total}`), `review.phase`, `branch`, and `next_action`. The current git branch is in the top-level `current_branch`.
 
 The state-category priority order, legacy-value mappings, and progress-counting rules live in `dev-workflow-base` skill (`references/state-schema.md`) and the script — do not restate or recompute them here.
 
@@ -77,7 +78,6 @@ Generate the handoff prompt and output it in a fenced code block that the user c
 #### Determine Document Path
 
 The path argument for `/dev-workflow-resume-work` should be the most advanced document:
-- If Task: use path to `review.md` (e.g., `.claude/dev-workflow/task/{task-dir}/review.md`)
 - If `plan.md` exists: use path to `plan.md`
 - Else if `spec.md` exists: use path to `spec.md`
 - Else if `epic.md` exists: use path to `epic.md`
@@ -96,7 +96,7 @@ Then output the prompt inside a fenced code block:
 /resume-work {document-path}
 
 ## Previous Session Context
-- **Type**: {Epic|Story|Task}
+- **Type**: {Epic|Story}
 - **State**: {state category}
 - **Progress**: {done}/{total} steps completed
 - **Branch**: {spec branch name} (current: {current git branch})

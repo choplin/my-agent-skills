@@ -121,6 +121,6 @@ After post-task completes:
 - **Reference**: `.claude/dev-workflow/epic/{epic-dir}/epic.md`
 - **Next phase**: `dev-workflow-create-spec` for next Story
 
-**If standalone Story/Task**:
+**If standalone Story**:
 - **Reference**: None
 - **Next phase**: Done (or start new task with `/dev-workflow-kickoff`)

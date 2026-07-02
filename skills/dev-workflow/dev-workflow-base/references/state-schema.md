@@ -11,12 +11,11 @@ No other file should restate the priority table or legacy mappings. Skills refer
 
 ## 1. `state.json` on-disk schema
 
-**Location**: one `state.json` per Story or Task work unit, alongside its other documents:
+**Location**: one `state.json` per Story work unit, alongside its other documents:
 
 - Story: `.claude/dev-workflow/story/{story-dir}/state.json`
-- Task: `.claude/dev-workflow/task/{task-dir}/state.json`
 
-Epics do **not** use `state.json`. Epic status is derived from the `## Stories` table in `epic.md`.
+Epics do **not** use `state.json` (status is derived from the `## Stories` table in `epic.md`), and Task-level work runs outside dev-workflow (it has no `state.json`).
 
 **Principle — store only machine-managed, non-derived state.** Do not store values that can be computed from other fields (e.g., a "resolved 2/5" counter, or the derived state category). The script computes those at read time.
 
@@ -47,10 +46,10 @@ Epics do **not** use `state.json`. Epic status is derived from the `## Stories` 
 | Field | Type | Meaning |
 |-------|------|---------|
 | `schema` | int | Schema version. Currently `1`. |
-| `level` | string | `"story"` or `"task"`. |
+| `level` | string | `"story"`. |
 | `title` | string | Human title (mirrors the `# Spec:`/`# Plan:` title). |
-| `branch` | string \| null | Git branch for this work unit. `null` for Task (no plan) without a dedicated branch. |
-| `criteria` | array | Acceptance criteria (Story) / completion criteria (Task). Owned by spec/plan. |
+| `branch` | string \| null | Git branch for this work unit (the Story branch). |
+| `criteria` | array | Acceptance criteria. Owned by spec/plan. |
 | `criteria[].id` | int | Stable id. |
 | `criteria[].name` | string | Criterion name. |
 | `criteria[].verify` | string \| null | Executable command that returns pass/fail, or `null` if not machine-verifiable (→ always human review). Populated by create-spec; **execution is out of scope until Story #3**. |
@@ -172,7 +171,7 @@ A one-time migration is **not** performed; fallback keeps existing work units re
 |-------|---------|
 | `current_branch` | `git branch --show-current`. |
 | `active_path` | Path of the unit bound to `--session` (or `null` when the session is unbound). See resolution rule below. |
-| `work_units[]` | One entry per discovered epic/story/task. |
+| `work_units[]` | One entry per discovered epic/story. |
 | `.matches_current_branch` | `branch` equals `current_branch`. A display hint for interactive skills only; **not** used to select the active unit. |
 | `.active` | `true` for the unit equal to `active_path`. **This is what consumers use to pick the unit to act on.** |
 | `.state` | Derived category (priority table above). |
@@ -203,7 +202,7 @@ python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_I
 python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --clear
 ```
 
-Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review, import-pr-comments, reply-to-pr-comments) **bind** at the point the unit is identified. A Task has no directory until self-review creates one, so a Task session is first bound there. `dev-workflow-post-task` **clears**. Read-only overviews (workflow-status) and `dev-workflow-handoff` do not bind; a handed-off unit is rebound by `dev-workflow-resume-work` in the next session.
+Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review, import-pr-comments, reply-to-pr-comments) **bind** at the point the unit is identified — normally at create-spec, when the Story directory is created. `dev-workflow-post-task` **clears**. Read-only overviews (workflow-status) and `dev-workflow-handoff` do not bind; a handed-off unit is rebound by `dev-workflow-resume-work` in the next session.
 
 ### Consumer rule
 

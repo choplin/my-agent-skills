@@ -45,23 +45,32 @@ Use the Skill tool to call `discuss-toolkit-dig` as a base skill to clarify user
 
 ## Assessment Criteria
 
-| Level | Criterion | Output |
-|-------|-----------|--------|
-| **Autonomous-Task** | Task **and** every criterion is machine-verifiable (an executable pass/fail) — the "answer" lives in a runnable check, not in the user's head | Use Skill tool: `dev-workflow-create-task` (autonomous variant — see "If Autonomous-Task") |
-| **Task** | Criteria writable directly from User Needs (no Requirements clarification needed) | Use Skill tool: `dev-workflow-create-task` |
+Assessment produces two kinds of routes. **Task-level work leaves dev-workflow** — it needs no spec and no approval gate, so it is handed to an autonomous execution skill (or just implemented directly). **Story- and Epic-level work stays in dev-workflow**, because it needs a spec before "done" can be defined.
+
+### Routes that leave dev-workflow (Task-level — no spec, no approval gate)
+
+| Level | Criterion | Route |
+|-------|-----------|-------|
+| **Autonomous-Task** | Task **and** every criterion is machine-verifiable (an executable pass/fail) — the "answer" lives in a runnable check, not in the user's head | Use Skill tool: `goal-loop` (predicate-gated implement→verify loop) |
+| **Task** | Criteria writable directly from User Needs (no Requirements clarification needed) | Use Skill tool: `exec-plan` — or, for a trivial one-off with nothing to defer, just implement it directly (no skill needed) |
+
+### Routes that stay in dev-workflow (spec required)
+
+| Level | Criterion | Route |
+|-------|-----------|-------|
 | **Story** | Requirements clarification needed before Criteria (need to decide "what kind" before "done") | Use Skill tool: `dev-workflow-create-spec` |
 | **Epic** | Multiple independent Stories (What has multiple parts) | Use Skill tool: `dev-workflow-create-epic` |
 
 **Examples**:
-- Autonomous-Task: "Make the failing tests in `auth/` pass" / "Port module X to match reference Y" → done = a command exits 0; the oracle is external
-- Task: "Fix this bug" → Criteria "Bug fixed, tests pass" - directly writable
-- Story: "Add authentication" → Need to decide "what kind of auth?" before defining "done"
+- Autonomous-Task: "Make the failing tests in `auth/` pass" / "Port module X to match reference Y" → done = a command exits 0; the oracle is external → `goal-loop`
+- Task: "Fix this bug" → Criteria "Bug fixed, tests pass" - directly writable → `exec-plan`, or just do it if it's a two-line change
+- Story: "Add authentication" → Need to decide "what kind of auth?" before defining "done" → `dev-workflow-create-spec`
 
 ### The oracle test (Task → Autonomous-Task)
 
 Once something is a Task, ask one more question: **can every completion criterion be a command that returns pass/fail?** This is the oracle test — does the "right answer" live in the world (a test suite, a build, a reference implementation, a benchmark) or only in the user's head (taste, product judgment, UX)?
 
-- **Answer in the world → Autonomous-Task.** The loop can close on its own; an up-front approval gate is pure overhead. Write goal + predicates and let the implement→verify loop run to green; the human reviews only the finished artifact.
+- **Answer in the world → Autonomous-Task.** The loop can close on its own; an up-front approval gate is pure overhead. Route to `goal-loop`: state goal + predicates and let the implement→verify loop run to green; the human reviews only the finished artifact.
 - **Answer in the user's head → ordinary Task/Story.** Keep the spec/approval as a human contract; predicates alone cannot capture intent — the oracle lives in the user's head.
 
 When in doubt (some criteria predicate-able, some not), it is **not** Autonomous-Task — fall back to Task/Story.
@@ -87,24 +96,20 @@ When in doubt (some criteria predicate-able, some not), it is **not** Autonomous
 
 ### If Autonomous-Task
 
-The work is a Task whose every criterion is an executable predicate. The point is to **skip the up-front approval gate** and let the loop close on the predicates.
+The work is a Task whose every criterion is an executable predicate. It **leaves dev-workflow**: there is no spec and no up-front approval gate — the loop closes on the predicates.
 
-**You MUST use the Skill tool** to call `dev-workflow-create-task`, telling it this is the **autonomous variant**:
-1. Write the completion criteria as executable `Verify:` commands (no `human` criteria — if any criterion would be `human`, this is not Autonomous-Task).
-2. State the goal + predicates; do **not** request plan approval via ExitPlanMode (the gate is what we are skipping).
-3. Run the implement → verify loop until every predicate exits 0. Prefer the built-in `/goal` command if available (a generator/evaluator loop on the completion condition); otherwise iterate implement → `dev-workflow-self-review` (its Step 0M machine pass runs the predicates) until green.
-4. Present the **finished artifact** for human review (the human reviews output, not the plan).
+**You MUST use the Skill tool** to call `goal-loop`. It will clarify the What, write a compact Goal Contract with executable predicates, and run a bounded implement→verify loop until every predicate passes, then present the finished artifact for human review.
 
-If during implementation a criterion turns out to need human judgment after all, stop the autonomous loop and fall back to ordinary Task (request approval, involve the user).
+If during implementation a criterion turns out to need human judgment after all, `goal-loop` stops as `blocked` and hands back to a spec-driven route (`dev-workflow-create-spec`).
 
 ### If Task
 
-**You MUST use the Skill tool** to call `dev-workflow-create-task`. Do NOT proceed with implementation yourself.
+The work **leaves dev-workflow**: Criteria follow directly from Needs, so no spec and no approval gate are needed.
 
-The create-task skill will:
-1. Receive Why/What context from this interview (via session history)
-2. Structure the information into Claude Code plan file format
-3. Request user approval via ExitPlanMode
+- **Self-drivable Task** (some decisions may need deferring) → use the Skill tool to call `exec-plan`. It agrees a rough Purpose/Boundaries/Acceptance, drives autonomously, parks the big calls, and batch-reviews them at the end. For a small Task, the plan can be a few lines.
+- **Trivial one-off** with nothing to defer → just implement it directly. No skill needed.
+
+If complexity turns out to need requirements decided up front, promote to Story (`dev-workflow-create-spec`).
 
 ### If Story
 
@@ -118,13 +123,17 @@ The create-spec skill will receive the interview context via session history.
 
 The create-epic skill will receive the interview context via session history.
 
-### Anti-pattern: Skipping Skill dispatch
+### Anti-pattern: Doing Story/Epic work inline
 
-**NEVER** start implementation, planning, or document creation directly after assessment. You MUST always use the Skill tool to dispatch to the appropriate skill. Using Plan tool, Write tool, or any other tool to do the work yourself instead of dispatching is a critical error.
+For **Story and Epic**, you MUST use the Skill tool to dispatch to `dev-workflow-create-spec` / `dev-workflow-create-epic`. NEVER write a spec or decompose an epic inline yourself — that skips the requirements step these levels exist for.
+
+For **Task-level** work the opposite holds: routing to `goal-loop` / `exec-plan`, or implementing a trivial change directly, is correct — do not force it through a spec.
+
+The one error to avoid on the Task side: silently treating Story- or Epic-level work as a Task to skip the spec. When requirements need deciding, route up, don't drive through.
 
 ## Promotion Flow
 
-Task → Story promotion is a **normal flow**, not a failure.
+Task → Story promotion is a **normal flow**, not a failure. It is how a Task-level route (`goal-loop` / `exec-plan`) re-enters dev-workflow when requirements turn out to need deciding.
 
 **Promotion triggers**:
 - Design decision emerged during implementation that wasn't anticipated
@@ -132,9 +141,9 @@ Task → Story promotion is a **normal flow**, not a failure.
 - Need to preserve decisions across session boundaries
 
 **When promoting**:
-- Why/What from Plan carry over to spec (this is why create-task includes full Why/What)
-- Document the How decisions made so far
-- Use the Skill tool to call `dev-workflow-create-spec` with existing Plan context
+- Carry the Why/What over to the spec: from the `goal-loop` Goal Contract, or the `exec-plan` Purpose/Boundaries/Acceptance already written for the Task
+- Document the How decisions made so far (the `exec-plan` Decision Log / Parking Lot, if present)
+- Use the Skill tool to call `dev-workflow-create-spec` with that context
 
 ## Success Criteria
 
@@ -142,7 +151,7 @@ Task → Story promotion is a **normal flow**, not a failure.
 - [ ] Why is concrete with specific problem/motivation
 - [ ] What is specific with measurable completion criteria
 - [ ] Assessment rationale is clear and traceable (based on "Criteria directly from Needs?" question)
-- [ ] Correct skill invoked based on assessment (create-task / create-spec / create-epic)
+- [ ] Correct route taken based on assessment (Task-level → `goal-loop` / `exec-plan` / direct implementation, which leave dev-workflow; Story → `create-spec`; Epic → `create-epic`)
 
 ## Next Session
 

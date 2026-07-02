@@ -366,7 +366,7 @@ def build_unit(unit_dir, level, branch_now):
 
 def discover(root, branch_now):
     units = []
-    layout = [("epic", "epic.md"), ("story", "spec.md"), ("task", None)]
+    layout = [("epic", "epic.md"), ("story", "spec.md")]
     for level, marker in layout:
         level_dir = os.path.join(root, level)
         if not os.path.isdir(level_dir):
@@ -376,10 +376,9 @@ def discover(root, branch_now):
             if not os.path.isdir(unit_dir):
                 continue
             has_state = os.path.exists(os.path.join(unit_dir, "state.json"))
-            if marker and not has_state and \
+            if not has_state and \
                     not os.path.exists(os.path.join(unit_dir, marker)):
-                # story/epic require their marker unless a state.json is present;
-                # task has no fixed marker and is always included.
+                # story/epic require their marker unless a state.json is present.
                 continue
             units.append(build_unit(unit_dir, level, branch_now))
     return units

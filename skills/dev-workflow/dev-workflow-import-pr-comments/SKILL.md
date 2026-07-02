@@ -24,13 +24,10 @@ When using draft PRs for bot reviews (e.g., Copilot), review comments arrive on 
 
 ### 1. Verify Prerequisites
 
-1. **Find review.md**: Look for `review.md` at:
-   - `.claude/dev-workflow/story/*/review.md`
-   - `.claude/dev-workflow/task/*/review.md`
+1. **Find review.md**: Look for `review.md` at `.claude/dev-workflow/story/*/review.md`
 
    - If not found: **auto-create** review.md using `dev-workflow-base` skill (`references/review-init-guide.md`):
-     - Follow the guide to determine work level (Story / Task with plan / Task no plan)
-     - Resolve metadata and create review.md at the appropriate path
+     - Resolve the active Story and its metadata, then create review.md at the resolved path
      - Self-Review Results: Use SKIPPED row (`| - | Self-review | SKIPPED | Self-review was not performed |`)
      - Set Phase to `REVIEWING`
 

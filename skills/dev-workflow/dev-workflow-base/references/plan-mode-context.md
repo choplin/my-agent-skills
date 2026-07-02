@@ -19,7 +19,7 @@ When using EnterPlanMode during any dev-workflow skill execution, include a `## 
 
 **Active skill**: {skill-name} ({phase-description})
 **Phase**: {Implementation | Self-Review | User-Review}
-**Work level**: {Story | Task}
+**Work level**: Story
 **Documents**:
 - Spec: {spec path or N/A}
 - Plan: {plan path or N/A}
@@ -35,6 +35,6 @@ When using EnterPlanMode during any dev-workflow skill execution, include a `## 
 |-------|-------------|
 | **Active skill** | The dev-workflow skill currently executing (e.g., `resume-work (Implementation Handoff)`, `self-review (Self-Correct)`) |
 | **Phase** | The workflow phase: Implementation, Self-Review, or User-Review |
-| **Work level** | Story or Task — determines post-completion flow |
+| **Work level** | Story — dev-workflow's in-flow level (Task-level work runs outside dev-workflow) |
 | **Documents** | Paths to relevant dev-workflow documents for re-loading context |
 | **After This Plan Completes** | The specific action to take when the plan's steps are done. Must be concrete and actionable without session history |

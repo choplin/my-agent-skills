@@ -17,12 +17,14 @@ Work state lives in documents and a small `state.json`, so a task survives `/cle
 
 | Level | When | Approach |
 |-------|------|----------|
-| **Autonomous-Task** | A Task where *every* criterion is machine-verifiable — the answer lives in a test/build/reference, not in your head | Skip the approval gate. Write goal + predicates, let the implement→verify loop run to green, review only the finished artifact. |
-| **Task** | Criteria writable directly from the need; implementation approach is obvious | Single Claude Code plan; implement, then self-review. |
+| **Autonomous-Task** | A Task where *every* criterion is machine-verifiable — the answer lives in a test/build/reference, not in your head | *Leaves dev-workflow* → `goal-loop`: write goal + predicates, let the implement→verify loop run to green, review only the finished artifact. |
+| **Task** | Criteria writable directly from the need; implementation approach is obvious | *Leaves dev-workflow* → `exec-plan` (self-drivable), or just implement directly (trivial one-off). |
 | **Story** | You must decide "what kind" before "done" (requirements need clarifying) | spec + plan documents, then implement. |
 | **Epic** | Multiple independent stories | An epic document coordinating stories, each its own Story. |
 
 The split is about **where the "right answer" lives**: in the world (tests, a spec to match, a benchmark) → lean autonomous; in your head (taste, UX, product judgment) → keep the spec as a human contract. See `docs/2026-06-11-loop-engineering-research.md` for the reasoning.
+
+**Task-level work leaves dev-workflow.** Both Task rows above are routed *out* by `dev-workflow-kickoff` — to `goal-loop`, `exec-plan`, or direct implementation, each of which carries its own review/finish. dev-workflow's own document and review flow (below) is for **Story and Epic**. A Task re-enters dev-workflow only via promotion to Story, when requirements turn out to need deciding.
 
 ## How It Works
 
@@ -51,8 +53,7 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 
 | Skill | Description |
 |-------|-------------|
-| `dev-workflow-kickoff` | Explore the need through dialogue and route to the right level (incl. the oracle test → Autonomous-Task) |
-| `dev-workflow-create-task` | Create a task-level plan with full Why/What (and the autonomous variant) |
+| `dev-workflow-kickoff` | Explore the need through dialogue and route to the right level (incl. the oracle test → Autonomous-Task); Task-level work is routed out to `goal-loop` / `exec-plan` / direct implementation |
 | `dev-workflow-create-epic` | Create an epic document coordinating multiple stories |
 | `dev-workflow-create-spec` | Create a spec with predicate-ized (`Verify:`) acceptance criteria |
 | `dev-workflow-create-plan` | Create a self-contained implementation plan (walking skeleton first, approach decisions) |
@@ -61,7 +62,7 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 | `dev-workflow-self-review` | Machine-verification pass, then classified LLM review |
 | `dev-workflow-user-review` | Structured handling of user feedback during review |
 | `dev-workflow-post-task` | Capture knowledge and feed omissions back into the workflow |
-| `dev-workflow-workflow-status` | Overview of all active epics, stories, and tasks |
+| `dev-workflow-workflow-status` | Overview of all active epics and stories |
 
 ## Dependencies
 
@@ -91,7 +92,7 @@ Install `discuss-toolkit` alongside this plugin. If it is not available, `dev-wo
 7. After LGTM, commit.
 8. `dev-workflow-post-task` — capture knowledge; feed any late-surfacing omissions back into the spec template / kickoff.
 
-For an **Autonomous-Task**, steps 2-7 collapse: write goal + predicates, run the implement→verify loop to green, then review the finished artifact.
+For **Task-level** work this whole flow is skipped — the work leaves dev-workflow: an **Autonomous-Task** goes to `goal-loop` (write goal + predicates, run the implement→verify loop to green, review the finished artifact); an ordinary **Task** goes to `exec-plan` or is implemented directly.
 
 ## Installation
 

@@ -13,36 +13,29 @@ Orchestrate comprehensive review of implementation through parallel execution of
 
 ## Purpose
 
-Comprehensive review of implementation through specialized reviewers. The review scope depends on the work level:
+Comprehensive review of a **Story** implementation through specialized reviewers: three parallel reviews (Acceptance Criteria, Plan Compliance, Code Quality), preceded by a machine-verification pass.
 
-- **Story**: Three parallel reviews (Acceptance Criteria, Plan Compliance, Code Quality)
-- **Task (with plan)**: Completion Criteria check (inline) + Code Quality review only
-- **Task (no plan)**: Code Quality review only (no Completion Criteria)
+self-review covers **Story-level work only**. Task-level work leaves dev-workflow (`goal-loop` / `exec-plan` / direct implementation) and is reviewed by that route's own finish step — `goal-loop`'s predicate verify, `exec-plan`'s batch review, or an ad-hoc pass like `/code-review`. If the active unit is a Task, see Step 0.
 
 ## Input
 
 - **Story**: Spec at `.claude/dev-workflow/story/{story-dir}/spec.md` + Plan at `.claude/dev-workflow/story/{story-dir}/plan.md`
-- **Task (with plan)**: Active Claude Code plan file (from `.claude/plans/`)
-- **Task (no plan)**: Git diff of current branch changes (no plan file required)
 
 ## Process
 
 ### 0. Determine Work Level
 
-Determine the level from the **active work unit**, not a glob over all stories (a leftover completed Story directory must never hijack the current work).
+self-review operates on the **active Story**, identified from the active work unit — not a glob over all stories (a leftover completed Story directory must never hijack the current work).
 
 1. Run `python3 dev-workflow-base/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID"` and read `active_path` (the unit bound to this session). If `active_path` is `null` (this session was never bound — e.g. you implemented after a `/clear`), identify the unit from `work_units[]` by `matches_current_branch`; if still ambiguous, ask the user. See `dev-workflow-base` skill (`references/state-schema.md`).
-   - If the active unit is a **Story** → **Story flow** (proceed to Step 1). Use its `path` as `{story-dir}`.
-2. If the active unit is a **Task** (or there is no active Story) → **Task flow**:
-   - Identify the active plan file: Glob `.claude/plans/*.md` and find the plan with `**Work level**: Task` in its `## Workflow Context` section
-   - If active Task plan found → **Task (with plan)** flow (proceed to Step 1T)
-   - If no active Task plan found → **Task (no plan)** flow (proceed to Step 1T, skip 1T-a)
+2. If the active unit is a **Story** → proceed to Step 0M, then the Story flow. Use its `path` as `{story-dir}`.
+3. If there is **no active Story** (the work is Task-level, or has no dev-workflow unit at all) → self-review does not apply. Tell the user: Task-level work is reviewed by its own route — `goal-loop`'s verify pass, `exec-plan`'s batch review, or an ad-hoc `/code-review` on the diff. Stop here.
 
 ### 0M. Machine-Verification Pass (run first — cheap & deterministic)
 
 Before spending any LLM reviewers, run the criteria predicates. This closes the cheap, certain cases first and surfaces hard FAILs without paying for review.
 
-1. Read the active unit's `state.json` `criteria[]` (Story/Task with plan). For each criterion with a non-null `verify` command:
+1. Read the active unit's `state.json` `criteria[]`. For each criterion with a non-null `verify` command:
    - Run the command (Bash). Exit 0 → PASS; non-zero → FAIL.
    - Write the result back to `state.json`: set `passes` and fill `evidence` (a one-line summary of the command + outcome). **Default-FAIL**: never set `passes: true` without having run the command and captured evidence.
 2. Criteria with `verify: null` (i.e. `Verify: human`) are **not** guessed here — they go to the acceptance-reviewer / human as NEEDS REVIEW.
@@ -89,7 +82,7 @@ When a finding's class is genuinely unclear, treat it as `correctness` (fail saf
 
 ### 1C. Codex Code Review (All Flows)
 
-After the parallel reviewers complete (Story) or after code quality review (Task), invoke Codex review:
+After the parallel reviewers complete, invoke Codex review:
 
 ```
 Skill(skill: "codex:review", args: "--wait")
@@ -109,32 +102,6 @@ Apply Finding Classification to Codex findings too: a finding only gates if it i
 | `needs-attention` | any `correctness` finding | FAIL |
 | `needs-attention` | only `improvement` findings | NEEDS REVIEW (record, don't gate) |
 | Skipped/Error | N/A | PASS (not counted) |
-
-### 1T. Invoke Reviewers — Task Flow
-
-For Task-level work, run two review steps:
-
-#### 1T-a. Completion Criteria Check (Inline)
-
-> **Skip this step if Task (no plan)** — proceed directly to 1T-b.
-
-The machine-verification pass (Step 0M) already ran any criteria with a `verify` command and wrote results to `state.json`. Here, handle only the remainder:
-
-1. For criteria with `verify: human` (or plan `### Completion Criteria` items without a command), examine the implementation and mark PASS / NEEDS REVIEW.
-2. Any machine-predicate FAIL from 0M is already a hard FAIL → Self-Correct.
-
-This check is performed inline (no agent needed).
-
-#### 1T-b. Code Quality Review
-
-Launch code-reviewer agent:
-
-```
-Task: feature-dev:code-reviewer (external agent)
-- subagent_type: feature-dev:code-reviewer
-- prompt: "Review code quality for the changes in this implementation"
-- Note: Skip if agent not available
-```
 
 ### 2. Aggregate Results
 
@@ -174,8 +141,8 @@ After fixing, re-run self-review from Step 0M.
 If you use EnterPlanMode to fix issues, add a `## dev-workflow Context` block to the plan file. Use the template in `dev-workflow-base` skill (`references/plan-mode-context.md`) with these values:
 
 - **Active skill**: self-review (Self-Correct)
-- **Work level**: Story / Task / Task (no plan) — match the current flow
-- **Documents**: the relevant docs for the work level — Story: Spec + Plan; Task (with plan): the active plan file; Task (no plan): `.claude/dev-workflow/task/{task-dir}/review.md`
+- **Work level**: Story
+- **Documents**: Spec + Plan
 - **After This Plan Completes**: Re-run self-review to verify fixes are effective.
 
 ### 5. Create review.md (if no FAIL remains)
@@ -185,11 +152,10 @@ When all results are PASS or NEEDS REVIEW (no FAIL), create review.md for the up
 **Also create/update `state.json`** in the same work-unit directory (see `dev-workflow-base` skill (`references/state-schema.md`)):
 
 - **Story**: `state.json` already exists (from create-spec/create-plan). Set `criteria[].passes`/`evidence` from the verification results, and initialize `review` = `{ "phase": "REVIEWING", "mode": "ITERATIVE", "items": [] }`.
-- **Task (with plan / no plan)**: the Task has no `state.json` yet — create it now alongside review.md. Set `level: "task"`, `title`, `branch` (current branch, or `null` for no-plan without a dedicated branch), `criteria` (from the plan's Completion Criteria if present, else `[]`), `steps` (from the plan if present, else `[]`), and `review` = `{ "phase": "REVIEWING", "mode": "ITERATIVE", "items": [] }`. Use the same `{task-dir}` as review.md.
 
 Do not store a resolved counter — it is derived by the script.
 
-**Bind this session** to the work unit now that its directory exists (idempotent; this is the first binding point for a Task, see `dev-workflow-base` skill (`references/state-schema.md`) § Session binding):
+**Bind this session** to the work unit (idempotent; the Story was already bound at create-spec, this reaffirms it — see `dev-workflow-base` skill (`references/state-schema.md`) § Session binding):
 
 ```bash
 python3 dev-workflow-base/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --set "<work-unit-dir>"
@@ -208,39 +174,6 @@ python3 dev-workflow-base/scripts/workflow-state.py --session "$CLAUDE_CODE_SESS
    - **Mode**: `ITERATIVE`
    - **Resolved**: `0 / 0`
 4. Write to `.claude/dev-workflow/story/{story-dir}/review.md`
-
-#### Task Flow (with plan)
-
-1. Derive task name from plan file's `# Plan: {name}` title (convert to kebab-case)
-2. Prepend today's date: `{yyyy-mm-dd}-{task-name}`
-3. Check for existing `.claude/dev-workflow/task/{yyyy-mm-dd}-{task-name}/review.md` — if it exists, ask user before overwriting
-3. Read `dev-workflow-base` skill (`references/review-template.md`)
-4. Fill in the template:
-   - **Title**: From plan file title
-   - **Related Files**: Plan path only (no Spec)
-   - **Self-Review Results**: Completion Criteria + Code Quality results only (no Acceptance Criteria / Plan Compliance rows)
-   - **Review Items**: Empty (no user feedback yet)
-   - **Phase**: `REVIEWING`
-   - **Mode**: `ITERATIVE`
-   - **Resolved**: `0 / 0`
-6. Write to `.claude/dev-workflow/task/{yyyy-mm-dd}-{task-name}/review.md`
-
-#### Task Flow (no plan)
-
-Follow `dev-workflow-base` skill (`references/review-init-guide.md`) to resolve metadata:
-
-1. Derive directory name from git branch: replace `/` with `-`, prepend today's date as `{yyyy-mm-dd}-{branch-with-dashes}`
-2. Check for existing `.claude/dev-workflow/task/{task-dir}/review.md` — if it exists, ask user before overwriting
-3. Read `dev-workflow-base` skill (`references/review-template.md`)
-4. Fill in the template:
-   - **Title**: From branch name (prefix removed)
-   - **Related Files**: No Spec or Plan lines (add comment `<!-- No plan file associated -->`)
-   - **Self-Review Results**: Code Quality results only (no Completion Criteria rows)
-   - **Review Items**: Empty (no user feedback yet)
-   - **Phase**: `REVIEWING`
-   - **Mode**: `ITERATIVE`
-   - **Resolved**: `0 / 0`
-5. Write to `.claude/dev-workflow/task/{task-dir}/review.md`
 
 ### 6. Invoke Handoff
 
@@ -298,89 +231,15 @@ The user can then copy the prompt, `/clear`, and paste to start user-review in a
 {If all PASS or only NEEDS REVIEW: review.md created, handoff invoked — copy prompt, /clear, paste to start user-review}
 ```
 
-### Task Flow (with plan)
-
-```markdown
-## Self Review Results
-
-**Plan**: `{path to plan file}`
-
-### 1. Completion Criteria Check
-
-| # | Criterion | Result | Details |
-|---|-----------|--------|---------|
-| 1 | {criterion from plan} | PASS/FAIL/NEEDS REVIEW | {details} |
-
-### 2. Code Quality Review
-
-{Output from feature-dev:code-reviewer agent, or "Skipped (agent not available)" if unavailable}
-
-### 3. Codex Code Review
-
-{Output from codex:review, or "Skipped (Codex CLI not available)" if unavailable}
-
-### Overall Summary
-
-| Review | PASS | FAIL | NEEDS REVIEW |
-|--------|------|------|--------------|
-| Completion Criteria | X | X | X |
-| Code: Bugs | X | X | X |
-| Code: Logic Errors | X | X | X |
-| Code: Security | X | X | X |
-| Code: Code Quality | X | X | X |
-| Code: Conventions | X | X | X |
-| Codex Review | X | X | X |
-| **Total** | X | X | X |
-
-### Next Action
-
-{If any FAIL: specific fixes to apply, then re-run self-review}
-{If all PASS or only NEEDS REVIEW: review.md created, handoff invoked — copy prompt, /clear, paste to start user-review}
-```
-
-### Task Flow (no plan)
-
-```markdown
-## Self Review Results
-
-**Branch**: `{branch name}`
-
-### 1. Code Quality Review
-
-{Output from feature-dev:code-reviewer agent, or "Skipped (agent not available)" if unavailable}
-
-### 2. Codex Code Review
-
-{Output from codex:review, or "Skipped (Codex CLI not available)" if unavailable}
-
-### Overall Summary
-
-| Review | PASS | FAIL | NEEDS REVIEW |
-|--------|------|------|--------------|
-| Code: Bugs | X | X | X |
-| Code: Logic Errors | X | X | X |
-| Code: Security | X | X | X |
-| Code: Code Quality | X | X | X |
-| Code: Conventions | X | X | X |
-| Codex Review | X | X | X |
-| **Total** | X | X | X |
-
-### Next Action
-
-{If any FAIL: specific fixes to apply, then re-run self-review}
-{If all PASS or only NEEDS REVIEW: review.md created, handoff invoked — copy prompt, /clear, paste to start user-review}
-```
-
 ## Success Criteria
 
-- [ ] Work level is correctly determined (Story or Task)
-- [ ] Story: All three reviewers are invoked in parallel
-- [ ] Task: Completion Criteria checked inline + code-reviewer invoked
+- [ ] Active unit is confirmed to be a Story (Task-level work is redirected to its own review route)
+- [ ] All three reviewers are invoked in parallel
 - [ ] Results are aggregated into unified report
 - [ ] Each FAIL includes actionable fix instruction
 - [ ] Feedback loop continues until no FAIL remains
 - [ ] Ready to proceed to user review (all PASS or only NEEDS REVIEW)
-- [ ] review.md is created at `.claude/dev-workflow/story/{story-dir}/review.md` (Story) or `.claude/dev-workflow/task/{task-dir}/review.md` (Task)
+- [ ] review.md is created at `.claude/dev-workflow/story/{story-dir}/review.md`
 - [ ] Codex review is invoked via Skill tool (when available)
 - [ ] Codex unavailability does not block self-review
 - [ ] Handoff skill is invoked to generate resume prompt

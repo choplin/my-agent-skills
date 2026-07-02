@@ -75,21 +75,21 @@ How: Implementation steps
 
 #### Task / Story / Epic
 
-Classification based on work volume.
+Classification based on work volume. **Task-level work leaves dev-workflow**: it needs no spec and no approval gate, so `dev-workflow-kickoff` routes it to an autonomous execution skill (or direct implementation) rather than into dev-workflow's own document/review flow. **Story and Epic stay in dev-workflow**, because they need a spec before "done" can be defined.
 
-| Level | Criterion | Documents |
-|-------|-----------|-----------|
-| Task | Can write Criteria directly from User Needs | None |
-| Story | Requirements organization needed | spec + plan |
-| Epic | Composed of multiple Stories | epic + each Story's spec/plan |
+| Level | Criterion | Documents | Handled by |
+|-------|-----------|-----------|------------|
+| Task | Can write Criteria directly from User Needs | None (in dev-workflow) | Leaves dev-workflow → `goal-loop` (every criterion machine-verifiable), `exec-plan` (self-drivable), or direct implementation (trivial one-off) |
+| Story | Requirements organization needed | spec + plan | dev-workflow |
+| Epic | Composed of multiple Stories | epic + each Story's spec/plan | dev-workflow |
 
 **Core of Task assessment**: Can you write Criteria directly from User Needs?
 
-- **Yes → Task**: No Requirements organization needed
-- **No → Story**: Define Criteria after organizing Requirements
+- **Yes → Task**: No Requirements organization needed → route out of dev-workflow
+- **No → Story**: Define Criteria after organizing Requirements → stay in dev-workflow
 
 **Examples**:
-- Task: "Fix this function's bug" → Can directly write Criteria "Bug fixed, tests pass"
+- Task: "Fix this function's bug" → Can directly write Criteria "Bug fixed, tests pass" → route to `goal-loop`/`exec-plan` or just implement it
 - Story: "Add authentication" → Need to decide "what kind of auth" before writing Criteria
 
 #### Documents
@@ -131,36 +131,36 @@ The Story directory name (e.g., `add-auth`) becomes the branch name (e.g., `feat
 ```
 [Understand] → Volume assessment
                   │
-       ┌──────────┼──────────┐
-       ↓          ↓          ↓
-     Task       Story       Epic
-       │          │          │
-       │      create spec  create epic
-       │          │          │
-       │      create branch decompose to Stories
-       │          │          │
-       │      create plan  └→ Return to [Understand] (each Story)
-       │          │
-       │   [Session clear?] ← optional (documents are self-complete)
-       │          │
-       │   [Resume Work] ← Re-entry point (branch checkout)
-       │          │
-       └──────────┴──────────→ [Implement]
-                                   ↓
-                            [Test/AI Review] ←┐
-                                   │         │ Iteration
-                                   └─────────┘
-                                   ↓
-                            [User Review] ← review.md persists state
-                                   ↓
-                               [Commit]
-                                   ↓
-                           [Knowledge Capture]
+       ┌──────────┴──────────┐
+       ↓                     ↓
+  Task-level            Story / Epic
+  (leaves dev-workflow)      │
+       ↓                 create spec / epic
+  goal-loop /                │
+  exec-plan /            create branch (Story) · decompose to Stories (Epic)
+  direct impl                │
+  — own review/finish;   create plan
+    promote to Story          │
+    if requirements       [Session clear?] ← optional (documents are self-complete)
+    emerge                    │
+                          [Resume Work] ← Re-entry point (branch checkout)
+                              │
+                          [Implement]
+                              ↓
+                       [Test/AI Review] ←┐
+                              │          │ Iteration
+                              └──────────┘
+                              ↓
+                       [User Review] ← review.md persists state
+                              ↓
+                          [Commit]
+                              ↓
+                      [Knowledge Capture]
 ```
 
 **Phase descriptions**:
 
-1. **Understand**: Grasp task content and assess volume
+1. **Understand**: Grasp task content and assess volume. Task-level work is routed out of dev-workflow here (to `goal-loop` / `exec-plan` / direct implementation); Story and Epic continue below
 2. **Document creation**: For Story/Epic, create spec/plan/epic
 3. **Session clear (optional)**: For Story/Epic, clearing before implementation is available but not required — documents are self-complete, so resume works with or without a clear (see Design Principle 2)
 4. **Resume Work**: Re-entry point for existing work (evaluates progress, identifies gaps, recommends next action)
@@ -175,7 +175,7 @@ The Story directory name (e.g., `add-auth`) becomes the branch name (e.g., `feat
 | Phase | Skill | Purpose |
 |-------|-------|---------|
 | Understand | `dev-workflow-kickoff` | Explore user needs, route to Task/Story/Epic |
-| Document (Task) | `dev-workflow-create-task` | Create task-level plan with Why/What context |
+| Route out (Task) | `goal-loop` / `exec-plan` | Task-level work leaves dev-workflow to an autonomous execution skill (or direct implementation) |
 | Document (Story) | `dev-workflow-create-spec` → `dev-workflow-create-plan` | Create spec then implementation plan |
 | Document (Epic) | `dev-workflow-create-epic` | Decompose into Stories |
 | Resume Work | `dev-workflow-resume-work` | Evaluate progress, identify gaps, recommend resumption point |
@@ -264,10 +264,10 @@ Start implementation only after all ambiguities are resolved. Proceeding with un
 
 ### 7. Task→Story Promotion as Normal Flow
 
-Task → Story promotion is a "normal flow", not a failure.
+Task → Story promotion is a "normal flow", not a failure. Because Task-level work runs outside dev-workflow (`goal-loop` / `exec-plan` / direct), promotion is how it **re-enters** dev-workflow when requirements turn out to need deciding.
 
 - Estimation mistakes are normal
-- Why/What carries over as-is, How is documented
+- Why/What carries over from the `goal-loop` Goal Contract or the `exec-plan` Purpose/Boundaries/Acceptance; How is documented
 - spec is an "evolving document", not a "finished product"
 
 ### 8. Plan Mode Context Preservation

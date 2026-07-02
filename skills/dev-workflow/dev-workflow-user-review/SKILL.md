@@ -65,8 +65,8 @@ OPEN → APPROACH PROPOSED → APPROACH AGREED → IMPLEMENTING → RESOLVED
 
 - Self-review results (from self-review skill, if available)
 - **Story**: Spec document at `.claude/dev-workflow/story/{story-dir}/spec.md`
-- **Task (with plan)**: Plan file (path from review.md's `## Related Files`)
-- **Task (no plan)**: Git diff of current branch changes
+
+user-review operates on **Story-level work only** — Task-level work leaves dev-workflow and is reviewed by its own route (`goal-loop` / `exec-plan` / an ad-hoc `/code-review`).
 
 ## Process
 
@@ -74,9 +74,7 @@ OPEN → APPROACH PROPOSED → APPROACH AGREED → IMPLEMENTING → RESOLVED
 
 Before starting, check for existing review state:
 
-1. Look for `review.md` at:
-   - `.claude/dev-workflow/story/{story-dir}/review.md` (Story)
-   - `.claude/dev-workflow/task/{task-dir}/review.md` (Task — includes both "with plan" and "no plan")
+1. Look for `review.md` at `.claude/dev-workflow/story/{story-dir}/review.md`
 2. If **review.md exists**, read it and resume based on the normalized Phase (legacy phase and item-status values are normalized per `dev-workflow-base` skill (`references/state-schema.md`); e.g. `COLLECTING FEEDBACK`→`REVIEWING`, `APPROACH RECORDED`→`APPROACH PROPOSED`):
    - `REVIEWING`: Show summary of items and their states — including any items that are `OPEN` or `APPROACH PROPOSED` (re-present their approach for agreement) — then wait for next feedback
    - `LGTM`: Proceed to post-task
@@ -95,8 +93,7 @@ python3 dev-workflow-base/scripts/workflow-state.py --session "$CLAUDE_CODE_SESS
 If review.md does not exist (Step 0 found nothing):
 
 1. **Create review.md** using `dev-workflow-base` skill (`references/review-init-guide.md`):
-   - Follow the guide to determine work level (Story / Task with plan / Task no plan)
-   - Resolve metadata (title, paths) according to the work level
+   - Resolve the active Story and its metadata (title, paths) per the guide
    - Use `dev-workflow-base` skill (`references/review-template.md`) to create review.md at the resolved path
    - Self-Review Results: Use SKIPPED row (`| - | Self-review | SKIPPED | Self-review was not performed |`)
    - Set Phase to `REVIEWING`
@@ -107,10 +104,7 @@ If review.md does not exist (Step 0 found nothing):
 ```markdown
 ## Review Summary
 
-<!-- Story: show Spec path -->
-<!-- Task (with plan): show Plan path -->
-<!-- Task (no plan): show Branch name -->
-**{Spec/Plan/Branch}**: `{path or branch name}`
+**Spec**: `{spec path}`
 
 ### Self-Review Results
 
@@ -270,16 +264,10 @@ Feedback that requires changes beyond the current spec's scope.
 
 **How to identify Design Change**:
 
-For **Story** (check spec file):
+Check the spec file:
 1. Read current spec at `.claude/dev-workflow/story/{story-dir}/spec.md`
 2. Compare feedback against spec's "Success Criteria" and "Requirements"
 3. If feedback requires NEW success criteria or changes EXISTING criteria → Design Change
-
-For **Task** (check plan file):
-1. Read the plan file (path from review.md's `## Related Files`)
-2. Compare feedback against plan's "Completion Criteria"
-3. If feedback requires NEW or CHANGED Completion Criteria → Design Change
-4. When a Design Change is identified in a Task, suggest **promoting to Story** (invoke `dev-workflow-create-spec` with Why/What from the plan)
 
 **Concrete examples**:
 
@@ -336,8 +324,8 @@ For each remaining item with Status = `APPROACH AGREED`:
 If you use EnterPlanMode during implementation of review items, add a `## dev-workflow Context` block to the plan file. Use the template in `dev-workflow-base` skill (`references/plan-mode-context.md`) with these values:
 
 - **Active skill**: user-review (Implementation)
-- **Work level**: Story / Task / Task (no plan) — match the current flow
-- **Documents**: the relevant docs for the work level, always including `review.md` — Story: Spec + Plan + Review; Task (with plan): the plan file + Review; Task (no plan): Review only
+- **Work level**: Story
+- **Documents**: Spec + Plan + Review
 - **After This Plan Completes**: Continue resolving remaining review items in review.md; after all items resolved, present implementation summary to user.
 
 #### 5c. Completion
@@ -483,10 +471,6 @@ post-task
 - `.claude/dev-workflow/story/{story-dir}/spec.md`
 - `.claude/dev-workflow/story/{story-dir}/plan.md`
 - `.claude/dev-workflow/story/{story-dir}/review.md`
-
-**Reference** (Task):
-- Plan file (path from review.md's `## Related Files`)
-- `.claude/dev-workflow/task/{task-dir}/review.md`
 
 **Next phase** (depends on review.md Phase):
 
