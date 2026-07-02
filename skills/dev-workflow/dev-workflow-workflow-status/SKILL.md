@@ -1,29 +1,47 @@
 ---
 name: dev-workflow-workflow-status
 description: Show overview of all active Epics and Stories with their current status. Use this to get a bird's-eye view of development progress before resuming work. Triggers on "/workflow-status", "show status", "what's in progress", "overview of work". Should NOT trigger for resuming a specific task (use resume-work) or starting new work (use kickoff).
-allowed-tools: Read, Glob, Grep
+allowed-tools: Read, Glob, Grep, Bash
 user-invocable: true
 ---
 
 # Status Overview
 
-Display a summary of all active Epics and Stories under `.claude/dev-workflow/`.
+Display a summary of the repo's Stories (local `state.json`) and Epics (Linear
+Projects). Stories come from the offline evaluator; Epics are read from Linear at
+this boundary. If Linear is unavailable, the Epic overview degrades gracefully —
+Stories still display.
 
 ## Tool Usage Constraints
 
-- **Read-only**: This skill only reads files. No modifications, no Bash commands.
+- **Read-only**: reads local state and Linear. No modifications.
+- **Linear**: use whichever Linear MCP server is wired, per the `linear` skill.
 
 ## Process
 
-### Phase 1: Run the State Evaluator
+### Phase 1: Run the State Evaluator (Stories)
 
 ```
 python3 dev-workflow-base/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID"
 ```
 
-This returns all work units (epics and stories) with their derived `state`, `progress`, `review`, and `level`. `--session` marks the unit this session is bound to as `active` (if any); workflow-status only reports — it does not bind. The state-category and progress rules live in `dev-workflow-base` skill (`references/state-schema.md`) and the script — do not recompute them.
+This returns every **Story** work unit (a directory with `state.json`) with its
+derived `state`, `progress`, `review`, `linear_issue_id`, and `active` flag.
+`--session` marks the bound unit as `active`; workflow-status only reports — it
+does not bind. The state-category and progress rules live in `dev-workflow-base`
+skill (`references/state-schema.md`) and the script — do not recompute them.
 
-If `work_units` is empty, output:
+### Phase 1b: Read the repo's Epics from Linear
+
+Resolve the repo's active Linear Project(s) the way `linear-start` does (Repo
+project-label → active Projects). Each Project is an **Epic**; read its Issues and
+their statuses to compute the rollup (`{Done}/{Total} Stories`). Associate each
+local Story with its Epic by matching `linear_issue_id` to a Project Issue.
+
+- **Linear unavailable / unauthenticated** → skip the Epic section, note
+  "Linear 未接続のため Epic 俯瞰は省略" and continue with Stories only.
+
+If there are no Stories **and** no Epics, output:
 
 ```
 Active な作業はありません。
@@ -34,7 +52,7 @@ Then stop.
 
 ### Phase 2: Map state to a display label
 
-Use each unit's `state` (and `progress` for in_progress) to pick a human label:
+Use each Story's `state` (and `progress` for in_progress) to pick a human label:
 
 | `state` | Display status |
 |---------|----------------|
@@ -44,10 +62,10 @@ Use each unit's `state` (and `progress` for in_progress) to pick a human label:
 | `in_progress` | In Progress ({done}/{total} steps) |
 | `planned` | Planned |
 | `spec_only` | Spec Created |
-| `epic_next_story` | {Done}/{Total} Stories Done (from epic.md Stories table) |
 | `blocked` | Blocked |
 
-**Epic-Story association**: For each story, read each `epic.md` Stories table; if the unit name appears there, associate it with that epic, else independent (Epic = `-`).
+Epic rollup (`{Done}/{Total} Stories`) comes from the Linear read in Phase 1b, not
+from the script.
 
 ### Phase 3: Display
 
@@ -69,12 +87,13 @@ Output the status overview in this format:
 
 **Display rules**:
 - Sort Epics alphabetically by name; sort Stories alphabetically by name
-- Omit a section entirely if it has no entries
-- Names are the directory names from each unit's `path` (e.g. `{yyyy-mm-dd}-{prefix}-{story-name}`, `{yyyy-mm-dd}-{epic-name}`)
+- Omit a section entirely if it has no entries (e.g. omit Epics when Linear is unavailable)
+- Story names are the directory names from each unit's `path` (e.g. `{yyyy-mm-dd}-{prefix}-{story-name}`); Epic names are the Linear Project names
 
 ## Success Criteria
 
-- [ ] All existing epics and stories under `.claude/dev-workflow/` are discovered (via the state evaluator)
-- [ ] Each item's status comes from the script's derived `state` (no hand-recomputation)
+- [ ] All local Stories (via the state evaluator) are discovered
+- [ ] Epics are read from the repo's Linear Project(s), or the Epic section is gracefully omitted when Linear is unavailable
+- [ ] Each Story's status comes from the script's derived `state` (no hand-recomputation)
 - [ ] Output is displayed as a clear, readable table
 - [ ] When no work exists, a helpful empty-state message is shown

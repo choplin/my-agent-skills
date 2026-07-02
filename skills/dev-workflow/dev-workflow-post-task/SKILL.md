@@ -63,7 +63,7 @@ For each approved item:
 - **Skill**: Invoke skill-authoring skill for proper skill creation
 - **CLAUDE.md**: Append to appropriate section
 - **ADR**: Create in docs/adr/ following ADR format
-- **Design Doc**: Copy spec/plan to docs/ with appropriate naming
+- **Design Doc**: Export the Story Issue's spec/plan (from Linear) to docs/ with appropriate naming
 - **Workflow improvement (C-3)**: edit `dev-workflow-kickoff` SKILL (add an interview question) or `dev-workflow-base` skill (`references/spec-template.md`) (add a prompt/checklist line) so future specs ask about the recurring omission up front
 
 ### 5. Clear the session binding
@@ -99,7 +99,7 @@ Based on this session, I recommend capturing the following:
 ### Design Doc Candidates
 
 1. **{spec/plan}**: {why it has lasting value}
-   - Location: `.claude/dev-workflow/story/{story-dir}/spec.md`
+   - Location: the Story's Linear Issue (`state.json.linear_issue_id`)
 
 ---
 
@@ -118,8 +118,8 @@ Which items would you like me to capture?
 After post-task completes:
 
 **If part of Epic**:
-- **Reference**: `.claude/dev-workflow/epic/{epic-dir}/epic.md`
-- **Next phase**: `dev-workflow-create-spec` for next Story
+- **Reference**: the Epic's Linear Project (its Story Issues)
+- **Next phase**: `dev-workflow-create-spec` (adopt mode) for the next Story Issue
 
 **If standalone Story**:
 - **Reference**: None

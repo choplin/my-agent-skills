@@ -9,7 +9,7 @@ dev-workflow turns "AI, please remember to follow the process" into a process th
 - **Inner loop (machine-checked):** completion is defined by predicates — commands that return pass/fail. Acceptance criteria carry a `Verify:` command; self-review runs them first, deterministically, before any LLM review. The loop closes on evidence, not on the model's say-so.
 - **Outer loop (human-checked):** the things a predicate can't capture — did we build the right thing, is the direction sound — surface as early as possible, when they are cheap to change.
 
-Work state lives in documents and a small `state.json`, so a task survives `/clear`, a crash, or a new session. A bundled script (`scripts/workflow-state.py`) derives "where am I" deterministically, and hooks inject that on session start and remind you to review before stopping.
+Authored content (spec, plan, epic) lives in **Linear** — a Story is a Linear Issue, an Epic a Linear Project — so humans can see it and agents can hand it off by ID. Machine execution state lives in a small local `state.json`, so the implementation loop survives `/clear`, a crash, a new session, or Linear being offline. A bundled script (`scripts/workflow-state.py`) derives "where am I" deterministically and offline from `state.json`; Linear is read only at session boundaries and written back best-effort. Hooks inject state on session start and remind you to review before stopping.
 
 ## Workflow Levels
 
@@ -19,8 +19,8 @@ Work state lives in documents and a small `state.json`, so a task survives `/cle
 |-------|------|----------|
 | **Autonomous-Task** | A Task where *every* criterion is machine-verifiable — the answer lives in a test/build/reference, not in your head | *Leaves dev-workflow* → `goal-loop`: write goal + predicates, let the implement→verify loop run to green, review only the finished artifact. |
 | **Task** | Criteria writable directly from the need; implementation approach is obvious | *Leaves dev-workflow* → `exec-plan` (self-drivable), or just implement directly (trivial one-off). |
-| **Story** | You must decide "what kind" before "done" (requirements need clarifying) | spec + plan documents, then implement. |
-| **Epic** | Multiple independent stories | An epic document coordinating stories, each its own Story. |
+| **Story** | You must decide "what kind" before "done" (requirements need clarifying) | spec + plan in a Linear Issue, `state.json` locally, then implement. |
+| **Epic** | Multiple independent stories | A Linear Project coordinating Story Issues, each its own Story. |
 
 The split is about **where the "right answer" lives**: in the world (tests, a spec to match, a benchmark) → lean autonomous; in your head (taste, UX, product judgment) → keep the spec as a human contract. See `docs/2026-06-11-loop-engineering-research.md` for the reasoning.
 
@@ -30,9 +30,9 @@ The split is about **where the "right answer" lives**: in the world (tests, a sp
 
 **Predicates (`Verify:`).** Each acceptance criterion gets a `Verify:` line: an executable command that exits 0 on pass, or `human` for criteria only a person can judge. Machine criteria are checked automatically; `human` criteria are routed to human review from the start and never guessed.
 
-**state.json.** Alongside the human-readable spec/plan, each work unit keeps a `state.json` holding machine state (criteria + pass/evidence, steps, review status). Criteria start `passes: false` and only flip to `true` with recorded evidence. Derived values (counters, "what state am I in") are never stored — the script computes them. See `references/state-schema.md`.
+**state.json.** Each Story keeps a local `state.json` holding machine state (criteria + pass/evidence, steps) and the `linear_issue_id` link to its Issue. The authored spec/plan live in that Issue, not on disk. Criteria start `passes: false` and only flip to `true` with recorded evidence. Derived values (counters, "what state am I in") are never stored — the script computes them. See `references/state-schema.md`.
 
-**State evaluator.** `scripts/workflow-state.py` scans your work units and reports each one's state, progress, and next action as JSON. It picks the active unit by current branch when there is one, else by most-recent activity — so it works with or without per-unit branches.
+**State evaluator.** `scripts/workflow-state.py` scans your local Story units and reports each one's state, progress, and next action as JSON — offline, from `state.json` alone. The active unit is bound per session (never guessed). Epics are Linear Projects, resolved by the consumer skills at session boundaries, not by this script.
 
 **self-review.** Runs the machine predicates first (cheap, certain); only then launches LLM reviewers. Every reviewer finding is classified `correctness` (a real bug or violated requirement — blocks) or `improvement` (style/refactor — recorded, doesn't block), so review noise doesn't force needless rework.
 
@@ -54,9 +54,9 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 | Skill | Description |
 |-------|-------------|
 | `dev-workflow-kickoff` | Explore the need through dialogue and route to the right level (incl. the oracle test → Autonomous-Task); Task-level work is routed out to `goal-loop` / `exec-plan` / direct implementation |
-| `dev-workflow-create-epic` | Create an epic document coordinating multiple stories |
-| `dev-workflow-create-spec` | Create a spec with predicate-ized (`Verify:`) acceptance criteria |
-| `dev-workflow-create-plan` | Create a self-contained implementation plan (walking skeleton first, approach decisions) |
+| `dev-workflow-create-epic` | Create a Linear Project coordinating multiple Story Issues |
+| `dev-workflow-create-spec` | Author a spec (predicate-ized `Verify:` criteria) into a Story's Linear Issue (create or adopt) + local `state.json` |
+| `dev-workflow-create-plan` | Append the plan design to the Story Issue; populate `state.json` steps (walking skeleton first, approach decisions) |
 | `dev-workflow-resume-work` | Resume existing work from the evaluator's view of progress |
 | `dev-workflow-handoff` | Generate a handoff prompt (mostly superseded by the SessionStart hook; use for session notes) |
 | `dev-workflow-self-review` | Story wrapper: the completion gate (machine-verification + plan-compliance — fix, don't itemize), then seeds an AI code review into `review.md` via `review-tools-ai-review` |
@@ -86,10 +86,10 @@ Install `discuss-toolkit` alongside this plugin. If it is not available, `dev-wo
 
 | File | Description |
 |------|-------------|
-| `references/epic-template.md` | Epic document template |
-| `references/spec-template.md` | Spec document template (with the `Verify:` line) |
-| `references/plan-template.md` | Plan document template |
-| `references/state-schema.md` | `state.json` schema and the state contract |
+| `references/epic-template.md` | Structure of an Epic's Linear Project description |
+| `references/spec-template.md` | Structure of a Story Issue's spec (with the `Verify:` line) |
+| `references/plan-template.md` | Structure of the `## Plan` section appended to a Story Issue |
+| `references/state-schema.md` | `state.json` schema, the state contract, and Linear backing |
 
 ## Typical Workflow (Story Level)
 

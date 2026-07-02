@@ -107,8 +107,8 @@ Each Story maps to a single git branch. Branch lifecycle is managed by skills:
 
 | Timing | Skill | Action |
 |--------|-------|--------|
-| After spec approval | `dev-workflow-create-spec` | Create branch `{prefix}/{story-name}` and checkout |
-| Session resume | `dev-workflow-resume-work` | Detect spec branch, confirm checkout with user |
+| After spec approval | `dev-workflow-create-spec` | Create branch `{prefix}/{story-name}` and checkout — **conditional**: skip if `linear-start` already set up the workspace (worktree/branch); record the actual branch in `state.json.branch` |
+| Session resume | `dev-workflow-resume-work` | Detect `state.json.branch`, confirm checkout with user |
 
 **Branch naming convention**: `{prefix}/{story-name}`
 
@@ -189,11 +189,23 @@ The Story directory name (e.g., `add-auth`) becomes the branch name (e.g., `feat
 
 ## Document Storage
 
-- **Location**: `.claude/dev-workflow/`
-- **Structure**: Grouped by work unit (e.g., `feature-auth/{spec,plan,review}.md`)
-- **Nature**: Temporary working documents. Explicitly save as permanent documents in post-task phase if needed
+Authored content is externalized to **Linear**; only machine-managed execution
+state stays local.
 
-Clearly separated by plugin name. Managed separately from project docs.
+- **Epic** → a **Linear Project** (Overview/Background/Goal in its description). No
+  local files.
+- **Story** → a **Linear Issue** whose description holds the spec (Why/What/Acceptance
+  Criteria) and the plan design (Approach/Files/Steps).
+- **Local** (`.claude/dev-workflow/story/{story-dir}/`) → `state.json` (criteria +
+  steps — the offline execution SoT and the `linear_issue_id` link) and, during
+  review, `review.md`.
+
+The split keeps the implementation hot loop and `workflow-state.py` offline: Linear
+is read only at session boundaries (bootstrap), and progress is written back to the
+Issue best-effort (fire-and-forget). See `references/state-schema.md` § Linear
+backing for the full contract.
+
+Permanent artifacts (Design Docs, ADRs) are exported in the post-task phase if needed.
 
 ## Knowledge Capture Destinations
 

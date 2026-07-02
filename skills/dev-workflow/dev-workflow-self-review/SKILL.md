@@ -30,8 +30,11 @@ route (an ad-hoc `review-tools-ai-review` + `review-tools-resolve` on the diff,
 
 ## Input
 
-- **Story**: Spec at `.claude/dev-workflow/story/{story-dir}/spec.md` + Plan at
-  `.claude/dev-workflow/story/{story-dir}/plan.md`. Its `review_dir` is
+- **Story**: `state.json` at `.claude/dev-workflow/story/{story-dir}/` (criteria +
+  steps — the local execution state). The authored **spec + plan** live in the
+  Story's **Linear Issue** (`state.json.linear_issue_id`); self-review reads them
+  once at this boundary and supplies their text to the review sub-skills (which stay
+  Linear-agnostic — they take content, not paths). Its `review_dir` is
   `.claude/dev-workflow/story/{story-dir}/`.
 
 ## Process
@@ -53,11 +56,13 @@ a non-null `verify` command: run it (Bash). Exit 0 → PASS; non-zero → FAIL. 
 `passes` + `evidence` back. **Default-FAIL**: never set `passes: true` without running
 the command. Any FAIL → fix the implementation and re-run until green.
 
-**1b. Plan compliance.** Verify every planned change is present (Files to Change table +
-Steps) — via the `dev-workflow:plan-compliance-reviewer` subagent (a wrapper around the
+**1b. Plan compliance.** Read the plan (Files to Change + Steps) from the Story Issue
+and verify every planned change is present — via the
+`dev-workflow:plan-compliance-reviewer` subagent (a wrapper around the
 `dev-workflow-plan-compliance-review` skill; apply the skill inline if the subagent is
-unavailable). A gap means implementation is unfinished: complete it now (and tick the
-plan's `## Progress`). If a gap needs substantial further work, say so and return to
+unavailable), passing the plan **content**. A gap means implementation is unfinished:
+complete it now (set the matching `state.json.steps[].done` and best-effort tick the
+Issue's Steps checklist). If a gap needs substantial further work, say so and return to
 implementation — **do not open the review** until the plan is fully implemented.
 
 Criteria with `verify: null` (`Verify: human`) are not judged here — they are the human
@@ -94,7 +99,7 @@ nothing, `review.md` is still created — the human review below is the point.)
 ```markdown
 ## Self Review — {story title}
 
-**Spec**: `{spec}`  **Plan**: `{plan}`
+**Story Issue**: `{linear_issue_id}`
 
 ### Completion Gate
 - Machine verification: {PASS per criterion with evidence — all green}

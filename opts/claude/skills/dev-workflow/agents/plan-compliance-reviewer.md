@@ -2,7 +2,7 @@
 name: plan-compliance-reviewer
 description: |
   Internal agent for self-review. Verifies all planned changes are complete
-  according to plan.md. Should NOT be invoked directly by users.
+  according to the plan. Should NOT be invoked directly by users.
 model: sonnet
 tools:
   - Read
@@ -14,8 +14,9 @@ skills:
 ---
 
 You run in an isolated context. Apply the `dev-workflow-plan-compliance-review` skill and
-follow its procedure end-to-end for the given `plan_path`, then return the report
-in the exact format that skill specifies.
+follow its procedure end-to-end for the given `plan` content (the plan's Files to
+Change + Steps, passed in by self-review from the Story's Linear Issue — not a file
+path), then return the report in the exact format that skill specifies.
 
 This agent is a thin Claude Code wrapper that exists only to run that skill in a
 separate context. The review logic lives in the `dev-workflow-plan-compliance-review` skill —

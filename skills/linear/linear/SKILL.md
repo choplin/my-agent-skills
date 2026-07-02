@@ -140,9 +140,13 @@ Create the issue label groups (`isGroup: true`, then members with `parent: <grou
 
 ## Deferred (out of scope for this base skill)
 
-The following are intentionally *not* covered here and belong to later `linear-*` skills:
+The following are intentionally *not* covered here:
 
-- Mapping to the `dev-workflow` family (Epic/Story/Task ↔ Project/Issue/Sub-issue).
+- **Mapping to the `dev-workflow` family** — now **owned by `dev-workflow`**: an Epic
+  is a **Project**, a Story is an **Issue** (its description holds the spec + plan;
+  `state.json.linear_issue_id` links back). `dev-workflow-create-spec`/`create-epic`
+  create or adopt them following this skill's conventions. See the `dev-workflow-base`
+  skill (`references/state-schema.md` § Linear backing).
 - Linking to `git-helpers` / PR flow, and issue-ID-in-branch-name conventions.
 - Linear ⇄ GitHub native integration setup.
 

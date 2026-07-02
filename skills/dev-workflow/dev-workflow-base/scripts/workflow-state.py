@@ -51,7 +51,6 @@ DISPATCH = {
     "potentially_complete": ("Run self-review", "dev-workflow-self-review"),
     "in_review": ("Resume user review", "dev-workflow-user-review"),
     "review_complete": ("Run post-task", "dev-workflow-post-task"),
-    "epic_next_story": ("Start next Story", "dev-workflow-create-spec"),
     "blocked": ("Report blockers", None),
 }
 
@@ -183,19 +182,6 @@ def parse_mode_from_review_md(text):
     return m.group(1).strip() if m else None
 
 
-def parse_progress_from_plan_md(text):
-    """Return (done, total) from the ## Progress section checkboxes."""
-    section = re.split(r"^##\s+Progress\s*$", text, flags=re.MULTILINE)
-    if len(section) < 2:
-        return (0, 0)
-    body = section[1]
-    # Stop at next H2 if present
-    body = re.split(r"^##\s+", body, flags=re.MULTILINE)[0]
-    done = len(re.findall(r"^- \[x\]", body, re.MULTILINE | re.IGNORECASE))
-    pending = len(re.findall(r"^- \[ \]", body, re.MULTILINE))
-    return (done, pending + done)
-
-
 def parse_review_items_from_md(text):
     """Return list of {status} dicts from review.md Item blocks."""
     items = []
@@ -206,46 +192,6 @@ def parse_review_items_from_md(text):
             continue
         items.append({"status": normalize_item_status(raw)})
     return items
-
-
-def parse_epic_stories(text):
-    """Return list of story status strings from the ## Stories table.
-
-    The Status column is located by header name, so differing table layouts
-    are tolerated (e.g. `| # | Story | Status | Dependencies |` vs
-    `| Story | Status | Spec | Plan |`). The first table row is the header.
-    """
-    statuses = []
-    section = re.split(r"^##\s+Stories\s*$", text, flags=re.MULTILINE)
-    if len(section) < 2:
-        return statuses
-    body = re.split(r"^##\s+", section[1], flags=re.MULTILINE)[0]
-    status_idx = None
-    for line in body.splitlines():
-        s = line.strip()
-        if not s.startswith("|"):
-            continue
-        cols = [c.strip() for c in s.strip("|").split("|")]
-        # Separator row, e.g. |---|---|
-        if cols and all(c and set(c) <= set("-: ") for c in cols):
-            continue
-        # First non-separator row is the header: locate the Status column.
-        if status_idx is None:
-            lowered = [c.lower() for c in cols]
-            if "status" in lowered:
-                status_idx = lowered.index("status")
-            continue
-        if status_idx < len(cols):
-            statuses.append(cols[status_idx])
-    return statuses
-
-
-# --- Title helper ------------------------------------------------------------
-
-
-def parse_title(text, prefix):
-    m = re.search(rf"^#\s+{re.escape(prefix)}:\s*(.+?)\s*$", text, re.MULTILINE)
-    return m.group(1).strip() if m else None
 
 
 # --- Work unit loading -------------------------------------------------------
@@ -272,17 +218,7 @@ def review_summary(items):
     return counts, f"{resolved}/{total}"
 
 
-def derive_state(level, has_spec, steps_done, steps_total,
-                 review_phase, epic_statuses):
-    if level == "epic":
-        if not epic_statuses:
-            return "blocked"
-        if any(s.lower().startswith("not started") for s in epic_statuses):
-            return "epic_next_story"
-        if all(s.lower() == "done" for s in epic_statuses):
-            return "review_complete"
-        # Some stories past "Not Started" but not all "Done".
-        return "in_progress"
+def derive_state(has_spec, steps_done, steps_total, review_phase):
     if review_phase is not None:
         return "review_complete" if review_phase == "done" else "in_review"
     if steps_total > 0 and steps_done == steps_total:
@@ -296,68 +232,39 @@ def derive_state(level, has_spec, steps_done, steps_total,
     return "blocked"
 
 
-def build_unit(unit_dir, level, branch_now):
-    state_obj = load_state_json(unit_dir)
-    source = "state_json" if state_obj else "markdown_fallback"
+def build_unit(unit_dir, branch_now):
+    # A Story is defined by its state.json (the local, offline SoT for execution
+    # state). Authored content lives in the backing Linear Issue, not on disk;
+    # there is no Markdown fallback. See references/state-schema.md.
+    state_obj = load_state_json(unit_dir) or {}
 
-    spec_txt = read(os.path.join(unit_dir, "spec.md"))
-    plan_txt = read(os.path.join(unit_dir, "plan.md"))
-    review_txt = read(os.path.join(unit_dir, "review.md"))
-    epic_txt = read(os.path.join(unit_dir, "epic.md"))
-
-    title = None
-    branch = None
-    steps_done = steps_total = 0
-    review_phase = None
-    items = []
-    epic_statuses = []
-    has_spec = spec_txt is not None
-
-    if state_obj:
-        title = state_obj.get("title")
-        branch = state_obj.get("branch")
-        steps = state_obj.get("steps") or []
-        steps_total = len(steps)
-        steps_done = sum(1 for s in steps if s.get("done"))
-        has_spec = has_spec or bool(state_obj.get("criteria"))
+    title = state_obj.get("title")
+    branch = state_obj.get("branch")
+    linear_issue_id = state_obj.get("linear_issue_id")
+    steps = state_obj.get("steps") or []
+    steps_total = len(steps)
+    steps_done = sum(1 for s in steps if s.get("done"))
+    has_spec = bool(state_obj.get("criteria"))
 
     # Review state is read from review.md — the single source of truth owned by
-    # the review-tools skills. state.json carries no `review` block; parse
-    # review.md whenever it exists, regardless of state.json.
+    # the review-tools skills. state.json carries no `review` block.
+    review_phase = None
+    items = []
+    review_txt = read(os.path.join(unit_dir, "review.md"))
     if review_txt:
         review_phase = parse_phase_from_review_md(review_txt)
         items = parse_review_items_from_md(review_txt)
 
-    if level == "epic":
-        if epic_txt:
-            title = title or parse_title(epic_txt, "Epic")
-            epic_statuses = parse_epic_stories(epic_txt)
-    else:
-        # Markdown fallback fills whatever state.json did not provide
-        if title is None:
-            if plan_txt:
-                title = parse_title(plan_txt, "Plan")
-            elif spec_txt:
-                title = parse_title(spec_txt, "Spec")
-        if not state_obj:
-            if plan_txt:
-                steps_done, steps_total = parse_progress_from_plan_md(plan_txt)
-        if branch is None and spec_txt:
-            m = re.search(r"^- \*\*Name\*\*:\s*`?([^`\n]+?)`?\s*$",
-                          spec_txt, re.MULTILINE)
-            if m:
-                branch = m.group(1).strip()
-
-    state = derive_state(level, has_spec, steps_done, steps_total,
-                         review_phase, epic_statuses)
+    state = derive_state(has_spec, steps_done, steps_total, review_phase)
     counts, resolved = review_summary(items)
     label, skill = DISPATCH.get(state, ("Unknown", None))
 
     return {
         "path": unit_dir,
-        "level": level,
+        "level": "story",
         "title": title,
         "branch": branch,
+        "linear_issue_id": linear_issue_id,
         "matches_current_branch": branch is not None and branch == branch_now,
         "state": state,
         "progress": {"done": steps_done, "total": steps_total},
@@ -367,27 +274,26 @@ def build_unit(unit_dir, level, branch_now):
             "resolved": resolved,
         },
         "next_action": {"label": label, "skill": skill},
-        "source": source,
     }
 
 
 def discover(root, branch_now):
+    """Discover Story work units — directories under story/ carrying a state.json.
+
+    Epics are Linear Projects, resolved by consumer skills at session
+    boundaries; the offline script does not evaluate them.
+    """
     units = []
-    layout = [("epic", "epic.md"), ("story", "spec.md")]
-    for level, marker in layout:
-        level_dir = os.path.join(root, level)
-        if not os.path.isdir(level_dir):
+    level_dir = os.path.join(root, "story")
+    if not os.path.isdir(level_dir):
+        return units
+    for name in sorted(os.listdir(level_dir)):
+        unit_dir = os.path.join(level_dir, name)
+        if not os.path.isdir(unit_dir):
             continue
-        for name in sorted(os.listdir(level_dir)):
-            unit_dir = os.path.join(level_dir, name)
-            if not os.path.isdir(unit_dir):
-                continue
-            has_state = os.path.exists(os.path.join(unit_dir, "state.json"))
-            if not has_state and \
-                    not os.path.exists(os.path.join(unit_dir, marker)):
-                # story/epic require their marker unless a state.json is present.
-                continue
-            units.append(build_unit(unit_dir, level, branch_now))
+        if not os.path.exists(os.path.join(unit_dir, "state.json")):
+            continue
+        units.append(build_unit(unit_dir, branch_now))
     return units
 
 

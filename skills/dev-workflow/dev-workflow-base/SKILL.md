@@ -21,10 +21,10 @@ skill, then read/run the named file from its own root):
 
 | Resource | File | Used for |
 |----------|------|----------|
-| State schema | `references/state-schema.md` | Work-unit state categories, legacy-value mappings, progress counting, active-unit resolution |
-| Spec template | `references/spec-template.md` | Creating spec.md |
-| Plan template | `references/plan-template.md` | Creating plan.md |
-| Epic template | `references/epic-template.md` | Creating epic.md |
+| State schema | `references/state-schema.md` | Work-unit state, Linear backing (bootstrap contract), legacy-value mappings, progress counting, active-unit resolution |
+| Spec template | `references/spec-template.md` | Structure of a Story Issue's spec (its Linear Issue description) |
+| Plan template | `references/plan-template.md` | Structure of the `## Plan` section appended to a Story Issue |
+| Epic template | `references/epic-template.md` | Structure of an Epic's Linear Project description |
 | Plan-mode context | `references/plan-mode-context.md` | The `## dev-workflow Context` block added to Claude Code plan files |
 | Workflow concepts | `references/workflow-concepts.md` | Epic/Story/Task model and promotion flow |
 

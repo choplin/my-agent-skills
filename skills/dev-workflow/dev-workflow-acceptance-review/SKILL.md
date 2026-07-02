@@ -12,7 +12,9 @@ subagent (a thin wrapper around this skill) for an isolated context.
 
 ## Input
 
-- `spec_path`: path to the spec.md file.
+- `spec`: the spec's **Acceptance Criteria** content (Given-When-Then with `Verify:`
+  lines) as text. self-review supplies it from the Story's Linear Issue; this skill
+  stays Linear-agnostic — it judges the criteria it is given, not a file path.
 
 ## Scope
 
@@ -25,11 +27,11 @@ otherwise NEEDS REVIEW. Never guess.
 
 ## Process
 
-### 1. Load Spec
+### 1. Read the supplied spec
 
-Read the spec file and extract:
-- **Acceptance Criteria** section (Given-When-Then format) — focus on `Verify: human` criteria
-- **Out of Scope** section (to avoid false negatives)
+From the supplied `spec` content, extract:
+- **Acceptance Criteria** (Given-When-Then format) — focus on `Verify: human` criteria
+- **Out of Scope** (to avoid false negatives)
 
 ### 2. Verify Each Criterion
 
@@ -67,8 +69,6 @@ Return results in this exact format:
 
 ```markdown
 ## Acceptance Criteria Review
-
-**Spec**: {spec_path}
 
 ### Results
 

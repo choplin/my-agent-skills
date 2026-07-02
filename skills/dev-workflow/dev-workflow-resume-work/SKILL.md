@@ -21,8 +21,10 @@ Resume work on an existing Epic or Story by evaluating current state and identif
 | `potentially_complete` | Run self-review | `Skill(skill: "dev-workflow-self-review")` |
 | `in_review` | Resume user review | `Skill(skill: "dev-workflow-user-review")` |
 | `review_complete` | Run post-task | `Skill(skill: "dev-workflow-post-task")` |
-| `epic_next_story` | Start next Story | `Skill(skill: "dev-workflow-create-spec")` |
+| `epic_next_story` | Start next Story (Epic) | `Skill(skill: "dev-workflow-create-spec")` (adopt mode on the next Project Issue) |
 | `blocked` | Report blockers, suggest resolution | _(depends on blocker)_ |
+
+`epic_next_story` is not emitted by the offline script (it only evaluates Stories); when resuming an **Epic**, compute the next Story by reading the Linear Project's Issues (see Phase 2).
 | Major divergence | Suggest plan update first | `Skill(skill: "dev-workflow-create-plan")` |
 | Update spec requested | Update spec | `Skill(skill: "dev-workflow-create-spec")` |
 | Update plan requested | Update plan | `Skill(skill: "dev-workflow-create-plan")` |
@@ -39,37 +41,31 @@ If path is provided as argument:
 - Read the specified document directly
 
 If no path provided:
-- Scan `.claude/dev-workflow/` for existing documents
-- List found documents with basic metadata
+- Discover **Stories** via the state evaluator (each is a `story/` dir with `state.json`)
+- Optionally read the repo's **Epics** (Linear Projects, per `linear-start`) when resuming Epic-level work
 - Present options to user for selection
 
-**Scan pattern**:
+**Layout**:
 ```
 .claude/dev-workflow/
-  ├── story/{yyyy-mm-dd}-{prefix}-{story-name}/
-  │     ├── spec.md
-  │     ├── plan.md
-  │     └── review.md
-  └── epic/{yyyy-mm-dd}-{epic-name}/
-        └── epic.md
+  └── story/{yyyy-mm-dd}-{prefix}-{story-name}/
+        ├── state.json     ← local execution state (the work unit)
+        └── review.md      ← review state (when in review)
 ```
+The Story's authored spec + plan live in its **Linear Issue** (`state.json.linear_issue_id`); an Epic is a **Linear Project**. There are no local `spec.md`/`plan.md`/`epic.md`.
 
 **Directory naming**: Directories are prefixed with creation date (`yyyy-mm-dd`) and Story directories match the branch name (with `/` replaced by `-`).
 
-### Phase 2: Document Loading
+### Phase 2: Load state + authored context (boundary read)
 
-Read the selected document(s) and extract:
-- **Type**: Epic / Story
-- **Spec path**: If exists (Story/Epic only)
-- **Plan path**: If exists (Story: `plan.md` in dev-workflow dir)
-- **Review path**: If exists
-- **Review Phase**: Phase value from review.md (REVIEWING / LGTM)
-- **Review Items**: Count of OPEN, APPROACH PROPOSED, APPROACH AGREED, IMPLEMENTING, RESOLVED, and SKIPPED items
-- **Branch**: Name and Base from spec.md `## Branch` section (if exists)
-- **Why**: Background and motivation
-- **What**: Implementation target and success criteria
-- **Progress**: Current implementation status
-- **Workflow Context**: Current phase, work level, post-work instructions (if exists in plan)
+For the selected Story, load:
+- **`state.json`** (local): `title`, `branch`, `linear_issue_id`, `criteria`, `steps` (progress).
+- **Review**: `review.md` phase/items (when it exists).
+- **Authored context from the Linear Issue** (`linear_issue_id`) — this is the once-per-session boundary read that recovers the "why": Why/What, Requirements, Acceptance Criteria, the plan's Approach/Decisions/Files/Steps. Do **not** rebuild `state.json` from it (that would overwrite live progress — see `dev-workflow-base` skill (`references/state-schema.md`) § Linear backing).
+
+For an Epic, read its Linear Project's Issues to find the next Story.
+
+If Linear is unavailable, proceed with `state.json` alone (progress is intact); note that authored context could not be loaded.
 
 ### Phase 3: State Evaluation
 
@@ -113,7 +109,7 @@ Output gap summary:
 
 Based on state and gaps, determine the recommended action from the **Core Rule** dispatch table above.
 
-**Workflow Context integration**: If the plan document contains a `## Workflow Context` section, use it to:
+**Workflow navigation**: post-work sequencing is driven by `state.json` via the state evaluator's `next_action` (not by a plan document section). Use it to:
 - Include post-work instructions in the recommendation (e.g., "After completing remaining steps, invoke self-review")
 - Confirm the recommended action aligns with the workflow sequence
 
@@ -126,9 +122,9 @@ Output structured report:
 
 ### Document Summary
 - **Type**: [Epic/Story]
-- **Spec**: [path or N/A]
-- **Plan**: [path or N/A]
-- **Branch**: [spec branch name] (current: [current git branch])
+- **Linear**: [Story Issue id, or Epic Project ref]
+- **State dir**: [`.claude/dev-workflow/story/{story-dir}` or N/A]
+- **Branch**: [state.json.branch] (current: [current git branch])
 
 ### Context
 **Why**: [Brief summary of motivation]
@@ -167,10 +163,10 @@ Options:
 
 ### Phase 7: Branch Checkout
 
-If spec.md contains a `## Branch` section:
+If `state.json.branch` is set:
 
 1. **Check current branch**: Run `git branch --show-current`
-2. **Already on correct branch**: If current branch matches spec branch name, report "Already on branch {name}" and skip
+2. **Already on correct branch**: If current branch matches `state.json.branch`, report "Already on branch {name}" and skip
 3. **Different branch**: If on a different branch:
    - Check for uncommitted changes with `git status --porcelain`
    - If uncommitted changes exist, present options:
@@ -180,7 +176,7 @@ If spec.md contains a `## Branch` section:
    - If clean, ask user: "Switch to {branch-name}?"
 4. **Execute only after user approval**: Run `git checkout {branch-name}`
 
-If no Branch section in spec, skip this phase.
+If `state.json.branch` is null, skip this phase.
 
 ### Phase 8: Dispatch
 
@@ -192,21 +188,20 @@ For states with a Skill dispatch: invoke it via the `Skill` tool immediately. Do
 
 When the state is `planned` or `in_progress`, there is no dedicated implementation skill. Instead:
 
-1. **Read documents**: Load both spec.md and plan.md fully into context
-2. **Locate Workflow Context**: Find the `## Workflow Context` section in plan.md
-3. **Identify resumption point**: From `## Progress`, find the first unchecked `- [ ]` step
-4. **Begin/continue implementation**: Follow the plan steps sequentially
-5. **Track progress**: Update `## Progress` as each step completes (`- [ ]` → `- [x]`)
-6. **After all steps complete**: Invoke `Skill(skill: "dev-workflow-self-review")` — this is specified in plan's Workflow Context and MUST NOT be skipped
+1. **Read the Story Issue**: load the authored spec + plan (Approach/Files/Steps) from the Linear Issue (`state.json.linear_issue_id`); load progress from `state.json`
+2. **Identify resumption point**: from `state.json.steps`, find the first step with `done: false`
+3. **Begin/continue implementation**: follow the plan steps sequentially
+4. **Track progress**: set each `state.json.steps[].done` to `true` as it completes, and best-effort tick the matching item in the Issue's Steps checklist (fire-and-forget; a failed Linear write never blocks)
+5. **After all steps complete**: Invoke `Skill(skill: "dev-workflow-self-review")` — this MUST NOT be skipped
 
 ##### Plan Mode Context Preservation
 
-If you use EnterPlanMode during implementation, add a `## dev-workflow Context` block to the plan file. Use the template in `dev-workflow-base` skill (`references/plan-mode-context.md`) with these values:
+If you use EnterPlanMode during implementation, add a `## dev-workflow Context` block to the Claude Code plan file. Use the template in `dev-workflow-base` skill (`references/plan-mode-context.md`) with these values:
 
 - **Active skill**: resume-work (Implementation Handoff)
 - **Work level**: Story
-- **Documents**: Spec + Plan (`.claude/dev-workflow/story/{story-dir}/`)
-- **After This Plan Completes**: Continue remaining plan.md steps, updating Progress; after all steps complete, invoke `dev-workflow-self-review` skill.
+- **Documents**: the Story's Linear Issue (spec + plan) + `.claude/dev-workflow/story/{story-dir}/state.json`
+- **After This Plan Completes**: continue remaining steps, updating `state.json.steps`; after all steps complete, invoke `dev-workflow-self-review` skill.
 
 ## Anti-Patterns
 

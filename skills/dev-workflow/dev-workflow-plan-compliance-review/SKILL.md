@@ -1,6 +1,6 @@
 ---
 name: dev-workflow-plan-compliance-review
-description: Verify that an implementation completes all planned changes in a dev-workflow plan.md — every entry in the Files to Change table and every implementation Step. Use during self-review to check plan completeness. This is the portable review procedure; under Claude Code it is also wrapped by the dev-workflow:plan-compliance-reviewer subagent for isolated execution.
+description: Verify that an implementation completes all planned changes in a dev-workflow plan — every entry in the Files to Change table and every implementation Step. Use during self-review to check plan completeness. This is the portable review procedure; under Claude Code it is also wrapped by the dev-workflow:plan-compliance-reviewer subagent for isolated execution.
 ---
 
 # Plan Compliance Review
@@ -12,16 +12,17 @@ skill) for an isolated context.
 
 ## Input
 
-- `plan_path`: path to the plan.md file.
+- `plan`: the plan content (Files to Change table + Steps) as text. self-review
+  supplies it from the Story's Linear Issue; this skill stays Linear-agnostic — it
+  checks the plan it is given, not a file path.
 
 ## Process
 
-### 1. Load Plan
+### 1. Read the supplied plan
 
-Read the plan file and extract:
+From the supplied `plan` content, extract:
 - **Files to Change** table (file paths, actions, descriptions)
-- **Steps** section (implementation steps)
-- **Verification** section (if present)
+- **Steps** (implementation steps)
 
 ### 2. Verify Files to Change
 
@@ -53,8 +54,6 @@ Return results in this exact format:
 
 ```markdown
 ## Plan Compliance Review
-
-**Plan**: {plan_path}
 
 ### Files to Change
 

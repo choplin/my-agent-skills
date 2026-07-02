@@ -18,16 +18,16 @@ Generate a copy-pasteable prompt that enables seamless work continuation in a ne
 
 ## Process
 
-### Phase 1: Document Discovery
+### Phase 1: Work Unit Discovery
 
-Scan for all existing work documents:
-
-1. **Epics**: Glob for `.claude/dev-workflow/epic/*/epic.md`
-2. **Stories**: Glob for `.claude/dev-workflow/story/*/spec.md`
+Discover the repo's **Story** work units by running the state evaluator (Phase 2/3
+use it too) — each is a `story/` directory with a `state.json`. An Epic is a Linear
+Project; hand off an Epic by referencing its Project (a handoff is normally of the
+active Story).
 
 (Task-level work runs outside dev-workflow — hand it off through its own plan file, not here.)
 
-If no documents are found, output:
+If no work units are found, output:
 
 ```
 Active な作業はありません。引き継ぎプロンプトを生成するには、作業中のwork unitが必要です。
@@ -75,12 +75,13 @@ If the user selects "Add notes", they will provide free-text input. Include it i
 
 Generate the handoff prompt and output it in a fenced code block that the user can copy.
 
-#### Determine Document Path
+#### Determine the resume target
 
-The path argument for `/dev-workflow-resume-work` should be the most advanced document:
-- If `plan.md` exists: use path to `plan.md`
-- Else if `spec.md` exists: use path to `spec.md`
-- Else if `epic.md` exists: use path to `epic.md`
+The argument for `/dev-workflow-resume-work` is the **Story directory** (the one
+holding `state.json`), e.g. `.claude/dev-workflow/story/{story-dir}`. resume-work
+binds to it, loads `state.json`, and reads the backing Linear Issue
+(`linear_issue_id`) for authored context. For an Epic handoff, pass the Linear
+Project reference instead.
 
 #### Output Format
 
@@ -93,13 +94,14 @@ Output the following, with the code block clearly marked for copying:
 Then output the prompt inside a fenced code block:
 
 ```
-/resume-work {document-path}
+/resume-work {story-dir path (or Linear Project ref for an Epic)}
 
 ## Previous Session Context
 - **Type**: {Epic|Story}
 - **State**: {state category}
 - **Progress**: {done}/{total} steps completed
-- **Branch**: {spec branch name} (current: {current git branch})
+- **Branch**: {branch name} (current: {current git branch})
+- **Linear**: {linear_issue_id}
 {if review phase exists:}
 - **Review Phase**: {phase value}
 
@@ -108,8 +110,8 @@ Then output the prompt inside a fenced code block:
 ```
 
 **Rules for the generated prompt**:
-- Omit the `**Progress**` line if no `plan.md` exists
-- Omit the `**Branch**` line if no Branch section in spec
+- Omit the `**Progress**` line if `state.json` has no steps
+- Omit the `**Branch**` line if `state.json.branch` is null
 - Omit the `**Review Phase**` line if no `review.md` exists
 - Omit the `## Session Notes` section entirely if user skipped notes
 - Keep the prompt minimal — `dev-workflow-resume-work` handles detailed state analysis

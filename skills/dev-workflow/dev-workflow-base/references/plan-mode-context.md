@@ -6,7 +6,7 @@ When Claude Code autonomously enters Plan Mode (EnterPlanMode) during dev-workfl
 
 This causes Claude Code to lose its place in the workflow after executing the plan, skipping post-implementation steps like self-review.
 
-**Note**: This is distinct from the `plan.md` document created by the `dev-workflow-create-plan` skill, which already includes a `## Workflow Context` section. This concerns Claude Code's built-in `.claude/plans/` files.
+**Note**: This concerns Claude Code's built-in `.claude/plans/` files. The dev-workflow plan itself lives in the Story's Linear Issue and its progress in `state.json`; this block re-anchors an ad-hoc Plan-Mode file back into that workflow.
 
 ## Rule
 
@@ -21,8 +21,8 @@ When using EnterPlanMode during any dev-workflow skill execution, include a `## 
 **Phase**: {Implementation | Self-Review | User-Review}
 **Work level**: Story
 **Documents**:
-- Spec: {spec path or N/A}
-- Plan: {plan path or N/A}
+- Story Issue: {linear_issue_id or N/A} (spec + plan)
+- State: `.claude/dev-workflow/story/{story-dir}/state.json`
 - Review: {review path or N/A}
 
 ### After This Plan Completes

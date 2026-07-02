@@ -1,55 +1,35 @@
-# Plan: {plan-name}
+<!-- This is the structure of a Story's plan, appended as a `## Plan` section to the
+**Story's Linear Issue description** (below the spec). `create-plan` writes it. The
+Steps are also mirrored into `state.json.steps` (the machine progress truth); the
+checklist here is the human-visible mirror, best-effort updated as steps complete. -->
 
-**Related spec**: `.claude/dev-workflow/story/{story-dir}/spec.md`
-**Branch**: `{prefix}/{story-name}` (from spec)
+## Plan
 
-## Workflow Context
-
-**Current phase**: Implementation
-**Work level**: Story
-
-### During Implementation
-- Follow Steps sequentially
-- Update `## Progress` section as each step completes (`- [ ]` → `- [x]`)
-- Refer to Spec's Acceptance Criteria as the source of truth for verification
-
-### After All Steps Complete
-1. Invoke `dev-workflow-self-review` skill — verifies against acceptance criteria in spec
-2. Invoke `dev-workflow-user-review` skill — presents results and collects user feedback
-3. After user LGTM: commit changes
-4. Invoke `dev-workflow-post-task` skill — capture knowledge
-
-### If Session Clears
-- Use `/dev-workflow-resume-work` to evaluate progress and resume from the correct point
-- Or read this plan and the spec, then continue from the last completed step
-
-## Approach
+### Approach
 
 {Overview of the implementation approach}
 
-## Files to Change
+### Approach Decisions
 
-| File | Change Type |
-|------|-------------|
-| `path/to/file` | Create/Update/Delete |
+| Decision | Options considered | Chosen + why |
+|----------|--------------------|--------------|
+| {e.g. state storage} | {A vs B} | {choice and rationale} |
 
-## Implementation Steps
+### Files to Change
 
-### Step 1: {Step name}
-- {Detailed tasks}
+| File | Change |
+|------|--------|
+| `path/to/file` | {Create/Update/Delete + brief description} |
 
-### Step 2: {Step name}
-- {Detailed tasks}
+### Steps
 
-## Progress
+- [ ] Step 1: {name} — {what to do}
+- [ ] Step 2: {name} — {what to do}
 
-- [ ] Step 1: {Step name}
-- [ ] Step 2: {Step name}
+### Decision Log
 
-## Decision Log
+- {Date}: {Decision} — {Rationale}
 
-- {Date}: {Decision} - {Rationale}
-
-## Discoveries
+### Discoveries
 
 (Record during implementation)

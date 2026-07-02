@@ -1,17 +1,36 @@
 ---
 name: dev-workflow-create-spec
-description: This skill is invoked ONLY from kickoff when Story-level work is identified. Should NOT be invoked directly by user or auto-triggered by AI. Creates spec document with requirements and acceptance criteria.
-allowed-tools: Read, Write, Glob, Grep, AskUserQuestion, Bash
+description: This skill is invoked ONLY from kickoff (or, in adopt mode, from linear-start → dispatch-work) when Story-level work is identified. Should NOT be invoked directly by user or auto-triggered by AI. Authors the spec into a Story's Linear Issue and creates its local state.json.
 user-invocable: false
 ---
 
-# Create Spec Document
+# Create Spec
 
-Create a specification document that captures requirements and acceptance criteria for Story-level work.
+Capture the requirements and acceptance criteria for Story-level work. The spec's
+**authored content lives in the Story's Linear Issue**; a local `state.json` holds
+only the machine-managed execution state. There is no local `spec.md`.
+
+A **Story maps to a Linear Issue** (an Epic maps to a Linear Project — see
+`dev-workflow-create-epic`). All Linear mechanics — resolving the repo's Project,
+Repo/Type labels, status transitions, the issue authoring standard — are owned by
+the **`linear` skill**; read it and follow its conventions rather than restating
+them here.
 
 ## Tool Usage Constraints
 
-- **Bash**: ONLY for git branch operations (`git checkout -b`, `git branch`, `git status --porcelain`). No other use.
+- **Bash**: ONLY for git branch operations (`git checkout -b`, `git branch`, `git status --porcelain`) and the session-bind command. No other use.
+- **Linear**: use whichever Linear MCP server is wired, per the `linear` skill.
+
+## Two entry modes
+
+- **create** (default, entered from kickoff): no Issue exists yet. Create a new
+  Issue in the repo's Project, then author the structured spec as its description.
+- **adopt** (entered via `linear-start` → `dispatch-work`): an Issue was already
+  picked and moved to In Progress. **Do not create a new Issue** — structure that
+  same Issue in place (preserving its id/assignee/history). Use its original
+  description as interview material; move the raw original into a comment for
+  provenance before replacing the description with the structured spec. `git`
+  workspace is already set up by `linear-start` in this path (see step 7).
 
 ## Purpose
 
@@ -148,28 +167,32 @@ Branch name: `{prefix}/{story-name}` (e.g., `feat/add-auth`)
 
 Result: `.claude/dev-workflow/story/{yyyy-mm-dd}-{prefix}-{story-name}/`
 
-#### 5b. Create Spec File
+#### 5b. Author the spec into the Story's Linear Issue
 
-Create `.claude/dev-workflow/story/{story-dir}/spec.md` where `{story-dir}` is the directory name from step 5a:
+The spec content becomes the Issue **description**. Follow the `linear` skill for
+placement (repo's Project, Repo/Type labels, In Progress status, authoring
+standard).
+
+- **create mode**: create a new Issue in the repo's active Project (resolve it per
+  `linear`/`linear-start`), set Type = `impl` (or `design`/`research` as fits),
+  move it to In Progress, and write the description below. Note its identifier as
+  `{issue-id}`.
+- **adopt mode**: the Issue already exists and is In Progress. Copy its current raw
+  description into a comment (`provenance: original issue text`), then replace the
+  description with the structured spec below. `{issue-id}` is that issue.
+
+Issue **title**: `{title}`. Issue **description**:
 
 ```markdown
-# Spec: {title}
-
 ## Branch
-
 - **Name**: `{prefix}/{story-name}`
 - **Base**: `main`
 
-## Related Files
-
-- **Workflow concepts**: `dev-workflow-base/references/workflow-concepts.md`
-- **Epic**: `.claude/dev-workflow/epic/{epic-dir}/epic.md` (if part of an Epic)
-
 ## Why
-{Background, motivation, problem being solved - from kickoff interview}
+{Background, motivation, problem being solved — from kickoff interview}
 
 ## What
-{User Needs to satisfy - from kickoff interview}
+{User Needs to satisfy — from kickoff interview}
 
 ## Requirements
 {Specific requirements derived from User Needs}
@@ -189,16 +212,22 @@ Create `.claude/dev-workflow/story/{story-dir}/spec.md` where `{story-dir}` is t
 {Items that need clarification later, if any}
 ```
 
+The Issue is the single source of truth for authored spec content; it is read
+back only at session boundaries (never in the implementation hot loop). See
+`dev-workflow-base` skill (`references/state-schema.md`) § Linear backing.
+
 #### 5c. Create state.json
 
-Create `.claude/dev-workflow/story/{story-dir}/state.json` next to spec.md. See `dev-workflow-base` skill (`references/state-schema.md`) for the full schema. Initialize:
+Create `.claude/dev-workflow/story/{story-dir}/state.json` where `{story-dir}` is the directory name from step 5a. See `dev-workflow-base` skill (`references/state-schema.md`) for the full schema. Initialize:
 
 - `level`: `"story"`, `title`, `branch` (from step 5a)
+- `linear_issue_id`: `{issue-id}` from step 5b (the backing Issue)
 - `criteria`: one entry per Acceptance Criteria scenario. For each, set `name`, decide `verify` (an executable pass/fail command if the criterion is machine-verifiable, else `null`), and initialize `passes: false`, `evidence: null` (**Default-FAIL** — see schema).
 - `steps`: `[]` (filled by create-plan)
-- `review`: `null` (filled when review starts)
 
-This is the machine-managed mirror of the spec. Do **not** store derived values (counters, state category).
+`state.json` is the local, offline execution state and the link (`linear_issue_id`)
+back to the Issue. Do **not** store derived values (counters, state category), and
+do **not** duplicate the authored prose here — that lives in the Issue.
 
 #### 5d. Bind this session to the Story
 
@@ -212,16 +241,20 @@ python3 dev-workflow-base/scripts/workflow-state.py --session "$CLAUDE_CODE_SESS
 
 Present spec to user for approval before proceeding.
 
-### 7. Create Branch
+### 7. Set up the branch (conditional)
 
-After user approves the spec, create the git branch:
+The Story maps to one git branch. **Who creates it depends on the entry path:**
 
-1. **Check uncommitted changes**: Run `git status --porcelain`
-   - If there are uncommitted changes, **stop** and inform the user to commit or stash first
-2. **Check existing branch**: Run `git branch --list {branch-name}`
-   - If the branch already exists, ask user whether to use the existing branch or choose a different name
-3. **Create and switch**: Run `git checkout -b {branch-name}`
-4. **Report success**: Confirm branch creation to the user
+- **adopt mode / already on a dedicated work branch or worktree** (the
+  `linear-start` path already set up the workspace): **do not create a branch.**
+  Use the current one. If its name differs from `{prefix}/{story-name}`, that is
+  fine — record the actual branch in `state.json.branch`.
+- **create mode on a base branch** (`main`/`master`, entered from kickoff with no
+  workspace set up yet): create the branch now:
+  1. **Check uncommitted changes**: `git status --porcelain` — if dirty, **stop** and ask the user to commit or stash first.
+  2. **Check existing branch**: `git branch --list {branch-name}` — if it exists, ask whether to reuse it or pick another name.
+  3. **Create and switch**: `git checkout -b {branch-name}`.
+  4. **Report success** and make sure `state.json.branch` matches.
 
 ## Success Criteria
 
@@ -231,16 +264,17 @@ After user approves the spec, create the git branch:
 - [ ] Acceptance criteria are few and focused (prefer 3-5 over 10+)
 - [ ] Each criterion is verifiable by AI: Can identify specific file(s) or code section(s) to check for PASS/FAIL. If no verification target can be named, the criterion is not verifiable.
 - [ ] Out of Scope is explicitly stated
+- [ ] Spec authored into the Linear Issue (created or adopted); `linear_issue_id` recorded in `state.json`
 - [ ] User has approved the spec
-- [ ] Branch is created and checked out (or user opted to skip)
+- [ ] Branch is set up (created, or the existing linear-start workspace reused); `state.json.branch` matches the actual branch
 - [ ] Directory name matches `{yyyy-mm-dd}-{prefix}-{story-name}` format
 
 ## Next Session
 
-After spec is approved and branch is created:
+After the spec is approved and the branch is set up:
 
-**Reference**: `.claude/dev-workflow/story/{story-dir}/spec.md` (where `{story-dir}` = `{yyyy-mm-dd}-{prefix}-{story-name}`)
-**Branch**: `{prefix}/{story-name}` (checkout if not already on it)
+**Reference**: the Story's Linear Issue `{issue-id}` (authored spec) + `.claude/dev-workflow/story/{story-dir}/state.json` (execution state, where `{story-dir}` = `{yyyy-mm-dd}-{prefix}-{story-name}`)
+**Branch**: the Story branch (checkout if not already on it)
 **Next phase**: `dev-workflow-create-plan`
 
-Read the spec file and invoke `dev-workflow-create-plan` skill to create implementation plan.
+Read the Issue and invoke `dev-workflow-create-plan` to create the implementation plan.

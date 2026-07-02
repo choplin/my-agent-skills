@@ -115,7 +115,7 @@ If complexity turns out to need requirements decided up front, promote to Story 
 
 **You MUST use the Skill tool** to call `dev-workflow-create-spec`. Do NOT proceed with spec creation yourself.
 
-The create-spec skill will receive the interview context via session history.
+The create-spec skill will receive the interview context via session history. **If an existing Linear Issue is already in play** (entered via `linear-start` → `dispatch-work`, so an Issue is already picked and In Progress), create-spec runs in **adopt** mode on that Issue rather than creating a new one.
 
 ### If Epic
 

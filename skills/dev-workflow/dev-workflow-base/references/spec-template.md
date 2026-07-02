@@ -1,4 +1,6 @@
-# Spec: {feature-name}
+<!-- This is the structure of a Story's spec, authored as the **description of its
+Linear Issue** (not a local file). `create-spec` writes it; the title is the Issue
+title, the body below is the Issue description. -->
 
 ## Branch
 
