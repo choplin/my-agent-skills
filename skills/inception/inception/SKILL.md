@@ -27,6 +27,7 @@ You hold the **Facilitator** stance across the whole session, layered over which
    - None → this is new; go to step 2.
    - One or more → ask the user whether to resume one (show each topic + its `session.phase`) or start a new one. On resume, read its `graph.json`, run `tree` and `open` (via the base CLI), and reflect the current state back: central question, phase, what's decided, what's still open.
 2. **Start a new session.** Derive a topic slug from the user's stated idea (kebab-case, 2–4 words; ask only if genuinely unclear). Run `inception.sh init .claude/inception/<slug> <slug>`. Ensure `.claude/inception/` is git-ignored. Begin in the **framing** phase.
+   - **Seed from a quick capture if one exists.** If `.claude/inception/<slug>/prd-quick.md` is present, it is an `inception-quick` capture. Read it and seed `session.summary` / `background` / `problem` / `purpose` / `centralQuestion` / `targetUsers` from its sections into the new `graph.json`. Reflect what was carried in, then continue framing from there rather than from a blank slate. (The rendered `prd.md` lives alongside `prd-quick.md`; the quick file is source input, not a projection, so leave it untouched.)
 
 ## Phases and delegation
 

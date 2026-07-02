@@ -20,6 +20,7 @@ Each phase is a different AI stance over the same graph. The orchestrator estima
 | Skill | Role |
 |-------|------|
 | `inception` | Orchestrator — owns the graph, estimates the phase, delegates to phase skills (the entry point) |
+| `inception-quick` | Lightweight route — capture just the background and purpose into a short `prd.md`, no graph, no full session |
 | `inception-base` | Shared model: graph JSON schema, the shell+jq CLI, the phase model, the dig-elicitation rule |
 | `inception-framing` | 構想 — Socratic; find the real problem before solutions |
 | `inception-diverge` | 発散 — widen ideas and perspectives, no judging |
@@ -31,8 +32,9 @@ Each phase is a different AI stance over the same graph. The orchestrator estima
 
 Stored under `.claude/inception/<topic-slug>/` (transient, not committed):
 
-- `graph.json` — the single source of truth
+- `graph.json` — the single source of truth (full `inception` only)
 - `prd.md` / `decisions.md` / `action-items.md` / `open-questions.md` — projections (regenerated; do not hand-edit)
+- `prd-quick.md` — the `inception-quick` route's hand-written capture (separate from the rendered `prd.md`, so neither clobbers the other)
 
 ## CLI
 
@@ -49,4 +51,5 @@ next <graph.json>       check <graph.json>      render <graph.json> <dir>
 
 - **Decisions are first-class.** Closing a question on a choice creates a `Decision` node with rejected alternatives + rationale — the durable artifact that prevents re-litigation.
 - **Elicit via dig.** All drawing-out of the user's thinking goes through `discuss-toolkit-dig`; never fill gaps with the AI's assumptions.
+- **Two routes.** Full `inception` shapes an idea through the whole phased session and the thinking graph. `inception-quick` skips all of that to capture just the background and purpose into a short `prd-quick.md` — use it when the idea does not need shaping, only recording. The two use separate files so neither clobbers the other, and the upgrade is lossless: starting full `inception` on a slug that already has a `prd-quick.md` seeds the graph from it before rendering.
 - **Relationship to neighbors.** Earlier and lighter than `dev-workflow` (which begins once a task is defined); broader than `discuss-toolkit-dig` (which clarifies one intent without lasting artifacts).
