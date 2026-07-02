@@ -20,12 +20,12 @@ In every phase, draw out the *user's* thinking via `discuss-toolkit-dig`; never 
 
 ## 発散 / Diverge — `inception-diverge`
 
-**Stance: widen. Generate ideas, options, and perspectives. Do not judge yet.** Premature narrowing kills options the user has not voiced.
+**Stance: widen. Generate ideas, options, and perspectives. Do not judge yet.** Premature narrowing kills options the user has not voiced. The failure mode is stopping after one or two questions — divergence is brainstorming, so run its reproducible shape rather than eyeballing "covered."
 
-- Methods: brainstorming, perspective enumeration (different stakeholders / time horizons / constraints), "what else could this be?", offering adjacent options to provoke.
-- Capture every undecided thing as a node — `Idea` for possibilities, `Question` for open points. Do not resolve inline; breadth first.
-- Graph ops: add many `Idea`/`Question` nodes under the relevant parents. Set `nextMove` later (in structure), not here.
-- Exit signal: the space feels covered, not just the first idea. Propose moving to Structure.
+- Run under **Osborn's four rules**: defer judgment, go for quantity, welcome wild ideas, build/combine.
+- Sweep a fixed set of breadth lenses, capturing nodes from each: stakeholders, time horizons, dropped-then-added constraints, analogies & prior art, **SCAMPER** on the leading idea, inversion ("what would guarantee failure?"). Offer adjacent options for the user to react to.
+- Capture every undecided thing as a node — `Idea` for possibilities, `Question` for open points. Do not resolve inline; breadth first. Set `nextMove` later (in structure), not here.
+- Exit signal: every lens has been walked AND the last lens or two add little that is genuinely new (real diminishing returns) — not "feels covered." Propose moving to Structure.
 
 ## 構造化 / Structure — `inception-structure`
 
