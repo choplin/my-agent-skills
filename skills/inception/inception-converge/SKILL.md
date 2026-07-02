@@ -30,4 +30,6 @@ Run `check`, confirm the four above, then **summarize the state and ask the user
 
 ## Handoff
 
-Once confirmed, the concept is shaped and executing the actions happens elsewhere. Present the action items and let the user pick how to carry them out — don't assume one path. Options depend on the work: `dev-workflow-kickoff` (spec/plan/review-driven delivery of a defined task), `goal-loop` (a bounded autonomous loop toward a verifiable goal), `exec-plan` (a self-contained, restartable execution plan), or simply handing the list off as-is. Offer the fitting choices and let the user decide. If new uncertainty surfaced, propose looping back to **Deepen** or **Diverge** instead.
+Once the user confirms the footing is done-enough, the concept is shaped and the session leaves the graph. If new uncertainty surfaced instead, propose looping back to **Deepen** or **Diverge** rather than converging on a thin footing.
+
+When it is confirmed, propose moving to the terminal exit, **`inception-finalize`** (確定) — do not persist or hand off actions from here. Finalize confirms the footing into the Project Notes vault as one consolidated PRD (with the decisions' rejected alternatives preserved), hands the concrete actions to whatever tracker fits (`dev-workflow-kickoff`, `goal-loop`, `exec-plan`, Linear, or as-is — the user's choice), and retires the transient graph. Keep converge about synthesizing; let finalize do the externalizing.

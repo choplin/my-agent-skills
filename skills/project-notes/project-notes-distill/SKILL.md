@@ -21,6 +21,7 @@ vault). This skill only handles the distillation half.
 | `Decision - ` | A decision with its rationale (decision record) |
 | `Proposal - ` | A draft proposal / pitch |
 | `Handoff - `  | Durable handoff across environments / people / days |
+| `PRD - `      | A foundational PRD — what this is and why, as a long-term anchor. Usually written by `inception-finalize` (the inception family's exit), not shaped here by hand. |
 
 - **When a note spans several types, `Decision` and `Proposal` outrank `Concept`
   and `Handoff`** (the decision or proposal is the actionable payload). Use
@@ -46,7 +47,7 @@ vault). This skill only handles the distillation half.
 ```markdown
 ---
 repo: <repo-name>
-type: concept | decision | proposal | handoff
+type: concept | decision | proposal | handoff | prd
 created: YYYY-MM-DD
 ---
 ```

@@ -34,6 +34,8 @@ Everything the user thinks lands in **one thinking graph** (`graph.json`). The P
 
 `.claude/` keeps these transient working notes out of the committed tree. If `.claude/inception/` is not already git-ignored, add it to `.gitignore` when running `init`.
 
+Everything under `.claude/inception/` is transient. The **durable** output is written only at the end, by `inception-finalize`: one consolidated PRD persisted to the Project Notes vault. After that, the vault PRD is authoritative and the graph here is a spent working note (see the phase model's terminal exit below).
+
 ## Language: plain, clear English
 
 All artifacts — every node's `content` and every PRD field — are written in **plain, clear English**, regardless of the conversation language. Short sentences, concrete nouns, no rhetorical flourish. Rationale: in prose, rhetoric reads as substance and lets thin thinking pass unnoticed; plain English exposes a gap instead of papering over it. The dialogue with the user can be in any language; the recorded thinking is English.
@@ -84,6 +86,7 @@ Run the script located at `scripts/inception.sh` inside this skill's directory. 
 | `next <graph.json>` | **the foundational open nodes to discuss next** — unblocked nodes ranked by how many others depend on them |
 | `check <graph.json>` | structural lint (dup ids, dangling refs, Decision without record, etc.) |
 | `render <graph.json> <dir>` | regenerate the four `*.md` projections |
+| `finalize <graph.json>` | print **one consolidated PRD** to stdout — Direction carries each decision's rejected alternatives + rationale, and the live queue / action items are omitted. Used by `inception-finalize` to persist the durable footing (it is read-only, like the query commands). |
 
 Two habits: run `check` after editing the graph, and `render` whenever you want the user to read the current state. Use `next` instead of guessing which open point is most foundational — the dependency graph answers it.
 
@@ -106,3 +109,7 @@ The session moves through phases; in each, the AI takes a different stance. The 
 | 収束 Converge | `converge` | synthesize: decisions, tradeoffs, next actions |
 
 Phases are not strictly linear — deepening often spawns new divergence. Loop as needed.
+
+### Terminal exit: 確定 Finalize — `inception-finalize`
+
+After converge confirms the footing is done-enough, the session leaves the graph. **Finalize is not a sixth phase** — the five phases shape thinking inside the transient graph; finalize moves the result out to durable memory (one consolidated PRD in the vault), hands concrete actions to a tracker, and retires the graph. It is one-way: reopening means a fresh session or editing the vault note, not re-rendering the old graph. `inception-quick` also ends here, to keep its `prd-quick.md`.

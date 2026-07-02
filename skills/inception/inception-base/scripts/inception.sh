@@ -15,6 +15,7 @@
 #   inception.sh next   <graph.json>       Foundational open nodes to discuss next
 #   inception.sh check  <graph.json>       Structural lint (dup ids, dangling refs)
 #   inception.sh render <graph.json> <dir> Regenerate the 4 markdown projections
+#   inception.sh finalize <graph.json>     Print the consolidated PRD (for finalize)
 
 set -euo pipefail
 
@@ -201,6 +202,51 @@ cmd_render() {
   printf 'rendered prd.md, decisions.md, action-items.md, open-questions.md into %s\n' "$dir"
 }
 
+cmd_finalize() {
+  # Print ONE consolidated PRD to stdout — the durable document `inception-finalize`
+  # persists to the project-notes vault. Unlike render's prd.md, the Direction
+  # section carries each decision's rejected alternatives + rationale (merging in
+  # what decisions.md held), so the anti-re-litigation record survives the move.
+  # The transient layers (live open-questions queue, action items) are deliberately
+  # omitted: actions leave for a tracker, the live queue dies with the session.
+  local f="${1:?finalize: missing <graph.json>}"
+  jq -r '
+    .session as $s | .nodes as $all
+    | def ph($v): ($v // "" | if .=="" then "_not yet defined_" else . end);
+      "# " + ( ($s.topic // "") | if .=="" then "(untitled)" else . end ) + " — PRD",
+      "",
+      "## Summary", "", ph($s.summary), "",
+      "## Background", "", ph($s.background), "",
+      "## Problem", "", ph($s.problem), "",
+      "## Purpose / Vision", "", ph($s.purpose), "",
+      "## Central question", "", ph($s.centralQuestion), "",
+      "## Target users", "", ph($s.targetUsers), "",
+      "## Value proposition", "", ph($s.valueProposition), "",
+      "## Goals", "", ph($s.goal), "",
+      "## Non-goals", "", ph($s.nonGoals), "",
+      "## Direction (decided)", "",
+      ( [ $all[] | select(.type=="Decision") ] as $d
+        | if ($d|length)==0 then "_no decisions recorded_"
+          else ( $d[]
+                 | ( "- **" + (.decision.chosen) + "**"
+                     + (if (.decision.rationale // "")!="" then " — " + .decision.rationale else "" end) ),
+                   ( (.decision.rejected // [])[] | "  - Rejected: " + .option + " — " + .reason ) )
+          end ),
+      "",
+      "## Risks", "",
+      ( [ $all[] | select(.type=="Counter") ] as $r
+        | if ($r|length)==0 then "_none captured_"
+          else ( $r[] | "- " + .content )
+          end ),
+      "",
+      "## Open by design", "",
+      ( [ $all[] | select(.status=="deferred") ] as $d
+        | if ($d|length)==0 then "_none_"
+          else ( $d[] | "- " + .content + " — " + (.deferReason // "no reason given") )
+          end )
+  ' "$f"
+}
+
 need_jq
 sub="${1:-}"; shift || true
 case "$sub" in
@@ -210,6 +256,7 @@ case "$sub" in
   next)   cmd_next   "$@" ;;
   check)  cmd_check  "$@" ;;
   render) cmd_render "$@" ;;
+  finalize) cmd_finalize "$@" ;;
   ""|-h|--help|help)
     grep -E '^#( |$)' "$0" | sed -E 's/^# ?//' ;;
   *) die "unknown command: $sub (try --help)" ;;
