@@ -15,7 +15,7 @@
       "properties": {
         "topic": { "type": "string", "description": "Short kebab-case slug for the idea/project." },
         "summary": { "type": "string", "description": "One or two sentences: what this is and the role it plays. The elevator pitch." },
-        "background": { "type": "string", "description": "Context and why now — the situation that makes this worth doing." },
+        "background": { "type": "string", "description": "Permanent context and why now — the standing situation that makes this worth doing. Not session-process narration (what was questioned/decided goes to Decision nodes) and not a progress snapshot (implementation status goes to the tracker). Still true months later. See prd-template.md 'Background: permanent context'." },
         "problem": { "type": "string", "description": "The core problem/pain being addressed. Stated from the user's perspective, not as a solution." },
         "purpose": { "type": "string", "description": "Purpose / long-term vision — the lasting positioning this is meant to hold." },
         "centralQuestion": { "type": "string", "description": "The single question the session is organized around (problem-first)." },

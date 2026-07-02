@@ -37,6 +37,7 @@ No `graph.json`, no CLI, no `decisions.md` / `action-items.md` / `open-questions
 3. **Write `prd-quick.md`.** Fill each section from what surfaced, in **plain, clear English** (short sentences, concrete nouns — regardless of the conversation language). A section you cannot fill from the user's own input stays `_not yet defined_`; never write the AI's guess into a PRD field. Leave the deepen/converge sections as `_not yet defined_`.
 4. **Self-check, then close.** Before showing the file, validate it against the section bars (never present without this gate):
    - Each filled section is in the user's own words — no AI guess written into any field.
+   - **Background** is permanent project context, not session narration ("originally I assumed…, now questioning…") and not a progress snapshot ("already implemented / collected…"). It must still be true months later; if a sentence describes what was done or decided, drop it. See the "Background: permanent context" contrast table in `inception-base/references/prd-template.md`.
    - **Problem** is stated as a pain, falsifiable, not a missing feature in disguise.
    - **Central question** is a single question, not a list.
    - Any section not filled from the user's input reads `_not yet defined_` (not fabricated).
