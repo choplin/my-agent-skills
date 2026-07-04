@@ -5,12 +5,12 @@
 # See README.md and docs/skill-first-architecture.md for the full model.
 
 # --- Overridable knobs -------------------------------------------------------
-# AGENT  : comma-separated skills-CLI agent ids, or '*' for all 70+ agents.
+# AGENT  : space-separated skills-CLI agent ids, or '*' for all 70+ agents.
 # SKILL  : skill name to install, or '*' for all.
 # SOURCE : skill source. './skills' installs from this working tree;
 #          'choplin/my-agent-skills' installs the published repo instead.
 # SCOPE  : '-g' for global (user-level), empty for project-level.
-AGENT  ?= claude-code
+AGENT  ?= claude-code codex
 SKILL  ?= *
 SOURCE ?= ./skills
 SCOPE  ?= -g
