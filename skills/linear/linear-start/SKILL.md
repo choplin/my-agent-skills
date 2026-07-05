@@ -47,7 +47,7 @@ Set the selected issue's `state` to **In Progress**. (Todo → In Progress, or B
 
 **If worktree** — delegate to the `wtm-worktree` skill (`wtm` CLI):
 
-- **Do not put the Linear issue ID in the branch or worktree name.** This is a solo workspace; an issue ID in the branch name is sometimes undesirable. Name the branch/worktree after the change itself.
+- **Do not put the Linear issue ID in the branch or worktree name.** Linear references stay internal (see `linear`'s "Linear references stay internal") — branch names surface in commits, PRs, and the remote. Name the branch/worktree after the change itself.
 - **Record the issue reference in the worktree note instead.** Pass `-m` on creation with the issue identifier, title, and URL, e.g.:
 
   ```bash
@@ -56,7 +56,7 @@ Set the selected issue's `state` to **In Progress**. (Todo → In Progress, or B
 
   The note is later readable with `wtm notes show`, so the branch stays clean while the link to Linear is preserved.
 
-**If current branch** — skip `wtm` entirely. There is no worktree note to hold the link, so keep the issue identifier/URL at hand and reference it in the eventual commit/PR.
+**If current branch** — skip `wtm` entirely. There is no worktree note to hold the link, so keep the issue identifier/URL in session context only — per `linear`'s "Linear references stay internal", it must **not** end up in the commit message or PR. Preserve the link from the Linear side instead: attach the eventual PR to the issue (Git integration or a `links` attachment).
 
 ### 6. Hand off to an execution skill
 

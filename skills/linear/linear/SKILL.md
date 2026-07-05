@@ -138,6 +138,17 @@ Create the issue label groups (`isGroup: true`, then members with `parent: <grou
 2. Create the issue **Repo** group; add a member per active repository on demand.
 3. Create the **Repo** project-label group in the project-label namespace (mirror the issue Repo group and its members). **This is a manual UI step — the MCP cannot create project labels.** Every Project must carry exactly one Repo label; when a repo's label is missing, ask the user to add it in the UI.
 
+## Linear references stay internal
+
+Linear is this workspace's internal tracker. **Never write Linear references — issue IDs (e.g. `ENG-123`), issue/project URLs — into work products**: commit messages, files committed to a repository, branch/worktree names, or PR titles/descriptions. Those artifacts persist outside Linear and are read by people and tools without workspace access, where the reference is dead weight at best and leaks internal context at worst.
+
+Keep the work↔issue link in the other direction — on the Linear side or in local-only state:
+
+- **Linear side**: attach the branch/PR to the issue via the Git integration or a `links` attachment on the issue.
+- **Local side**: worktree notes (`wtm add -m`, see `linear-start`), `state.json.linear_issue_id` (dev-workflow), or session context.
+
+When exporting issue content into a repo (e.g. a spec/plan → `docs/`), carry the content but strip issue IDs/URLs from it.
+
 ## Deferred (out of scope for this base skill)
 
 The following are intentionally *not* covered here:
@@ -147,7 +158,7 @@ The following are intentionally *not* covered here:
   `state.json.linear_issue_id` links back). `dev-workflow-create-spec`/`create-epic`
   create or adopt them following this skill's conventions. See the `dev-workflow-base`
   skill (`references/state-schema.md` § Linear backing).
-- Linking to `git-helpers` / PR flow, and issue-ID-in-branch-name conventions.
+- Linking to `git-helpers` / PR flow. (Where Linear references may and may not appear is already settled above — they stay internal.)
 - Linear ⇄ GitHub native integration setup.
 
 This skill defines the vocabulary and rules those skills build on.
