@@ -10,8 +10,8 @@ user-invocable: true
 Shape project knowledge into a durable, typed note in the vault's **Notes** layer.
 
 Read `project-notes-base` and run its "Resolving the Anchor" step first — it is
-mandatory and gives you `<anchor>` (`.git/project-notes`, symlinked into the
-vault). This skill only handles the distillation half.
+mandatory and gives you `<anchor>` (the in-repo symlink into the vault). This
+skill only handles the distillation half.
 
 ## Note Types (filename prefix in `Notes/`)
 

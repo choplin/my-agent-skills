@@ -21,14 +21,15 @@ organized per repository.
 
 ## Layout
 
-Notes live in the vault, reached from the repo through a `.git/project-notes`
-symlink (inside `.git/`, so it is never committed):
+Notes live in the vault, reached from the repo through a `.agents/project-notes`
+symlink (kept untracked via `.git/info/exclude`, so it is never committed but
+stays visible in editor file panels):
 
 ```
-<repo>/.git/project-notes  →  <vault>/<repo-name>/
-                              ├── Inbox/   # raw notes (disposable)  → project-notes-capture
-                              └── Notes/   # distilled notes         → project-notes-distill
-                                           #   Concept- / Decision- / Proposal- / Handoff-
+<repo>/.agents/project-notes  →  <vault>/<repo-name>/
+                                 ├── Inbox/   # raw notes (disposable)  → project-notes-capture
+                                 └── Notes/   # distilled notes         → project-notes-distill
+                                              #   Concept- / Decision- / Proposal- / Handoff-
 ```
 
 The symlink is created (idempotently) on every run — see the "Resolving the

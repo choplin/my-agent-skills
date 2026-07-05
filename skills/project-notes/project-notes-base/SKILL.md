@@ -5,7 +5,7 @@ description: >-
   (raw thinking is disposable, only distilled notes become long-term memory), the
   vault location convention, the per-repository / Inbox-vs-Notes layout, and the
   MUST-run procedure that resolves the in-repo notes anchor (a
-  `.git/project-notes` symlink into the vault). project-notes-capture and
+  `.agents/project-notes` symlink into the vault). project-notes-capture and
   project-notes-distill delegate here to resolve the anchor before reading or
   writing. Use this skill when another project-notes skill asks to resolve the
   anchor or apply the vault layout. Not typically invoked on its own.
@@ -34,14 +34,16 @@ Notes live in the vault, but the skills always operate through an in-repo
 symlink so the repo can reference its own notes with a stable path:
 
 ```
-<repo>/.git/project-notes   →   <vault>/<repo-name>/
-                                 ├── Inbox/   ← raw (disposable)   → project-notes-capture
-                                 └── Notes/   ← distilled (keep)    → project-notes-distill
+<repo>/.agents/project-notes   →   <vault>/<repo-name>/
+                                    ├── Inbox/   ← raw (disposable)   → project-notes-capture
+                                    └── Notes/   ← distilled (keep)    → project-notes-distill
 ```
 
-The link lives **inside `.git/`**, which git never tracks — so it is never
-committed, never leaks the vault path to collaborators, and needs no `.gitignore`
-or `.git/info/exclude` entry.
+The link lives in the **working tree** (not inside `.git/`, which editor file
+panels such as Zed's hide), so the notes stay browsable from the editor. To keep
+it out of version control, the resolve step registers it in
+`.git/info/exclude` — which is local-only and never committed, so the vault path
+never leaks to collaborators and the repo's `.gitignore` is left untouched.
 
 ## Resolving the Anchor (MUST run before any read/write)
 
@@ -53,19 +55,26 @@ vault="$HOME/Obsidian/Project Notes"
 
 # repo-name: stable across worktrees (derived from the shared git dir, not the
 # worktree path)
-repo_name=$(basename "$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")")
+common_dir=$(git rev-parse --path-format=absolute --git-common-dir)
+repo_name=$(basename "$(dirname "$common_dir")")
 
-# Anchor location inside THIS checkout's git dir (worktree-correct)
-anchor=$(git rev-parse --git-path project-notes)
+# Anchor location at THIS checkout's root (each worktree gets its own link)
+anchor="$(git rev-parse --show-toplevel)/.agents/project-notes"
+
+# Keep the link untracked without touching the repo's .gitignore
+# (info/exclude is shared by all worktrees, so one entry covers them all)
+grep -qxF '/.agents/project-notes' "$common_dir/info/exclude" 2>/dev/null ||
+  echo '/.agents/project-notes' >> "$common_dir/info/exclude"
 
 # Ensure the repo's vault folder exists, then the symlink (never clobber)
-mkdir -p "$vault/$repo_name"
+mkdir -p "$vault/$repo_name" "$(dirname "$anchor")"
 [ -e "$anchor" ] || ln -s "$vault/$repo_name" "$anchor"
 ```
 
-- If not in a git repo, there is no `.git/` to anchor into — fall back to writing
-  directly under `<vault>/<repo-name>/` and tell the user the in-repo link was
-  skipped (resolve `<repo-name>` from the current directory name, or ask).
+- If not in a git repo, there is no `info/exclude` to keep the link untracked —
+  fall back to writing directly under `<vault>/<repo-name>/` and tell the user
+  the in-repo link was skipped (resolve `<repo-name>` from the current directory
+  name, or ask).
 - After this step, **all note paths are under the anchor**: raw notes go to
   `<anchor>/Inbox/`, distilled notes to `<anchor>/Notes/`. The `Inbox/`/`Notes/`
   subfolders are created on first write (the Write tool creates parents).

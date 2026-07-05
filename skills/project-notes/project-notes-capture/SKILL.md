@@ -10,8 +10,8 @@ user-invocable: true
 Capture a raw, unshaped project note into the vault's disposable **Inbox** layer.
 
 Read `project-notes-base` and run its "Resolving the Anchor" step first — it is
-mandatory and gives you `<anchor>` (`.git/project-notes`, symlinked into the
-vault). This skill only handles the raw-capture half.
+mandatory and gives you `<anchor>` (the in-repo symlink into the vault). This
+skill only handles the raw-capture half.
 
 ## When to Capture vs Distill
 
