@@ -51,8 +51,9 @@ Present a short summary: how many items, how many `open`, grouped by `Source`.
 
 - Work `open` items, or take a new point the user raises now (add it as an item with
   `Source: direct`, `Status: open`).
-- The user sets the pace: one at a time (default), or "まとめて / batch" to agree
-  several approaches first and apply them together within this session.
+- **Always one item at a time.** Propose, get a decision, apply — then move to the next.
+  Never batch several proposals or apply multiple items together, even if the user asks
+  to "go faster"; keep each item on its own propose→decide→apply cycle.
 
 ### 2. Propose a response
 
@@ -64,22 +65,26 @@ Read the item's `Detail`. Judge whether the response is unambiguous:
 - **Out of scope** (it would need a new/changed requirement or a design-level change):
   say so and propose `postponed` — do not attempt the change here.
 
-Present the proposal and record it in the item's `Approach`:
+Present the proposal **always paired with the original comment**, and record it in the
+item's `Approach`. Quote the item's `Detail` verbatim (the original reviewer comment) so
+the user judges the response against the exact wording, not a paraphrase:
 
 ```markdown
 **Item {N}** ({source}): {summary}
+**Original comment**:
+> {verbatim Detail — the original reviewer comment}
 **Proposed**: WHERE: {file:location} / WHAT: {specific change}   (or: POSTPONE — {why out of scope})
 
 Agree? (or refine / "skip")
 ```
 
-Do **not** change any code yet.
+Never present a proposal without the original comment beside it. Do **not** change any
+code yet.
 
 ### 3. User decides
 
-- **Agree** ("OK", "やって", "go ahead"): apply the change (or, in batch mode, record the
-  agreed approach and move on). When applied, set `Status: resolved` and fill
-  `Resolution`.
+- **Agree** ("OK", "やって", "go ahead"): apply the change now. When applied, set
+  `Status: resolved` and fill `Resolution`, then move to the next item.
 - **Refine / discuss**: adjust the approach, re-present. Keep the item `open`.
 - **Skip** ("skip", "やめて"): set `Status: skipped`.
 - **Postpone** (agreed it is out of scope): set `Status: postponed`, and in `Resolution`
@@ -113,6 +118,8 @@ their recorded `Approach`es are read back from `review.md`.
 | Anti-pattern | Why It's Wrong | Correct Behavior |
 |--------------|----------------|------------------|
 | Applying a change before the user agrees | Wrong approach causes rework | Always propose and wait for agreement |
+| Batching several items into one proposal | Loses per-item decision; hides context | One item at a time — propose, decide, apply, next |
+| Proposing without the original comment | User can't judge against exact wording | Always quote the item's `Detail` beside the proposal |
 | Forcing a design-level change through here | It needs an out-of-scope decision | Mark `postponed`; surface it as a follow-up |
 | Proposing multiple interpretations | Adds cognitive load | Use `discuss-toolkit-dig` to narrow down |
 | Concluding without an explicit signal | The user may have more feedback | Wait for "LGTM" / "以上" or an empty open list |
@@ -120,6 +127,8 @@ their recorded `Approach`es are read back from `review.md`.
 ## Success Criteria
 
 - [ ] Each `open` item driven to `resolved` / `skipped` / `postponed`
+- [ ] Items are worked strictly one at a time (no batching)
+- [ ] Every proposal is presented paired with the original comment (verbatim `Detail`)
 - [ ] A response is proposed and agreed before any code change
 - [ ] Ambiguous items go through `discuss-toolkit-dig` before a proposal
 - [ ] Out-of-scope items are `postponed`, not forced
