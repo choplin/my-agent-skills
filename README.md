@@ -60,7 +60,8 @@ scripts/install-opts.sh --dry-run     # preview
 | `skill-authoring` | skill-authoring, skill-authoring-quality-review |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig, name-project, quick-chat |
-| `git-helpers` | branch-commit, draft-pr, pr-description, rebase-onto-rewritten |
+| `git-helpers` | branch-commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten |
+| `understanding` | explain-diff (reviewer-facing HTML explanation of a diff; explain-pr publishes it for PRs) |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
 | `lang-reference` | go, java, python, scala, typescript |
 | `discussion-continuity` | continue-discussion |
