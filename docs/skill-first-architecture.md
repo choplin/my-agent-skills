@@ -110,7 +110,19 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
    - The calling skill says: use the agent's subagent if available; otherwise
      apply the skill inline. This "fallback procedure" is itself the skill.
 
-5. **Graceful degradation is a prose convention, not a mechanism.** The Agent
+5. **When a required capability is absent, a skill does one of three things**,
+   depending on how replaceable the capability is:
+   - **fallback** — equivalent path exists, full behavior preserved. The subagent
+     case: the `opts/<agent>/agents/` wrapper is only for isolation; the logic
+     lives in the portable skill and runs inline (convention #4).
+   - **degrade** — only an enhancement is missing, core still runs. The hook case:
+     host-side enforcement (`stop-gate`, `session-start`) can't be re-created in
+     prose, so it drops while the guidance remains.
+   - **abort** — capability is essential and irreplaceable. Declare it as a
+     *capability* prerequisite (not an agent name), probe it where possible, and
+     stop before any side effect if absent.
+
+6. **Graceful degradation is a prose convention, not a mechanism.** The Agent
    Skills standard has no feature-detection or conditionals. Capability-aware
    wording ("under Claude Code you may dispatch …; otherwise apply inline")
    relies on the host model honoring it. Expect to refine this with real use.

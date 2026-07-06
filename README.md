@@ -57,11 +57,15 @@ scripts/install-opts.sh --dry-run     # preview
 | `dev-workflow` | kickoff, create-epic/spec/plan, self-review, user-review, acceptance-review, plan-compliance-review, handoff, resume-work, post-task, workflow-status, base |
 | `review-tools` | ai-review, import-pr, import-ci, resolve, reply-pr, report, base (portable review process: a review.md record of items fed by ingestion sources — AI review / PR / CI / direct — and worked to resolution; used by dev-workflow and other flows) |
 | `goal-loop` | goal-loop, goal-loop-base (Codex /goal-style bounded autonomous loop; shell + jq, hooks opt-in) |
+| `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
+| `exec-plan` | exec-plan, exec-plan-base, exec-plan-record (rough-goal autonomous plan; decision log + parking lot) |
+| `dispatch` | dispatch-work (routes a new task to inception / goal-loop / exec-plan / dev-workflow-kickoff) |
+| `linear` | linear, linear-groom, linear-start (Linear issue lifecycle; start picks an issue → worktree → execution) |
 | `skill-authoring` | skill-authoring, skill-authoring-quality-review |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig, name-project, quick-chat |
 | `git-helpers` | branch-commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten |
-| `understanding` | explain-diff (reviewer-facing HTML explanation of a diff; explain-pr publishes it for PRs) |
+| `understanding` | explain-diff (reviewer-facing HTML explanation of a diff; explain-pr publishes it for PRs), html-docs (shared web-doc design system; base for explain-diff) |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
 | `lang-reference` | go, java, python, scala, typescript |
 | `discussion-continuity` | continue-discussion |
@@ -69,3 +73,80 @@ scripts/install-opts.sh --dry-run     # preview
 | `jira-cli` | jira-cli |
 
 > MoonBit skills are **not** vendored here — install them straight from upstream: `skills add moonbitlang/skills`.
+
+## Skill dependencies
+
+Skills delegate to each other **by name** (a prose convention, not a resolved
+manifest — see the architecture doc). This catalog lists only skills that depend
+on another; everything else is standalone. **Bold** marks a **cross-group**
+dependency — the edges that matter when installing a partial set. `(ext)` is a
+skill not vendored in this repo. Within a group, `base` is that group's `*-base`.
+
+**Cross-group hubs** (one skill that many groups delegate to):
+
+- `discuss-toolkit-dig` ← dev-workflow-kickoff, inception (+framing/deepen), inception-quick, exec-plan, goal-loop, review-tools-resolve, skill-authoring
+- `dev-workflow-kickoff` ← dispatch-work, inception-quick, inception-finalize, goal-loop
+- `inception` / `goal-loop` / `exec-plan` ← dispatch-work (execution-mode routing)
+- `review-tools` (ai-review, resolve, report) ← dev-workflow (self-review, user-review)
+
+**dev-workflow**
+- kickoff → create-spec, create-epic, **discuss-toolkit-dig**, **goal-loop**, **exec-plan**
+- create-spec → base, create-plan
+- create-epic → base, create-spec
+- create-plan → base, resume-work
+- resume-work → base, create-plan, self-review, user-review, post-task
+- self-review → base, plan-compliance-review, handoff, **review-tools-ai-review**
+- user-review → acceptance-review, create-spec, post-task, **review-tools-resolve**, **review-tools-report**
+- handoff → base, resume-work
+- workflow-status → base, **linear**
+
+**inception**
+- inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**
+- inception-quick → inception, **discuss-toolkit-dig**, **dev-workflow-kickoff**
+- inception-finalize → **project-notes-base**, **linear**, **dev-workflow-kickoff**
+- inception-framing → **discuss-toolkit-dig**
+- inception-deepen → **discuss-toolkit-dig**
+- inception-converge → finalize
+
+**exec-plan**
+- exec-plan → base, **discuss-toolkit-quick-chat**, **discuss-toolkit-dig**
+- exec-plan-record → base
+
+**goal-loop**
+- goal-loop → base, **discuss-toolkit-dig**, **dev-workflow-kickoff**
+
+**review-tools**
+- ai-review → base, code-review `(ext)`
+- import-pr → base
+- import-ci → base
+- resolve → base, **discuss-toolkit-dig**
+- report → base
+
+**git-helpers**
+- draft-pr → pr-description
+- explain-pr → **understanding-explain-diff**
+
+**discuss-toolkit**
+- name-project → dig
+
+**project-notes**
+- capture → base
+- distill → base
+
+**linear**
+- linear-start → linear, **dispatch-work**, wtm-worktree `(ext)`
+- linear-groom → linear
+
+**skill-authoring**
+- skill-authoring → **discuss-toolkit-dig**, skill-development `(ext)`
+- skill-authoring-quality-review → skill-authoring
+
+**ai-council**
+- ai-council → ai-council-codex-cli, ai-council-fugu-cli
+- ai-council-fugu-cli → ai-council-codex-cli
+
+**understanding**
+- explain-diff → html-docs
+
+**standalone**
+- dispatch-work → **inception**, **goal-loop**, **exec-plan**, **dev-workflow-kickoff**
