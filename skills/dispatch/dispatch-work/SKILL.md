@@ -2,7 +2,9 @@
 name: dispatch-work
 description: >-
   Single front door for STARTING a piece of work when you are unsure which execution mode fits.
-  Invoked explicitly by the user (e.g. /dispatch-work); does not auto-activate. Assesses one thing —
+  Invoked when the user is explicitly starting or routing a piece of work (e.g. /dispatch-work), or
+  delegated to by a routing skill such as linear-start; do not auto-activate on unrelated in-progress
+  work. Assesses one thing —
   how "done" is decided and how much you stay in the loop — then RECOMMENDS an execution mode and lets
   the user make the final call: a small obvious change to just implement in-session with no skill,
   a fuzzy concept to shape (inception), a task whose completion is fully
@@ -13,7 +15,6 @@ description: >-
   it does not decide for you — it recommends, the user chooses, then it hands off.
 allowed-tools: Read, Glob, Grep, AskUserQuestion, Skill
 user-invocable: true
-disable-model-invocation: true
 ---
 
 # Dispatch Work
