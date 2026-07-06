@@ -66,6 +66,41 @@ run() {
   fi
 }
 
+# Refuse to install opts/<agent>/skills/<name> when it would collide with a
+# skills-CLI-managed skill of the same name: both mechanisms own
+# <agent-home>/skills/<name>, so whichever runs last silently wipes the other
+# (the skills CLI recreates the whole skill dir on every `skills add`).
+# Two checks:
+#   1. static  — <name> must not equal any portable skill in skills/*/<name>/
+#   2. runtime — the install target must not be a symlink managed by another
+#      mechanism (i.e. one that does not point into this repo's opts/)
+check_skill_collisions() {
+  local agent="$1" dst_base="$2"
+  local src_base="$opts_dir/$agent"
+  local dir name target resolved
+  [[ -d "$src_base/skills" ]] || return 0
+  for dir in "$src_base"/skills/*/; do
+    [[ -d "$dir" ]] || continue
+    name="$(basename "$dir")"
+    if compgen -G "$repo_root/skills/*/$name/SKILL.md" > /dev/null; then
+      echo "error: opts/$agent/skills/$name collides with the portable skill '$name'" >&2
+      echo "  Both would install to <agent-home>/skills/$name and overwrite each other." >&2
+      echo "  Rename the add-on dir so it is not a portable skill name (e.g. '$name-addon')." >&2
+      return 1
+    fi
+    target="$dst_base/skills/$name"
+    if [[ -L "$target" ]]; then
+      resolved="$(cd "$(dirname "$target")" 2>/dev/null && readlink -f "$target" || true)"
+      if [[ "$resolved" != "$opts_dir"/* ]]; then
+        echo "error: $target is a symlink managed by another mechanism (-> ${resolved:-unresolvable})" >&2
+        echo "  Refusing to write through it; installing would pollute that mechanism's files." >&2
+        echo "  Rename opts/$agent/skills/$name or remove the conflicting install first." >&2
+        return 1
+      fi
+    fi
+  done
+}
+
 for agent in "${agents[@]}"; do
   src_base="$opts_dir/$agent"
   if [[ ! -d "$src_base" ]]; then
@@ -78,6 +113,7 @@ for agent in "${agents[@]}"; do
   fi
 
   echo "==> $agent  ($mode -> $dst_base)"
+  check_skill_collisions "$agent" "$dst_base"
   # Walk every file under opts/<agent> and place it at the mirrored path.
   # Include symlinks (-type l): some opts resources are symlinks to a base
   # skill's bundled script (e.g. scripts/verify.sh), and those must be

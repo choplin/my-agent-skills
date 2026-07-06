@@ -194,7 +194,7 @@ refusing to fake completion.
 The core above runs on any host. Where a host can do more, an opt-in add-on
 layers structural enforcement and convenience on top:
 
-- **Claude Code**: the `goal-loop` opt-in plugin under `opts/claude/skills/goal-loop/`
+- **Claude Code**: the `goal-loop-addon` opt-in plugin under `opts/claude/skills/goal-loop-addon/`
   adds a PreToolUse hook that denies direct edits to `state.json` (structural
   Default-FAIL), SessionStart/Stop hooks that surface and nudge an active loop,
   and a `loop.sh` wrapper that defaults `--builder-cmd` to `claude -p`. Install

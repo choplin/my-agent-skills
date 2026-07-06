@@ -50,8 +50,8 @@ State and goals live under `.agents/goals/{yyyy-mm-dd}-{slug}/`.
 ## Claude Code add-on (opt-in)
 
 The portable skill runs on any agent (with `loop.sh`, or the inline bounded
-fallback) **without any hook**. For Claude Code, the `goal-loop` opt-in plugin
-under `opts/claude/skills/goal-loop/` adds structural enforcement and convenience
+fallback) **without any hook**. For Claude Code, the `goal-loop-addon` opt-in plugin
+under `opts/claude/skills/goal-loop-addon/` adds structural enforcement and convenience
 *on top of* the already-safe core:
 
 - `scripts/loop.sh` — a thin wrapper that defaults `--builder-cmd` to `claude -p` (fresh context) each round.
