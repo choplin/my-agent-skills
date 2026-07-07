@@ -1,18 +1,16 @@
 ---
 name: dispatch-work
 description: >-
-  Single front door for STARTING a piece of work when you are unsure which execution mode fits.
-  Invoked when the user is explicitly starting or routing a piece of work (e.g. /dispatch-work), or
-  delegated to by a routing skill such as linear-start; do not auto-activate on unrelated in-progress
-  work. Assesses one thing —
-  how "done" is decided and how much you stay in the loop — then RECOMMENDS an execution mode and lets
-  the user make the final call: a small obvious change to just implement in-session with no skill,
-  a fuzzy concept to shape (inception), a task whose completion is fully
-  checkable by executable predicates (goal-loop), a rough goal to self-drive with the big calls batched
-  for you at the end (exec-plan), or work that needs an up-front spec and approval/review gates,
-  possibly across sessions (dev-workflow-kickoff). Use for "start this / which mode should I use /
-  route this work / I don't know whether to spec it or just let you run". Not itself an executor, and
-  it does not decide for you — it recommends, the user chooses, then it hands off.
+  Single front door for STARTING work when you are unsure which execution mode fits. Invoked when the
+  user is explicitly starting or routing work (e.g. /dispatch-work), or delegated to by a routing skill
+  such as linear-start; do not auto-activate on unrelated in-progress work. Assesses one thing — how
+  "done" is decided and how much you stay in the loop — then RECOMMENDS a mode and lets the user make
+  the final call: implement in-session (small obvious change), inception (shape a fuzzy concept),
+  goal-loop (completion checkable by executable predicates), exec-plan (self-drive a rough goal, big
+  calls batched to the end), or dev-workflow-kickoff (needs an up-front spec and approval/review gates,
+  possibly across sessions). Use for "start this / which mode should I use / route this work / I don't
+  know whether to spec it or just let you run". Not an executor and does not decide for you — it
+  recommends, the user chooses, then hands off.
 allowed-tools: Read, Glob, Grep, AskUserQuestion, Skill
 user-invocable: true
 ---

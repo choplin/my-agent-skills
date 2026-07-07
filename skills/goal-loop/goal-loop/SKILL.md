@@ -2,16 +2,13 @@
 name: goal-loop
 description: >-
   Invoked by the user (e.g. /goal-loop) or auto-activated when a task clearly fits; also reachable via
-  dispatch-work. Run a bounded
-  autonomous implement->verify loop after the user's What is clear and completion can be checked by
-  executable predicates. A portable, predicate-gated counterpart to Codex /goal (completion is gated on
-  executable predicates, not asserted by the model): clarify the What with dig,
-  write a compact Goal Contract, scaffold default-fail predicates, then run a bounded builder -> verify
-  (-> optional evaluator) loop until executable checks pass. Use it for "run this as a goal", "goal loop",
-  "while-true loop", "let the agent finish this autonomously", "full-bet on the agent", porting/cloning/
-  migration tasks with tests or a reference implementation, or bug fixes whose done state is
-  command-verifiable. Not for cases where the right answer depends on unexpressed product judgment, taste,
-  UX review, or human-only acceptance; route those to a spec-driven workflow (dev-workflow-kickoff) instead.
+  dispatch-work. Run a bounded autonomous implement->verify loop after the user's What is clear and
+  completion can be checked by executable predicates (gated on the predicates, not asserted by the
+  model). Use for "run this as a goal", "goal loop", "while-true loop", "let the agent finish this
+  autonomously", "full-bet on the agent", porting/cloning/migration tasks with tests or a reference
+  implementation, or bug fixes whose done state is command-verifiable. Not for cases where the right
+  answer depends on unexpressed product judgment, taste, UX review, or human-only acceptance; route
+  those to dev-workflow-kickoff instead.
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 ---

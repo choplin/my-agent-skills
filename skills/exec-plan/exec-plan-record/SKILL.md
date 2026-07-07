@@ -2,14 +2,13 @@
 name: exec-plan-record
 description: >-
   Invoked explicitly by the user (e.g. /exec-plan-record); does not auto-activate. Write the current
-  session out to a durable, self-contained plan file — reconstruct from the conversation so far what
-  the goal is, which decisions are already made and why, what's done, and what's left — so the work
-  can be referenced and resumed across later sessions. Use mid-work when a task is growing and you
-  want one anchor document, for "write down where we've gotten to", "capture the goal and what's
-  left", "save this so we can pick it up later". Writes the same plan file as exec-plan but does not
-  drive anything. Not for agreeing a fresh goal and running it autonomously (use exec-plan), saving a
-  pure design discussion for a future session (use discussion-continuity-continue-discussion), or
-  snapshotting a dev-workflow work unit for /clear (use dev-workflow-handoff).
+  session out to a durable, self-contained plan file — reconstruct from the conversation what the goal
+  is, which decisions are made and why, what's done, and what's left — so the work can be resumed across
+  sessions. Use mid-work for "write down where we've gotten to", "capture the goal and what's left",
+  "save this so we can pick it up later". Writes the same plan file as exec-plan but does not drive
+  anything. Not for agreeing a fresh goal and running it autonomously (use exec-plan), saving a pure
+  design discussion (use discussion-continuity-continue-discussion), or snapshotting a dev-workflow work
+  unit for /clear (use dev-workflow-handoff).
 user-invocable: true
 disable-model-invocation: true
 allowed-tools: Read, Write, Edit, Glob, Bash, Skill, AskUserQuestion

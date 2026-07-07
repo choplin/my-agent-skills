@@ -2,16 +2,15 @@
 name: exec-plan
 description: >-
   Invoked by the user (e.g. /exec-plan) or auto-activated when a task clearly fits; also reachable via
-  dispatch-work. Agree on a rough goal
-  and direction, then run autonomously as far as possible. Write a self-contained, ExecPlan-style
-  plan and drive it inline: resolve low-risk, reversible decisions on your own (recorded in a
-  Decision Log) and park high-impact or hard-to-reverse decisions in a Parking Lot for a single
-  batch review at the end. Use for "run as far as you can without me", "rough goal, drive it
-  yourself and ask me the big calls later", "do whatever doesn't need my judgment". Lighter than
-  goal-loop (no executable predicates required) and dev-workflow (no up-front spec or approval
-  gate). Not for work where most steps need human judgment, where completion should be gated on
-  executable predicates (use goal-loop), where requirements must be decided up front (use
-  dev-workflow-create-spec), or for shaping a still-fuzzy concept (use inception).
+  dispatch-work. Agree on a rough goal and direction, then run autonomously as far as possible: write a
+  self-contained ExecPlan-style plan and drive it inline — resolve low-risk, reversible decisions
+  yourself (Decision Log) and park high-impact or hard-to-reverse ones for a single batch review at the
+  end (Parking Lot). Use for "run as far as you can without me", "rough goal, drive it yourself and ask
+  me the big calls later", "do whatever doesn't need my judgment". Lighter than goal-loop (no executable
+  predicates) and dev-workflow (no up-front spec or approval gate). Not for work where most steps need
+  human judgment, where completion should be gated on executable predicates (use goal-loop), where
+  requirements must be decided up front (use dev-workflow-create-spec), or for shaping a still-fuzzy
+  concept (use inception).
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
 ---

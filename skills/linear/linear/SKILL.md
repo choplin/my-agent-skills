@@ -1,6 +1,6 @@
 ---
 name: linear
-description: Operating conventions for managing work in this Linear workspace — how the agent treats Linear's model (Project / Milestone / Cycle / Issue / Sub-issue / Label / Status / Priority) and owns the full issue lifecycle (create, groom, comment, transition status, close). Use this skill whenever creating, grooming, triaging, updating, or closing Linear issues/projects, or when deciding how to structure work in Linear. Triggers on "Linear issue", "add to Linear", "triage the backlog", "groom this issue", "Linearに積む", "Issueを作って", "Linearで管理". Should NOT trigger for non-Linear issue trackers (Jira → jira-cli; GitHub Issues → github tools), or for git/PR mechanics (git-helpers).
+description: Operating conventions for managing work in this Linear workspace — how the agent treats Linear's model (Project / Milestone / Cycle / Issue / Sub-issue / Label / Status / Priority) and owns the full issue lifecycle (create, groom, comment, transition status, close). Use whenever creating, grooming, triaging, updating, or closing Linear issues/projects, or deciding how to structure work in Linear. Triggers on "Linear issue", "add to Linear", "triage the backlog", "groom this issue", "Linearに積む", "Issueを作って", "Linearで管理". Should NOT trigger for non-Linear trackers (Jira → jira-cli; GitHub Issues → github tools), or for git/PR mechanics (git-helpers).
 user-invocable: true
 ---
 
