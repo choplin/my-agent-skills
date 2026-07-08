@@ -156,10 +156,12 @@ uv run --project "$SKILL_DIR" python "$SKILL_DIR/scripts/foo.py" "$@"
 ```
 
 **A tool the flake cannot provide** (too heavy, or downloads its own weights at
-run time — e.g. a multi-GB ML CLI) stays a manual `... install` the user runs,
-checked **in the worker, not the wrapper** — in nix mode it only appears on PATH
-after the dev shell loads (e.g. `~/.local/bin` for a `uv tool install`ed CLI),
-which the wrapper has not entered yet. Never auto-install it (§6).
+run time — e.g. a multi-GB ML CLI): if it is pip-installable, do **not** make it
+a manual install — declare it in `pyproject.toml` and resolve it PATH-first via
+`uv run`, per §5. Either way the choice of *how to run the tool* lives **in the
+worker, not the wrapper**: the wrapper only guarantees the base env is on PATH,
+and the worker then decides between an installed binary and `uv run`. Never
+hand-install it (§6).
 
 **Inline variant** (single-script skills): keep the resolution inside the worker
 and re-exec it once, guarded by an env var —
@@ -181,6 +183,45 @@ but deps un-synced still works, because `uv run` syncs.
   "never mutate the user's system"; and it is deterministic because `uv.lock` is
   committed. The two tiers therefore split cleanly: the **flake** provides the
   *tools* (uv/python/system libs), and **`uv run`** provides the *libraries*.
+
+### 5a. A pip-installable CLI tool: declare in pyproject, resolve PATH-first
+
+When a dependency is a **CLI tool** the skill shells out to (not a library your
+own code imports — e.g. an OCR/ML CLI), you still declare it in `pyproject.toml`
+and pin it in `uv.lock`, but resolve it **PATH-first** in the worker: use an
+already-installed binary if present, otherwise run it via `uv run --project`.
+There is no reason to ignore a copy the user already has, and it avoids building
+a heavy project `.venv` when the tool is on PATH — while `uv run` still gives a
+zero-setup, in-repo fallback (no manual/global install).
+
+```sh
+# Prefer an installed binary; else resolve it in-repo via uv (auto-synced, §5).
+if command -v mytool >/dev/null; then
+  TOOL=(mytool)
+elif command -v uv >/dev/null; then
+  TOOL=(uv run --project "$SKILL_DIR" mytool)
+else
+  echo "error: need 'mytool' or 'uv' on PATH — launch via scripts/preflight.sh" >&2; exit 1
+fi
+"${TOOL[@]}" <args>   # run through the resolved launcher
+```
+
+Two things follow:
+
+- **The preflight predicate must admit both paths.** PATH mode is viable when the
+  base env (system libs) is present **and** there is a way to get the tool —
+  either `uv` (which can provision it *and* supply a Python) **or** the tool
+  itself plus any interpreter it needs already on PATH. So the wrapper's test
+  becomes e.g. `has poppler && { has uv || { has mytool && has python3; }; }`
+  rather than hard-requiring `uv`. (nix mode still provides `uv` + libs, so
+  `uv run` provisions the tool there with no extra setup.)
+- **The tool's runtime data is not in the `.venv`.** Model weights and similar
+  large runtime downloads land in the tool's own cache (e.g. `~/.cache`), not the
+  project venv, and are shared across every resolution path. So PATH-vs-`uv run`
+  only changes where the *packages* live (a global install vs the project
+  `.venv`); the multi-GB runtime data is downloaded once and reused either way.
+  Pinning via `uv.lock` therefore buys package reproducibility, not control over
+  that runtime data.
 
 ## 6. Failure is early, aggregated, and promoting — never performing
 
