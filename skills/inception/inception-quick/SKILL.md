@@ -13,7 +13,7 @@ The lightweight sibling of `inception`. Use it when the idea does not need a ful
 
 ## What it produces
 
-A single self-contained `prd-quick.md` at `.claude/inception/<topic-slug>/prd-quick.md`, holding the sections the framing phase establishes:
+A single self-contained `prd-quick.md` at `.agents/inception/<topic-slug>/prd-quick.md`, holding the sections the framing phase establishes:
 
 - **Summary** — one–two sentences: what this is and the role it plays.
 - **Background** — the situation and why now: the forces making this worth doing.
@@ -28,10 +28,10 @@ No `graph.json`, no CLI, no `decisions.md` / `action-items.md` / `open-questions
 
 ## How to run it
 
-1. **Slug + location.** Derive a topic slug from the user's idea (kebab-case, 2–4 words; ask only if genuinely unclear). Target `.claude/inception/<slug>/prd-quick.md` (deliberately **not** `prd.md`, which full `inception` renders from its graph — separate names so neither route can clobber the other).
-   - If `.claude/inception/<slug>/graph.json` already exists, this topic is a full `inception` session — do not start a quick capture over it; tell the user and defer to `inception`.
-   - If `.claude/inception/<slug>/prd-quick.md` already exists (from a prior quick run), offer to update it rather than clobber.
-   - Ensure `.claude/inception/` is git-ignored (it holds transient working notes). At most repos `.claude` is already ignored; add it if not.
+1. **Slug + location.** Derive a topic slug from the user's idea (kebab-case, 2–4 words; ask only if genuinely unclear). Target `.agents/inception/<slug>/prd-quick.md` (deliberately **not** `prd.md`, which full `inception` renders from its graph — separate names so neither route can clobber the other).
+   - If `.agents/inception/<slug>/graph.json` already exists, this topic is a full `inception` session — do not start a quick capture over it; tell the user and defer to `inception`.
+   - If `.agents/inception/<slug>/prd-quick.md` already exists (from a prior quick run), offer to update it rather than clobber.
+   - Ensure `.agents/inception/` is git-ignored (it holds transient working notes). Add `.agents/inception/` to `.gitignore` if it is not already ignored.
 2. **Brief framing dig.** Delegate elicitation to `discuss-toolkit-dig` (subject: "the background and purpose behind this idea"). Draw out *why now*, *what problem*, and *for whom* — enough to write each section from the user's own words. Keep it brief: this is a capture, not the full Socratic reframing loop, so stop once the framing sections can be filled honestly rather than sweeping for more.
    - Still apply the one framing guardrail: if the user jumps to *how* (a solution) before *why/what*, note it and pull back to the problem. A quick brief with a sharp problem beats a fast one built on a solution-in-disguise.
 3. **Write `prd-quick.md`.** Fill each section from what surfaced, in **plain, clear English** (short sentences, concrete nouns — regardless of the conversation language). A section you cannot fill from the user's own input stays `_not yet defined_`; never write the AI's guess into a PRD field. Leave the deepen/converge sections as `_not yet defined_`.
@@ -42,7 +42,7 @@ No `graph.json`, no CLI, no `decisions.md` / `action-items.md` / `open-questions
    - **Central question** is a single question, not a list.
    - Any section not filled from the user's input reads `_not yet defined_` (not fabricated).
    Then show the user the `prd-quick.md` and name the two paths out:
-   - **Keep it.** To persist this footing into durable memory, offer **`inception-finalize`** (確定) — it writes `prd-quick.md` to the Project Notes vault as a keep-forever PRD note. `prd-quick.md` under `.claude/` is transient; finalize is what makes it last.
+   - **Keep it.** To persist this footing into durable memory, offer **`inception-finalize`** (確定) — it writes `prd-quick.md` to the Project Notes vault as a keep-forever PRD note. `prd-quick.md` under `.agents/` is transient; finalize is what makes it last.
    - **Upgrade it.** If they later want to pressure-test the idea, generate options, or record decisions and first actions, run full `inception` on the **same topic** — it detects this hand-written `prd-quick.md`, seeds its graph's `session.*` fields from it, and continues from there (the capture is carried forward, not lost). If a concrete next action is already obvious instead, offer to hand it to `dev-workflow-kickoff`.
 
 ## Scope guard

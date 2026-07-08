@@ -24,7 +24,7 @@ Everything the user thinks lands in **one thinking graph** (`graph.json`). The P
 ## Storage
 
 ```
-.claude/inception/<topic-slug>/
+.agents/inception/<topic-slug>/
 ├── graph.json        # the single source of truth (schema: schema/graph.schema.json)
 ├── prd.md            # projection: foundational PRD (see references/prd-template.md)
 ├── decisions.md      # projection: Decision nodes with rejected alternatives
@@ -32,9 +32,9 @@ Everything the user thinks lands in **one thinking graph** (`graph.json`). The P
 └── open-questions.md  # projection: open discussion nodes by nextMove + deferred
 ```
 
-`.claude/` keeps these transient working notes out of the committed tree. If `.claude/inception/` is not already git-ignored, add it to `.gitignore` when running `init`.
+`.agents/inception/` holds transient working notes that should stay out of the committed tree. If it is not already git-ignored, add it to `.gitignore` when running `init`.
 
-Everything under `.claude/inception/` is transient. The **durable** output is written only at the end, by `inception-finalize`: one consolidated PRD persisted to the Project Notes vault. After that, the vault PRD is authoritative and the graph here is a spent working note (see the phase model's terminal exit below).
+Everything under `.agents/inception/` is transient. The **durable** output is written only at the end, by `inception-finalize`: one consolidated PRD persisted to the Project Notes vault. After that, the vault PRD is authoritative and the graph here is a spent working note (see the phase model's terminal exit below).
 
 ## Language: plain, clear English
 

@@ -7,7 +7,7 @@ allowed-tools: Read, Write, Glob, Bash, AskUserQuestion
 
 # Inception — Finalize (確定)
 
-The terminal exit of the inception family. The thinking is done; this step **confirms the footing into durable memory** and lets go of the working artifacts. It is one-way: after finalize, the persisted PRD is authoritative and the `.claude/inception/` graph is a spent working note.
+The terminal exit of the inception family. The thinking is done; this step **confirms the footing into durable memory** and lets go of the working artifacts. It is one-way: after finalize, the persisted PRD is authoritative and the `.agents/inception/` graph is a spent working note.
 
 > This is not a sixth thinking phase. `framing → diverge → structure → deepen → converge` shape the idea inside the transient graph; **finalize** moves the result out. It is reached from `inception` (after converge confirms done-enough) and from `inception-quick` (to keep its `prd-quick.md`), or run directly on an existing session.
 
@@ -26,20 +26,20 @@ Both routes converge here, so the durable output is the same shape regardless of
 | Full `inception` | Run the base CLI: `inception.sh finalize <dir>/graph.json`. It prints one PRD whose **Direction section carries each decision's rejected alternatives + rationale** (the anti-re-litigation record that `prd.md` alone drops), and omits the live queue and action items. |
 | `inception-quick` | Use the existing `<dir>/prd-quick.md` as-is — it is already a self-contained PRD. Its deepen/converge sections read `_not yet defined_`; that is expected and fine, finalize persists the footing that exists. |
 
-Locate the session under `.claude/inception/<topic-slug>/` (Glob if the slug is unknown; ask which one if several).
+Locate the session under `.agents/inception/<topic-slug>/` (Glob if the slug is unknown; ask which one if several).
 
 ## Workflow
 
 1. **Get the consolidated PRD text** from the source above (CLI for full, the file for quick).
 2. **Resolve the vault anchor.** Read `project-notes-base` and run its "Resolving the Anchor" step (mandatory) — it gives `<anchor>` (the in-repo symlink into the vault). This reuses the vault location, per-repo layout, and symlink machinery; finalize adds no new directory of its own.
-   - If the user has no Project Notes vault at all, `project-notes-base` says to ask for a path. If they decline a vault, ask where to persist instead (or keep it in `.claude/` and tell them it stays transient). Do not silently drop the durable output.
+   - If the user has no Project Notes vault at all, `project-notes-base` says to ask for a path. If they decline a vault, ask where to persist instead (or keep it in `.agents/` and tell them it stays transient). Do not silently drop the durable output.
 3. **Write the PRD note** to `<anchor>/Notes/PRD - <concise title>.md` with the light frontmatter below. Use a human-readable title (not the kebab slug). **Never clobber** — if a same-title PRD note already exists, show it and ask whether to update or write under a new title.
    - **Write the persisted note in Japanese.** The source PRD (CLI output or `prd-quick.md`) is plain English by `inception-base`'s rule — that rule governs the *thinking* artifacts. The vault note is read only by its owner, so translate the full content (headings and body) into plain, clear Japanese when persisting. Keep the same discipline: short sentences, concrete nouns, no rhetorical flourish; technical terms, proper nouns (product, service, company names), and code identifiers stay in their original form. Translate faithfully — do not add, drop, or reinterpret content while translating.
 4. **Hand off the actions (full route only).** Present the `Action` nodes and let the user choose how to carry them out — do not decide for them:
    - **Linear (Project + Issues)** — delegate to the `linear-base` skill. A finalized inception footing is a **finite outcome/goal**, which in Linear's model is a **Project** — so **create a Project for this footing first, then register the promoted actions as Issues under that Project** (never as loose issues with no project). Use the PRD's title/purpose for the Project name and description. This writes to an external system, so **show the proposed Project and its issues, and get explicit approval before creating anything**. Issue promotion stays per-action — some actions are still too coarse to be issues; only promote the ones the user picks — but every promoted issue goes under the Project.
    - **`dev-workflow-kickoff`** — for a spec/plan/review-driven task.
    - Or hand the list off as-is. Actions do not stay in the PRD; the PRD records direction, not the to-do list.
-5. **Retire the transient layer.** State plainly: the live open-questions queue is a point-in-time snapshot and is **not** persisted; the vault PRD is now the authoritative footing and the `.claude/inception/` graph is a spent working note. Leave the `.claude/` files in place (they are gitignored and harmless); delete them only if the user asks.
+5. **Retire the transient layer.** State plainly: the live open-questions queue is a point-in-time snapshot and is **not** persisted; the vault PRD is now the authoritative footing and the `.agents/inception/` graph is a spent working note. Leave the `.agents/` files in place (they are gitignored and harmless); delete them only if the user asks.
 
 ## Frontmatter (matches project-notes)
 
@@ -55,7 +55,7 @@ Get `created` and `repo-name` the same way `project-notes-base` does (`date +%F`
 
 ## Self-check before declaring done
 
-- [ ] The vault PRD is written under `<anchor>/Notes/` with the `PRD - ` prefix, not left only in `.claude/`.
+- [ ] The vault PRD is written under `<anchor>/Notes/` with the `PRD - ` prefix, not left only in `.agents/`.
 - [ ] The vault PRD is written in **Japanese** (translated from the English source PRD), with technical terms, proper nouns, and identifiers left in their original form.
 - [ ] For a full session: the Direction section preserves **rejected alternatives + rationale** (not just the chosen option).
 - [ ] **Background is permanent context** — it reads as standing project context that is still true months from now, with no session-process narration ("in this session we questioned/decided…", which duplicates Direction) and no progress snapshot ("implemented X", "collected N months of data", which belongs to the tracker). If it drifts, fix it before persisting; this is a keep-forever anchor. See the "Background: permanent context" contrast table in `inception-base/references/prd-template.md`.
