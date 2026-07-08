@@ -1,5 +1,8 @@
 __pycache__/
 *.pyc
 
+# uv project-local virtualenvs (created on first `uv run`; deps come from uv.lock)
+.venv/
+
 # wtm creates a per-worktree symlink to the repo-root .claude config
 .claude
