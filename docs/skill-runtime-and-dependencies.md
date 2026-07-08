@@ -97,57 +97,76 @@ Key properties:
 - **nix stays opt-in.** The script *never* invokes `nix` or `uv sync`
   implicitly as a hard requirement; nix is only *one blessed way* to provision
   the PATH, chosen only when the direct PATH is unavailable.
-- **Decide once, then run mode-agnostically.** When the nix path is chosen,
-  **re-exec the script itself once** inside `nix develop`, guarded by an env var
-  to avoid an infinite loop. After re-exec, uv/python/poppler are all on PATH, so
-  the rest of the script has no mode branches and pays the flake-eval cost once
-  (not per invocation).
+- **Decide once, then run mode-agnostically.** When the nix path is chosen, the
+  work must end up running with uv/python/poppler on PATH, paying the flake-eval
+  cost once (not per invocation). Two shapes do this — pick by how many scripts
+  need the env:
+  - **Preferred — a separate `preflight.sh` wrapper** that resolves the env and
+    then `exec`s the given command inside it. One resolver serves every script in
+    the leaf (and any command the SKILL.md tells the agent to run through it), and
+    because the wrapper `exec`s the *target* (not itself), it needs **no re-exec
+    guard variable**. This is the paper-studio-summarize shape.
+  - **Alternative — inline self-re-exec** inside a single worker script, guarded
+    by an env var to avoid an infinite loop. Fine when the skill has exactly one
+    entry script and you would rather not add a second file.
 
-### Preflight template
+### Preflight template (preferred: separate wrapper)
 
-Copy this into each skill that needs it (the snippet cannot be shared across
-leaf directories — see §7):
+Copy this into each skill that needs it as `scripts/preflight.sh` (the snippet
+cannot be shared across leaf directories — see §7). The SKILL.md then launches
+any env-dependent script through it, e.g.
+`bash <SKILL_DIR>/scripts/preflight.sh bash <SKILL_DIR>/scripts/foo.sh <args>`:
 
 ```sh
 #!/usr/bin/env bash
+# preflight.sh — resolve the runtime env once, then exec the given command in it.
+# Usage: preflight.sh <command> [args...]
 set -euo pipefail
 
-# Resolve the skill's own root (adjust depth to the script's location).
+[ $# -gt 0 ] || { echo "usage: $0 <command> [args...]" >&2; exit 2; }
+
 SKILL_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
-# --- preflight: resolve the execution mode exactly once ---
-if [ -z "${SKILL_ENV_RESOLVED:-}" ]; then
-  if command -v uv >/dev/null 2>&1; then
-    :  # PATH mode — use the runtime already on PATH.
-  elif [ -f "$SKILL_DIR/flake.lock" ] && command -v nix >/dev/null 2>&1; then
-    # nix mode — re-exec self inside the dev shell; from here everything is on PATH.
-    exec env SKILL_ENV_RESOLVED=1 nix develop "$SKILL_DIR" --command bash "$0" "$@"
-  else
-    fail_preflight   # see §6
-  fi
-fi
-export SKILL_ENV_RESOLVED=1
-
-# --- body: mode-agnostic from here on ---
-# Lib-layer deps are delegated to uv (auto-sync from uv.lock is intended, §5):
-uv run --project "$SKILL_DIR" python "$SKILL_DIR/scripts/foo.py" "$@"
-
-fail_preflight() {
+if command -v uv >/dev/null 2>&1; then
+  exec "$@"                                     # PATH mode — runtime already available.
+elif [ -f "$SKILL_DIR/flake.lock" ] && command -v nix >/dev/null 2>&1; then
+  exec nix develop "$SKILL_DIR" --command "$@"  # nix mode — run the target in the dev shell.
+else
   cat >&2 <<EOF
-This skill needs a runtime that was not found. Set it up either way:
-  A) nix (all-in-one): run this skill via
-       nix develop "$SKILL_DIR" --command <re-run the skill>
+This skill needs a runtime that was not found. Set it up either way, then re-run:
+  A) nix (all-in-one): run the command inside the bundled dev shell —
+       nix develop "$SKILL_DIR" --command <command> [args...]
      (requires nix with the nix-command & flakes features enabled)
   B) manual: install the tools yourself, e.g.
        uv        -> https://docs.astral.sh/uv/
        poppler   -> macOS: brew install poppler | Debian: apt-get install poppler-utils
 EOF
   exit 1
-}
+fi
 ```
 
+The worker it launches is then mode-agnostic and delegates its lib layer to uv
+(auto-sync from `uv.lock` is intended, §5):
+
+```sh
+# scripts/foo.sh — assumes the env is resolved (launch via preflight.sh).
+# Safety net for a direct call, and a pointer back to the wrapper:
+command -v uv >/dev/null || { echo "error: uv not found — launch via scripts/preflight.sh" >&2; exit 1; }
+uv run --project "$SKILL_DIR" python "$SKILL_DIR/scripts/foo.py" "$@"
+```
+
+**A tool the flake cannot provide** (too heavy, or downloads its own weights at
+run time — e.g. a multi-GB ML CLI) stays a manual `... install` the user runs,
+checked **in the worker, not the wrapper** — in nix mode it only appears on PATH
+after the dev shell loads (e.g. `~/.local/bin` for a `uv tool install`ed CLI),
+which the wrapper has not entered yet. Never auto-install it (§6).
+
+**Inline variant** (single-script skills): keep the resolution inside the worker
+and re-exec it once, guarded by an env var —
+`if [ -z "${SKILL_ENV_RESOLVED:-}" ]; then … exec env SKILL_ENV_RESOLVED=1 nix develop "$SKILL_DIR" --command bash "$0" "$@"; fi`.
+
 (If `nix` is present but the `nix-command`/`flakes` features are disabled, the
-`nix develop` re-exec fails — catch that and degrade to `fail_preflight` rather
+`nix develop` exec fails — catch that and degrade to the aggregated fail rather
 than surfacing a cryptic nix error.)
 
 ## 5. Library-layer deps are delegated to `uv run`
