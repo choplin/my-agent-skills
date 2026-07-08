@@ -14,7 +14,7 @@ local `state.json` as the machine-managed progress state. There is no local
 
 ## Tool Usage Constraints
 
-- **Linear**: use whichever Linear MCP server is wired, per the `linear` skill.
+- **Linear**: use whichever Linear MCP server is wired, per the `linear-base` skill.
 
 ## Purpose
 

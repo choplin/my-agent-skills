@@ -63,7 +63,7 @@ For each approved item:
 - **Skill**: Invoke skill-authoring skill for proper skill creation
 - **CLAUDE.md**: Append to appropriate section
 - **ADR**: Create in docs/adr/ following ADR format
-- **Design Doc**: Export the Story Issue's spec/plan (from Linear) to docs/ with appropriate naming — carry the content but strip Linear issue IDs/URLs (per the `linear` skill, Linear references stay internal and never enter repo files)
+- **Design Doc**: Export the Story Issue's spec/plan (from Linear) to docs/ with appropriate naming — carry the content but strip Linear issue IDs/URLs (per the `linear-base` skill, Linear references stay internal and never enter repo files)
 - **Workflow improvement (C-3)**: edit `dev-workflow-kickoff` SKILL (add an interview question) or `dev-workflow-base` skill (`references/spec-template.md`) (add a prompt/checklist line) so future specs ask about the recurring omission up front
 
 ### 5. Clear the session binding

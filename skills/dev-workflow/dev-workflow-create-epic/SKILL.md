@@ -12,11 +12,11 @@ An **Epic maps to a Linear Project**; its **Stories are the Project's Issues**
 (a Story maps to an Issue — see `dev-workflow-create-spec`). There is no local
 epic document. All Linear mechanics — the required Repo project-label, the
 goal/target framing of a Project, Issue labels, `blocked by` relations — are owned
-by the **`linear` skill**; follow its conventions rather than restating them.
+by the **`linear-base` skill**; follow its conventions rather than restating them.
 
 ## Tool Usage Constraints
 
-- **Linear**: use whichever Linear MCP server is wired, per the `linear` skill.
+- **Linear**: use whichever Linear MCP server is wired, per the `linear-base` skill.
 
 ## Purpose
 
@@ -67,7 +67,7 @@ For each Story, ask: "Does this require another Story to be completed first?"
 
 ### 4. Create the Linear Project
 
-Create a Project for the Epic, per the `linear` skill (it must carry the repo's
+Create a Project for the Epic, per the `linear-base` skill (it must carry the repo's
 **Repo** project-label; frame it as a finite outcome with a target, not a bucket).
 Resolve the repo's Project namespace the same way `linear-start` does. Put the
 Epic's framing in the Project **description**:
@@ -88,7 +88,7 @@ Epic's framing in the Project **description**:
 
 ### 5. Create the Story Issues in the Project
 
-For each Story, create an Issue **in the Project** (Repo + Type labels per `linear`):
+For each Story, create an Issue **in the Project** (Repo + Type labels per `linear-base`):
 
 - **Title** = the Story name; **description** = the one-sentence What (kept
   lightweight — full spec structuring happens later, at `create-spec` adopt time).

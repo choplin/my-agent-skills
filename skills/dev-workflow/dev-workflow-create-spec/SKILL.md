@@ -13,13 +13,13 @@ only the machine-managed execution state. There is no local `spec.md`.
 A **Story maps to a Linear Issue** (an Epic maps to a Linear Project — see
 `dev-workflow-create-epic`). All Linear mechanics — resolving the repo's Project,
 Repo/Type labels, status transitions, the issue authoring standard — are owned by
-the **`linear` skill**; read it and follow its conventions rather than restating
+the **`linear-base` skill**; read it and follow its conventions rather than restating
 them here.
 
 ## Tool Usage Constraints
 
 - **Bash**: ONLY for git branch operations (`git checkout -b`, `git branch`, `git status --porcelain`) and the session-bind command. No other use.
-- **Linear**: use whichever Linear MCP server is wired, per the `linear` skill.
+- **Linear**: use whichever Linear MCP server is wired, per the `linear-base` skill.
 
 ## Two entry modes
 
@@ -169,12 +169,12 @@ Result: `.claude/dev-workflow/story/{yyyy-mm-dd}-{prefix}-{story-name}/`
 
 #### 5b. Author the spec into the Story's Linear Issue
 
-The spec content becomes the Issue **description**. Follow the `linear` skill for
+The spec content becomes the Issue **description**. Follow the `linear-base` skill for
 placement (repo's Project, Repo/Type labels, In Progress status, authoring
 standard).
 
 - **create mode**: create a new Issue in the repo's active Project (resolve it per
-  `linear`/`linear-start`), set Type = `impl` (or `design`/`research` as fits),
+  `linear-base`/`linear-start`), set Type = `impl` (or `design`/`research` as fits),
   move it to In Progress, and write the description below. Note its identifier as
   `{issue-id}`.
 - **adopt mode**: the Issue already exists and is In Progress. Copy its current raw

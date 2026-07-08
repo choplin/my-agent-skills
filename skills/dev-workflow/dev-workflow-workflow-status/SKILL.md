@@ -15,7 +15,7 @@ Stories still display.
 ## Tool Usage Constraints
 
 - **Read-only**: reads local state and Linear. No modifications.
-- **Linear**: use whichever Linear MCP server is wired, per the `linear` skill.
+- **Linear**: use whichever Linear MCP server is wired, per the `linear-base` skill.
 
 ## Process
 
