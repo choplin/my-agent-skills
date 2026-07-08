@@ -127,6 +127,12 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
    wording ("under Claude Code you may dispatch …; otherwise apply inline")
    relies on the host model honoring it. Expect to refine this with real use.
 
+7. **Runtime & dependency handling has its own policy.** How a skill may depend
+   on a runtime (bash+jq default, Python/Node by fit), declares it in a
+   leaf-bundled `flake.nix`, and resolves it at run time (preflight → PATH else
+   `nix develop` else aggregated fail) is specified in
+   [skill-runtime-and-dependencies.md](./skill-runtime-and-dependencies.md).
+
 ## Rollout (incremental, non-destructive until validated)
 
 - **Step 0** — scaffold `skills/`, `opts/`, `scripts/install-opts.sh`, this doc. ✅
