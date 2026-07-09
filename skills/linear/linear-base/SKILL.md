@@ -89,9 +89,20 @@ Transitions (who/when):
 - **→ Backlog**: whenever an idea/task appears. Rough content is fine.
 - **Backlog → Todo**: the **grooming step** (below). The gate where self-completeness and true size are settled.
 - **Todo → In Progress**: work starts / branch created.
-- **In Progress → In Review**: PR opened.
-- **In Review → Done**: PR merged. (Review requesting changes → back to In Progress.)
+- **In Progress → In Review**: PR opened. **Leave a completion note first** (see below).
+- **In Review → Done**: PR merged. (Review requesting changes → back to In Progress.) If Done is reached with **no** In Review step, leave the completion note at this transition instead.
 - **any → Canceled**: dropped or superseded. Use Canceled, never Done, for work that wasn't actually completed.
+
+### Completion note (record what was decided & changed)
+
+**Required, not optional.** When an issue leaves active work into **In Review** — or jumps **straight to Done** where there is no review step — leave a comment on the issue recording, in the issue's own terms:
+
+- **What was decided** — the choices made *while working* that the groomed issue didn't already fix: the approach taken, alternatives rejected, scope trimmed or added, and anything that deviated from the plan and why.
+- **What was changed** — the actual deliverable: for `impl`, what the PR does; for `design`, the decision reached; for `research`, the finding.
+
+Rationale: commit messages and PR text describe only the change and carry **no** Linear references (see *Linear references stay internal*), so the *why* and the delta-from-spec have no home outside the issue. This comment makes the issue a durable, self-contained record of how the work actually resolved — the completion-side counterpart to the self-completeness bar applied at grooming.
+
+Keep it proportional: an issue that shipped exactly as groomed needs a sentence; one where the approach shifted needs the decisions spelled out. When nothing deviated from the groomed plan, **say so explicitly** rather than omitting the note.
 
 ## The grooming step (Backlog → Todo)
 
