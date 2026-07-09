@@ -63,14 +63,12 @@ skills/<group>/<group>-<skill>/
   flake.nix          # devShell providing the system deps
   flake.lock         # committed — also the signal that enables the nix path (§4)
   devshell.toml      # optional, if the flake uses numtide/devshell
-  pyproject.toml     # Python lib-layer deps (if any)
-  uv.lock            # committed — makes `uv run` sync deterministic
   scripts/...
 ```
 
 Without a committed `flake.lock`, the nix path (§4) does not activate and the
-build is not reproducible; without `uv.lock`, `uv run`'s sync is
-non-deterministic.
+build is not reproducible. PyPI packages are **not** declared here — they are
+resolved on demand by `uvx` (§5), so no `pyproject.toml` / `uv.lock` is bundled.
 
 ## 3. Baseline is not zero-cost either
 
@@ -94,9 +92,9 @@ the opt-in convenience; fail last):
 
 Key properties:
 
-- **nix stays opt-in.** The script *never* invokes `nix` or `uv sync`
-  implicitly as a hard requirement; nix is only *one blessed way* to provision
-  the PATH, chosen only when the direct PATH is unavailable.
+- **nix stays opt-in.** The script *never* invokes `nix` implicitly as a hard
+  requirement; nix is only *one blessed way* to provision the PATH, chosen only
+  when the direct PATH is unavailable.
 - **Decide once, then run mode-agnostically.** When the nix path is chosen, the
   work must end up running with uv/python/poppler on PATH, paying the flake-eval
   cost once (not per invocation). Two shapes do this — pick by how many scripts
@@ -145,23 +143,23 @@ EOF
 fi
 ```
 
-The worker it launches is then mode-agnostic and delegates its lib layer to uv
-(auto-sync from `uv.lock` is intended, §5):
+The worker it launches is then mode-agnostic — it assumes the base env is on PATH
+and runs its resolved interpreter/tool directly (a stdlib script needs only
+`python3`; a pip-installable CLI tool is resolved PATH-first via `uvx`, §5):
 
 ```sh
 # scripts/foo.sh — assumes the env is resolved (launch via preflight.sh).
 # Safety net for a direct call, and a pointer back to the wrapper:
-command -v uv >/dev/null || { echo "error: uv not found — launch via scripts/preflight.sh" >&2; exit 1; }
-uv run --project "$SKILL_DIR" python "$SKILL_DIR/scripts/foo.py" "$@"
+command -v python3 >/dev/null || { echo "error: python3 not found — launch via scripts/preflight.sh" >&2; exit 1; }
+python3 "$SKILL_DIR/scripts/foo.py" "$@"
 ```
 
 **A tool the flake cannot provide** (too heavy, or downloads its own weights at
 run time — e.g. a multi-GB ML CLI): if it is pip-installable, do **not** make it
-a manual install — declare it in `pyproject.toml` and resolve it PATH-first via
-`uv run`, per §5. Either way the choice of *how to run the tool* lives **in the
-worker, not the wrapper**: the wrapper only guarantees the base env is on PATH,
-and the worker then decides between an installed binary and `uv run`. Never
-hand-install it (§6).
+a manual install — resolve it PATH-first via `uvx`, per §5. Either way the
+choice of *how to run the tool* lives **in the worker, not the wrapper**: the
+wrapper only guarantees the base env is on PATH, and the worker then decides
+between an installed binary and `uvx`. Never hand-install it (§6).
 
 **Inline variant** (single-script skills): keep the resolution inside the worker
 and re-exec it once, guarded by an env var —
@@ -171,42 +169,43 @@ and re-exec it once, guarded by an env var —
 `nix develop` exec fails — catch that and degrade to the aggregated fail rather
 than surfacing a cryptic nix error.)
 
-## 5. Library-layer deps are delegated to `uv run`
+## 5. Pip-installable deps: resolve PATH-first, `uvx` by default
 
-For Python, do **not** hand-probe each imported package. Run scripts through
-`uv run --project "$SKILL_DIR"`, which resolves the `pyproject.toml` deps into a
-project-local `.venv` from `uv.lock`. This makes "PATH-first" robust: uv on PATH
-but deps un-synced still works, because `uv run` syncs.
+Anything from PyPI is resolved **without a per-skill `pyproject.toml` /
+`uv.lock`**. The two tiers split cleanly: the **flake** provides the *tools*
+(uv/python/system libs), and **uv resolves PyPI packages on demand** into its own
+cache — never a project-local `.venv` committed via a lockfile.
 
-- **Auto-sync from the lockfile is intended and allowed.** It is a
-  *project-local* `.venv`, not a system-level install, so it does not violate
-  "never mutate the user's system"; and it is deterministic because `uv.lock` is
-  committed. The two tiers therefore split cleanly: the **flake** provides the
-  *tools* (uv/python/system libs), and **`uv run`** provides the *libraries*.
-
-### 5a. A pip-installable CLI tool: declare in pyproject, resolve PATH-first
-
-When a dependency is a **CLI tool** the skill shells out to (not a library your
-own code imports — e.g. an OCR/ML CLI), you still declare it in `pyproject.toml`
-and pin it in `uv.lock`, but resolve it **PATH-first** in the worker: use an
-already-installed binary if present, otherwise run it via `uv run --project`.
-There is no reason to ignore a copy the user already has, and it avoids building
-a heavy project `.venv` when the tool is on PATH — while `uv run` still gives a
-zero-setup, in-repo fallback (no manual/global install).
+A **CLI tool** the skill shells out to (e.g. an OCR/ML CLI) is resolved
+**PATH-first** in the worker: use an already-installed binary if present,
+otherwise run it ephemerally with `uvx --from '<tool>[extra]' <tool>`, which
+resolves it from PyPI into uv's **shared tool cache**. There is no reason to
+ignore a copy the user already has, and the uvx cache is keyed by the requirement
+spec — so skills requesting the same spec **share one environment** instead of
+each building its own `.venv`, and the skill stays free of a lockfile.
 
 ```sh
-# Prefer an installed binary; else resolve it in-repo via uv (auto-synced, §5).
+# Prefer an installed binary; else resolve it ephemerally via uvx (shared cache).
 if command -v mytool >/dev/null; then
   TOOL=(mytool)
 elif command -v uv >/dev/null; then
-  TOOL=(uv run --project "$SKILL_DIR" mytool)
+  TOOL=(uvx --from 'mytool[extra]' mytool)
 else
   echo "error: need 'mytool' or 'uv' on PATH — launch via scripts/preflight.sh" >&2; exit 1
 fi
 "${TOOL[@]}" <args>   # run through the resolved launcher
 ```
 
-Two things follow:
+By default this is **unpinned** — uvx resolves the latest on first use and caches
+it. That is the intended trade for the convenient path: lightest weight, shared
+across skills, and a user who truly needs a fixed version can pin the spec
+themselves (`uvx --from 'mytool[extra]==1.2.3' mytool`; the cache still shares
+across skills that use the identical pinned spec). If instead your own code needs
+to **import** a third-party library (not shell out to a CLI), resolve it the same
+lockfile-free way with `uv run --with '<pkg>' python …` (an ephemeral env) rather
+than reintroducing a per-skill `pyproject.toml` / `uv.lock`.
+
+Three things follow:
 
 - **The preflight predicate must admit both paths.** PATH mode is viable when the
   base env (system libs) is present **and** there is a way to get the tool —
@@ -214,14 +213,18 @@ Two things follow:
   itself plus any interpreter it needs already on PATH. So the wrapper's test
   becomes e.g. `has poppler && { has uv || { has mytool && has python3; }; }`
   rather than hard-requiring `uv`. (nix mode still provides `uv` + libs, so
-  `uv run` provisions the tool there with no extra setup.)
-- **The tool's runtime data is not in the `.venv`.** Model weights and similar
-  large runtime downloads land in the tool's own cache (e.g. `~/.cache`), not the
-  project venv, and are shared across every resolution path. So PATH-vs-`uv run`
-  only changes where the *packages* live (a global install vs the project
-  `.venv`); the multi-GB runtime data is downloaded once and reused either way.
-  Pinning via `uv.lock` therefore buys package reproducibility, not control over
-  that runtime data.
+  `uvx` provisions the tool there with no extra setup.)
+- **A stdlib-only helper script needs no project interpreter.** If the worker
+  also runs a stdlib-only Python converter alongside the tool, run it with a PATH
+  `python3`, falling back to `uv run python` (an ephemeral interpreter) when only
+  `uv` is present — no project or lockfile required.
+- **The tool's runtime data is not in the tool env.** Model weights and similar
+  large runtime downloads land in the tool's own cache (e.g. `~/.cache` /
+  Hugging Face), not the uvx tool env, and are shared across every resolution
+  path. So PATH-vs-`uvx` only changes where the *packages* live; the multi-GB
+  runtime data is downloaded once and reused either way. Pinning therefore buys
+  package reproducibility, not control over that runtime data — which is why the
+  unpinned shared path is a cheap default.
 
 ## 6. Failure is early, aggregated, and promoting — never performing
 
@@ -231,9 +234,9 @@ Two things follow:
   (nix setup *and* the manual install commands). Do not fail one missing piece
   at a time — that forces the user into a re-run loop.
 - **Promoting, not performing.** Print the exact command and stop. **Never
-  auto-install** a system dependency. (The single allowed exception is `uv
-  run`'s project-local lib sync, per §5 — that is project-local, not a system
-  mutation.)
+  auto-install** a system dependency. (The single allowed exception is uv
+  resolving PyPI packages into its own cache — `uvx`, or `uv run --with`, per §5
+  — a user-cache write, not a system mutation.)
 
 ## 7. Distribution realities
 
@@ -244,7 +247,7 @@ Two things follow:
 - **Mitigate duplication with a single source of truth + sync.** Keep one
   canonical copy of the env/preflight in the repo and **sync it into each leaf
   via the `Makefile`**, rather than hand-editing N copies of the lockfiles.
-- **Sandbox / network caveat.** `uv run`'s first sync and `nix develop`'s
+- **Sandbox / network caveat.** `uvx`'s first resolve and `nix develop`'s
   substituter fetches need network and cache writes, which an agent's command
   sandbox may block. The SKILL.md should tell the reader to **re-run without the
   sandbox** on such a failure (paper-studio already documents this pattern).
