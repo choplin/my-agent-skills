@@ -6,3 +6,6 @@ __pycache__/
 
 # wtm creates a per-worktree symlink to the repo-root .claude config
 .claude
+
+# agent runtime output (exec-plans, explain-diff output, etc.) — not committed
+.agents/
