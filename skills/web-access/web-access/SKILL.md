@@ -1,7 +1,6 @@
 ---
 name: web-access
 description: This skill should be used when reading, opening, or fetching the content of a web page or URL, to choose between the agent's plain web-fetch tool and a full browser session (for JavaScript-rendered content, sites needing an authenticated session, or bot-blocked pages), with a fallback when a plain fetch returns an empty body or JS shell. Triggers on "このページを見て", "URLの中身を読んで", "ログインが必要なサイトを参照して", "JSで描画されるページを読んで", "open this URL", "read this web page", "fetch this site". Should NOT trigger for keyword web search with no specific URL (use a web-search tool), or when a dedicated integration already covers the source (GitHub, Linear, Jira/Confluence, Google Drive).
-version: 0.1.0
 user-invocable: true
 ---
 
