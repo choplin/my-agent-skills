@@ -56,6 +56,8 @@ The first draft almost always needs refinement. Run the skill against real tasks
 
 Even one execute-then-revise pass noticeably improves quality; complex domains need several.
 
+> When the skill's deliverable can be judged **mechanically** (a test/oracle, a verification anchor, or binary self-criteria) and you have real tasks to run against, this refinement can be driven as a bounded autonomous loop — `skill-optimize` runs evaluate → improve → held-out gate and keeps only edits that verifiably help. Beware: fold in a correction only once it recurs across *multiple* runs (a single-trace fix is likely overfitting), and remember an imprecise evaluator makes iteration degrade quality, not improve it — so a trustworthy signal is the precondition, not the loop itself.
+
 ---
 
 ## Layer B — Content quality
