@@ -69,6 +69,14 @@ Tie-breakers:
 - **exec-plan vs goal-loop**: exec-plan *expects* a few decisions that need the user
   and parks them; goal-loop *refuses* work whose completion needs judgment. If
   completion is fully predicate-checkable, prefer goal-loop.
+- **native `/goal` vs the goal-loop skill**: both fit predicate-checkable work; they
+  differ in how much the user stays in the loop. If the user will supervise in real
+  time and an LLM-judged stop is acceptable, the host's native `/goal` is the lighter
+  option — recommend running it directly (a host command, not a skill handoff, like
+  the no-skill route). Route to the `goal-loop` skill when the run is unattended or
+  high-stakes and "done" must be deterministic and tamper-proof (exit-0 predicates,
+  not an evaluator model). The Goal Contract is the same either way, so the choice is
+  reversible.
 
 The routing table is how *you* reason about fit — not a verdict you impose. Turn
 your best-fit row into a recommendation, then hand the decision to the user.

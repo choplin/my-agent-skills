@@ -18,13 +18,34 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 Run a bounded loop-engineering harness once the user's What is clear and the
 completion oracle lives outside the user's head.
 
-This skill is a portable, predicate-gated counterpart to Codex `/goal`. It keeps
-the same Goal Contract shape, but where `/goal` lets the model declare completion,
-this skill gates completion on executable predicates. When the host provides a
-native goal mechanism, use it — but keep the same Goal Contract and Default-FAIL evidence
-discipline so the workflow works on agents without `/goal`.
+This skill is a portable, predicate-gated counterpart to the native `/goal`
+mechanism offered by Codex and now Claude Code. Those keep the same Goal Contract
+shape, but completion is **model-judged**: the agent decides it is done — on Claude
+Code, a dedicated evaluator model re-checks your stated goal each time the agent
+tries to stop and sends it back until the goal is met or a turn cap is hit. This
+skill replaces that judgment with **executable predicates**: a command's exit 0 is
+the gate, `verify.sh` is the only writer of results, and the evidence is the actual
+command output. "Done" is deterministic, auditable, and tamper-proof rather than
+argued.
+
 The bundled scripts are **shell + `jq` only** (no Python, no compiled binary), so
 the loop runs anywhere a shell and `jq` exist.
+
+## Native `/goal` vs this skill
+
+They differ only in what gates completion, so the choice follows how much you stay
+in the loop:
+
+- **Native `/goal`** when you are **supervising in real time** and an LLM judging a
+  natural-language condition is acceptable (including semi-qualitative goals a command
+  cannot capture).
+- **This skill** when every criterion reduces to a command and "done" must hold
+  unattended — long runs, context resets, or high-stakes work (migrations, ports,
+  mass changes) where a lenient judge is unacceptable — or the host has no native
+  `/goal` at all.
+
+The two compose: drive with native `/goal` while keeping this skill's Goal Contract
+and Default-FAIL evidence discipline.
 
 ## Core principle
 
