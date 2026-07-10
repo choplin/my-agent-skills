@@ -60,6 +60,24 @@ back to the plain-fetch shell. Tell the user a full browser must be
 enabled/connected (they may need to open their browser and connect the
 integration), and let them decide.
 
+### Clean up before returning the turn
+
+A full-browser read opens a real tab (and, under Claude Code / Claude in Chrome,
+a tab group) in the user's live browser. Once you have retrieved the content you
+were asked for, close what you opened **before** handing the turn back — do not
+leave stray tabs behind:
+
+- Close every tab this skill opened for the task (under Claude Code, the
+  `tabs_close_mcp` tool).
+- Remove the tab group that held them. Closing all of the group's tabs collapses
+  the group; if any grouping wrapper remains, close it too so the browser is
+  left as you found it.
+
+Only skip the cleanup when the user explicitly asked to keep the page open (e.g.
+to keep interacting with it themselves) — in that case say the tab was left open
+and why. Reuse the same tab across steps of one task rather than opening a new
+tab each time, so there is a single tab to close at the end.
+
 ## Out of scope
 
 - **Keyword search with no specific URL** — use a web-search tool to find pages first.
