@@ -1,6 +1,6 @@
 ---
 name: skill-quality-base
-description: Shared resources for the skill-quality family — two domains. (1) The optimization training-loop model that treats a skill as optimizable parameters (trajectories = data, verification signal = loss, text edits = gradient, SKILL.md = parameters), the run-directory + state.json layout, the train/held-out isolation rule, the verifier-quality guard, and the agent-agnostic shell+jq scripts (init.sh, record.sh, gate.sh) that scaffold a run, record scores, and enforce the accept/reject gate. (2) The content-quality rubric (B1–B6) plus anti-patterns and instruction patterns that skill-quality-review scores a skill against and skill-quality-improve writes edits by. Other skill-quality skills delegate to this skill by name. Use this skill when a skill-quality skill asks to apply the state schema, the verification-signal taxonomy, the content-quality rubric, or run a base script. Not typically invoked on its own.
+description: Shared resources for the skill-quality family, two domains — (1) the optimization-loop model, the run-directory/state.json schema, the four laws, and the agent-agnostic shell+jq scripts (init.sh, record.sh, gate.sh), used by skill-quality-optimize/evaluate/improve; (2) the content-quality rubric (B1–B6) plus anti-patterns and instruction patterns, used by skill-quality-review and skill-quality-improve. Other skill-quality skills delegate to this skill by name. Use this skill when a skill-quality skill needs the state schema, the verification-signal taxonomy, the content-quality rubric, or a base script. Not typically invoked on its own.
 user-invocable: false
 ---
 
@@ -54,7 +54,7 @@ this family enforces — do not shortcut them:
    manufactures overfitting. `gate.sh` is the sole writer of accept/revert.
 3. **Regularize: keep only edits that recur.** A correction seen in a single
    trajectory is likely a fluke; adopt an edit only when it addresses a failure
-   that recurs across multiple train trajectories (Trace2Skill). One-off
+   that recurs across **≥2 train trajectories** (Trace2Skill). One-off
    corrections do not become rules.
 4. **Bound the edit magnitude.** Big edits early, small edits as scores plateau;
    reject any candidate that does not *strictly* beat the current best on

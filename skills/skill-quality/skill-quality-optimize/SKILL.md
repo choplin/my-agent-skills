@@ -25,7 +25,10 @@ signal is the loss. Mechanism and laws live in `skill-quality-base` — load it.
 
 1. **A working skill exists.** This tunes; it does not author. No draft → author
    it first (e.g. `skill-creator`), then tune here.
-2. **Real tasks exist**, enough to split into train + held-out.
+2. **Real tasks exist** — enough for a non-trivial train/held-out split (too few
+   and the held-out score is noise, not signal; `skill-quality-evaluate` gives the
+   sizing, ~5 train / ~3 holdout). If unsure whether your count is enough, say so
+   and let the user decide rather than guessing.
 3. **A mechanical verification signal exists** (oracle / anchor / self-criteria).
    If the deliverable's quality is a human judgment call, **stop** — a loop with a
    signal that can't discriminate converges on worse output (base law 1). Run
@@ -40,11 +43,14 @@ gate.
 
 ### Setup (once)
 
-1. Confirm preconditions with the user; agree on the task set and signal.
+1. Confirm preconditions with the user; agree on the task set, the signal, and a
+   target held-out score ("the goal") — what score would make this skill good
+   enough to stop.
 2. `skill-quality-evaluate`: design the signal, `init.sh` the run, copy the skill
    to `versions/v0/`, evaluate **v0 on both splits**, `record.sh` both, then
    `gate.sh <dir> --set-baseline`.
-3. If v0's held-out score already meets the goal, report and stop — nothing to do.
+3. If v0's held-out score already meets the goal agreed in step 1, report and stop
+   — nothing to do.
 
 ### Each iteration (until terminal status)
 
@@ -64,9 +70,11 @@ gate.
 ### Terminal
 
 - `converged` (`no_improve_streak` hit): the signal can't extract more, or the
-  skill is at its ceiling. **Before trusting it, hand-spot-check a few held-out
-  deliverables** — a plateau can also mean the verifier stopped discriminating
-  (base law 1).
+  skill is at its ceiling. **Before trusting it, hand-spot-check 2-3 held-out
+  deliverables against the signal's own criteria.** If any would plausibly fail
+  the signal's intent despite being scored "pass," the verifier has stopped
+  discriminating (base law 1) — treat the plateau as unproven and strengthen the
+  signal instead of accepting it.
 - `blocked` (budget spent): report the best version and its trajectory.
 
 Either way the deliverable is `versions/<best.version>/`. Present a summary:
@@ -94,4 +102,6 @@ over the real skill.
   rubric that `improve` writes edits by.
 - `skill-quality-review` — advisory review (static rubric + deliverable read); a
   cheap pre-filter before committing to a run, and the home for skills this loop
-  can't touch (no mechanical signal). `skill-creator` — authoring from scratch.
+  can't touch (no mechanical signal).
+- `skill-creator` — authoring from scratch (not this skill's job; see
+  Preconditions #1).

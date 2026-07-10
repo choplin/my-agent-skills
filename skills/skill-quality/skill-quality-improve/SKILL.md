@@ -4,7 +4,7 @@ description: Produce one improvement step for a skill under optimization — rea
 user-invocable: false
 ---
 
-# skill-quality-optimize: one improvement step
+# skill-quality-improve: one improvement step
 
 Given a scored version and its **train** failure traces, produce the next
 candidate version. This is the gradient + parameter-update step of the training
@@ -32,8 +32,8 @@ distinct train tasks** exhibit it.
   evidence of a property common to the task domain, not a fluke (base law 3,
   Trace2Skill regularization).
 - **Discard** single-trajectory corrections. A one-off failure does not become a
-  rule; noting it in `signal.md` as "watch" is fine, editing the skill for it is
-  not.
+  rule — if the same failure is real, it will recur as a ≥2-task cluster in a
+  future train split and get adopted then.
 
 ### 2. Turn each adopted cluster into a minimal edit
 
@@ -53,7 +53,9 @@ failure, applying the content-quality rubric (`skill-quality-base`,
 Read `budget.iteration` / `max_iterations` from `state.json`:
 
 - **Early** (first iterations): larger structural edits are allowed — reorder,
-  add a section, change the default approach.
+  add a section, change the default approach. They are cheap to revert: the gate
+  always compares against the same current best, so a bad early edit just fails
+  and reverts.
 - **Late** (as scores plateau): shrink to targeted, surgical edits. Wholesale
   rewrites late in a run overwrite hard-won gains and confuse the gate about what
   caused a change.
@@ -67,6 +69,11 @@ Write the edited skill to `versions/v<next>/` (copy the current best, apply the
 edits). Record a one-line changelog of what changed and which failure clusters it
 targets — the orchestrator uses this when reporting, and it becomes the `--reason`
 passed to `gate.sh`.
+
+Before handing back, confirm: (1) every edit traces to a ≥2-task cluster adopted
+in step 1; (2) any new gotcha landed in `SKILL.md`, not `references/`; (3) the
+changelog names the specific clusters addressed. A malformed candidate caught here
+costs nothing; caught by the gate it wastes a held-out evaluation round.
 
 ## Output
 

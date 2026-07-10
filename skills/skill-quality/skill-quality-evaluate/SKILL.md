@@ -4,7 +4,7 @@ description: Empirically measure how good a skill is — run it on a set of real
 user-invocable: true
 ---
 
-# skill-quality-optimize: evaluate a skill
+# skill-quality-evaluate: evaluate a skill
 
 Measure a skill by **running it and scoring the output**, not by reading it. This
 is the loss-function step of the training loop (`skill-quality-base`). It stands
@@ -34,9 +34,12 @@ actual usage, not invented ones. You need enough to split:
 - **holdout** — tasks reserved to judge whether a change genuinely helped. Never
   derive edits from these (base law 2).
 
-Aim for at least ~5 train + ~3 holdout; more is better, but a weak-but-real set
-beats a large invented one. Standalone audits can skip the split (evaluate one
-pooled set) — the split only matters when feeding `skill-quality-optimize`.
+Aim for at least ~5 train + ~3 holdout — below that, one fluke task swings a
+split's pass rate so far that any score reads as anecdote, not a rate. More is
+better, but a weak-but-real set beats a large invented one; if you can't reach
+~5/~3 with real tasks, say the scores are indicative only rather than padding with
+invented ones. Standalone audits can skip the split (evaluate one pooled set) —
+the split only matters when feeding `skill-quality-optimize`.
 
 ### 2. Design the verification signal
 
@@ -88,7 +91,16 @@ recorded.
 
 ## Output
 
+Before reporting, self-check: every task in the declared split has a recorded
+pass/fail (`record.sh` warns on a mismatch — don't ignore it); holdout
+deliverables were not read before scoring; and if the signal is self-criteria, a
+*separate* fresh agent did the judging.
+
 Report: pass rate per split, the list of failing tasks with their failure
-reasons, and a one-line verdict — does the skill clear the bar, and is the signal
-trustworthy enough to optimize against? The scored `state.json` + traces are the
-handoff to `skill-quality-improve` / `skill-quality-optimize`.
+reasons, and a one-line verdict. "Clears the bar" is not self-defined — state the
+pass rate against a threshold given up front by whoever requested the run; if none
+was given, report the rate and say no bar was set rather than inventing one. Also
+state whether the signal itself is precise enough to trust for further iteration
+(base law 1), not just whether the skill happened to pass this time. The scored
+`state.json` + traces are the handoff to `skill-quality-improve` /
+`skill-quality-optimize`.

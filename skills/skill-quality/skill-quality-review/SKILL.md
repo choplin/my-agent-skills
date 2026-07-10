@@ -1,6 +1,6 @@
 ---
 name: skill-quality-review
-description: Review a skill's quality in one advisory pass and return findings (never a gate, never a loop). Two modes that degrade gracefully — static, scoring the SKILL.md against the content-quality rubric (context economy, why & concrete criteria, self-evaluable output, triggering description, calibrated control); and deliverable, running the skill on a few real tasks and reading the outputs qualitatively. When the deliverable can't be observed, do static only and say so. Use to validate a newly created or modified skill, sanity-check one before committing to the skill-quality-optimize loop, or diagnose a skill that produces poor results or frequent clarification requests. This is the portable procedure; under Claude Code it is also wrapped by the skill-quality-reviewer subagent for isolated execution. Should NOT trigger for the autonomous mechanical optimize loop (use skill-quality-optimize), pass/fail benchmarking against a mechanical signal (use skill-quality-evaluate), plugin structure questions, or authoring a skill from scratch (use skill-creator).
+description: Review a skill's quality in one advisory pass and return findings (never a gate, never a loop). Two modes that degrade gracefully — static, scoring the SKILL.md against the content-quality rubric (context economy, why & concrete criteria, self-evaluable output, triggering description, calibrated control); and deliverable, running the skill on a few real tasks and reading the outputs qualitatively. When the deliverable can't be observed, do static only and say so. Use to validate a newly created or modified skill, sanity-check one before committing to the skill-quality-optimize loop, or diagnose a skill that produces poor results or frequent clarification requests. This is the portable procedure; under Claude Code it is also wrapped by the skill-quality-reviewer subagent for isolated execution. Should NOT trigger for the autonomous mechanical optimize loop (use skill-quality-optimize), pass/fail benchmarking against a mechanical signal (use skill-quality-evaluate), proposing edits inside an active optimization loop (use skill-quality-improve), plugin structure questions, or authoring a skill from scratch (use skill-creator).
 user-invocable: true
 ---
 
@@ -127,11 +127,28 @@ Return, in this order:
 1. **Coverage** — which modes ran; if `deliverable` was skipped or left unjudged,
    which case and why.
 2. **Overall assessment** — Pass / Needs Improvement / Needs Major Revision.
-3. **Per-topic findings (B1–B5)** — Strong / Adequate / Weak, with specific quotes;
-   fold in deliverable evidence where it applies.
+3. **Per-topic findings (B1–B5)** — Strong / Adequate / Weak, with verbatim quotes
+   (copy the exact text, don't paraphrase — the point is to let the reader verify
+   without re-reading the source); fold in deliverable evidence where it applies.
 4. **Priority fixes** — ordered by impact, with concrete before/after
    recommendations.
 5. **Strengths** — what to preserve.
+
+Grade against a stated basis, so two reviewers converge instead of each picking a
+band by feel (don't reimport the B2 "ungrounded threshold" anti-pattern into your
+own verdict):
+
+- **Per topic** — *Strong*: no issue found. *Adequate*: cosmetic or a single
+  non-critical gap. *Weak*: an anti-pattern match, or a gap that would cause a
+  real failure (agent stalls, guesses, or ships wrong output).
+- **Overall** — *Pass*: no Weak topic. *Needs Improvement*: 1–2 Weak, none that
+  would misdirect the agent. *Needs Major Revision*: 3+ Weak, or any Weak in B2
+  gotchas / B3 self-evaluability (those actively mislead).
+
+Before returning, self-check: every B1–B5 verdict cites at least one verbatim
+quote; Coverage names which modes ran and, if deliverable was skipped, which
+fallback case and why; no numeric score appears anywhere (a number invites gating
+— see Boundary).
 
 Findings only. Applying them, and any iterate-and-recheck, is the human's call (or,
 where a trustworthy mechanical signal exists, `skill-quality-optimize`'s).
