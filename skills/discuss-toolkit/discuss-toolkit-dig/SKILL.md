@@ -28,7 +28,6 @@ When AI detects that user's request lacks specifics needed to proceed:
 
 Specialized skills call dig to ensure intent clarity before their work:
 - name-project calls dig to understand project goals → proceeds to generate names
-- skill-authoring calls dig to extract experiential rationale → proceeds to write skill content
 
 ### 3. Direct User Invocation
 

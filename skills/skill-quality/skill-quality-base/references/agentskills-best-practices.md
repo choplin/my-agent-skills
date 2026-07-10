@@ -1,7 +1,7 @@
 # Best practices for skill creators (upstream source)
 
 > Reproduced from <https://agentskills.io/skill-creation/best-practices> (retrieved 2026-06-24).
-> This is the source material the `skill-authoring` SKILL.md distills. Read it for the full original treatment, including examples that the main skill abbreviates. Related upstream pages: `/skill-creation/evaluating-skills`, `/skill-creation/optimizing-descriptions`, `/skill-creation/using-scripts`, `/specification#progressive-disclosure`.
+> This is the source material the content-quality rubric (`content-quality-rubric.md`) distills. Read it for the full original treatment, including examples that the rubric abbreviates. Related upstream pages: `/skill-creation/evaluating-skills`, `/skill-creation/optimizing-descriptions`, `/skill-creation/using-scripts`, `/specification#progressive-disclosure`.
 
 ## Start from real expertise
 

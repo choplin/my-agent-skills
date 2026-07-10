@@ -1,35 +1,40 @@
 ---
-name: skill-optimize-base
-description: Shared resources for the skill-optimize family — the training-loop model that treats a skill as optimizable parameters (trajectories = data, verification signal = loss, text edits = gradient, SKILL.md = parameters), the run-directory + state.json layout, the train/held-out isolation rule, the verifier-quality guard, and the agent-agnostic shell+jq scripts (init.sh, record.sh, gate.sh) that scaffold a run, record scores, and enforce the accept/reject gate. Other skill-optimize skills delegate to this skill by name. Use this skill when a skill-optimize skill asks to apply the state schema, the verification-signal taxonomy, or run a base script. Not typically invoked on its own.
+name: skill-quality-base
+description: Shared resources for the skill-quality family — two domains. (1) The optimization training-loop model that treats a skill as optimizable parameters (trajectories = data, verification signal = loss, text edits = gradient, SKILL.md = parameters), the run-directory + state.json layout, the train/held-out isolation rule, the verifier-quality guard, and the agent-agnostic shell+jq scripts (init.sh, record.sh, gate.sh) that scaffold a run, record scores, and enforce the accept/reject gate. (2) The content-quality rubric (B1–B6) plus anti-patterns and instruction patterns that skill-quality-review scores a skill against and skill-quality-improve writes edits by. Other skill-quality skills delegate to this skill by name. Use this skill when a skill-quality skill asks to apply the state schema, the verification-signal taxonomy, the content-quality rubric, or run a base script. Not typically invoked on its own.
 user-invocable: false
 ---
 
-# skill-optimize base resources
+# skill-quality base resources
 
-This skill owns the resources shared across the **skill-optimize** family. Other
-skill-optimize skills **delegate to this skill by name** instead of referencing
+This skill owns the resources shared across the **skill-quality** family. Other
+skill-quality skills **delegate to this skill by name** instead of referencing
 plugin-root paths, so the same skills work whether installed flat by the skills
 CLI or loaded as part of a plugin.
+
+It holds **two independent domains**, used by different family members:
+
+- **Optimization loop** (the run layout, four laws, and `init.sh`/`record.sh`/`gate.sh`) — used by `skill-quality-optimize`, `skill-quality-evaluate`, `skill-quality-improve`.
+- **Content-quality rubric** (`references/content-quality-rubric.md`, `references/anti-patterns.md`, `references/instruction-patterns.md`) — the B1–B6 rubric for judging *what a skill says*. `skill-quality-review` scores against it; `skill-quality-improve` writes edits by it. This is orthogonal to the loop: reviewing text needs no run, no signal, no gate.
 
 References here are addressed in two forms. In both, resolve the path **relative
 to this skill's installed directory** (load this skill, then read/run the named
 file from its own root):
 
-- `` `skill-optimize-base` skill (`references/<file>`) `` → read `references/<file>` from this skill.
-- `skill-optimize-base/scripts/<name>.sh` → run this skill's script.
+- `` `skill-quality-base` skill (`references/<file>`) `` → read `references/<file>` from this skill.
+- `skill-quality-base/scripts/<name>.sh` → run this skill's script.
 
 ## The core idea: a skill is an optimizable artifact
 
 Improving a skill from real execution is a training loop. The mapping is exact,
-and every skill-optimize phase is one part of it:
+and every skill-quality-optimize phase is one part of it:
 
-| Training loop | skill-optimize | Owned by |
+| Training loop | skill-quality-optimize | Owned by |
 |---------------|----------------|----------|
-| Training data | success/failure-labeled **trajectories** (the skill run on real tasks) | `skill-optimize-evaluate` |
-| Loss function | the **verification signal** scoring each deliverable | `skill-optimize-evaluate` |
-| Gradient + learning rate | proposed **text edits** and their controlled magnitude | `skill-optimize-improve` |
+| Training data | success/failure-labeled **trajectories** (the skill run on real tasks) | `skill-quality-evaluate` |
+| Loss function | the **verification signal** scoring each deliverable | `skill-quality-evaluate` |
+| Gradient + learning rate | proposed **text edits** and their controlled magnitude | `skill-quality-improve` |
 | Parameters | the skill's `SKILL.md` (+ references) | the edited artifact |
-| Training step + regularization + held-out gate | propose → gate → accept/revert | `skill-optimize` (orchestrator) + `gate.sh` |
+| Training step + regularization + held-out gate | propose → gate → accept/revert | `skill-quality-optimize` (orchestrator) + `gate.sh` |
 
 ## Four laws (why the machinery exists)
 

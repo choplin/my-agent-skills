@@ -1,5 +1,5 @@
 ---
-name: skill-optimize
+name: skill-quality-optimize
 description: >-
   Autonomously improve an existing skill by running it as a training loop — evaluate it on real
   tasks against a mechanical verification signal, propose edits from the failure traces, and keep
@@ -8,28 +8,28 @@ description: >-
   mechanically judge its output pass/fail, and you want the agent to drive the improvement loop.
   Triggers on "optimize this skill", "auto-improve this skill", "run the skill training loop",
   "tune this skill from traces", "スキルを自律最適化", "スキルを自動改善". Should NOT trigger for
-  authoring a skill from scratch (use skill-authoring + plugin-dev:skill-development), for static
-  content review (use skill-authoring-quality-review), or when the skill's quality cannot be judged
-  mechanically (no usable verification signal — see skill-optimize-base law 1).
+  authoring a skill from scratch (use skill-creator), for advisory or static review (use
+  skill-quality-review), or when the skill's quality cannot be judged mechanically (no usable
+  verification signal — see skill-quality-base law 1).
 user-invocable: true
 ---
 
-# skill-optimize: the skill training loop
+# skill-quality-optimize: the skill training loop
 
 Drive a bounded, autonomous **evaluate → improve → gate** loop over an existing
 skill until its held-out score plateaus or the budget is spent. The skill's
 `SKILL.md` is the parameter set; real task runs are the data; the verification
-signal is the loss. Mechanism and laws live in `skill-optimize-base` — load it.
+signal is the loss. Mechanism and laws live in `skill-quality-base` — load it.
 
 ## Preconditions (all three, or don't run)
 
-1. **A working skill exists.** This tunes; it does not author. No draft → use
-   `skill-authoring` + `plugin-dev:skill-development` first.
+1. **A working skill exists.** This tunes; it does not author. No draft → author
+   it first (e.g. `skill-creator`), then tune here.
 2. **Real tasks exist**, enough to split into train + held-out.
 3. **A mechanical verification signal exists** (oracle / anchor / self-criteria).
    If the deliverable's quality is a human judgment call, **stop** — a loop with a
    signal that can't discriminate converges on worse output (base law 1). Run
-   `skill-optimize-evaluate` once for a baseline and hand the rest to a human.
+   `skill-quality-evaluate` once for a baseline and hand the rest to a human.
 
 If any precondition is unmet, say so and stop; do not fabricate tasks or a signal.
 
@@ -41,16 +41,16 @@ gate.
 ### Setup (once)
 
 1. Confirm preconditions with the user; agree on the task set and signal.
-2. `skill-optimize-evaluate`: design the signal, `init.sh` the run, copy the skill
+2. `skill-quality-evaluate`: design the signal, `init.sh` the run, copy the skill
    to `versions/v0/`, evaluate **v0 on both splits**, `record.sh` both, then
    `gate.sh <dir> --set-baseline`.
 3. If v0's held-out score already meets the goal, report and stop — nothing to do.
 
 ### Each iteration (until terminal status)
 
-1. **Improve** — `skill-optimize-improve` reads `traces/<current>/train/*` and
+1. **Improve** — `skill-quality-improve` reads `traces/<current>/train/*` and
    emits `versions/v<next>/` with a changelog.
-2. **Evaluate on both splits** — `skill-optimize-evaluate` runs the candidate on
+2. **Evaluate on both splits** — `skill-quality-evaluate` runs the candidate on
    **train and holdout**, `record.sh` both. Holdout decides the gate; the fresh
    train traces are the material the *next* improve step learns from (so an
    accepted version always has train traces ready). Comparing the two also exposes
@@ -88,8 +88,10 @@ over the real skill.
 
 ## Composition
 
-- `skill-optimize-evaluate` — the loss step; also runs standalone to audit/baseline.
-- `skill-optimize-improve` — the gradient+update step.
-- `skill-optimize-base` — state schema, laws, `init.sh` / `record.sh` / `gate.sh`.
-- `skill-authoring` — what makes an edit good content (improve delegates to it).
-- `skill-authoring-quality-review` — cheap static pre-filter before a run.
+- `skill-quality-evaluate` — the loss step; also runs standalone to audit/baseline.
+- `skill-quality-improve` — the gradient+update step.
+- `skill-quality-base` — state schema, laws, scripts, and the content-quality
+  rubric that `improve` writes edits by.
+- `skill-quality-review` — advisory review (static rubric + deliverable read); a
+  cheap pre-filter before committing to a run, and the home for skills this loop
+  can't touch (no mechanical signal). `skill-creator` — authoring from scratch.

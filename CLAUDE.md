@@ -27,7 +27,7 @@ When working in this repository, actively use these skills:
 
 | Skill | Use When |
 |-------|----------|
-| `/skill-authoring:skill-authoring` | Creating or improving skills (content quality). Use together with plugin-dev:skill-development |
+| `/skill-quality-review` | Reviewing or improving an existing skill's quality (static rubric + deliverable read). Author new skills with skill-creator; autonomously tune with skill-quality-optimize |
 | `/plugin-dev:skill-development` | Skill file structure and formatting |
 | `/plugin-dev:agent-development` | Creating subagents |
 | `/plugin-dev:command-development` | Creating slash commands |

@@ -37,7 +37,8 @@ consistent with the anchors.
 ## 3. Self-criteria (agent-judged deliverable criteria)
 
 When neither an oracle nor anchors exist, fall back to the deliverable success
-criteria from `skill-authoring` B3: **binary, observable, specific** checks a
+criteria from the content-quality rubric B3 (`content-quality-rubric.md`):
+**binary, observable, specific** checks a
 fresh agent applies by reading the output. Set `signal.kind = self-criteria` and
 `command = null`.
 
@@ -59,7 +60,7 @@ When the deliverable's quality lives in such a judgment:
 
 - **Do not run the optimization loop on it.** A loop with a signal that cannot
   discriminate will happily "converge" on worse output.
-- Use `skill-optimize-evaluate` once to establish a baseline on whatever *is*
+- Use `skill-quality-evaluate` once to establish a baseline on whatever *is*
   checkable, and hand the subjective dimension to a human reviewer.
 - Split the deliverable: mechanize the checkable parts (facts, structure,
   constraints), keep the taste-dependent parts human-gated.

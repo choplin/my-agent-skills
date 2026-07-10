@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# init.sh — scaffold a skill-optimize run's state.json and directories.
+# init.sh — scaffold a skill-quality-optimize run's state.json and directories.
 set -euo pipefail
 
 die() { echo "error: $*" >&2; exit 1; }

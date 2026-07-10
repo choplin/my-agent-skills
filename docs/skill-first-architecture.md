@@ -62,7 +62,7 @@ installs flat to `.agents/skills/<name>` and same-name skills overwrite). So we
 namespace by **baking a `<group>-` prefix into the flat `name`**:
 
 - Skill `name` = `<group>-<skill>` (e.g. `dev-workflow-create-spec`). The
-  group's "root" skill may keep the bare group name (e.g. `skill-authoring`).
+  group's "root" skill may keep the bare group name (e.g. `inception`).
 - **An opt add-on under `opts/<agent>/skills/<name>` must not reuse any portable
   skill's `name`.** Both mechanisms install to `<agent-home>/skills/<name>`, so
   whichever runs last silently wipes the other — the skills CLI recreates the
@@ -136,8 +136,8 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
 ## Rollout (incremental, non-destructive until validated)
 
 - **Step 0** — scaffold `skills/`, `opts/`, `scripts/install-opts.sh`, this doc. ✅
-- **Step 1** — pilot **skill-authoring** end-to-end (skill + extracted
-  `skill-authoring-quality-review` skill + thin `opts/claude/agents/` wrapper). ✅
+- **Step 1** — pilot skill-quality tooling end-to-end (the `skill-quality-review`
+  skill + thin `opts/claude/agents/` wrapper). ✅
   Discovery validated with `skills add ./skills --list`.
 - **Step 2** — migrate **dev-workflow**. ✅
   - 13 skills → `skills/dev-workflow/`; shared `references/` + `workflow-state.py`

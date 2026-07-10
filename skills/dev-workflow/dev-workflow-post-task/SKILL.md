@@ -60,7 +60,7 @@ Present the proposal list. User selects which items to capture.
 
 For each approved item:
 
-- **Skill**: Invoke skill-authoring skill for proper skill creation
+- **Skill**: Author with skill-creator, then skill-quality-review to check its quality
 - **CLAUDE.md**: Append to appropriate section
 - **ADR**: Create in docs/adr/ following ADR format
 - **Design Doc**: Export the Story Issue's spec/plan (from Linear) to docs/ with appropriate naming — carry the content but strip Linear issue IDs/URLs (per the `linear-base` skill, Linear references stay internal and never enter repo files)

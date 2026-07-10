@@ -61,7 +61,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `exec-plan` | exec-plan, exec-plan-base, exec-plan-record (rough-goal autonomous plan; decision log + parking lot) |
 | `dispatch` | dispatch-work (routes a new task to inception / goal-loop / exec-plan / dev-workflow-kickoff) |
 | `linear` | linear, linear-groom, linear-start (Linear issue lifecycle; start picks an issue → worktree → execution) |
-| `skill-authoring` | skill-authoring, skill-authoring-quality-review |
+| `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig, name-project, quick-chat |
 | `git-helpers` | branch-commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten |
@@ -84,7 +84,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **Cross-group hubs** (one skill that many groups delegate to):
 
-- `discuss-toolkit-dig` ← dev-workflow-kickoff, inception (+framing/deepen), inception-quick, exec-plan, goal-loop, review-tools-resolve, skill-authoring
+- `discuss-toolkit-dig` ← dev-workflow-kickoff, inception (+framing/deepen), inception-quick, exec-plan, goal-loop, review-tools-resolve
 - `dev-workflow-kickoff` ← dispatch-work, inception-quick, inception-finalize, goal-loop
 - `inception` / `goal-loop` / `exec-plan` ← dispatch-work (execution-mode routing)
 - `review-tools` (ai-review, resolve, report) ← dev-workflow (self-review, user-review)
@@ -137,9 +137,11 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - linear-start → linear, **dispatch-work**, wtm-worktree `(ext)`
 - linear-groom → linear
 
-**skill-authoring**
-- skill-authoring → **discuss-toolkit-dig**, skill-development `(ext)`
-- skill-authoring-quality-review → skill-authoring
+**skill-quality**
+- skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-creator `(ext)`
+- skill-quality-evaluate → base
+- skill-quality-improve → base
+- skill-quality-review → base
 
 **ai-council**
 - ai-council → ai-council-codex-cli, ai-council-fugu-cli

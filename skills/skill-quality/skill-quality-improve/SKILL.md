@@ -1,19 +1,19 @@
 ---
-name: skill-optimize-improve
-description: Produce one improvement step for a skill under optimization — read the labeled failure traces from evaluate, propose edits to SKILL.md that address failures recurring across multiple train trajectories, apply them at a controlled magnitude, and emit a new candidate version for the held-out gate to judge. This is the gradient+update step of the skill-optimize loop; it delegates content-quality judgment to skill-authoring. Triggers on "propose skill edits from traces", "improve step for a skill", "next optimization step". Should NOT trigger for authoring from scratch (use skill-authoring) or for deciding whether an edit is kept (that is gate.sh in skill-optimize-base).
+name: skill-quality-improve
+description: Produce one improvement step for a skill under optimization — read the labeled failure traces from evaluate, propose edits to SKILL.md that address failures recurring across multiple train trajectories, apply them at a controlled magnitude, and emit a new candidate version for the held-out gate to judge. This is the gradient+update step of the skill-quality-optimize loop; it delegates content-quality judgment to the rubric in skill-quality-base. Triggers on "propose skill edits from traces", "improve step for a skill", "next optimization step". Should NOT trigger for authoring from scratch (use skill-creator) or for deciding whether an edit is kept (that is gate.sh in skill-quality-base).
 user-invocable: false
 ---
 
-# skill-optimize: one improvement step
+# skill-quality-optimize: one improvement step
 
 Given a scored version and its **train** failure traces, produce the next
 candidate version. This is the gradient + parameter-update step of the training
-loop (`skill-optimize-base`). It does **not** decide whether the edit survives —
+loop (`skill-quality-base`). It does **not** decide whether the edit survives —
 that is the held-out gate (`gate.sh`).
 
-> Load `skill-optimize-base` for the run layout and laws. Load `skill-authoring`
-> for what makes an edit good content (this step only decides *which* edits to
-> make; skill-authoring decides *how to write them well*).
+> Load `skill-quality-base` for the run layout, the laws, and the content-quality
+> rubric (`references/content-quality-rubric.md`) — this step only decides *which*
+> edits to make; the rubric decides *how to write them well*.
 
 ## Inputs
 
@@ -38,7 +38,8 @@ distinct train tasks** exhibit it.
 ### 2. Turn each adopted cluster into a minimal edit
 
 For each surviving cluster, write the smallest edit that would have prevented the
-failure, applying `skill-authoring` content quality:
+failure, applying the content-quality rubric (`skill-quality-base`,
+`references/content-quality-rubric.md`):
 
 - Prefer adding a **Gotcha** or a **concrete criterion with its rationale** over
   vague prose — the failure reason *is* the rationale ("because task t2 produced

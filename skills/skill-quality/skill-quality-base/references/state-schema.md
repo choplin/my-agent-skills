@@ -22,7 +22,7 @@ resume in a fresh session.
   evals/                  # optional human-readable score dumps
 ```
 
-Convention for `<run-dir>`: `.skill-optimize/<skill-name>/` under the repo, or a
+Convention for `<run-dir>`: `.skill-quality/<skill-name>/` under the repo, or a
 scratchpad path when outside a repo. One directory per skill under optimization.
 
 ## state.json fields
