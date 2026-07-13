@@ -60,6 +60,26 @@ static-only review as if the deliverable had been observed — a silent skip rea
 
 Evaluate the target against the rubric loaded from `skill-quality-base`.
 
+### 0. Preflight — does the skill even load? (B0, mechanical)
+
+Run first, always:
+
+```
+skill-quality-base/scripts/lint-frontmatter.sh <target-skill-dir>
+```
+
+Exit 0 = the frontmatter parses and has its `name`/`description` → continue to the
+rubric. **Non-zero = stop.** Report the lint output as the finding, with overall
+**Needs Major Revision**, and do not score B1–B5: a skill whose frontmatter is broken
+is never loaded, so its content is moot and any rubric verdict would be advice on a
+file the agent never reads.
+
+Do not eyeball this instead of running it, and do not "fix" it by judgment. The
+canonical failure is an unquoted `description` with a `: ` (colon + space) somewhere
+mid-sentence — YAML reads it as a nested key and the whole file fails to parse. It
+reads perfectly to a human, the skill simply never appears, and the user reports it
+as "the skill doesn't trigger" (a B4 symptom) when B4 is not the problem at all.
+
 ### 1. Read the target skill
 
 1. Locate and read the target's `SKILL.md`.
@@ -124,8 +144,8 @@ them.
 
 Return, in this order:
 
-1. **Coverage** — which modes ran; if `deliverable` was skipped or left unjudged,
-   which case and why.
+1. **Coverage** — the B0 preflight verdict (clean, or the lint output); which modes
+   ran; if `deliverable` was skipped or left unjudged, which case and why.
 2. **Overall assessment** — Pass / Needs Improvement / Needs Major Revision.
 3. **Per-topic findings (B1–B5)** — Strong / Adequate / Weak, with verbatim quotes
    (copy the exact text, don't paraphrase — the point is to let the reader verify
@@ -143,12 +163,13 @@ own verdict):
   real failure (agent stalls, guesses, or ships wrong output).
 - **Overall** — *Pass*: no Weak topic. *Needs Improvement*: 1–2 Weak, none that
   would misdirect the agent. *Needs Major Revision*: 3+ Weak, or any Weak in B2
-  gotchas / B3 self-evaluability (those actively mislead).
+  gotchas / B3 self-evaluability (those actively mislead), **or a failed B0
+  preflight** (nothing else can matter).
 
-Before returning, self-check: every B1–B5 verdict cites at least one verbatim
-quote; Coverage names which modes ran and, if deliverable was skipped, which
-fallback case and why; no numeric score appears anywhere (a number invites gating
-— see Boundary).
+Before returning, self-check: B0 was actually *run*, not assumed; every B1–B5
+verdict cites at least one verbatim quote; Coverage names which modes ran and, if
+deliverable was skipped, which fallback case and why; no numeric score appears
+anywhere (a number invites gating — see Boundary).
 
 Findings only. Applying them, and any iterate-and-recheck, is the human's call (or,
 where a trustworthy mechanical signal exists, `skill-quality-optimize`'s).

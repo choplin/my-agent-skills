@@ -70,10 +70,26 @@ edits). Record a one-line changelog of what changed and which failure clusters i
 targets — the orchestrator uses this when reporting, and it becomes the `--reason`
 passed to `gate.sh`.
 
+Then run the B0 loadability preflight on the candidate — **mandatory whenever the
+edit touched the frontmatter**, since an edit to `description` is the likeliest way
+to break it:
+
+```
+skill-quality-base/scripts/lint-frontmatter.sh versions/v<next>/
+```
+
+It must exit 0. Fix and re-run until it does; never hand a failing candidate to the
+gate. The trap is a `: ` (colon + space) written into an unquoted `description` —
+YAML reads it as a nested key, the file stops parsing, and the skill silently does
+not load. The gate would then score the candidate at whatever a *missing* skill
+scores and reject it as a bad edit, so the loop learns the wrong lesson from a
+one-character typo.
+
 Before handing back, confirm: (1) every edit traces to a ≥2-task cluster adopted
 in step 1; (2) any new gotcha landed in `SKILL.md`, not `references/`; (3) the
-changelog names the specific clusters addressed. A malformed candidate caught here
-costs nothing; caught by the gate it wastes a held-out evaluation round.
+changelog names the specific clusters addressed; (4) the lint exited 0. A malformed
+candidate caught here costs nothing; caught by the gate it wastes a held-out
+evaluation round.
 
 ## Output
 
