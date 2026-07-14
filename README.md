@@ -60,7 +60,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
 | `exec-plan` | exec-plan, exec-plan-base, exec-plan-record (rough-goal autonomous plan; decision log + parking lot) |
 | `dispatch` | dispatch-work (routes a new task to inception / goal-loop / exec-plan / dev-workflow-kickoff) |
-| `linear` | linear, linear-groom, linear-start (Linear issue lifecycle; start picks an issue → worktree → execution) |
+| `linear` | linear, linear-groom, linear-start (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig, name-project, quick-chat |
@@ -134,7 +134,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - distill → base
 
 **linear**
-- linear-start → linear, **dispatch-work**, wtm-worktree `(ext)`
+- linear-start → linear, **dispatch-work**, **dev-workflow-resume-work**, **exec-plan**, **goal-loop**, wtm-worktree `(ext)`
 - linear-groom → linear
 
 **skill-quality**
