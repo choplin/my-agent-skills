@@ -41,7 +41,8 @@ Apply the `understanding-html-docs-review` skill and follow its procedure end-to
 then return the findings report it specifies.
 
 Reviewing in a fresh context is the point: the agent that authored the page cannot
-read it independently of having just written it. You have the contract and the
+read it independently of having just written it. You have the contract — the base
+design system, plus any consumer context contract the dispatcher hands you — and the
 document, and nothing else.
 
 This agent is a thin Claude-Code wrapper that exists only to run that skill in a
