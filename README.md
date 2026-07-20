@@ -63,7 +63,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
-| `discuss-toolkit` | dig, name-project, quick-chat, focus (handle multiple discussion points one at a time) |
+| `discuss-toolkit` | dig, name-project, quick-chat, one-point (handle multiple discussion points one at a time) |
 | `git-helpers` | branch-commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten |
 | `understanding` | explain-diff (reviewer-facing HTML explanation of a diff; explain-pr publishes it for PRs), html-docs (shared web-doc design system; base for explain-diff) |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
