@@ -64,7 +64,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig, one-point (handle multiple discussion points one at a time) |
-| `git-helpers` | branch-commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten |
+| `git-helpers` | draft-pr, explain-pr, pr-description, rebase-onto-rewritten |
 | `understanding` | explain-diff (reviewer-facing HTML explanation of a diff; explain-pr publishes it for PRs), html-docs (shared web-doc design system; base for explain-diff) |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
 | `lang-reference` | go, java, python, scala, typescript |
