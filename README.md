@@ -54,7 +54,7 @@ scripts/install-opts.sh --dry-run     # preview
 
 | Group | Skills |
 |-------|--------|
-| `dev-workflow` | kickoff, create-epic/spec/plan, self-review, user-review, acceptance-review, plan-compliance-review, resume-work, post-task, workflow-status, base |
+| `dev-workflow` | kickoff, create-epic/spec/plan, self-review, user-review, acceptance-review, plan-compliance-review, resume-work, post-task, base |
 | `review-tools` | ai-review, import-pr, import-ci, resolve, reply-pr, report, base (portable review process: a review.md record of items fed by ingestion sources — AI review / PR / CI / direct — and worked to resolution; used by dev-workflow and other flows) |
 | `goal-loop` | goal-loop, goal-loop-base (Codex /goal-style bounded autonomous loop; shell + jq, hooks opt-in) |
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
@@ -96,7 +96,6 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - resume-work → base, create-plan, self-review, user-review, post-task
 - self-review → base, plan-compliance-review, **review-tools-ai-review**
 - user-review → acceptance-review, create-spec, post-task, **review-tools-resolve**, **review-tools-report**
-- workflow-status → base, **linear**
 
 **inception**
 - inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**

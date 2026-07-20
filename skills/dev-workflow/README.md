@@ -63,7 +63,6 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 | `dev-workflow-acceptance-review` | Judge the spec's `Verify: human` acceptance criteria (invoked by user-review) |
 | `dev-workflow-plan-compliance-review` | Verify the plan's Files-to-Change and Steps are complete (the completion gate in self-review) |
 | `dev-workflow-post-task` | Capture knowledge and feed omissions back into the workflow |
-| `dev-workflow-workflow-status` | Overview of all active epics and stories |
 
 The generic review process — a `review.md` record of items fed by ingestion sources
 (AI review, PR comments, CI, direct feedback) and worked to resolution — lives in the

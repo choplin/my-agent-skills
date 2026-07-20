@@ -97,9 +97,10 @@ For each Story, create an Issue **in the Project** (Repo + Type labels per `line
 - **Dependencies** = express as Linear **`blocked by`** relations between the
   Issues, not as prose.
 
-These Issues are what the Epic rollup reads: `workflow-status` / `resume-work`
-list the Project's Issues and their statuses to compute progress and the
-next Story. Do not create local directories or a `state.json` for the Epic.
+These Issues are what the Epic rollup reads: `resume-work` lists the Project's
+Issues and their statuses to compute progress and the next Story, and the `linear`
+skill gives the repo-wide progress overview. Do not create local directories or a
+`state.json` for the Epic.
 
 ### 6. Suggest Next Action
 
