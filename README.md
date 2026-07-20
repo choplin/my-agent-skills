@@ -54,13 +54,13 @@ scripts/install-opts.sh --dry-run     # preview
 
 | Group | Skills |
 |-------|--------|
-| `dev-workflow` | kickoff, create-epic/spec/plan, self-review, user-review, acceptance-review, plan-compliance-review, handoff, resume-work, post-task, workflow-status, base |
+| `dev-workflow` | kickoff, create-epic/spec/plan, self-review, user-review, acceptance-review, plan-compliance-review, resume-work, post-task, workflow-status, base |
 | `review-tools` | ai-review, import-pr, import-ci, resolve, reply-pr, report, base (portable review process: a review.md record of items fed by ingestion sources — AI review / PR / CI / direct — and worked to resolution; used by dev-workflow and other flows) |
 | `goal-loop` | goal-loop, goal-loop-base (Codex /goal-style bounded autonomous loop; shell + jq, hooks opt-in) |
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
 | `exec-plan` | exec-plan, exec-plan-base, exec-plan-record (rough-goal autonomous plan; decision log + parking lot) |
 | `dispatch` | dispatch-work (routes a new task to inception / goal-loop / exec-plan / dev-workflow-kickoff) |
-| `linear` | linear, linear-groom, linear-start (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution) |
+| `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig, name-project, quick-chat, focus (handle multiple discussion points one at a time) |
@@ -68,7 +68,6 @@ scripts/install-opts.sh --dry-run     # preview
 | `understanding` | explain-diff (reviewer-facing HTML explanation of a diff; explain-pr publishes it for PRs), html-docs (shared web-doc design system; base for explain-diff) |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
 | `lang-reference` | go, java, python, scala, typescript |
-| `discussion-continuity` | continue-discussion |
 | `project-notes` | project-notes-capture, project-notes-distill, project-notes-base (raw→distilled project notes in an Obsidian vault) |
 | `jira-cli` | jira-cli |
 
@@ -95,9 +94,8 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - create-epic → base, create-spec
 - create-plan → base, resume-work
 - resume-work → base, create-plan, self-review, user-review, post-task
-- self-review → base, plan-compliance-review, handoff, **review-tools-ai-review**
+- self-review → base, plan-compliance-review, **review-tools-ai-review**
 - user-review → acceptance-review, create-spec, post-task, **review-tools-resolve**, **review-tools-report**
-- handoff → base, resume-work
 - workflow-status → base, **linear**
 
 **inception**

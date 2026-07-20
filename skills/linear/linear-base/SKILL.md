@@ -91,6 +91,7 @@ Transitions (who/when):
 - **Todo → In Progress**: work starts / branch created.
 - **In Progress → In Review**: PR opened. **Leave a completion note first** (see below).
 - **In Review → Done**: PR merged. (Review requesting changes → back to In Progress.) If Done is reached with **no** In Review step, leave the completion note at this transition instead.
+- **In Progress → (session boundary, stays In Progress)**: not a status change, but a checkpoint. When work on an issue **spans sessions** and this session ends before the issue finishes, **leave a handoff note** (see below) so a fresh session can resume it.
 - **any → Canceled**: dropped or superseded. Use Canceled, never Done, for work that wasn't actually completed.
 
 ### Completion note (record what was decided & changed)
@@ -103,6 +104,21 @@ Transitions (who/when):
 Rationale: commit messages and PR text describe only the change and carry **no** Linear references (see *Linear references stay internal*), so the *why* and the delta-from-spec have no home outside the issue. This comment makes the issue a durable, self-contained record of how the work actually resolved — the completion-side counterpart to the self-completeness bar applied at grooming.
 
 Keep it proportional: an issue that shipped exactly as groomed needs a sentence; one where the approach shifted needs the decisions spelled out. When nothing deviated from the groomed plan, **say so explicitly** rather than omitting the note.
+
+### Handoff note (record in-progress context for a cross-session pickup)
+
+The completion note's mid-work sibling. When an issue is **still In Progress** and a session ends before it finishes — the work is large enough to span sessions — leave a comment recording, in the issue's own terms, enough for a **fresh session with no memory of this one** to resume the *same* issue:
+
+- **Why / 経緯 / discussion** — the path that led to where the work now stands.
+- **Decisions made while working** — each with its rationale and the alternatives rejected (the same "why" the completion note captures, but recorded mid-flight).
+- **Open questions** — what is still undecided.
+- **Current state & next step** — where the work actually stands, and the first concrete action a resumer should take.
+
+Record only what a fresh reader **cannot reconstruct from git and the tracked artifacts**. Do **not** re-describe the diff (git holds it) or transcribe local execution state — `state.json`, exec-plan files, and loop artifacts are read directly on resume (see `linear-start` step 5 and `dev-workflow-resume-work`). The note carries the judgement those files cannot.
+
+The issue **stays In Progress** — a handoff note is not a status transition. The `linear-handoff` skill drives this end-to-end (identify issue → align → draft → verify self-completeness → post as a comment).
+
+**Corollary — cross-session work must be an issue.** Because the note's anchor is the issue comment, a discussion or task that has grown to span sessions but is **not yet a Linear issue** is itself in a bad state: create the issue first (there is no local-file handoff fallback), then hand it off. This is why there is no separate "continue this discussion" mechanism — the durable place for anything worth carrying across sessions is the issue.
 
 ## The grooming step (Backlog → Todo)
 

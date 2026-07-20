@@ -90,9 +90,11 @@ nothing, `review.md` is still created — the human review below is the point.)
    ```
    The state evaluator reads review phase/items from `review.md`; only the
    machine-verification `criteria` results are written to `state.json`.
-2. **Invoke handoff**: `Skill(skill: "dev-workflow-handoff")`. It detects `in_review`
-   (review.md Phase `open`) and generates a resume prompt for the next session, where
-   `dev-workflow-user-review` applies the human acceptance criteria and resolves the items.
+2. **Leave the unit at `in_review`** (review.md Phase `open`). No prompt to copy: the
+   SessionStart hook injects the active-unit summary into the next session, so resuming is
+   just `dev-workflow-resume-work` — it detects `in_review` and dispatches to
+   `dev-workflow-user-review`, which applies the human acceptance criteria and resolves the
+   items.
 
 ## Output Format
 
@@ -110,7 +112,7 @@ nothing, `review.md` is still created — the human review below is the point.)
 |---|--------|---------|
 | 1 | ai | {code finding} |
 
-{count} items open. Handoff generated — copy prompt, /clear, paste to run user review.
+{count} items open. Left at in_review — /clear, then `dev-workflow-resume-work` runs user review.
 ```
 
 ## Success Criteria
@@ -119,5 +121,5 @@ nothing, `review.md` is still created — the human review below is the point.)
 - [ ] Machine predicates run and fixed to green; `state.json` criteria updated (Default-FAIL honored)
 - [ ] Plan fully implemented (gaps completed or returned to implementation) — not itemized
 - [ ] AI code review seeded via `review-tools-ai-review` (`ai` items); `review.md` at Phase `open`
-- [ ] Session bound; `dev-workflow-handoff` invoked
+- [ ] Session bound; unit left at `in_review` for the next session to resume
 - [ ] No dev-workflow items written to `review.md`; only `criteria` results written to `state.json`

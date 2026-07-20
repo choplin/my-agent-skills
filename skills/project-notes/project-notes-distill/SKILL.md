@@ -1,6 +1,6 @@
 ---
 name: project-notes-distill
-description: Distill project knowledge into a typed long-term note in the Project Notes Obsidian vault (the durable Notes layer), organized per repository. Use when the user wants to record a decision and its rationale, a reusable concept, a proposal draft, or a durable handoff — shaping it into something readable months later. Triggers on "蒸留して残して", "ちゃんとまとめて残して", "この決定を記録", "distill this into a note", "record this decision/concept". Should NOT trigger for quick raw capture without shaping (use project-notes-capture); saving state to resume the SAME session shortly (use discussion-continuity); updating in-repo docs, README, or code comments (this targets the external Obsidian vault only); TODO lists; or committing code.
+description: Distill project knowledge into a typed long-term note in the Project Notes Obsidian vault (the durable Notes layer), organized per repository. Use when the user wants to record a decision and its rationale, a reusable concept, a proposal draft, or a durable handoff — shaping it into something readable months later. Triggers on "蒸留して残して", "ちゃんとまとめて残して", "この決定を記録", "distill this into a note", "record this decision/concept". Should NOT trigger for quick raw capture without shaping (use project-notes-capture); saving transient state to resume the SAME session shortly (keep it in session); updating in-repo docs, README, or code comments (this targets the external Obsidian vault only); TODO lists; or committing code.
 allowed-tools: Read, Write, Glob, Bash, AskUserQuestion
 user-invocable: true
 ---
@@ -26,10 +26,11 @@ skill only handles the distillation half.
 - **When a note spans several types, `Decision` and `Proposal` outrank `Concept`
   and `Handoff`** (the decision or proposal is the actionable payload). Use
   AskUserQuestion only when none clearly fits better.
-- **Handoff vs discussion-continuity**: a `Handoff - ` note is a *durable* record
+- **Handoff vs a transient pause**: a `Handoff - ` note is a *durable* record
   for another environment, another person, or resuming after days. If the user
-  just wants to pause and resume the *same* work shortly, that is
-  discussion-continuity, not this skill.
+  just wants to pause and resume the *same* work shortly, that is not a note at
+  all — keep it in session; a Linear issue that genuinely spans sessions records
+  its pickup context on the issue via `linear-handoff`.
 
 ## Workflow
 

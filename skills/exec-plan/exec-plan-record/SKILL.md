@@ -6,9 +6,8 @@ description: >-
   is, which decisions are made and why, what's done, and what's left — so the work can be resumed across
   sessions. Use mid-work for "write down where we've gotten to", "capture the goal and what's left",
   "save this so we can pick it up later". Writes the same plan file as exec-plan but does not drive
-  anything. Not for agreeing a fresh goal and running it autonomously (use exec-plan), saving a pure
-  design discussion (use discussion-continuity-continue-discussion), or snapshotting a dev-workflow work
-  unit for /clear (use dev-workflow-handoff).
+  anything. Not for agreeing a fresh goal and running it autonomously (use exec-plan), or carrying a
+  Linear issue across sessions (use linear-handoff to record a handoff note on the issue).
 user-invocable: true
 disable-model-invocation: true
 allowed-tools: Read, Write, Edit, Glob, Bash, Skill, AskUserQuestion
@@ -85,6 +84,6 @@ alone. If they want it executed rather than just recorded, point them at
 ## When NOT to use
 
 - You want to agree a goal and have it run autonomously → `exec-plan`.
-- The work belongs in a dev-workflow unit and you're snapshotting it for `/clear` → `dev-workflow-handoff`.
-- It's a pure design/requirements discussion to continue in a future session, needing rationale-verified capture → `discussion-continuity-continue-discussion`.
+- The work belongs in a dev-workflow unit → its progress lives in `state.json` and the SessionStart hook restores it; resume with `dev-workflow-resume-work`.
+- The work is a Linear issue spanning sessions → record a handoff note on the issue with `linear-handoff` (cross-session discussion belongs in an issue, not a local file).
 - The concept is still fuzzy and needs shaping, not recording → `inception`.

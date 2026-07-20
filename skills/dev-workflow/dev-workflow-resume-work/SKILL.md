@@ -1,6 +1,6 @@
 ---
 name: dev-workflow-resume-work
-description: Use this skill to resume work on an existing Epic or Story. Triggers on phrases like "resume work", "continue previous work", "pick up where I left off", "what was I working on", or when user wants to continue existing development work. Should NOT trigger for starting new tasks (use kickoff), Task-level work that left dev-workflow (resume it via goal-loop/exec-plan or its own plan file), or for discussion continuity without implementation artifacts.
+description: Use this skill to resume work on an existing Epic or Story. Triggers on phrases like "resume work", "continue previous work", "pick up where I left off", "what was I working on", or when user wants to continue existing development work. Should NOT trigger for starting new tasks (use kickoff), Task-level work that left dev-workflow (resume it via goal-loop/exec-plan or its own plan file), or for work with no dev-workflow artifacts to resume.
 allowed-tools: Read, Glob, Grep, AskUserQuestion, Skill, Bash
 user-invocable: true
 ---
@@ -62,6 +62,7 @@ For the selected Story, load:
 - **`state.json`** (local): `title`, `branch`, `linear_issue_id`, `criteria`, `steps` (progress).
 - **Review**: `review.md` phase/items (when it exists).
 - **Authored context from the Linear Issue** (`linear_issue_id`) — this is the once-per-session boundary read that recovers the "why": Why/What, Requirements, Acceptance Criteria, the plan's Approach/Decisions/Files/Steps. Do **not** rebuild `state.json` from it (that would overwrite live progress — see `dev-workflow-base` skill (`references/state-schema.md`) § Linear backing).
+- **The Issue's latest handoff note** (a comment, if the previous session left one — see `linear-base`'s *Handoff note*) — the mid-work account of decisions taken since grooming, where the work paused, and the intended next step. It complements `state.json` (progress) and the authored spec/plan (the "why"): read it for context, never rebuild `state.json` from it.
 
 For an Epic, read its Linear Project's Issues to find the next Story.
 

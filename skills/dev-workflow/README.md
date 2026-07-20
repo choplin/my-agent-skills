@@ -44,7 +44,7 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 
 | Hook | Event | Behavior |
 |------|-------|----------|
-| `session-start.py` | SessionStart | Injects a short summary of the active work unit (state, progress, next action) so a fresh session resumes with context — replacing the handoff copy-paste ritual for the common case. |
+| `session-start.py` | SessionStart | Injects a short summary of the active work unit (state, progress, next action) so a fresh session resumes with context — no copy-paste handoff prompt is carried across sessions. |
 | `stop-gate.py` | Stop | When the active unit is `potentially_complete` (all steps done, no review started), reminds you to run `/dev-workflow-self-review`. Blocks at most twice in a row, then yields — a reminder, not a loop engine. |
 
 > Hooks load at session start; after installing or changing them, restart Claude Code. See `docs/2026-06-22-hooks-design.md`.
@@ -58,7 +58,6 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 | `dev-workflow-create-spec` | Author a spec (predicate-ized `Verify:` criteria) into a Story's Linear Issue (create or adopt) + local `state.json` |
 | `dev-workflow-create-plan` | Append the plan design to the Story Issue; populate `state.json` steps (walking skeleton first, approach decisions) |
 | `dev-workflow-resume-work` | Resume existing work from the evaluator's view of progress |
-| `dev-workflow-handoff` | Generate a handoff prompt (mostly superseded by the SessionStart hook; use for session notes) |
 | `dev-workflow-self-review` | Story wrapper: the completion gate (machine-verification + plan-compliance — fix, don't itemize), then seeds an AI code review into `review.md` via `review-tools-ai-review` |
 | `dev-workflow-user-review` | Story wrapper: applies the human acceptance criteria, delegates item resolution to `review-tools-resolve`, drives `postponed` items via create-spec, then `review-tools-report` → post-task |
 | `dev-workflow-acceptance-review` | Judge the spec's `Verify: human` acceptance criteria (invoked by user-review) |

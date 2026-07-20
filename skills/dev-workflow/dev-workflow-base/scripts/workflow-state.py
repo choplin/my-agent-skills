@@ -5,7 +5,7 @@ Scans .claude/dev-workflow/ and prints a single JSON object describing every
 work unit's derived state. This is the single deterministic implementation of
 the state contract defined in dev-workflow/references/state-schema.md.
 
-Consumers (resume-work, handoff, workflow-status, self-review) run this script
+Consumers (resume-work, workflow-status, self-review) run this script
 and use its output instead of parsing Markdown or restating the priority table.
 
 Usage:

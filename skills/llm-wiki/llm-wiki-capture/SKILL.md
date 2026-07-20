@@ -9,8 +9,8 @@ description: >-
   Triggers on "llm-wiki に書いて", "この知見を wiki に残して", "KB にメモして",
   "capture this into the wiki", "save this finding to the KB", "note this in
   llm-wiki". Should NOT trigger for shaping/merging notes already captured (use
-  llm-wiki-distill), team-shared repo docs (README/docs/), or resuming the same
-  session shortly (discussion-continuity).
+  llm-wiki-distill), team-shared repo docs (README/docs/), or transient state for
+  resuming the same session shortly (keep it in session).
 allowed-tools: Read, Write, Edit, Glob, Bash
 user-invocable: true
 ---

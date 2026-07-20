@@ -45,4 +45,5 @@ Close with a one-line read of the situation (e.g. "Project A is mid-flight; Proj
 
 - Want to **pick up** a Todo/Backlog item, or **resume** an In Progress one → `linear-start`.
 - Want to **groom** the Backlog into ready work → `linear-groom`.
+- Working an In Progress issue and **pausing before it finishes** → `linear-handoff` records a handoff note so a later session can resume it.
 - Want to **drill into** a specific Project's issues → offer to list them (identifier, title, Status, Priority) as a follow-up; individual-issue detail is out of scope for the snapshot itself but a natural next question.

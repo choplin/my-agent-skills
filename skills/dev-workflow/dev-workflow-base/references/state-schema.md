@@ -124,7 +124,7 @@ rewrites that same Issue (preserving its id/assignee/history) into the structure
 form first, then bootstrap proceeds identically.
 
 **Epic rollup is read at session boundaries, not by the script.** The
-consumer skills (`workflow-status`, `resume-work`, `handoff`) read the Project's
+consumer skills (`workflow-status`, `resume-work`) read the Project's
 Issues from Linear to compute which Story is next and how many are done — these
 are the same infrequent, boundary-only reads as authored context. When Linear is
 unavailable the Epic overview degrades (unavailable) but Story-level work, driven
@@ -241,8 +241,8 @@ python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_I
 python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --clear
 ```
 
-Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review) **bind** at the point the unit is identified — normally at create-spec, when the Story directory is created. (The `review-tools` skills that self-review/user-review delegate to do not bind; the dev-workflow wrapper binds before delegating.) `dev-workflow-post-task` **clears**. Read-only overviews (workflow-status) and `dev-workflow-handoff` do not bind; a handed-off unit is rebound by `dev-workflow-resume-work` in the next session.
+Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review) **bind** at the point the unit is identified — normally at create-spec, when the Story directory is created. (The `review-tools` skills that self-review/user-review delegate to do not bind; the dev-workflow wrapper binds before delegating.) `dev-workflow-post-task` **clears**. Read-only overviews (workflow-status) do not bind; a unit left mid-flight is rebound by `dev-workflow-resume-work` in the next session (the SessionStart hook injects its summary so no prompt is carried across).
 
 ### Consumer rule
 
-Skills that need state (resume-work, handoff, workflow-status, self-review) **run the script and read its output**, selecting the unit via `active` / `active_path`. They run the bind/clear command shown above where needed, but must not restate the priority table, legacy mappings, progress-counting rules, or the active-resolution rule — those live only here and in the script.
+Skills that need state (resume-work, workflow-status, self-review) **run the script and read its output**, selecting the unit via `active` / `active_path`. They run the bind/clear command shown above where needed, but must not restate the priority table, legacy mappings, progress-counting rules, or the active-resolution rule — those live only here and in the script.

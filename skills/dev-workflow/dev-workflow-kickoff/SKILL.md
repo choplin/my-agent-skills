@@ -1,6 +1,6 @@
 ---
 name: dev-workflow-kickoff
-description: Use this skill when the user wants to START work on a new development task. This skill explores user needs through dialogue to understand What they want to achieve and Why. Triggers on phrases like "I want to start this task", "let's work on this", "I have an idea", "how should I approach this work", or when user presents a new work item (concrete or vague). Should NOT trigger for ongoing tasks (use continue-discussion), discussing features without intent to start work, or questions about existing code.
+description: Use this skill when the user wants to START work on a new development task. This skill explores user needs through dialogue to understand What they want to achieve and Why. Triggers on phrases like "I want to start this task", "let's work on this", "I have an idea", "how should I approach this work", or when user presents a new work item (concrete or vague). Should NOT trigger for ongoing tasks (use dev-workflow-resume-work), discussing features without intent to start work, or questions about existing code.
 allowed-tools: Read, Glob, Grep, AskUserQuestion, Skill
 user-invocable: true
 ---

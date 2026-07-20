@@ -1,6 +1,6 @@
 ---
 name: project-notes-capture
-description: Quickly capture a raw project note into the Project Notes Obsidian vault (the disposable Inbox layer), organized per repository. Use when the user wants to jot down a fragment, pasted output, or a mid-session thought without shaping it. Triggers on "Inboxに入れて", "とりあえずメモ", "生ログを残して", "jot this down", "capture this raw", "dump this into my project notes". Should NOT trigger for shaping something worth keeping long-term (use project-notes-distill); saving state to resume the SAME session shortly (use discussion-continuity); updating in-repo docs, README, docs/, or code comments; TODO lists; or committing code.
+description: Quickly capture a raw project note into the Project Notes Obsidian vault (the disposable Inbox layer), organized per repository. Use when the user wants to jot down a fragment, pasted output, or a mid-session thought without shaping it. Triggers on "Inboxに入れて", "とりあえずメモ", "生ログを残して", "jot this down", "capture this raw", "dump this into my project notes". Should NOT trigger for shaping something worth keeping long-term (use project-notes-distill); saving transient state to resume the SAME session shortly (keep it in session); updating in-repo docs, README, docs/, or code comments; TODO lists; or committing code.
 allowed-tools: Read, Write, Glob, Bash
 user-invocable: true
 ---

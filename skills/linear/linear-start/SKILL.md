@@ -83,7 +83,7 @@ done
 
 Before touching anything, establish where the work actually stands, and report it to the user. Read, in the resolved workspace:
 
-- **The issue's comments** — the progress the user recorded on it. This is the primary account of what was decided and how far it got.
+- **The issue's comments** — the progress recorded on it. The **most recent handoff note** (see `linear-base`'s *Handoff note*), if one exists, is the canonical pickup record: it states the goal, the decisions made while working, the open questions, and the next step to take. Read it first, then any earlier comments for fuller history. This is the primary account of what was decided and how far it got.
 - **The git state** — commits on the branch versus its base, plus uncommitted and staged changes (`git status`, `git log`, `git diff`).
 - **In-flight execution artifacts** — the trace left by whichever execution mode was running:
   - `dev-workflow` → its `state.json` (`linear_issue_id` links back to the issue)
