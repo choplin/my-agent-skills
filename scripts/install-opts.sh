@@ -11,6 +11,8 @@
 #   opts/claude/agents/foo.md   ->  ~/.claude/agents/foo.md
 #   opts/claude/hooks/bar.py    ->  ~/.claude/hooks/bar.py
 #
+# Removal is handled by the sibling uninstall-opts.sh.
+#
 # Usage:
 #   scripts/install-opts.sh [--copy] [--dry-run] [agent ...]
 #
