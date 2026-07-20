@@ -1,6 +1,6 @@
 ---
 name: git-helpers-squash-merge
-description: This skill should be used when the user wants to collapse the current feature branch into a single commit and fast-forward it onto the base branch (default main). Triggers on phrases like "squash-merge", "squash して main にマージ", "ブランチを1コミットにまとめて main へ", "squash then fast-forward merge", "1コミットにして main に着地させる", or when the user wants one clean commit on main from a branch. Optionally rebases onto the base first (with confirmation) and removes the worktree afterward. Should NOT trigger for normal merges that preserve branch history, PR/remote-side merges, or moving uncommitted changes to a new branch (use branch-commit).
+description: This skill should be used when the user wants to collapse the current feature branch into a single commit and fast-forward it onto the base branch (default main). Triggers on phrases like "squash-merge", "squash して main にマージ", "ブランチを1コミットにまとめて main へ", "squash then fast-forward merge", "1コミットにして main に着地させる", or when the user wants one clean commit on main from a branch. Rebases onto the base first when needed (backup ref created, no confirmation) and removes the worktree afterward (with confirmation). Should NOT trigger for normal merges that preserve branch history, PR/remote-side merges, or moving uncommitted changes to a new branch (use branch-commit).
 allowed-tools: Bash(git *), Bash(wtm *)
 user-invocable: true
 ---
@@ -9,8 +9,8 @@ user-invocable: true
 
 Collapse the current feature branch into a single commit and fast-forward it onto
 the base branch, so the base gains exactly **one** commit for the whole branch.
-Optionally rebases onto the base first, then removes the branch (and, if asked,
-the worktree).
+Rebases onto the base first when the base has advanced (a backup ref is created
+first; no confirmation), then removes the branch (and, if asked, the worktree).
 
 This skill is **explicit-invocation only** — never run it proactively.
 
@@ -39,12 +39,13 @@ This skill is **explicit-invocation only** — never run it proactively.
        /^worktree /{wt=$2} $0=="branch "b{print wt}')
      ```
 
-2. **Rebase onto base if needed — CONFIRM FIRST**
+2. **Rebase onto base if needed — automatic, backup ref first**
    - If base is **not** an ancestor of HEAD
      (`git merge-base --is-ancestor <base> HEAD` fails), the base has advanced.
-   - Report how far base moved (`git log --oneline HEAD..<base>`), explain that a
-     rebase is required for a fast-forward, and **ask the user before rebasing**.
-   - On approval: create a backup ref
+   - A rebase is unavoidable here: the skill's goal is a fast-forward landing, so
+     there is no alternative path. Do it **without asking** — but always create a
+     backup ref first so it stays reversible.
+   - Report how far base moved (`git log --oneline HEAD..<base>`), create the backup
      `git branch "$BRANCH-backup-$(date +%Y%m%d-%H%M%S)"`, then `git rebase <base>`.
    - If conflicts arise, **stop** and show the conflicting files. Wait for the user
      to resolve; do not auto-resolve.
