@@ -58,7 +58,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `review-tools` | ai-review, import-pr, import-ci, resolve, reply-pr, report, base (portable review process: a review.md record of items fed by ingestion sources — AI review / PR / CI / direct — and worked to resolution; used by dev-workflow and other flows) |
 | `goal-loop` | goal-loop, goal-loop-base (Codex /goal-style bounded autonomous loop; shell + jq, hooks opt-in) |
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
-| `exec-plan` | exec-plan, exec-plan-base, exec-plan-record (rough-goal autonomous plan; decision log + parking lot) |
+| `exec-plan` | exec-plan, exec-plan-base (rough-goal autonomous plan; decision log + parking lot) |
 | `dispatch` | dispatch-work (routes a new task to inception / goal-loop / exec-plan / dev-workflow-kickoff) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
@@ -108,7 +108,6 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **exec-plan**
 - exec-plan → base, **discuss-toolkit-dig**
-- exec-plan-record → base
 
 **goal-loop**
 - goal-loop → base, **discuss-toolkit-dig**, **dev-workflow-kickoff**

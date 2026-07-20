@@ -185,6 +185,4 @@ decisions — not an up-front plan, and not a stream of mid-run questions.
 - Completion can and should be gated on executable predicates → `goal-loop`.
 - Requirements must be decided before "done" can be defined → `dev-workflow-create-spec`.
 - The concept itself is still fuzzy and needs shaping → `inception`.
-- You only want to write down where the current session has gotten to — goal,
-  decisions, progress, what's left — without driving anything → `exec-plan-record`.
 - A quick one-off change with nothing to defer → just do it.

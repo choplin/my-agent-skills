@@ -1,22 +1,21 @@
 ---
 name: exec-plan-base
 description: >-
-  Shared resources for the exec-plan skill family — the self-contained ExecPlan-style plan file
+  Shared resources for the exec-plan skill — the self-contained ExecPlan-style plan file
   format, its on-disk location convention, and the principles that keep a plan restartable on its
-  own. exec-plan delegates here for the file it drives; exec-plan-record delegates here for the file
-  it writes from a live session. Use this skill when another exec-plan skill asks to apply the plan
-  file format or follow the location convention. Not typically invoked on its own.
+  own. exec-plan delegates here for the file it drives. Use this skill when exec-plan asks to apply
+  the plan file format or follow the location convention. Not typically invoked on its own.
 user-invocable: false
 allowed-tools: Read, Write, Edit, Glob, Bash
 ---
 
 # Exec Plan — Base
 
-The shared plan artifact for the exec-plan family. Two skills write the **same**
-file in the **same** place, so a plan written by one can be picked up by the
-other: `exec-plan-record` captures a live session into this file; `exec-plan`
-drives this file forward. Keeping the format here is what makes them
-interoperable and avoids duplicating the template.
+The shared plan artifact for the exec-plan skill. Keeping the file format and
+location here — separate from the skill that drives the file — is what lets a
+plan written in one session be picked up in a later one: the format is the
+stable contract a fresh reader resumes from. `exec-plan` writes and drives this
+file.
 
 This format adapts OpenAI's ExecPlan / PLANS.md — self-contained, self-driving
 plans (https://developers.openai.com/cookbook/articles/codex_exec_plans).
@@ -79,12 +78,10 @@ The sections are stable so the file stays interoperable, but the invoking skill
 gives them their workflow meaning:
 
 - **Decision Log** — decisions already settled, each with its rationale. `exec-plan`
-  fills this live with reversible two-way-door calls it made while driving;
-  `exec-plan-record` fills it with decisions the session already reached.
+  fills this live with reversible two-way-door calls it made while driving.
 - **Parking Lot** — decisions still open. `exec-plan` parks high-impact / one-way-door
-  calls here for a single batch review at the end; `exec-plan-record` records the
-  open questions and remaining decisions a future session must resolve.
+  calls here for a single batch review at the end.
 
-Both skills read the format and location from here; neither restates the
+`exec-plan` reads the format and location from here rather than restating the
 template. The surrounding workflow (how the file gets filled, and whether it is
 then driven) belongs to the invoking skill, not to this base.
