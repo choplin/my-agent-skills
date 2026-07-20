@@ -23,71 +23,23 @@ Use Fugu when you want **another AI's perspective from a different vendor** than
 - Command mechanics (`exec`, `review`, `-s read-only`, `-o`, `--json`, `-c key=value`)
   are identical to Codex. For full subcommand/flag details, see the
   `ai-council-codex-cli` skill.
-- **Key difference**: `codex-xhigh` runs OpenAI's model with higher reasoning effort;
-  `codex-fugu` runs **Sakana AI's Fugu model** behind the same interface. Attribute
-  opinions to Fugu, not to Codex/OpenAI.
+- **Key difference**: `codex` runs OpenAI's model; `codex-fugu` runs **Sakana AI's
+  Fugu model** behind the same interface. Attribute opinions to Fugu, not to
+  Codex/OpenAI.
 - When called non-interactively (output piped or redirected), `codex-fugu` skips its
   update check and passes straight through to the Fugu model — safe to call from scripts/agents.
 
-## Basic Commands
+## Commands
 
-### Non-interactive Mode (codex-fugu exec)
+Command usage is **identical to Codex** — same subcommands and flags (`exec`,
+`review`, `-s read-only`, `-o`, `--json`, `-c key=value`) with the `codex-fugu`
+prefix. See the `ai-council-codex-cli` skill for syntax, examples, best practices,
+and output interpretation. Only two things are Fugu-specific:
 
-```bash
-# Read-only sandbox (safe for reviews / opinions)
-codex-fugu exec -s read-only "Review this code and share your thoughts"
-
-# Output to file
-codex-fugu exec -s read-only -o /tmp/fugu-response.txt "your prompt"
-
-# JSON output format
-codex-fugu exec -s read-only --json "your prompt"
-```
-
-### Code Review Mode (codex-fugu review)
-
-```bash
-# Review uncommitted changes
-codex-fugu review --uncommitted
-
-# Review changes against a base branch
-codex-fugu review --base main
-
-# Review specific files
-codex-fugu review path/to/file.ts
-```
-
-## Management Flags
-
-`codex-fugu` adds a few wrapper-only flags (handled before the model runs):
-
-- `--status`    — show installed Codex version, Fugu bundle target, and any version mismatch
-- `--recheck`   — clear suppressed update decisions and the update-check throttle
-- `--no-update` — skip the update/version check for this run (also `CODEX_FUGU_NO_UPDATE=1`)
-- `--set-key`   — (re)configure the Fugu API key via the recorded installer
-
-## Best Practices for Getting Opinions
-
-1. **Use read-only sandbox** for safety: `-s read-only`
-2. **Be specific** about the kind of feedback you want
-3. **Provide context** about the codebase or design goals
-4. **Capture output** with `-o` or `--json` for structured responses
-5. **Attribute clearly** — label the response as Fugu's (Sakana AI), distinct from Codex/Claude
-
-## Example Prompts
-
-### Code Review
-```bash
-# Fugu can read files directly — just provide the path
-codex-fugu exec -s read-only "Review src/utils/parser.ts for potential bugs and improvements"
-```
-
-### Design Discussion
-```bash
-codex-fugu exec -s read-only "What are the trade-offs between Redux and React Context for a medium-sized React app?"
-```
-
-## Output Interpretation
-
-Fugu responses typically include analysis of the problem, concrete suggestions,
-concerns/risks, and code examples where applicable. Present them as Fugu's view.
+1. **Attribute clearly** — always present the response as Fugu's (Sakana AI),
+   distinct from Codex/OpenAI and Claude.
+2. **Wrapper-only management flags** (handled before the model runs):
+   - `--status`    — show installed Codex version, Fugu bundle target, and any version mismatch
+   - `--recheck`   — clear suppressed update decisions and the update-check throttle
+   - `--no-update` — skip the update/version check for this run (also `CODEX_FUGU_NO_UPDATE=1`)
+   - `--set-key`   — (re)configure the Fugu API key via the recorded installer

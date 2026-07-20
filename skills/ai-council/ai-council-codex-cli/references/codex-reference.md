@@ -6,17 +6,6 @@
 npm install -g @openai/codex
 ```
 
-## Recommended Alias
-
-For better reasoning quality, use the `codex-xhigh` alias which sets `model_reasoning_effort="xhigh"`:
-
-```bash
-# Add to your shell config (.bashrc, .zshrc, etc.)
-alias codex-xhigh='codex --config model_reasoning_effort="xhigh"'
-```
-
-**All examples in this document use `codex-xhigh` for optimal results.**
-
 ## Authentication
 
 ### Option 1: Login command
@@ -104,11 +93,13 @@ Controls how much reasoning effort the model applies.
 | `low` | Minimal reasoning |
 | `medium` | Balanced reasoning |
 | `high` | More thorough reasoning |
-| `xhigh` | Maximum reasoning effort (recommended for reviews) |
+| `xhigh` | Maximum reasoning effort |
+
+The default is fine for routine opinions; raise to `high`/`xhigh` only for high-stakes or contested questions, since higher effort is noticeably slower.
 
 Example:
 ```bash
-codex exec -c model_reasoning_effort="xhigh" "Review this code"
+codex exec -c model_reasoning_effort="high" "Review this code"
 ```
 
 ### model_reasoning_summary
@@ -149,20 +140,20 @@ codex exec -c model_reasoning_summary="detailed" "Analyze this architecture"
 
 ### Get a quick opinion
 ```bash
-codex-xhigh exec -s read-only "What do you think about using monorepos for microservices?"
+codex exec -s read-only "What do you think about using monorepos for microservices?"
 ```
 
 ### Review PR changes
 ```bash
-codex-xhigh review --base main --output /tmp/review.md
+codex review --base main --output /tmp/review.md
 ```
 
 ### Generate code with specific model
 ```bash
-codex-xhigh exec -m gpt-4 "Write a Python function to parse JSON safely"
+codex exec -m gpt-4 "Write a Python function to parse JSON safely"
 ```
 
 ### Batch review multiple files
 ```bash
-codex-xhigh review src/components/*.tsx
+codex review src/components/*.tsx
 ```

@@ -51,7 +51,10 @@ or verifiable.
 Source panelists via the group's existing plumbing where it helps:
 `ai-council-codex-cli` (and its `ai-council-codex-advisor` agent) and
 `ai-council-fugu-cli` (and `ai-council-fugu-advisor`) give you tier-1
-different-model-family panelists without reinventing the CLI wiring.
+different-model-family panelists without reinventing the CLI wiring. A panel is
+exactly the high-stakes case that justifies more reasoning effort, so raise it
+for these panelists — e.g. run codex with `-c model_reasoning_effort="high"`
+instead of the routine default.
 
 ## Roles
 

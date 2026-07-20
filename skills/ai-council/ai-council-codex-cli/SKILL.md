@@ -13,39 +13,39 @@ OpenAI Codex CLI is a command-line tool that provides AI-powered code assistance
 
 ## Basic Commands
 
-**Important**: Always use `codex-xhigh` alias which has `model_reasoning_effort="xhigh"` configured for better reasoning quality.
+By default `codex` runs at its standard reasoning effort — fine for routine opinions. For high-stakes or contested questions (e.g. an adversarial panel), raise it per-invocation with `-c model_reasoning_effort="high"` rather than making every call slow.
 
-### Non-interactive Mode (codex-xhigh exec)
+### Non-interactive Mode (codex exec)
 
 For getting quick opinions or executing prompts without interactive mode:
 
 ```bash
 # Basic execution
-codex-xhigh exec "your prompt here"
+codex exec "your prompt here"
 
 # Read-only sandbox (safe for reviews)
-codex-xhigh exec -s read-only "Review this code and share your thoughts"
+codex exec -s read-only "Review this code and share your thoughts"
 
 # Output to file
-codex-xhigh exec -o /tmp/codex-response.txt "your prompt"
+codex exec -o /tmp/codex-response.txt "your prompt"
 
 # JSON output format
-codex-xhigh exec --json "your prompt"
+codex exec --json "your prompt"
 ```
 
-### Code Review Mode (codex-xhigh review)
+### Code Review Mode (codex review)
 
 For reviewing code changes:
 
 ```bash
 # Review uncommitted changes
-codex-xhigh review --uncommitted
+codex review --uncommitted
 
 # Review changes against a base branch
-codex-xhigh review --base main
+codex review --base main
 
 # Review specific files
-codex-xhigh review path/to/file.ts
+codex review path/to/file.ts
 ```
 
 ## Best Practices for Getting Opinions
@@ -60,17 +60,17 @@ codex-xhigh review path/to/file.ts
 ### Code Review
 ```bash
 # Codex can read files directly - just provide the path
-codex-xhigh exec -s read-only "Review src/utils/parser.ts for potential bugs and improvements"
+codex exec -s read-only "Review src/utils/parser.ts for potential bugs and improvements"
 ```
 
 ### Design Discussion
 ```bash
-codex-xhigh exec -s read-only "What are the pros and cons of using Redux vs React Context for state management in a medium-sized React application?"
+codex exec -s read-only "What are the pros and cons of using Redux vs React Context for state management in a medium-sized React application?"
 ```
 
 ### Architecture Opinion
 ```bash
-codex-xhigh exec -s read-only "Review this API design and suggest improvements:
+codex exec -s read-only "Review this API design and suggest improvements:
 
 GET /users/{id}/posts
 POST /users/{id}/posts

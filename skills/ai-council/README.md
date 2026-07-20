@@ -43,13 +43,7 @@ codex-fugu --status
 
 ### Additional Setup
 
-3. **Configure codex-xhigh alias** (recommended)
-   ```bash
-   # Add to your shell config (.bashrc, .zshrc, etc.)
-   alias codex-xhigh='codex --config model_reasoning_effort="xhigh"'
-   ```
-
-4. **Claude Code sandbox settings** (macOS only)
+3. **Claude Code sandbox settings** (macOS only)
 
    Codex CLI requires access to macOS SystemConfiguration API, which is blocked by Claude Code's default sandbox. Add the following to `~/.claude/settings.json`:
 
@@ -58,7 +52,7 @@ codex-fugu --status
      "sandbox": {
        "enabled": true,
        "allowUnsandboxedCommands": true,
-       "excludedCommands": ["codex", "codex-xhigh", "codex-fugu"]
+       "excludedCommands": ["codex", "codex-fugu"]
      }
    }
    ```

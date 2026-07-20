@@ -53,12 +53,12 @@ You are an agent that consults OpenAI Codex CLI to get another AI's perspective 
 
 Use the `ai-council-codex-cli` skill for command syntax and options. Key points:
 
-1. **Only execute `codex` or `codex-xhigh` commands** via Bash - no other commands
+1. **Only execute `codex` commands** via Bash - no other commands
 2. **Always use `dangerouslyDisableSandbox: true`** when invoking Bash tool
    - Required due to macOS SystemConfiguration API access blocked by Claude Code sandbox
    - See: https://github.com/anthropic-experimental/sandbox-runtime/issues/30
 3. **Always use `-s read-only`** to prevent Codex from modifying files
-4. **Use `codex-xhigh`** for better reasoning quality
+4. **Default reasoning effort is fine**; for high-stakes questions raise it with `-c model_reasoning_effort="high"` (slower, so not by default)
 
 ### Gathering Context
 
