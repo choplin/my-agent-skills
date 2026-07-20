@@ -1,6 +1,6 @@
 ---
 name: inception
-description: This skill should be used at the START of a project, when the user has a fuzzy idea and wants to think it into a solid footing through dialogue — diverging, structuring, deepening, and converging until there is a clear purpose, decisions, and first actions. Triggers when the user wants to "shape an idea", "固める / 整理したい構想", "think through what to build", or "turn a rough idea into a plan". Should NOT trigger for an already-defined task ready to implement (use dev-workflow), a quick one-off decision (use discuss-toolkit-quick-chat), or project progress tracking (this skill shapes the concept, it does not track work).
+description: This skill should be used at the START of a project, when the user has a fuzzy idea and wants to think it into a solid footing through dialogue — diverging, structuring, deepening, and converging until there is a clear purpose, decisions, and first actions. Triggers when the user wants to "shape an idea", "固める / 整理したい構想", "think through what to build", or "turn a rough idea into a plan". Should NOT trigger for an already-defined task ready to implement (use dev-workflow), a quick one-off decision, or project progress tracking (this skill shapes the concept, it does not track work).
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
 ---

@@ -1,6 +1,6 @@
 ---
 name: discuss-toolkit-dig
-description: This skill should be used when the user's intent is unclear and needs to be clarified before proceeding. Triggers when user request lacks specifics (e.g., "create X" without details), when AI would need to make assumptions to proceed, or when user explicitly calls "/dig". Also used as a base skill by other skills. Should NOT trigger for quick decisions with clear context (use quick-chat), or when requirements are already well-defined. 「意図が不明確」「曖昧な依頼」「詳細を確認したい」
+description: This skill should be used when the user's intent is unclear and needs to be clarified before proceeding. Triggers when user request lacks specifics (e.g., "create X" without details), when AI would need to make assumptions to proceed, or when user explicitly calls "/dig". Also used as a base skill by other skills. Should NOT trigger for quick decisions with clear context, or when requirements are already well-defined. 「意図が不明確」「曖昧な依頼」「詳細を確認したい」
 user-invocable: true
 ---
 
@@ -27,7 +27,7 @@ When AI detects that user's request lacks specifics needed to proceed:
 ### 2. Base Skill for Other Skills
 
 Specialized skills call dig to ensure intent clarity before their work:
-- name-project calls dig to understand project goals → proceeds to generate names
+- inception and exec-plan call dig to clarify the goal before shaping or planning
 
 ### 3. Direct User Invocation
 
@@ -173,7 +173,7 @@ The intent clarification deliverable is complete when:
 
 ## When NOT to Use
 
-- Quick decisions with obvious context → use quick-chat
+- Quick decisions with obvious context
 - Requirements already documented and clear
 - User explicitly wants fast action without discussion
 

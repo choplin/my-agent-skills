@@ -78,7 +78,7 @@ There is no fixed numeric threshold. The two axes are the guide; the agreed
 ### 1. Draft the direction and plan
 
 Keep this light. Do **not** run a heavy interview (that's `dev-workflow`) or a
-thinking session (that's `inception`). A short `discuss-toolkit-quick-chat`, or
+thinking session (that's `inception`). A short back-and-forth, or
 `discuss-toolkit-dig` only if the goal is genuinely unclear, is enough.
 
 Settle just three things and write them into the plan file:
