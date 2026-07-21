@@ -68,7 +68,6 @@ scripts/install-opts.sh --dry-run     # preview
 | `understanding` | explain-diff (reviewer-facing HTML explanation of a diff; explain-pr publishes it for PRs), html-docs (shared web-doc design system; base for explain-diff) |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
 | `lang-reference` | go, java, python, scala, typescript |
-| `project-notes` | project-notes-capture, project-notes-distill, project-notes-base (raw→distilled project notes in an Obsidian vault) |
 | `jira-cli` | jira-cli |
 
 > MoonBit skills are **not** vendored here — install them straight from upstream: `skills add moonbitlang/skills`.
@@ -100,7 +99,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **inception**
 - inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**
 - inception-quick → inception, **discuss-toolkit-dig**, **dev-workflow-kickoff**
-- inception-finalize → **project-notes-base**, **linear**, **dev-workflow-kickoff**
+- inception-finalize → llm-wiki-base `(ext)`, **linear**, **dev-workflow-kickoff**
 - inception-framing → **discuss-toolkit-dig**
 - inception-deepen → **discuss-toolkit-dig**
 - inception-converge → finalize
@@ -121,10 +120,6 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **git-helpers**
 - draft-pr → pr-description
 - explain-pr → **understanding-explain-diff**
-
-**project-notes**
-- capture → base
-- distill → base
 
 **linear**
 - linear-start → linear, **dispatch-work**, **dev-workflow-resume-work**, **exec-plan**, **goal-loop**, wtm-worktree `(ext)`
