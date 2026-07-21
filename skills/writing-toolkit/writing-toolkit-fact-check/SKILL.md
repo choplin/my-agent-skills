@@ -8,6 +8,19 @@ allowed-tools: Read, Grep, Glob, Task, Bash, WebSearch
 
 Ensure that technical documents contain ONLY verified facts - no assumptions, guesses, or unverified claims.
 
+## Execution — isolate the verification reads
+
+Fact-checking reads many files, runs commands, and searches the web to confirm each
+claim. That bulk should not land in the caller's context.
+
+- **Under Claude Code**, dispatch the `writing-toolkit-fact-check` subagent
+  (`subagent_type: writing-toolkit-fact-check`) so those reads stay out of this
+  context; it runs the Process below in isolation and returns only the findings.
+- **Otherwise**, apply the Process below inline.
+
+Either way the verification procedure and the four-state output are exactly the same
+— the subagent is only a context boundary, not a different check.
+
 ## Process
 
 1. **Read the document thoroughly** - Identify all factual claims, technical statements, and assertions
