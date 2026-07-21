@@ -6,17 +6,13 @@ Document review and writing improvement skills for Claude Code.
 
 | Skill | Description |
 |-------|-------------|
-| `critical-review` | Objective critical analysis of documents and plans |
+| `review` | Review or revise a document across two axes: stance (critical / objective) × deliverable (review / revise) |
 | `fact-check` | Fact-check technical documents for accuracy |
-| `objective-review` | Neutral, balanced analysis from reader's perspective |
-| `revise-document` | Comprehensive document revision |
 
 ## When Skills Activate
 
-- **critical-review**: "review this critically", "critique this", "find problems"
+- **review**: "review this", "critique this", "find problems", "review objectively", "how does this read", "revise this", "improve this writing", "make this clearer"
 - **fact-check**: "fact-check this", "verify this document", "check accuracy"
-- **objective-review**: "review objectively", "how does this read"
-- **revise-document**: "revise this", "improve this writing", "make this clearer"
 
 ## Installation
 
