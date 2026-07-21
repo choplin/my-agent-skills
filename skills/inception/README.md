@@ -27,7 +27,7 @@ Each phase is a different AI stance over the same graph. The orchestrator estima
 | `inception-structure` | 構造化 — cluster into an issue tree, wire dependencies |
 | `inception-deepen` | 深掘り — attack premises, resolve points, record decisions |
 | `inception-converge` | 収束 — synthesize into purpose, decisions, actions |
-| `inception-finalize` | 確定 — terminal exit; persist the consolidated PRD to the Project Notes vault, hand actions to a tracker, retire the graph |
+| `inception-finalize` | 確定 — terminal exit; persist the consolidated PRD to the llm-wiki knowledge base, hand actions to a tracker, retire the graph |
 
 ## Artifacts
 
@@ -37,7 +37,7 @@ Stored under `.agents/inception/<topic-slug>/` (transient, not committed):
 - `prd.md` / `decisions.md` / `action-items.md` / `open-questions.md` — projections (regenerated; do not hand-edit)
 - `prd-quick.md` — the `inception-quick` route's hand-written capture (separate from the rendered `prd.md`, so neither clobbers the other)
 
-Everything above is transient. The **durable** artifact is produced only at the end by `inception-finalize`: one consolidated PRD written to the Project Notes vault (`Notes/PRD - <title>.md`), with the decisions' rejected alternatives preserved. After finalize, the vault PRD is authoritative and the `.agents/` graph is spent.
+Everything above is transient. The **durable** artifact is produced only at the end by `inception-finalize`: one consolidated PRD written to the llm-wiki knowledge base (one note in the repo scope, tagged `prd`), with the decisions' rejected alternatives preserved. After finalize, the wiki PRD is authoritative and the `.agents/` graph is spent.
 
 ## CLI
 
@@ -49,12 +49,12 @@ next <graph.json>       check <graph.json>      render <graph.json> <dir>
 finalize <graph.json>
 ```
 
-`next` is the key one — it walks `dependsOn` to surface the most foundational open point to discuss next. `finalize` prints the single consolidated PRD (rejected alternatives included, live queue/actions omitted) that `inception-finalize` persists to the vault.
+`next` is the key one — it walks `dependsOn` to surface the most foundational open point to discuss next. `finalize` prints the single consolidated PRD (rejected alternatives included, live queue/actions omitted) that `inception-finalize` persists to the llm-wiki knowledge base.
 
 ## Conventions
 
 - **Decisions are first-class.** Closing a question on a choice creates a `Decision` node with rejected alternatives + rationale — the durable artifact that prevents re-litigation.
 - **Elicit via dig.** All drawing-out of the user's thinking goes through `discuss-toolkit-dig`; never fill gaps with the AI's assumptions.
 - **Two routes.** Full `inception` shapes an idea through the whole phased session and the thinking graph. `inception-quick` skips all of that to capture just the background and purpose into a short `prd-quick.md` — use it when the idea does not need shaping, only recording. The two use separate files so neither clobbers the other, and the upgrade is lossless: starting full `inception` on a slug that already has a `prd-quick.md` seeds the graph from it before rendering.
-- **Finalize is the one-way exit.** Both routes end at `inception-finalize`: the working artifacts stay transient in `.agents/`, and only the consolidated PRD is confirmed into the Project Notes vault (via `project-notes-base`, no new directory). Concrete actions leave for a tracker (Linear, `dev-workflow-kickoff`, …); the live open-questions queue is a snapshot and is discarded. After finalize the vault PRD is the source of truth — reopen by starting a fresh session or editing the note, not by re-rendering the retired graph.
-- **Relationship to neighbors.** Earlier and lighter than `dev-workflow` (which begins once a task is defined); broader than `discuss-toolkit-dig` (which clarifies one intent without lasting artifacts). Shares its durable store with `project-notes` (finalize writes a `PRD - ` note into the same vault).
+- **Finalize is the one-way exit.** Both routes end at `inception-finalize`: the working artifacts stay transient in `.agents/`, and only the consolidated PRD is confirmed into the llm-wiki knowledge base (via `llm-wiki-base`, no directory scheme of its own). Concrete actions leave for a tracker (Linear, `dev-workflow-kickoff`, …); the live open-questions queue is a snapshot and is discarded. After finalize the wiki PRD is the source of truth — reopen by starting a fresh session or editing the note, not by re-rendering the retired graph.
+- **Relationship to neighbors.** Earlier and lighter than `dev-workflow` (which begins once a task is defined); broader than `discuss-toolkit-dig` (which clarifies one intent without lasting artifacts). Shares its durable store with the `llm-wiki` family (finalize writes a `prd`-tagged note into the same knowledge base).

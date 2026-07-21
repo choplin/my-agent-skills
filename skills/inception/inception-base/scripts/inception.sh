@@ -204,7 +204,7 @@ cmd_render() {
 
 cmd_finalize() {
   # Print ONE consolidated PRD to stdout — the durable document `inception-finalize`
-  # persists to the project-notes vault. Unlike render's prd.md, the Direction
+  # persists to the llm-wiki knowledge base. Unlike render's prd.md, the Direction
   # section carries each decision's rejected alternatives + rationale (merging in
   # what decisions.md held), so the anti-re-litigation record survives the move.
   # The transient layers (live open-questions queue, action items) are deliberately

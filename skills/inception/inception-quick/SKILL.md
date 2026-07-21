@@ -42,7 +42,7 @@ No `graph.json`, no CLI, no `decisions.md` / `action-items.md` / `open-questions
    - **Central question** is a single question, not a list.
    - Any section not filled from the user's input reads `_not yet defined_` (not fabricated).
    Then show the user the `prd-quick.md` and name the two paths out:
-   - **Keep it.** To persist this footing into durable memory, offer **`inception-finalize`** (確定) — it writes `prd-quick.md` to the Project Notes vault as a keep-forever PRD note. `prd-quick.md` under `.agents/` is transient; finalize is what makes it last.
+   - **Keep it.** To persist this footing into durable memory, offer **`inception-finalize`** (確定) — it writes `prd-quick.md` to the llm-wiki knowledge base as a keep-forever PRD note. `prd-quick.md` under `.agents/` is transient; finalize is what makes it last.
    - **Upgrade it.** If they later want to pressure-test the idea, generate options, or record decisions and first actions, run full `inception` on the **same topic** — it detects this hand-written `prd-quick.md`, seeds its graph's `session.*` fields from it, and continues from there (the capture is carried forward, not lost). If a concrete next action is already obvious instead, offer to hand it to `dev-workflow-kickoff`.
 
 ## Scope guard
