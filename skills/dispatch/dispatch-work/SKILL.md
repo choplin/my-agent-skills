@@ -50,7 +50,7 @@ Evaluate top to bottom; take the first row that fits.
 |---|---|---|
 | Small, obvious, low-risk — the change is self-evident and completion is checkable at a glance; any execution skill would only add ceremony | **no skill** — implement directly in-session | Nothing to route; the cheapest correct path is to just do it and keep the session going |
 | Still fuzzy — you don't yet know *what* to build; needs shaping before any execution | `inception` | No defined What means no oracle yet; shape the concept first |
-| A clear task whose **every** completion criterion is an executable pass/fail (tests, build, a reference impl, a benchmark), and you want to hand it off | `goal-loop` | The oracle lives outside the user's head; a bounded implement→verify loop can close it |
+| A clear task whose **every** completion criterion is an executable pass/fail (tests, build, a reference impl, a benchmark), and you want to hand it off | native **`/goal`** (host command) **or** the `goal-loop` skill | The oracle lives outside the user's head; a bounded implement→verify loop can close it. `/goal` is the lighter, supervised option (LLM-judged stop); `goal-loop` when the run is unattended/high-stakes and "done" must be deterministic — see tie-breaker |
 | A rough goal you want driven **as far as possible autonomously**, with the few high-impact / hard-to-reverse decisions parked and batch-reviewed at the end — no up-front spec wanted | `exec-plan` | Most calls are reversible and cheap to self-drive; only the one-way doors need the user, once |
 | Work that needs requirements **decided up front**, or benefits from a durable spec/plan, approval gates, self-review, or spans multiple sessions / a PR-review flow | `dev-workflow-kickoff` | The oracle is a human-authored contract; keep the human in the loop with tracked artifacts |
 
@@ -88,7 +88,8 @@ mark it as the recommendation with a one-line reason; list the others as
 selectable alternatives so the user can override. Adapt the wording to the task:
 
 - **小さく明白な変更なので、スキルを使わずこのまま実装する** → no skill（このセッションで直接）
-- **実行可能なチェックで完了判定できる／任せきりにしたい** → goal-loop
+- **実行可能なチェックで完了判定でき、リアルタイムで見ていられる（LLM判定での停止でOK）** → native `/goal`（ホストコマンドを直接実行）
+- **実行可能なチェックで完了判定でき、無人・高stakesで決定論的に止めたい** → goal-loop
 - **だいたい任せて、重い決定だけ最後にまとめて相談したい** → exec-plan
 - **先に仕様を固め、承認・レビューしながら進めたい（複数セッションを跨ぐ）** → dev-workflow-kickoff
 - **まだ何を作るか曖昧で、まず構想を固めたい** → inception
@@ -103,14 +104,21 @@ the user has decided. The four engine targets (`inception`, `goal-loop`, `exec-p
 `dev-workflow-kickoff`) are model-invocable: use the **Skill tool** to invoke the
 chosen one directly. It receives the task context via session history.
 
-The fifth option is different in kind: **no-skill returns control to the normal
-session** — there is no skill to invoke and nothing to hand off to. Once the user
-picks it, simply proceed to implement the change in-session. This is the one route
-where `dispatch-work` does not launch another skill; it still is not the executor —
-it just steps out of the way so the ordinary session can do the small change. (The
-"never implement yourself" anti-pattern below still holds: it forbids doing the work
-*inside a routing that should have gone to an engine*, not this deliberate,
-user-chosen inline route.)
+Two options are different in kind — they are **host commands, not skills**, so there
+is nothing to invoke via the Skill tool:
+
+- **no-skill returns control to the normal session** — no skill to invoke and nothing
+  to hand off to. Once the user picks it, simply proceed to implement the change
+  in-session. This is one route where `dispatch-work` does not launch another skill;
+  it still is not the executor — it just steps out of the way so the ordinary session
+  can do the small change. (The "never implement yourself" anti-pattern below still
+  holds: it forbids doing the work *inside a routing that should have gone to an
+  engine*, not this deliberate, user-chosen inline route.)
+- **native `/goal`** — the host's built-in Goal command, not a skill in this repo.
+  Like the no-skill route, do not try to invoke it with the Skill tool; instead tell
+  the user to run `/goal` directly (hand off the Goal Contract you have gathered so
+  they can paste it in). The `goal-loop` skill, by contrast, *is* model-invocable and
+  is handed off via the Skill tool like the other engines.
 
 ## Anti-patterns
 
