@@ -1,0 +1,4 @@
+interface:
+  display_name: "Browser Showcase Capture"
+  short_description: "Capture polished web-app demos in a browser."
+  default_prompt: "Use $showcase-capture-browser to capture this web app demo."

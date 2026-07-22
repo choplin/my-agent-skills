@@ -1,0 +1,4 @@
+interface:
+  display_name: "Terminal Showcase Capture"
+  short_description: "Capture polished CLI demo screenshots and videos."
+  default_prompt: "Use $showcase-capture-terminal to capture this CLI demo."

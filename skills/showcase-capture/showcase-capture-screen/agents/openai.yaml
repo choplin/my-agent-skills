@@ -1,0 +1,4 @@
+interface:
+  display_name: "Screen Showcase Capture"
+  short_description: "Capture app demonstrations with screen tools."
+  default_prompt: "Use $showcase-capture-screen to capture this app demonstration."

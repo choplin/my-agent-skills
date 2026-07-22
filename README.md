@@ -68,6 +68,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
 | `lang-reference` | go, java, python, scala, typescript |
 | `jira-cli` | jira-cli |
+| `showcase-capture` | plan, terminal, browser, screen (plan app/tool demo media; capture each planned shot on its appropriate surface) |
 
 > MoonBit skills are **not** vendored here — install them straight from upstream: `skills add moonbitlang/skills`.
 

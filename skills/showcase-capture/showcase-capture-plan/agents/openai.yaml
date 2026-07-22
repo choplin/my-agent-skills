@@ -1,0 +1,4 @@
+interface:
+  display_name: "Showcase Capture Plan"
+  short_description: "Plan demo videos and screenshots before capture."
+  default_prompt: "Use $showcase-capture-plan to plan the demo media for this app."
