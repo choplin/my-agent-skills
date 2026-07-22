@@ -174,7 +174,7 @@ Several skills (`linear` (the overview), `linear-start`, `linear-groom`) begin b
 - Exactly one match → use it silently.
 - No match, or ambiguous → **ask** the user which Repo label applies (don't guess). If the repo has no label yet, offer to add its issue Repo label (the agent can create issue labels).
 
-**Step B — Repo label → active Project(s).** List the Projects tagged with the **Repo project-label = R** whose state is **active** — not `completed` and not `canceled`. Every Project carries exactly one Repo tag (`1 Project = 1 repo`), so the repo resolves to its active Project(s) directly.
+**Step B — Repo label → active Project(s).** List the Projects tagged with the **Repo project-label = R**, then retain the ones whose state is **not** `completed` or `canceled`. Here “active” is a local convenience term for a non-terminal Project; it is **not** a Linear `state` value, so never query `state: "active"`. Every Project carries exactly one Repo tag (`1 Project = 1 repo`), so the repo resolves to its active Project(s) directly.
 
 - **The `Repo/R` project-label doesn't exist yet** → the agent **cannot create project labels** (see Label groups). Ask the user to create the `Repo/R` project-label in the Linear UI and tag the relevant Project(s) with it, then continue. (Once-per-repo setup.)
 - **No active Project carries R** → say so and stop; offer to create a Project or groom the backlog.
