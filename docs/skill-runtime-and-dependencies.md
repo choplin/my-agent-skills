@@ -103,7 +103,7 @@ Key properties:
     then `exec`s the given command inside it. One resolver serves every script in
     the leaf (and any command the SKILL.md tells the agent to run through it), and
     because the wrapper `exec`s the *target* (not itself), it needs **no re-exec
-    guard variable**. This is the paper-studio-summarize shape.
+    guard variable**.
   - **Alternative — inline self-re-exec** inside a single worker script, guarded
     by an env var to avoid an infinite loop. Fine when the skill has exactly one
     entry script and you would rather not add a second file.
@@ -250,11 +250,9 @@ Three things follow:
 - **Sandbox / network caveat.** `uvx`'s first resolve and `nix develop`'s
   substituter fetches need network and cache writes, which an agent's command
   sandbox may block. The SKILL.md should tell the reader to **re-run without the
-  sandbox** on such a failure (paper-studio already documents this pattern).
+  sandbox** on such a failure.
 
 ## Reference implementation
 
-- Guard pattern for a hard prerequisite: `paper-studio-summarize`
-  (`scripts/mineru_ocr.sh` — `command -v` + install message + stop).
 - The `goal-loop` group is the reference for the broader "portable core, opt-in
   add-on" discipline.
