@@ -1,6 +1,6 @@
 ---
 name: linear-start
-description: Start or resume work on a Linear issue belonging to the current repository — resolve the repo to its active Linear Project, list that project's in-flight and open issues (In Progress + Todo + Backlog), let the user pick one, set up or recover its workspace, and hand off to an execution skill. When the picked issue reaches Done, report the Project's status and suggest the next related work to chain into. Picking an In Progress issue resumes it — the existing worktree is located, the work already done is reconstructed, and the execution mode already in flight is continued. Use when the user wants to pick up the next piece of work — new or half-finished — from Linear for the repo they are in. Triggers on "start a Linear issue", "pick an issue to work on", "resume an in-progress issue", "着手する issue を選ぶ", "Linear から次の作業を", "途中の issue を再開", "続きから作業する". Should NOT trigger for creating/grooming issues (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
+description: Start or resume work on a Linear issue belonging to the current repository — use the repo label to list all its in-flight and open issues (In Progress + Todo + Backlog), including issues outside a Project, let the user pick one, set up or recover its workspace, and hand off to an execution skill. When the picked issue reaches Done, report its Project's status when it has one and suggest the next related work to chain into. Picking an In Progress issue resumes it — the existing worktree is located, the work already done is reconstructed, and the execution mode already in flight is continued. Use when the user wants to pick up the next piece of work — new or half-finished — from Linear for the repo they are in. Triggers on "start a Linear issue", "pick an issue to work on", "resume an in-progress issue", "着手する issue を選ぶ", "Linear から次の作業を", "途中の issue を再開", "続きから作業する". Should NOT trigger for creating/grooming issues (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
 user-invocable: true
 ---
 
@@ -12,18 +12,17 @@ Use whichever Linear MCP server is wired. Referenced fields (`state`, `project`,
 
 ## Flow
 
-### 1. Resolve the current repo → active Project
+### 1. Resolve the current repo → Repo label
 
-Resolve the repo to its active Project(s) per the `linear-base` skill's **Resolving the current repo's active Project(s)** (repo → Repo label R → active Projects tagged `Repo/R`; the label-ambiguity, missing-project-label, and no-active-Project edge cases all live there).
+Resolve the current repo to its issue **Repo label R** using **Step A — repo → Repo label** in `linear-base`'s *Resolving the current repo's active Project(s)* procedure. The label-ambiguity edge case still applies.
 
-This skill acts on a **single** Project:
+Do **not** resolve or require an active Project before listing candidates. Projects represent finite outcomes, while an Issue can validly be a standalone deliverable; making a Project the search root would hide standalone issues. A missing `Repo/R` **project** label or no active Project must therefore not stop this skill.
 
-- **Exactly one active Project → select it and just tell the user** which one; do not ask. (This is the normal case — one repo usually has a single active Project.)
-- **Multiple active Projects → list them and ask** the user to pick one.
+Retain each candidate's Project, if any, as context for display and the post-completion report. Never ask the user to choose a Project before they choose an Issue.
 
 ### 2. List the issues to choose from
 
-Within the chosen Project, list its issues with **Repo label = R** in two sections. For each issue show: identifier, title, Status, Priority, and Type label (`impl`/`design`/`research`).
+List **all issues with Repo label = R**, regardless of whether they belong to a Project or which Project they belong to, in two sections. For each issue show: identifier, title, Status, Priority, Type label (`impl`/`design`/`research`), and Project (`<project name>` or `No Project`).
 
 **Section 1 — In flight (resume candidates):** issues whose `state` is **In Progress**. Show these **first**, as their own section — they are candidates because work already exists on them, not because of their priority, so they are not ranked against the section below. Surfacing them at the top is deliberate: it makes half-finished work visible before new work is picked up.
 
@@ -108,15 +107,15 @@ Summarize for the user what is done, what is in progress, and what remains, **be
 
 Whichever way it goes, remember the later lifecycle transitions owned by `linear-base`: **In Progress → In Review** when a PR opens, **In Review → Done** when it merges. When the issue reaches **Done**, continue with step 7.
 
-### 7. After Done — show the Project status and suggest the next related work
+### 7. After Done — show context and suggest the next related work
 
-Once the issue this flow put In Progress reaches **Done** (the completion note is left by `linear-base` at that transition), don't stop at "merged". The Project moved on by one issue — surface where it now stands and what to pick up next, so the user can chain into the next piece without re-running the whole selection from scratch. This may land in a later session or turn than the one that started the issue; run it whenever the completion this flow set in motion reaches Done.
+Once the issue this flow put In Progress reaches **Done** (the completion note is left by `linear-base` at that transition), don't stop at "merged". Surface its Project context when it has one, then show what to pick up next so the user can chain into the next piece without re-running the whole selection from scratch. This may land in a later session or turn than the one that started the issue; run it whenever the completion this flow set in motion reaches Done.
 
-**7a. Report the Project's status.** For the same Project resolved at step 1, tally its issues with **Repo label = R** by `state` type and present the compact per-Project block exactly as the `linear` overview skill does (its step 2–3 — `In Progress` / `Todo` / `Backlog`, optional `(Done N)`, `canceled` excluded). The Project was already resolved, so just re-tally and report; don't re-run repo resolution or ask the user to pick a Project again. Close with a one-line read of the shape (e.g. "one In Progress left, three Todo ready").
+**7a. Report Project status when applicable.** If the completed issue belongs to a Project, tally that Project's issues with **Repo label = R** by `state` type and present the compact per-Project block exactly as the `linear` overview skill does (its step 2–3 — `In Progress` / `Todo` / `Backlog`, optional `(Done N)`, `canceled` excluded). Close with a one-line read of the shape (e.g. "one In Progress left, three Todo ready"). If it has **No Project**, state that it was a standalone issue and skip the Project tally; do not invent or require a Project.
 
-**7b. Suggest the next related task(s).** Propose the issue(s) to pick up next, **related to the one just completed** — one or several. Rank by relatedness first, then fall back to the Project's ready work:
+**7b. Suggest the next related task(s).** Propose the issue(s) to pick up next, **related to the one just completed** — one or several. Search issues with **Repo label = R** and rank by relatedness first, then fall back to the repo's ready work:
 
 1. **Related to the completed issue, first** — issues that share its **Milestone**, are linked to it by a **Linear relation** (parent, sub-issue, or blocking/blocked — a blocked issue the completed one just unblocked is a strong candidate), or share a **Type/topic label**. Prefer these, ordered by readiness (Todo above Backlog) then priority.
-2. **Fallback — the Project's ready work** — if nothing is related, or to round out the list, offer the top open issues by priority exactly as step 2's Section 2 orders them (Todo above Backlog, Urgent → None).
+2. **Fallback — the repo's ready work** — if nothing is related, or to round out the list, offer the top open issues by priority exactly as step 2's Section 2 orders them (Todo above Backlog, Urgent → None), including standalone issues.
 
-Show each suggestion as identifier, title, Status, Priority, Type — and a short note on *why* it's related (e.g. "same milestone", "was blocked by the one you finished"). Present them and let the user pick, decline, or stop. **If the user picks one, loop back into this skill from step 2** (or step 3 if the Project is unchanged and already resolved) to start it — a Done issue naturally leads into the next start. If no issue is related and none is ready, say so plainly rather than padding the list.
+Show each suggestion as identifier, title, Status, Priority, Type, and Project — plus a short note on *why* it's related (e.g. "same milestone", "was blocked by the one you finished"). Present them and let the user pick, decline, or stop. **If the user picks one, loop back into this skill from step 2** (or step 3 if it is already in the selected state) to start it — a Done issue naturally leads into the next start. If no issue is related and none is ready, say so plainly rather than padding the list.
