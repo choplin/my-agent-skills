@@ -7,7 +7,7 @@ allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
 
 # Inception — Deepen (深掘り)
 
-> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Full method: `inception-base/references/phases.md`.
+> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Phase map: `inception-base/references/phases.md`.
 
 **Stance: adversarial. Attack premises; be the devil's advocate.** Drain the queue one foundational point at a time, but pressure-test before closing. This is where thinking actually advances.
 

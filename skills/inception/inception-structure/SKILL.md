@@ -7,7 +7,7 @@ allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
 
 # Inception — Structure (構造化)
 
-> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Full method: `inception-base/references/phases.md`.
+> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Phase map: `inception-base/references/phases.md`.
 
 **Stance: organize.** Turn the divergent dump into an issue tree with dependencies, so the conversation knows what to discuss first.
 

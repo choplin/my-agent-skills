@@ -98,7 +98,7 @@ cmd_next() {
 cmd_check() {
   local f="${1:?check: missing <graph.json>}"
   jq -r '
-    .nodes as $all
+    .session.phase as $phase | .nodes as $all
     | ( [ $all[].id ] ) as $ids
     | [
         ( $ids | group_by(.) | map(select(length>1)[0]) | map("duplicate id: " + .) ),
@@ -107,7 +107,7 @@ cmd_check() {
         ( [ $all[] | . as $n | (.dependsOn // [])[] | select(. as $d | $ids | index($d) | not)
             | "dangling dependsOn: " + $n.id + " -> " + . ] ),
         ( [ $all[] | select(.type=="Decision" and (.decision|not)) | "Decision node without decision field: " + .id ] ),
-        ( [ $all[] | select(.status=="open" and (.type=="Question" or .type=="Idea" or .type=="Counter") and (.nextMove|not)) | "open discussion node without nextMove: " + .id ] ),
+        ( [ $all[] | select($phase != "framing" and $phase != "diverge" and .status=="open" and (.type=="Question" or .type=="Idea" or .type=="Counter") and (.nextMove|not)) | "open discussion node without nextMove: " + .id ] ),
         ( [ $all[] | select(.status=="deferred" and ((.deferReason // "")=="")) | "deferred node without deferReason: " + .id ] )
       ] | add
     | if length==0 then "ok: no structural issues" else .[] end
@@ -142,7 +142,7 @@ cmd_render() {
           end ),
       "",
       "## Risks", "",
-      ( [ $all[] | select(.type=="Counter") ] as $r
+      ( [ $all[] | select(.type=="Counter" and .status!="dropped") ] as $r
         | if ($r|length)==0 then "_none captured yet_"
           else ( $r[] | "- " + .content )
           end ),
@@ -234,7 +234,7 @@ cmd_finalize() {
           end ),
       "",
       "## Risks", "",
-      ( [ $all[] | select(.type=="Counter") ] as $r
+      ( [ $all[] | select(.type=="Counter" and .status!="dropped") ] as $r
         | if ($r|length)==0 then "_none captured_"
           else ( $r[] | "- " + .content )
           end ),

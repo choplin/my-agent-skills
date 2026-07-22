@@ -7,7 +7,7 @@ allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
 
 # Inception — Converge (収束)
 
-> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Full method: `inception-base/references/phases.md`.
+> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Phase map: `inception-base/references/phases.md`.
 
 **Stance: synthesize.** Pull the resolved graph into a footing the user can act on.
 

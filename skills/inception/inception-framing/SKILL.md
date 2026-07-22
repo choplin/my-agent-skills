@@ -7,7 +7,7 @@ allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
 
 # Inception — Framing (構想)
 
-> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Full method: `inception-base/references/phases.md`.
+> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Phase map: `inception-base/references/phases.md`.
 
 **Stance: Socratic. Find the real problem before any solution.** At the start, the highest-leverage move is reframing the problem, not answering it. The first framing a user offers is rarely the sharpest one.
 

@@ -93,11 +93,6 @@
             },
             "rationale": { "type": "string" }
           }
-        },
-        "source": {
-          "type": "string",
-          "enum": ["user", "ai"],
-          "description": "Who originated this node."
         }
       }
     }

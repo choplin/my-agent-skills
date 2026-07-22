@@ -22,6 +22,44 @@ A single self-contained `prd-quick.md` at `.agents/inception/<topic-slug>/prd-qu
 - **Central question** — the single question the whole effort answers.
 - **Target users** — a first cut; primary/secondary, specific enough to be wrong about.
 
+Write exactly this shape so full `inception` can seed the matching graph fields:
+
+```markdown
+# <topic> — Quick PRD
+
+## Summary
+
+## Background
+
+## Problem
+
+## Purpose / Vision
+
+## Central question
+
+## Target users
+
+## Value proposition
+
+_not yet defined_
+
+## Goals
+
+_not yet defined_
+
+## Non-goals
+
+_not yet defined_
+
+## Direction (decided)
+
+_not yet defined_
+
+## Risks
+
+_not yet defined_
+```
+
 See `inception-base/references/prd-template.md` for what "good" vs "thin" looks like per section. The sections that only deepening/convergence can fill (Value proposition, Goals, Non-goals, and the graph-derived Direction/Risks) render as `_not yet defined_` — an honest signal that this is a foundation, and the upgrade hook to full `inception`.
 
 No `graph.json`, no CLI, no `decisions.md` / `action-items.md` / `open-questions.md`. One file.

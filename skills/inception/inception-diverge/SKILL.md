@@ -7,7 +7,7 @@ allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
 
 # Inception — Diverge (発散)
 
-> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Full method: `inception-base/references/phases.md`.
+> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Phase map: `inception-base/references/phases.md`.
 
 **Stance: widen. Generate ideas, options, and perspectives — do not judge yet.** Premature narrowing kills options the user has not voiced. Your value here is breadth and the introduction of perspectives the user hasn't taken.
 
