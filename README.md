@@ -118,7 +118,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **git-helpers**
 - draft-pr → pr-description
-- explain-pr → understanding-explain-diff `(ext; reading-studio-skills)`
+- explain-pr → understanding-explain-diff `(ext; explainer-studio)`
 
 **linear**
 - linear-start → linear, **dispatch-work**, **dev-workflow-resume-work**, **exec-plan**, **goal-loop**, wtm-worktree `(ext)`
