@@ -66,9 +66,10 @@ scripts/install-opts.sh --dry-run     # preview
 | `discuss-toolkit` | dig, one-point (handle multiple discussion points one at a time) |
 | `git-helpers` | draft-pr, explain-pr, pr-description, rebase-onto-rewritten |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
-| `lang-reference` | go, java, python, scala, typescript |
+| `lang-reference` | go, java, python, scala, sql, typescript |
 | `jira-cli` | jira-cli |
 | `showcase-capture` | plan, terminal, browser, screen (plan app/tool demo media; capture each planned shot on its appropriate surface) |
+| `codebase-structure` | codebase-structure, codebase-structure-refactor (model code around concepts, types, invariants, and ownership; safely refactor existing code toward that structure) |
 
 > MoonBit skills are **not** vendored here — install them straight from upstream: `skills add moonbitlang/skills`.
 

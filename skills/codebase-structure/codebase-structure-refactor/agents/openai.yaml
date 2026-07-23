@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codebase Structure Refactor"
+  short_description: "Safely refactor code toward explicit ownership"
+  default_prompt: "Use $codebase-structure-refactor to restructure this implementation without changing its behavior."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codebase Structure"
+  short_description: "Structure code around concepts, types, and ownership"
+  default_prompt: "Use $codebase-structure to guide this codebase's structure and boundaries."
