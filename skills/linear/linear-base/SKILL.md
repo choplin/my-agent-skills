@@ -114,7 +114,7 @@ The completion note's mid-work sibling. When an issue is **still In Progress** a
 - **Open questions** — what is still undecided.
 - **Current state & next step** — where the work actually stands, and the first concrete action a resumer should take.
 
-Record only what a fresh reader **cannot reconstruct from git and the tracked artifacts**. Do **not** re-describe the diff (git holds it) or transcribe local execution state — `state.json`, exec-plan files, and loop artifacts are read directly on resume (see `linear-start` step 5 and `dev-workflow-resume-work`). The note carries the judgement those files cannot.
+Record only what a fresh reader **cannot reconstruct from git and the tracked artifacts**. Do **not** re-describe the diff (git holds it) or transcribe local execution state — `state.json`, exec-plan files, and loop artifacts are read directly on resume (see `linear-start` step 6 and `dev-workflow-resume-work`). The note carries the judgement those files cannot.
 
 The issue **stays In Progress** — a handoff note is not a status transition. The `linear-handoff` skill drives this end-to-end (identify issue → align → draft → verify self-completeness → post as a comment).
 
