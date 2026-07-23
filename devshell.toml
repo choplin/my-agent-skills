@@ -1,0 +1,4 @@
+[devshell]
+name = "my-agent-skills"
+
+packages = ["lefthook"]

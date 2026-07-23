@@ -33,6 +33,38 @@ make help           # list all targets; SOURCE/AGENT/SKILL/SCOPE are overridable
 
 `make install` symlinks skills from `./skills` for `claude-code` globally, so edits to this repo take effect without re-running. To install the published repo instead, override `SOURCE=choplin/my-agent-skills`.
 
+## Validate
+
+Install [`skill-validator`](https://github.com/agent-ecosystem/skill-validator)
+and run the repository-wide strict check:
+
+```bash
+brew tap agent-ecosystem/tap
+brew install skill-validator
+make validate-skills
+```
+
+The validator checks every `skills/<group>/<skill>/SKILL.md`. The
+`user-invocable` frontmatter and the `agents/` and `schema/` directories are
+explicitly allowed repository extensions; all other warnings fail the check.
+
+The Nix development shell provides `lefthook`. Enter it directly, or allow
+direnv to load it automatically:
+
+```bash
+nix develop
+# or: direnv allow
+```
+
+Then enable this repository's pre-commit hook once:
+
+```bash
+lefthook install
+```
+
+GitHub Actions runs the same command for pushes and pull requests that change
+skills or validation configuration.
+
 Or run each piece directly:
 
 **Skills** (works for Claude Code, Codex, Cursor, Kimi, and 70+ agents):

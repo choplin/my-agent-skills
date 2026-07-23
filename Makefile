@@ -22,7 +22,7 @@ MANIFEST := $(HOME)/.agents/.my-agent-skills.manifest
 
 .DEFAULT_GOAL := help
 
-.PHONY: help install install-skills install-opts manifest-record list reset purge
+.PHONY: help install install-skills install-opts manifest-record list validate-skills reset purge
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
@@ -44,6 +44,9 @@ manifest-record: ## Union the skills the CLI installs from SOURCE into the insta
 
 list: ## Browse available skills in SOURCE without installing
 	skills add $(SOURCE) --list
+
+validate-skills: ## Validate every skill strictly with skill-validator
+	scripts/validate-skills.sh
 
 reset: ## Purge this repo's skills & add-ons, then reinstall from SOURCE (clears renamed/deleted leftovers)
 	$(MAKE) purge

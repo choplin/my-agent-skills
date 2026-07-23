@@ -1,0 +1,5 @@
+pre-commit:
+  commands:
+    validate-skills:
+      glob: "skills/**"
+      run: make validate-skills
