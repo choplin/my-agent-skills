@@ -24,9 +24,8 @@ implementation) here, never turned into review items. The review itself is only 
 
 ## Scope
 
-Story-level work only. Task-level work leaves dev-workflow and is reviewed by its own
-route (an ad-hoc `review-tools-ai-review` + `review-tools-resolve` on the diff,
-`goal-loop`, `exec-plan`). If the active unit is a Task, see Step 0.
+Story-level work only. All single deliverables admitted by dev-workflow are
+Stories; autonomous work is selected before kickoff and has no dev-workflow state.
 
 ## Input
 
@@ -117,7 +116,7 @@ nothing, `review.md` is still created — the human review below is the point.)
 
 ## Success Criteria
 
-- [ ] Active unit confirmed to be a Story (Task-level redirected)
+- [ ] Active unit confirmed to be a Story
 - [ ] Machine predicates run and fixed to green; `state.json` criteria updated (Default-FAIL honored)
 - [ ] Plan fully implemented (gaps completed or returned to implementation) — not itemized
 - [ ] AI code review seeded via `review-tools-ai-review` (`ai` items); `review.md` at Phase `open`

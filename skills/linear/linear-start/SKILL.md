@@ -102,7 +102,8 @@ Before touching anything, establish where the work actually stands, and report i
 - **In-flight execution artifacts** — the trace left by whichever execution mode was running:
   - `dev-workflow` → its `state.json` (`linear_issue_id` links back to the issue)
   - `exec-plan` → a plan file under `.agents/exec-plans/`
-  - `goal-loop` → its loop/goal artifacts
+  - host-native `/goal` → active goal state, when the host exposes it to the
+    current session (there is no repository artifact to search)
   - none of the above → the work was done in-session with no execution skill
 
 Summarize for the user what is done, what is in progress, and what remains, **before** continuing. A resume that skips this step re-derives the work from scratch and risks contradicting decisions the issue already records.
@@ -117,7 +118,7 @@ Summarize for the user what is done, what is in progress, and what remains, **be
 |---|---|
 | `dev-workflow` `state.json` | `dev-workflow-resume-work` |
 | Plan file under `.agents/exec-plans/` | `exec-plan` (drive the existing plan; do not write a new one) |
-| `goal-loop` artifacts | `goal-loop` (continue against the existing predicates) |
+| Active host-native `/goal` | Continue the existing goal through the host |
 | None | `dispatch-work` — but frame the remaining work (from step 6) as the task, not the whole issue |
 
 Whichever way it goes, remember the later lifecycle transitions owned by `linear-base`: **In Progress → In Review** when a PR opens, **In Review → Done** when it merges. When the issue reaches **Done**, continue with step 8.

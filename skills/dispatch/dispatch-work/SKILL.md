@@ -1,132 +1,132 @@
 ---
 name: dispatch-work
 description: >-
-  Single front door for STARTING work when you are unsure which execution mode fits. Invoked when the
-  user is explicitly starting or routing work (e.g. /dispatch-work), or delegated to by a routing skill
-  such as linear-start; do not auto-activate on unrelated in-progress work. Assesses one thing — how
-  "done" is decided and how much you stay in the loop — then RECOMMENDS a mode and lets the user make
-  the final call: implement in-session (small obvious change), inception (shape a fuzzy concept),
-  goal-loop (completion checkable by executable predicates), exec-plan (self-drive a rough goal, big
-  calls batched to the end), or dev-workflow-kickoff (needs an up-front spec and approval/review gates,
-  possibly across sessions). Use for "start this / which mode should I use / route this work / I don't
-  know whether to spec it or just let you run". Not an executor and does not decide for you — it
-  recommends, the user chooses, then hands off.
+  Single front door for STARTING work when the execution mode has not been chosen.
+  Invoked explicitly (for example /dispatch-work) or delegated to by a routing skill
+  such as linear-start; do not auto-activate on unrelated in-progress work. First
+  separates fuzzy concept shaping from executable work. For executable work, asks
+  whether humans should gate progress through approved specs and reviews or the agent
+  should drive autonomously, then recommends dev-workflow-kickoff, the host's native
+  /goal, exec-plan, or direct in-session implementation. Not an executor: the user
+  chooses one route, then this skill hands off.
 allowed-tools: Read, Glob, Grep, AskUserQuestion, Skill
 user-invocable: true
 ---
 
 # Dispatch Work
 
-One entry point for starting work. Decide **how "done" is decided and how much the
-user stays in the loop**, then hand off to the engine that matches. This skill does
-not implement, plan, or write documents itself — it routes.
+Choose the control model for one new work unit, then hand off. This skill does not
+interview for requirements, write artifacts, or implement the work.
 
-## Why this exists
+## Responsibility boundary
 
-There are several task-driving skills, split along a single axis: **where the
-completion oracle lives, and how much human judgment gates the work.** Picking the
-wrong one is the common failure — spec-gating a task a loop could close on its own,
-or turning an autonomous loop loose on work whose "done" only the user can judge.
-This skill makes that one choice explicit — but **recommends, it does not decide.**
-The final call of which mode to run is always the user's. Surface the best-fit
-route with your reasoning, then let the user confirm or override.
+`dispatch-work` is the **only cross-family mode selector**:
 
-## The one question
+- `inception` shapes a fuzzy What before execution.
+- `dev-workflow-kickoff` starts work whose phases are gated by human approval of a
+  durable spec, plan, and review.
+- Native `/goal` and `exec-plan` are autonomous modes. They differ in how
+  completion and exceptional decisions are handled.
+- Direct in-session implementation is the cheap route for a trivial change.
 
-> **How is "done" decided, and how much do you want to stay in the loop?**
+Once `dev-workflow-kickoff` is chosen, that choice is settled: kickoff must not
+redirect the work back to an autonomous mode based on issue contents. Likewise,
+do not present `inception` beside execution modes. It is a preceding stage, not
+another execution preference.
 
-Everything hinges on this. Read the conversation, form a recommendation from the
-routing table below — then **present it to the user and let them choose.** Do not
-silently route, even when the answer looks obvious from context: the whole point of
-this front door is to make the mode a deliberate, user-owned choice. Do not run a
-full interview either (the chosen engine runs its own intake) — this is one question,
-not a requirements dialogue.
+## Decision tree
 
-## Routing table
+Evaluate these gates in order.
 
-Evaluate top to bottom; take the first row that fits.
+### Gate 1 — Is the What shaped enough to execute?
 
-| The work looks like… | Route to | Why |
-|---|---|---|
-| Small, obvious, low-risk — the change is self-evident and completion is checkable at a glance; any execution skill would only add ceremony | **no skill** — implement directly in-session | Nothing to route; the cheapest correct path is to just do it and keep the session going |
-| Still fuzzy — you don't yet know *what* to build; needs shaping before any execution | `inception` | No defined What means no oracle yet; shape the concept first |
-| A clear task whose **every** completion criterion is an executable pass/fail (tests, build, a reference impl, a benchmark), and you want to hand it off | native **`/goal`** (host command) **or** the `goal-loop` skill | The oracle lives outside the user's head; a bounded implement→verify loop can close it. `/goal` is the lighter, supervised option (LLM-judged stop); `goal-loop` when the run is unattended/high-stakes and "done" must be deterministic — see tie-breaker |
-| A rough goal you want driven **as far as possible autonomously**, with the few high-impact / hard-to-reverse decisions parked and batch-reviewed at the end — no up-front spec wanted | `exec-plan` | Most calls are reversible and cheap to self-drive; only the one-way doors need the user, once |
-| Work that needs requirements **decided up front**, or benefits from a durable spec/plan, approval gates, self-review, or spans multiple sessions / a PR-review flow | `dev-workflow-kickoff` | The oracle is a human-authored contract; keep the human in the loop with tracked artifacts |
+If the user still does not know what should be built, or foundational product
+questions remain open, recommend **`inception` alone**. Do not list `/goal`,
+`exec-plan`, `dev-workflow-kickoff`, or direct implementation as alternatives in
+the same prompt. Inception finishes and finalizes the footing first; concrete
+actions can return to `dispatch-work` afterward.
 
-Tie-breakers:
-- **no-skill vs any engine**: the inline route is only for changes that are *both*
-  small and obvious — self-evident completion, low blast radius, nothing to spec or
-  verify beyond a glance. The moment there is real uncertainty, a decision worth
-  parking, or a completion criterion that isn't self-evident, prefer a real engine.
-  When unsure, do **not** pick no-skill.
-- **goal-loop vs dev-workflow**: if *any* completion criterion needs human taste,
-  UX, or product judgment, it is **not** goal-loop → route to dev-workflow-kickoff.
-- **exec-plan vs dev-workflow**: does the work need a durable spec/plan and approval
-  gates (dev-workflow), or just a rough goal and autonomy with a single batched
-  review at the end (exec-plan)? When decisions must survive across sessions or be
-  reviewed as they are made, choose dev-workflow.
-- **exec-plan vs goal-loop**: exec-plan *expects* a few decisions that need the user
-  and parks them; goal-loop *refuses* work whose completion needs judgment. If
-  completion is fully predicate-checkable, prefer goal-loop.
-- **native `/goal` vs the goal-loop skill**: both fit predicate-checkable work; they
-  differ in how much the user stays in the loop. If the user will supervise in real
-  time and an LLM-judged stop is acceptable, the host's native `/goal` is the lighter
-  option — recommend running it directly (a host command, not a skill handoff, like
-  the no-skill route). Route to the `goal-loop` skill when the run is unattended or
-  high-stakes and "done" must be deterministic and tamper-proof (exit-0 predicates,
-  not an evaluator model). The Goal Contract is the same either way, so the choice is
-  reversible.
+If the What is clear enough to execute, do not offer `inception`. Continue to the
+control-model gate.
 
-The routing table is how *you* reason about fit — not a verdict you impose. Turn
-your best-fit row into a recommendation, then hand the decision to the user.
+### Gate 2 — Who gates progress?
 
-## Present the recommendation and let the user choose
+The primary execution question is:
 
-Always ask, using a single `AskUserQuestion`. Put your recommended mode first and
-mark it as the recommendation with a one-line reason; list the others as
-selectable alternatives so the user can override. Adapt the wording to the task:
+> Should approved specs and human review gate the phases of this work, or should
+> the agent drive autonomously after the direction is set?
 
-- **小さく明白な変更なので、スキルを使わずこのまま実装する** → no skill（このセッションで直接）
-- **実行可能なチェックで完了判定でき、リアルタイムで見ていられる（LLM判定での停止でOK）** → native `/goal`（ホストコマンドを直接実行）
-- **実行可能なチェックで完了判定でき、無人・高stakesで決定論的に止めたい** → goal-loop
-- **だいたい任せて、重い決定だけ最後にまとめて相談したい** → exec-plan
-- **先に仕様を固め、承認・レビューしながら進めたい（複数セッションを跨ぐ）** → dev-workflow-kickoff
-- **まだ何を作るか曖昧で、まず構想を固めたい** → inception
+- **Human-gated** → `dev-workflow-kickoff`. Choose this when the user wants an
+  approved spec and plan to be the contract, wants explicit checkpoints before
+  later phases, or wants final human acceptance to be part of the workflow.
+  This preference wins even if the issue looks small or every criterion could be
+  tested by a command.
+- **Autonomous** → continue to Gate 3. Human involvement may still occur at the
+  beginning or end, but it is not a phase-by-phase progress gate.
+- **Trivial** → direct implementation is available only when the change is small,
+  obvious, low-risk, and self-evidently complete.
 
-State *why* you recommend one, but do not argue the user out of a different pick —
-the decision is theirs.
+Do not infer the control model solely from the Linear issue's wording, size,
+labels, or apparent testability. Those inform the recommendation, but the user's
+desired mode of involvement decides this gate.
 
-## Handoff (only after the user has chosen)
+### Gate 3 — Which autonomous mode?
 
-Once the **user** has picked a mode, hand off — never start the work yourself before
-the user has decided. The four engine targets (`inception`, `goal-loop`, `exec-plan`,
-`dev-workflow-kickoff`) are model-invocable: use the **Skill tool** to invoke the
-chosen one directly. It receives the task context via session history.
+Use **distance and planning horizon** to distinguish the two autonomous routes:
 
-Two options are different in kind — they are **host commands, not skills**, so there
-is nothing to invoke via the Skill tool:
+- **Native `/goal`** — the outcome is clear, but it is a distant or multi-stage
+  target whose route may need to be discovered, revised, or organized into
+  workflows while work continues. The persistent goal keeps the active chat
+  pointed at the outcome across those intermediate plans and continuations.
+  Prefer this for migrations, broad ports, repository-wide transformations, or
+  "keep working until this larger outcome is achieved."
+- **`exec-plan`** — the goal and direction are already concrete enough to write
+  a self-contained execution plan now. The work is comparatively light or
+  near-horizon: most of the route is visible, and the few high-impact decisions
+  can be parked without blocking most progress. The agent drives the plan
+  inline and batch-reviews those decisions at the end.
 
-- **no-skill returns control to the normal session** — no skill to invoke and nothing
-  to hand off to. Once the user picks it, simply proceed to implement the change
-  in-session. This is one route where `dispatch-work` does not launch another skill;
-  it still is not the executor — it just steps out of the way so the ordinary session
-  can do the small change. (The "never implement yourself" anti-pattern below still
-  holds: it forbids doing the work *inside a routing that should have gone to an
-  engine*, not this deliberate, user-chosen inline route.)
-- **native `/goal`** — the host's built-in Goal command, not a skill in this repo.
-  Like the no-skill route, do not try to invoke it with the Skill tool; instead tell
-  the user to run `/goal` directly (hand off the Goal Contract you have gathered so
-  they can paste it in). The `goal-loop` skill, by contrast, *is* model-invocable and
-  is handed off via the Skill tool like the other engines.
+If most steps require human judgment, the work is not autonomous: return to the
+human-gated choice. If the direction itself is still unsettled, return to
+`inception`. If parked decisions would block most of the visible plan, prefer
+native `/goal` only when the larger outcome can guide useful route discovery;
+otherwise return to the human-gated choice.
+
+## Present one stage at a time
+
+Use one `AskUserQuestion` for the active gate.
+
+- At Gate 1, when fuzzy, present only the recommendation to shape the concept
+  with `inception` (plus the user's ability to decline through free-form input).
+- At Gate 2, present **human-gated dev-workflow** versus **autonomous execution**;
+  include direct implementation only when the work is genuinely trivial.
+- At Gate 3, present native `/goal` versus `exec-plan`.
+
+Put the recommendation first and explain it in one line. The user owns the
+choice, but each prompt is single-stage and mutually exclusive; never flatten
+`inception`, control-model choices, and autonomous-engine choices into one list.
+
+## Handoff
+
+After the user chooses:
+
+- `inception`, `exec-plan`, or `dev-workflow-kickoff` → invoke that skill.
+- direct implementation → return control to the ordinary session and implement.
+- native `/goal` → use the host's built-in goal mechanism. If the host exposes it
+  only as a user command, provide a compact goal statement and ask the user to run
+  `/goal`; do not substitute a repository skill or invent a portable loop.
+
+The destination receives the task context from session history. Do not perform
+its intake inside this router.
 
 ## Anti-patterns
 
-- **NEVER decide for the user.** Recommend a mode, but the choice — and any
-  override — is theirs. Do not dispatch before they have picked.
-- **NEVER** implement, plan, or write documents yourself. The whole value of this
-  skill is the recommendation + handoff; doing the work here defeats it.
-- **Do not run a full requirements interview.** This skill makes one recommendation.
-  The destination engine (dig, spec, Goal Contract, ExecPlan) runs its own intake.
-- **Do not skip the ask because the answer "looks obvious."** Even a clear-cut fit
-  is presented for confirmation — a wrong mode is expensive to unwind mid-run.
+- Do not present `inception` alongside execution modes.
+- Do not choose human-gated versus autonomous solely from issue-content/skill
+  similarity.
+- Do not send a user who selected human gates through another autonomous-fit
+  assessment in kickoff.
+- Do not equate "has tests" with "must be autonomous"; control preference comes
+  first.
+- Do not run a requirements interview or implementation inside this skill.
+- Do not silently dispatch before the user chooses.

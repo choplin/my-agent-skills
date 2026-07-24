@@ -49,7 +49,9 @@ Locate the session under `.agents/inception/<topic-slug>/` (Glob if the slug is 
    - Any link from the PRD to other wiki notes uses the **slug form** (`[[slug]]` same-scope, `[[scope/slug]]` cross-scope) — never the natural title, which zk treats as a broken link.
 4. **Hand off the actions (full route only).** Present the `Action` nodes and let the user choose how to carry them out — do not decide for them:
    - **Linear (Project + Issues)** — delegate to the `linear-base` skill. A finalized inception footing is a **finite outcome/goal**, which in Linear's model is a **Project** — so **create a Project for this footing first, then register the promoted actions as Issues under that Project** (never as loose issues with no project). Use the PRD's title/purpose for the Project name and description. This writes to an external system, so **show the proposed Project and its issues, and get explicit approval before creating anything**. Issue promotion stays per-action — some actions are still too coarse to be issues; only promote the ones the user picks — but every promoted issue goes under the Project.
-   - **`dev-workflow-kickoff`** — for a spec/plan/review-driven task.
+   - **`dispatch-work`** — for an action the user wants to execute now. Return the
+     selected action to the single mode selector; it will ask human-gated versus
+     autonomous and route accordingly.
    - Or hand the list off as-is. Actions do not stay in the PRD; the PRD records direction, not the to-do list.
 5. **Retire the transient layer.** State plainly: the live open-questions queue is a point-in-time snapshot and is **not** persisted; the wiki PRD is now the authoritative footing and the `.agents/inception/` graph is a spent working note. Leave the `.agents/` files in place (they are gitignored and harmless); delete them only if the user asks.
 

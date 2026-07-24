@@ -111,7 +111,7 @@ metadata", nothing more.
 
 POSIX-ish `bash` (works on macOS's bash 3.2); the three loop scripts additionally
 depend on **`jq`** and check for it up front, while `lint-frontmatter.sh` is pure
-shell — no Python, no per-host runtime. They mirror goal-loop's discipline: the
+shell — no Python, no per-host runtime. They follow the same default-fail discipline: the
 mechanical parts are script-enforced, never model-asserted.
 
 - `scripts/lint-frontmatter.sh <path>…` — the B0 loadability preflight. Takes

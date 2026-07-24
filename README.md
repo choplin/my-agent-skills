@@ -88,14 +88,13 @@ scripts/install-opts.sh --dry-run     # preview
 |-------|--------|
 | `dev-workflow` | kickoff, create-epic/spec/plan, self-review, user-review, acceptance-review, plan-compliance-review, resume-work, post-task, base |
 | `review-tools` | ai-review, import-pr, import-ci, resolve, reply-pr, report, base (portable review process: a review.md record of items fed by ingestion sources — AI review / PR / CI / direct — and worked to resolution; used by dev-workflow and other flows) |
-| `goal-loop` | goal-loop, goal-loop-base (Codex /goal-style bounded autonomous loop; shell + jq, hooks opt-in) |
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
 | `exec-plan` | exec-plan, exec-plan-base (rough-goal autonomous plan; decision log + parking lot) |
-| `dispatch` | dispatch-work (routes a new task to inception / goal-loop / exec-plan / dev-workflow-kickoff) |
+| `dispatch` | dispatch-work (separates fuzzy shaping, human-gated dev-workflow, native `/goal`, exec-plan, and direct implementation) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
-| `discuss-toolkit` | dig, one-point (handle multiple discussion points one at a time) |
+| `discuss-toolkit` | dig (intent fidelity), grill-me (candidate robustness), one-point (discussion pacing) |
 | `git-helpers` | draft-pr, explain-pr, pr-description, rebase-onto-rewritten |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
 | `lang-reference` | go, java, python, scala, sql, typescript |
@@ -116,13 +115,13 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **Cross-group hubs** (one skill that many groups delegate to):
 
-- `discuss-toolkit-dig` ← dev-workflow-kickoff, inception (+framing/deepen), inception-quick, exec-plan, goal-loop, review-tools-resolve
-- `dev-workflow-kickoff` ← dispatch-work, inception-quick, inception-finalize, goal-loop
-- `inception` / `goal-loop` / `exec-plan` ← dispatch-work (execution-mode routing)
+- `discuss-toolkit-dig` ← grill-me, dev-workflow-kickoff, inception (+framing/deepen), inception-quick, exec-plan, review-tools-resolve
+- `dev-workflow-kickoff` ← dispatch-work
+- `inception` / `exec-plan` ← dispatch-work (shaping/execution routing; native `/goal` is host-provided)
 - `review-tools` (ai-review, resolve, report) ← dev-workflow (self-review, user-review)
 
 **dev-workflow**
-- kickoff → create-spec, create-epic, **discuss-toolkit-dig**, **goal-loop**, **exec-plan**
+- kickoff → create-spec, create-epic, **discuss-toolkit-dig**
 - create-spec → base, create-plan
 - create-epic → base, create-spec
 - create-plan → base, resume-work
@@ -132,17 +131,14 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **inception**
 - inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**
-- inception-quick → inception, **discuss-toolkit-dig**, **dev-workflow-kickoff**
-- inception-finalize → llm-wiki-base `(ext)`, **linear**, **dev-workflow-kickoff**
+- inception-quick → inception, **discuss-toolkit-dig**, **dispatch-work**
+- inception-finalize → llm-wiki-base `(ext)`, **linear**, **dispatch-work**
 - inception-framing → **discuss-toolkit-dig**
 - inception-deepen → **discuss-toolkit-dig**
 - inception-converge → finalize
 
 **exec-plan**
 - exec-plan → base, **discuss-toolkit-dig**
-
-**goal-loop**
-- goal-loop → base, **discuss-toolkit-dig**, **dev-workflow-kickoff**
 
 **review-tools**
 - ai-review → base, code-review `(ext)`
@@ -156,7 +152,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - explain-pr → understanding-explain-diff `(ext; explainer-studio)`
 
 **linear**
-- linear-start → linear, **dispatch-work**, **dev-workflow-resume-work**, **exec-plan**, **goal-loop**, wtm-worktree `(ext)`
+- linear-start → linear, **dispatch-work**, **dev-workflow-resume-work**, **exec-plan**, wtm-worktree `(ext)`
 - linear-groom → linear
 
 **skill-quality**
@@ -170,4 +166,4 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - ai-council-fugu-cli → ai-council-codex-cli
 
 **standalone**
-- dispatch-work → **inception**, **goal-loop**, **exec-plan**, **dev-workflow-kickoff**
+- dispatch-work → **inception**, **exec-plan**, **dev-workflow-kickoff**; native `/goal` is a host command

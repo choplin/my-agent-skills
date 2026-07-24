@@ -15,8 +15,8 @@ review items — the latter delegated to `review-tools-resolve`.
 
 ## Scope
 
-Story-level work only. Task-level work leaves dev-workflow and is reviewed by its own
-route (`review-tools-resolve` on the diff, `goal-loop`, `exec-plan`).
+Story-level work only. All single deliverables admitted by dev-workflow are
+Stories; autonomous work is selected before kickoff and has no dev-workflow state.
 
 ## Process
 

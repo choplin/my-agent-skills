@@ -13,18 +13,18 @@ Authored content (spec, plan, epic) lives in **Linear** — a Story is a Linear 
 
 ## Workflow Levels
 
-`dev-workflow-kickoff` interviews you and routes the work to the right level. The core question is **"can you write the completion criteria directly from your need?"** — and, for tasks, **"can every criterion be a command that returns pass/fail?"**
+`dev-workflow-kickoff` is entered after the user has chosen a human-gated
+workflow. It interviews the user, then decides only whether the outcome is one
+independently reviewable Story or an Epic made of several independent Stories.
 
 | Level | When | Approach |
 |-------|------|----------|
-| **Autonomous-Task** | A Task where *every* criterion is machine-verifiable — the answer lives in a test/build/reference, not in your head | *Leaves dev-workflow* → `goal-loop`: write goal + predicates, let the implement→verify loop run to green, review only the finished artifact. |
-| **Task** | Criteria writable directly from the need; implementation approach is obvious | *Leaves dev-workflow* → `exec-plan` (self-drivable), or just implement directly (trivial one-off). |
-| **Story** | You must decide "what kind" before "done" (requirements need clarifying) | spec + plan in a Linear Issue, `state.json` locally, then implement. |
+| **Story** | One independently specifiable and reviewable outcome, regardless of size | spec + plan in a Linear Issue, `state.json` locally, then implement through the review gates |
 | **Epic** | Multiple independent stories | A Linear Project coordinating Story Issues, each its own Story. |
 
-The split is about **where the "right answer" lives**: in the world (tests, a spec to match, a benchmark) → lean autonomous; in your head (taste, UX, product judgment) → keep the spec as a human contract. See `docs/2026-06-11-loop-engineering-research.md` for the reasoning.
-
-**Task-level work leaves dev-workflow.** Both Task rows above are routed *out* by `dev-workflow-kickoff` — to `goal-loop`, `exec-plan`, or direct implementation, each of which carries its own review/finish. dev-workflow's own document and review flow (below) is for **Story and Epic**. A Task re-enters dev-workflow only via promotion to Story, when requirements turn out to need deciding.
+The split between human-gated and autonomous work happens before kickoff, in
+`dispatch-work`. Once kickoff is invoked, the approved spec, plan, and review are
+the workflow contract even when the change is small or fully machine-verifiable.
 
 ## How It Works
 
@@ -53,7 +53,7 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 
 | Skill | Description |
 |-------|-------------|
-| `dev-workflow-kickoff` | Explore the need through dialogue and route to the right level (incl. the oracle test → Autonomous-Task); Task-level work is routed out to `goal-loop` / `exec-plan` / direct implementation |
+| `dev-workflow-kickoff` | Start a human-gated workflow; explore the need and route one deliverable to Story or several independent deliverables to Epic |
 | `dev-workflow-create-epic` | Create a Linear Project coordinating multiple Story Issues |
 | `dev-workflow-create-spec` | Author a spec (predicate-ized `Verify:` criteria) into a Story's Linear Issue (create or adopt) + local `state.json` |
 | `dev-workflow-create-plan` | Append the plan design to the Story Issue; populate `state.json` steps (walking skeleton first, approach decisions) |
@@ -67,7 +67,7 @@ Two command hooks (in `hooks/`) move workflow adherence from prompt to mechanism
 The generic review process — a `review.md` record of items fed by ingestion sources
 (AI review, PR comments, CI, direct feedback) and worked to resolution — lives in the
 **`review-tools`** skill family, which dev-workflow's review phase delegates to. It is
-reusable by non-dev-workflow flows too (`goal-loop`, `exec-plan`, or ad-hoc). dev-workflow's
+reusable by non-dev-workflow flows too (`exec-plan` or ad-hoc). dev-workflow's
 machine-verification and plan-compliance are its **completion gate** (implementation must
 be complete before review — never review items), and the `Verify: human` acceptance
 criteria are the human acceptance judgment in user-review. See `review-tools-base`.
@@ -91,7 +91,7 @@ Install `discuss-toolkit` alongside this plugin. If it is not available, `dev-wo
 
 ## Typical Workflow (Story Level)
 
-1. `dev-workflow-kickoff` — explore the need, assess the level.
+1. `dev-workflow-kickoff` — explore the need and confirm Story versus Epic.
 2. `dev-workflow-create-spec` — write requirements and predicate-ized acceptance criteria (`Verify:` commands, or `human`).
 3. `dev-workflow-create-plan` — sequence the steps; Step 1 is a walking skeleton; record approach decisions.
 4. Implement, updating progress. Show the walking-skeleton slice early for a quick direction check. (Clearing the session is optional — documents + `state.json` are the source of truth.)
@@ -99,8 +99,6 @@ Install `discuss-toolkit` alongside this plugin. If it is not available, `dev-wo
 6. `dev-workflow-user-review` — present results; handle feedback.
 7. After LGTM, commit.
 8. `dev-workflow-post-task` — capture knowledge; feed any late-surfacing omissions back into the spec template / kickoff.
-
-For **Task-level** work this whole flow is skipped — the work leaves dev-workflow: an **Autonomous-Task** goes to `goal-loop` (write goal + predicates, run the implement→verify loop to green, review the finished artifact); an ordinary **Task** goes to `exec-plan` or is implemented directly.
 
 ## Installation
 

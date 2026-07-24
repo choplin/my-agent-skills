@@ -251,8 +251,3 @@ Three things follow:
   substituter fetches need network and cache writes, which an agent's command
   sandbox may block. The SKILL.md should tell the reader to **re-run without the
   sandbox** on such a failure.
-
-## Reference implementation
-
-- The `goal-loop` group is the reference for the broader "portable core, opt-in
-  add-on" discipline.

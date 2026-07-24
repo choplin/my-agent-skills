@@ -1,13 +1,14 @@
 ---
 name: dev-workflow-resume-work
-description: Use this skill to resume work on an existing Epic or Story. Triggers on phrases like "resume work", "continue previous work", "pick up where I left off", "what was I working on", or when user wants to continue existing development work. Should NOT trigger for starting new tasks (use kickoff), Task-level work that left dev-workflow (resume it via goal-loop/exec-plan or its own plan file), or for work with no dev-workflow artifacts to resume.
+description: Use this skill to resume work on an existing dev-workflow Epic or Story. Triggers on phrases like "resume work", "continue previous work", "pick up where I left off", "what was I working on", or when user wants to continue existing human-gated development work. Should NOT trigger for starting new work (use kickoff), autonomous work selected outside dev-workflow, or work with no dev-workflow artifacts to resume.
 allowed-tools: Read, Glob, Grep, AskUserQuestion, Skill, Bash
 user-invocable: true
 ---
 
 # Resume Work
 
-Resume work on an existing Epic or Story by evaluating current state and identifying the appropriate resumption point. (Task-level work runs outside dev-workflow — resume it through `goal-loop` / `exec-plan` or its own plan file.)
+Resume work on an existing human-gated Epic or Story by evaluating current state
+and identifying the appropriate resumption point.
 
 ## Core Rule: Skill Dispatch
 

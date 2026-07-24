@@ -27,7 +27,7 @@ Workflow needs to change according to work scale. Small tasks can be executed di
 Establish a workflow that effectively guides development work with Claude Code.
 
 **Target state**:
-- Work scale can be appropriately assessed (Task/Story/Epic)
+- Gated work can be appropriately shaped as a Story or Epic
 - Necessary support is available at each phase
 - Context is maintained across sessions (through documents)
 - AI can determine completion through self-review
@@ -73,24 +73,28 @@ How: Implementation steps
 | plan | Implementation steps | How |
 | epic | Overall requirements + Story management | Why + What (high level) |
 
-#### Task / Story / Epic
+#### Story / Epic
 
-Classification based on work volume. **Task-level work leaves dev-workflow**: it needs no spec and no approval gate, so `dev-workflow-kickoff` routes it to an autonomous execution skill (or direct implementation) rather than into dev-workflow's own document/review flow. **Story and Epic stay in dev-workflow**, because they need a spec before "done" can be defined.
+`dev-workflow` is the human-gated control model. The user chooses it before
+kickoff; kickoff never redirects work to an autonomous mode based on size or
+testability.
 
-| Level | Criterion | Documents | Handled by |
-|-------|-----------|-----------|------------|
-| Task | Can write Criteria directly from User Needs | None (in dev-workflow) | Leaves dev-workflow → `goal-loop` (every criterion machine-verifiable), `exec-plan` (self-drivable), or direct implementation (trivial one-off) |
-| Story | Requirements organization needed | spec + plan | dev-workflow |
-| Epic | Composed of multiple Stories | epic + each Story's spec/plan | dev-workflow |
+| Level | Criterion | Documents |
+|-------|-----------|-----------|
+| Story | One independently specifiable and reviewable outcome, regardless of size | spec + plan |
+| Epic | Multiple independent Stories | epic + each Story's spec/plan |
 
-**Core of Task assessment**: Can you write Criteria directly from User Needs?
+The assessment question is:
 
-- **Yes → Task**: No Requirements organization needed → route out of dev-workflow
-- **No → Story**: Define Criteria after organizing Requirements → stay in dev-workflow
+> Can this outcome be specified, implemented, and reviewed as one independent
+> deliverable?
 
-**Examples**:
-- Task: "Fix this function's bug" → Can directly write Criteria "Bug fixed, tests pass" → route to `goal-loop`/`exec-plan` or just implement it
-- Story: "Add authentication" → Need to decide "what kind of auth" before writing Criteria
+- **Yes → Story**
+- **No → Epic**, then decompose it into independent Stories
+
+Small fixes are valid Stories when the user wants spec/plan/review gates.
+Conversely, many files or implementation steps do not make an Epic unless they
+produce independently reviewable outcomes.
 
 #### Documents
 
@@ -124,44 +128,41 @@ Each Story maps to a single git branch. Branch lifecycle is managed by skills:
 
 The Story directory name (e.g., `add-auth`) becomes the branch name (e.g., `feat/add-auth`).
 
-**Note**: Task and Epic do not have associated branches. Tasks are too small to warrant a branch, and Epics are decomposed into Stories which each have their own branch.
+**Note**: Epics do not have associated branches. They are decomposed into Stories,
+each with its own branch.
 
 ### Workflow Phases
 
 ```
-[Understand] → Volume assessment
-                  │
-       ┌──────────┴──────────┐
-       ↓                     ↓
-  Task-level            Story / Epic
-  (leaves dev-workflow)      │
-       ↓                 create spec / epic
-  goal-loop /                │
-  exec-plan /            create branch (Story) · decompose to Stories (Epic)
-  direct impl                │
-  — own review/finish;   create plan
-    promote to Story          │
-    if requirements       [Session clear?] ← optional (documents are self-complete)
-    emerge                    │
-                          [Resume Work] ← Re-entry point (branch checkout)
-                              │
-                          [Implement]
-                              ↓
-                       [Test/AI Review] ←┐
-                              │          │ Iteration
-                              └──────────┘
-                              ↓
-                       [User Review] ← review.md persists state
-                              ↓
-                          [Commit]
-                              ↓
-                      [Knowledge Capture]
+[Understand] → Story / Epic assessment
+                     │
+             create spec / epic
+                     │
+        create branch (Story) · decompose to Stories (Epic)
+                     │
+                 create plan
+                     │
+        [Session clear?] ← optional (documents are self-complete)
+                     │
+          [Resume Work] ← Re-entry point (branch checkout)
+                     │
+                [Implement]
+                     ↓
+              [Test/AI Review] ←┐
+                     │          │ Iteration
+                     └──────────┘
+                     ↓
+              [User Review] ← review.md persists state
+                     ↓
+                 [Commit]
+                     ↓
+             [Knowledge Capture]
 ```
 
 **Phase descriptions**:
 
-1. **Understand**: Grasp task content and assess volume. Task-level work is routed out of dev-workflow here (to `goal-loop` / `exec-plan` / direct implementation); Story and Epic continue below
-2. **Document creation**: For Story/Epic, create spec/plan/epic
+1. **Understand**: Clarify Why/What and decide whether the gated outcome is one Story or several independent Stories in an Epic
+2. **Document creation**: Create spec/plan/epic
 3. **Session clear (optional)**: For Story/Epic, clearing before implementation is available but not required — documents are self-complete, so resume works with or without a clear (see Design Principle 2)
 4. **Resume Work**: Re-entry point for existing work (evaluates progress, identifies gaps, recommends next action)
 5. **Implement**: Proceed with implementation based on documents
@@ -174,8 +175,7 @@ The Story directory name (e.g., `add-auth`) becomes the branch name (e.g., `feat
 
 | Phase | Skill | Purpose |
 |-------|-------|---------|
-| Understand | `dev-workflow-kickoff` | Explore user needs, route to Task/Story/Epic |
-| Route out (Task) | `goal-loop` / `exec-plan` | Task-level work leaves dev-workflow to an autonomous execution skill (or direct implementation) |
+| Understand | `dev-workflow-kickoff` | Explore user needs, route to Story or Epic |
 | Document (Story) | `dev-workflow-create-spec` → `dev-workflow-create-plan` | Create spec then implementation plan |
 | Document (Epic) | `dev-workflow-create-epic` | Decompose into Stories |
 | Resume Work | `dev-workflow-resume-work` | Evaluate progress, identify gaps, recommend resumption point |
@@ -264,7 +264,8 @@ Include verifiable acceptance criteria in specs. Format that allows AI to determ
 
 ### 4. Recursive Flow
 
-After Epic → Story decomposition, each Story returns to the Understand phase. Volume assessment is performed again.
+After Epic → Story decomposition, each Story enters the spec phase as one
+human-gated deliverable. The execution-mode decision is not reopened.
 
 ### 5. Fail-safe with Knowledge Capture
 
@@ -274,13 +275,13 @@ Update documents including failure knowledge while rolling back. Leave results a
 
 Start implementation only after all ambiguities are resolved. Proceeding with unresolved issues wastes work.
 
-### 7. Task→Story Promotion as Normal Flow
+### 7. Autonomous→Human-gated Escalation
 
-Task → Story promotion is a "normal flow", not a failure. Because Task-level work runs outside dev-workflow (`goal-loop` / `exec-plan` / direct), promotion is how it **re-enters** dev-workflow when requirements turn out to need deciding.
-
-- Estimation mistakes are normal
-- Why/What carries over from the `goal-loop` Goal Contract or the `exec-plan` Purpose/Boundaries/Acceptance; How is documented
-- spec is an "evolving document", not a "finished product"
+An autonomous run may discover that progress requires decisions only a human
+should gate. That run stops and returns to `dispatch-work`; if the user chooses
+dev-workflow, kickoff creates a Story or Epic from the context already learned.
+This is an escalation between control models, not a classification performed
+inside kickoff.
 
 ### 8. Plan Mode Context Preservation
 
@@ -297,9 +298,11 @@ Lessons learned from designing this workflow:
 3. **Discussion phases also span sessions**. A mechanism to save discussion state was needed
 4. **Important information tends to be lost during plan-to-implementation transition**. Attention required
 5. **spec is an "evolving document", not a "finished product"**. Perfect upfront design is impossible
-6. **Task → Story promotion is a "normal flow", not a failure**. Estimation mistakes are normal
+6. **Autonomous → human-gated escalation is a normal safety transition** when
+   the chosen autonomous mode discovers that human approval must gate progress
 7. **Criteria must be operationally defined**. Avoid subjective words like "obvious", concretize in checklist format
 8. **Using subagents (Claude/Codex) for design review reveals overlooked issues**
-9. **Task/Story assessment is determined by "Needs→Criteria directness", not "How choices"**. "Having choices" is a result; the cause is "Cannot derive Criteria directly from Needs"
+9. **Story/Epic assessment is about independent deliverables, not difficulty or
+   the number of implementation choices**
 10. **Plan documents need workflow context, not just implementation steps**. After session clear, the plan is the only surviving context. Without workflow navigation (which phase, what comes next), AI loses its place in the workflow and skips post-implementation steps like self-review
 11. **Plan Mode creates isolated context that loses workflow position**. Claude Code's built-in Plan Mode generates `.claude/plans/` files focused on How. Without explicitly embedding dev-workflow context (active skill, phase, next action), the workflow chain breaks after plan execution

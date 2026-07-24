@@ -2,7 +2,7 @@
 
 Skills for the **start of a project** — think a fuzzy idea into a solid footing through a phase-driven, dialogic facilitation. The session grows a single thinking graph that is projected into a PRD, a decision record, action items, and open questions.
 
-> Scope: inception shapes the founding concept. It does **not** track project progress or execute the actions — once actions are concrete, hand them to whatever execution/tracking workflow fits (e.g. `dev-workflow`, `goal-loop`, `exec-plan`), the user's choice.
+> Scope: inception shapes the founding concept. It does **not** track project progress or execute the actions — once actions are concrete and the footing is finalized, send selected actions through `dispatch-work`, where the user chooses the execution mode.
 
 ## The model
 
@@ -56,5 +56,5 @@ finalize <graph.json>
 - **Decisions are first-class.** Closing a question on a choice creates a `Decision` node with rejected alternatives + rationale — the durable artifact that prevents re-litigation.
 - **Elicit via dig.** All drawing-out of the user's thinking goes through `discuss-toolkit-dig`; never fill gaps with the AI's assumptions.
 - **Two routes.** Full `inception` shapes an idea through the whole phased session and the thinking graph. `inception-quick` skips all of that to capture just the background and purpose into a short `prd-quick.md` — use it when the idea does not need shaping, only recording. The two use separate files so neither clobbers the other, and the upgrade is lossless: starting full `inception` on a slug that already has a `prd-quick.md` seeds the graph from it before rendering.
-- **Finalize is the one-way exit.** Both routes end at `inception-finalize`: the working artifacts stay transient in `.agents/`, and only the consolidated PRD is confirmed into the llm-wiki knowledge base (via `llm-wiki-base`, no directory scheme of its own). Concrete actions leave for a tracker (Linear, `dev-workflow-kickoff`, …); the live open-questions queue is a snapshot and is discarded. After finalize the wiki PRD is the source of truth — reopen by starting a fresh session or editing the note, not by re-rendering the retired graph.
+- **Finalize is the one-way exit.** Both routes end at `inception-finalize`: the working artifacts stay transient in `.agents/`, and only the consolidated PRD is confirmed into the llm-wiki knowledge base (via `llm-wiki-base`, no directory scheme of its own). Concrete actions leave for Linear or return to `dispatch-work` for an execution-mode choice; the live open-questions queue is a snapshot and is discarded. After finalize the wiki PRD is the source of truth — reopen by starting a fresh session or editing the note, not by re-rendering the retired graph.
 - **Relationship to neighbors.** Earlier and lighter than `dev-workflow` (which begins once a task is defined); broader than `discuss-toolkit-dig` (which clarifies one intent without lasting artifacts). Shares its durable store with the `llm-wiki` family (finalize writes a `prd`-tagged note into the same knowledge base).

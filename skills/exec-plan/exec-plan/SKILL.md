@@ -1,17 +1,14 @@
 ---
 name: exec-plan
 description: >-
-  Invoked by the user (e.g. /exec-plan) or auto-activated when a task clearly fits; also reachable via
-  dispatch-work. Pin the direction up front — confirmed with the user, not deferred — then run
-  autonomously as far as possible, deferring only the detail decisions: write a self-contained
-  ExecPlan-style plan and drive it inline — resolve low-risk, reversible calls yourself (Decision Log)
-  and park high-impact or hard-to-reverse ones for a single batch review at the end (Parking Lot). Use
-  for "run as far as you can without me", "agree the direction, drive it yourself and ask me the big
-  calls later", "do whatever doesn't need my judgment". Lighter than goal-loop (no executable
-  predicates) and dev-workflow (no up-front spec or approval gate). Not for work where most steps need
-  human judgment, where completion should be gated on executable predicates (use goal-loop), where
-  requirements must be decided up front (use dev-workflow-create-spec), or for shaping a still-fuzzy
-  concept (use inception).
+  Invoked explicitly or via dispatch-work for a clear, near-horizon goal whose
+  route is visible enough to plan and drive inline. Pin the direction, resolve
+  reversible calls autonomously, and park the few high-impact decisions for one
+  batch review at the end. Lighter than native /goal, which fits distant outcomes
+  whose route must be discovered or reorganized while working; unlike
+  dev-workflow, exec-plan has no spec or phase-approval gates. Not for work where
+  most steps need human judgment, requirements must be decided up front, or the
+  concept itself is still fuzzy.
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
 ---
@@ -50,10 +47,12 @@ the user's. Two things are treated very differently:
     to the **Parking Lot**, skip the parts that depend on it, and keep driving
     everything else.
 
-This is the difference from `goal-loop`: goal-loop *refuses* a task whose
-completion needs human judgment, and stops when judgment is needed. exec-plan
-*expects* a few such decisions, sets them aside, and runs the rest to the end —
-then discusses the parked ones in a single pass.
+This is the difference from native `/goal`: `/goal` keeps a persistent, possibly
+distant outcome attached while Codex discovers and revises the route across
+multiple stages. exec-plan starts closer to the work: the direction and most of
+the route are already visible enough to write a self-contained plan. It sets
+aside the few decisions that should not be guessed, runs the unblocked plan to
+the end, then discusses the parked decisions in a single pass.
 
 ## The decision split — what to drive through, what to park
 
@@ -90,8 +89,8 @@ Settle just three things and write them into the plan file:
   touch. This is where the user pre-draws any lines they care about; the rest is
   judged live by the two-axis split.
 - **Acceptance** — observable behavior a human can confirm. This is a self-checked
-  target, *not* a machine gate; if you need completion gated on executable
-  predicates, use `goal-loop` instead.
+  target, *not* a persistent long-horizon goal; if reaching the outcome requires
+  discovering or repeatedly restructuring the route, use native `/goal` instead.
 
 Write the plan to the location and format defined in `exec-plan-base` (read it
 first). In this skill's terms, **Decision Log** holds the two-way-door calls you
@@ -182,7 +181,8 @@ decisions — not an up-front plan, and not a stream of mid-run questions.
 ## When NOT to use
 
 - Most steps need human judgment as you go → `dev-workflow` (or just collaborate directly).
-- Completion can and should be gated on executable predicates → `goal-loop`.
+- The outcome is distant and the route must be discovered or reorganized while
+  working → native `/goal`.
 - Requirements must be decided before "done" can be defined → `dev-workflow-create-spec`.
 - The concept itself is still fuzzy and needs shaping → `inception`.
 - A quick one-off change with nothing to defer → just do it.

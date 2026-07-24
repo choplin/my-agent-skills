@@ -67,9 +67,9 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
   skill's `name`.** Both mechanisms install to `<agent-home>/skills/<name>`, so
   whichever runs last silently wipes the other — the skills CLI recreates the
   whole skill dir on every `skills add`, uninstalling the add-on's hooks
-  (observed live with goal-loop, 2026-07-04). This bites exactly when a group
-  keeps a bare-name root skill *and* ships a same-named opt plugin; suffix the
-  add-on dir instead (e.g. `goal-loop-addon`). `install-opts.sh` enforces this:
+  (observed live with a portable-skill/add-on collision, 2026-07-04). This bites
+  exactly when a group keeps a bare-name root skill *and* ships a same-named opt
+  plugin; suffix the add-on dir. `install-opts.sh` enforces this:
   it refuses names that match a portable skill and refuses to write through a
   skills-CLI-managed symlink.
 - Directory layout keeps the group folder: `skills/<group>/<group>-<skill>/`

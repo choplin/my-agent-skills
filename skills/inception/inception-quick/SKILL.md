@@ -1,6 +1,6 @@
 ---
 name: inception-quick
-description: The lightweight route of the inception family — when the user wants to capture just the background and purpose of an idea into a short PRD, without the full diverge/structure/deepen/converge session or the thinking-graph machinery. Runs a brief dig on the framing (why, what, for whom) and writes it straight to prd-quick.md. Triggers on "sketch the background and purpose of an idea", "quickly note down the background and purpose", "サクッと背景と目的をまとめる", "軽く構想を書き留める", "write a quick PRD/brief". Should NOT trigger when the user wants to actually shape/pressure-test the idea (use inception); to start a development task with the AI driving intake/routing (use dev-workflow-kickoff); an already-defined task ready to implement (use dev-workflow); or a one-off decision.
+description: The lightweight route of the inception family — when the user wants to capture just the background and purpose of an idea into a short PRD, without the full diverge/structure/deepen/converge session or the thinking-graph machinery. Runs a brief dig on the framing (why, what, for whom) and writes it straight to prd-quick.md. Triggers on "sketch the background and purpose of an idea", "quickly note down the background and purpose", "サクッと背景と目的をまとめる", "軽く構想を書き留める", "write a quick PRD/brief". Should NOT trigger when the user wants to actually shape/pressure-test the idea (use inception); to start and route executable work (use dispatch-work); an already-defined task ready to implement; or a one-off decision.
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
 ---
@@ -81,7 +81,7 @@ No `graph.json`, no CLI, no `decisions.md` / `action-items.md` / `open-questions
    - Any section not filled from the user's input reads `_not yet defined_` (not fabricated).
    Then show the user the `prd-quick.md` and name the two paths out:
    - **Keep it.** To persist this footing into durable memory, offer **`inception-finalize`** (確定) — it writes `prd-quick.md` to the llm-wiki knowledge base as a keep-forever PRD note. `prd-quick.md` under `.agents/` is transient; finalize is what makes it last.
-   - **Upgrade it.** If they later want to pressure-test the idea, generate options, or record decisions and first actions, run full `inception` on the **same topic** — it detects this hand-written `prd-quick.md`, seeds its graph's `session.*` fields from it, and continues from there (the capture is carried forward, not lost). If a concrete next action is already obvious instead, offer to hand it to `dev-workflow-kickoff`.
+   - **Upgrade it.** If they later want to pressure-test the idea, generate options, or record decisions and first actions, run full `inception` on the **same topic** — it detects this hand-written `prd-quick.md`, seeds its graph's `session.*` fields from it, and continues from there (the capture is carried forward, not lost). If a concrete next action is already obvious instead, offer to hand it to `dispatch-work`.
 
 ## Scope guard
 

@@ -102,11 +102,11 @@ Concrete, rename-prone names are confined here.
 - **`ai-council`** (root) is the weaker, one-shot sibling — parallel opinion
   gathering without cross-feedback. Useful, but its convergence is weaker
   evidence; the adversarial member exists for when that is not enough.
-- **`goal-loop`** enforces the loop-time discipline from the other side: it
-  runs an autonomous loop only when completion is checked by an executable
-  predicate or external oracle, and refuses targets whose "done" lives in a
-  human's head. That refusal is the "don't run the loop on a signal you don't
-  trust" caveat applied to loop engineering.
+- **Native `/goal` usage** applies the loop-time discipline by giving the host a
+  persistent, explicit target. Work whose direction must be approved by a human
+  stays in `dev-workflow`; autonomous work expected to surface parked decisions
+  uses `exec-plan`. The routing boundary is the "don't run the loop on a signal
+  you don't trust" caveat applied to loop engineering.
 - **`review-tools`** and the AI-review paths are ingestion/adjudication
   plumbing that a verifier stage can reuse.
 - **Direction — autonomous skill-quality loops.** Applying the loop-time regime

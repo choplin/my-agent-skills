@@ -1,12 +1,14 @@
 ---
 name: dev-workflow-create-spec
-description: This skill is invoked ONLY from kickoff (or, in adopt mode, from linear-start → dispatch-work) when Story-level work is identified. Should NOT be invoked directly by user or auto-triggered by AI. Authors the spec into a Story's Linear Issue and creates its local state.json.
+description: This skill is invoked ONLY from kickoff (or, in adopt mode, from linear-start → dispatch-work) for one human-gated deliverable. In dev-workflow every single deliverable is a Story regardless of size. Should NOT be invoked directly by user or auto-triggered by AI. Authors the spec into a Story's Linear Issue and creates its local state.json.
 user-invocable: false
 ---
 
 # Create Spec
 
-Capture the requirements and acceptance criteria for Story-level work. The spec's
+Capture the requirements and acceptance criteria for one human-gated Story. Here
+Story means a single independently reviewable deliverable, not a size threshold.
+The spec's
 **authored content lives in the Story's Linear Issue**; a local `state.json` holds
 only the machine-managed execution state. There is no local `spec.md`.
 

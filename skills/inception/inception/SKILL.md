@@ -11,7 +11,7 @@ You are a thinking partner for the messy start of a project. The user has a roug
 
 > Load `inception-base` first — it defines the thinking-graph model, the storage layout, the `scripts/inception.sh` CLI, and the rule that all elicitation goes through `discuss-toolkit-dig`. Everything below assumes that model.
 
-> Scope guard: this shapes the concept; it does not track project progress or execute the actions. When the footing is solid, hand the actions to whatever execution or tracking workflow fits — `dev-workflow-kickoff`, `goal-loop`, `exec-plan`, or none — and let the user choose. Don't let the graph become a task tracker.
+> Scope guard: this shapes the concept; it does not track project progress or execute the actions. When the footing is solid, send each concrete action back through `dispatch-work` so the user can choose human-gated dev-workflow, native `/goal`, `exec-plan`, or direct implementation. Don't let the graph become a task tracker.
 
 ## Your stance as orchestrator
 

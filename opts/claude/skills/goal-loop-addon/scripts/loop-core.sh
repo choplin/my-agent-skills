@@ -1,1 +1,0 @@
-../../../../../skills/goal-loop/goal-loop-base/scripts/loop.sh
