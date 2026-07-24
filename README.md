@@ -102,6 +102,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `jira-cli` | jira-cli |
 | `showcase-capture` | plan, terminal, browser, screen (plan app/tool demo media; capture each planned shot on its appropriate surface) |
 | `codebase-structure` | codebase-structure, codebase-structure-refactor (model code around concepts, types, invariants, and ownership; safely refactor existing code toward that structure) |
+| `refactoring-tools` | refactoring-tools-planner (inspect a repository and create an evidence-based, implementation-ready refactor plan without changing production code) |
 
 > MoonBit skills are **not** vendored here — install them straight from upstream: `skills add moonbitlang/skills`.
 

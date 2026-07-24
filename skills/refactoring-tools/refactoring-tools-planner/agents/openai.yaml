@@ -1,0 +1,4 @@
+interface:
+  display_name: "Refactoring Tools Planner"
+  short_description: "Create evidence-based, implementation-ready refactor plans"
+  default_prompt: "Use $refactoring-tools-planner to inspect this repository and create .agents/refactoring-tools/refactor-instructions.md for an implementation agent."
