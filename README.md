@@ -90,7 +90,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `review-tools` | ai-review, import-pr, import-ci, resolve, reply-pr, report, base (portable review process: a review.md record of items fed by ingestion sources — AI review / PR / CI / direct — and worked to resolution; used by dev-workflow and other flows) |
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
 | `exec-plan` | exec-plan, exec-plan-base (rough-goal autonomous plan; decision log + parking lot) |
-| `dispatch` | dispatch-work (separates fuzzy shaping, human-gated dev-workflow, native `/goal`, exec-plan, and direct implementation) |
+| `dispatch` | dispatch-work (separates intent clarification, concept shaping, candidate pressure-testing, human-gated work, autonomous work, and direct implementation) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
@@ -115,7 +115,8 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **Cross-group hubs** (one skill that many groups delegate to):
 
-- `discuss-toolkit-dig` ← grill-me, dev-workflow-kickoff, inception (+framing/deepen), inception-quick, exec-plan, review-tools-resolve
+- `discuss-toolkit-dig` ← dispatch-work, grill-me, dev-workflow-kickoff, inception (+framing/deepen), inception-quick, exec-plan, review-tools-resolve
+- `grill-me` ← dispatch-work
 - `dev-workflow-kickoff` ← dispatch-work
 - `inception` / `exec-plan` ← dispatch-work (shaping/execution routing; native `/goal` is host-provided)
 - `review-tools` (ai-review, resolve, report) ← dev-workflow (self-review, user-review)
@@ -166,4 +167,4 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - ai-council-fugu-cli → ai-council-codex-cli
 
 **standalone**
-- dispatch-work → **inception**, **exec-plan**, **dev-workflow-kickoff**; native `/goal` is a host command
+- dispatch-work → **discuss-toolkit-dig**, **grill-me**, **inception**, **exec-plan**, **dev-workflow-kickoff**; native `/goal` is a host command
