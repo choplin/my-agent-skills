@@ -7,9 +7,11 @@ description: >-
   distinguishes an unshaped project concept (inception), an unclear request
   (discuss-toolkit-dig), and an identifiable direction the user wants challenged
   (grill-me).
-  For executable work, recommends dev-workflow-kickoff, the host's native /goal,
-  exec-plan, or direct in-session implementation based on the desired control model.
-  Not an executor: the user chooses one route, then this skill hands off.
+  For executable work, recommends one concrete route from dev-workflow-kickoff,
+  ordinary in-session collaboration, the host's native /goal, exec-plan, or direct
+  implementation based on the task's judgment, risk, and planning horizon. It
+  presents a task-specific recommendation rather than making the user traverse a
+  generic mode questionnaire. Not an executor: after routing, it hands off.
 allowed-tools: Read, Glob, Grep, AskUserQuestion, Skill
 user-invocable: true
 ---
@@ -29,6 +31,8 @@ interview for requirements, write artifacts, or implement the work.
 - `grill-me` pressure-tests an identifiable candidate direction.
 - `dev-workflow-kickoff` starts work whose phases are gated by human approval of a
   durable spec, plan, and review.
+- Ordinary in-session collaboration keeps the work conversational without loading
+  another workflow skill or creating its durable artifacts.
 - Native `/goal` and `exec-plan` are autonomous modes. They differ in how
   completion and exceptional decisions are handled.
 - Direct in-session implementation is the cheap route for a trivial change.
@@ -83,26 +87,46 @@ same prompt. After dig or grill-me reaches shared understanding, return to
 `dispatch-work` if the user wants to start execution. Inception returns concrete
 actions only after the footing is finalized.
 
-### Gate 2 — Who gates execution progress?
+### Gate 2 — What control model fits the task?
 
-The primary execution question is:
+Infer a default from the task instead of asking the user to choose between abstract
+control models:
 
-> Should approved specs and human review gate the phases of this work, or should
-> the agent drive autonomously after the direction is set?
+- **Durable human gates → `dev-workflow-kickoff`.** Recommend this when correctness
+  depends on settling subjective requirements before implementation; several
+  one-way-door decisions have broad consequences; approval, auditability, or
+  handoff requires a durable spec and plan; or distinct phases should not advance
+  without human acceptance.
+- **Conversational collaboration → ordinary session.** Recommend working directly
+  in the current session when decisions are best made through a lightweight
+  back-and-forth, but a formal spec/plan/review state machine would be overhead.
+  This route is not limited to trivial edits: it fits bounded design and
+  implementation work where the user wants to steer meaningful choices as they
+  appear. Use no workflow skill and create no workflow artifacts unless the work
+  itself requires an artifact.
+- **Autonomous execution → continue to Gate 3.** Recommend autonomy when the
+  outcome and observable completion conditions are clear, most decisions are
+  reversible or already constrained, and useful progress does not depend on
+  frequent user judgment.
+- **Immediate implementation → ordinary session.** For a small, obvious, low-risk
+  change with self-evident completion, recommend simply doing it now.
 
-- **Human-gated** → `dev-workflow-kickoff`. Choose this when the user wants an
-  approved spec and plan to be the contract, wants explicit checkpoints before
-  later phases, or wants final human acceptance to be part of the workflow.
-  This preference wins even if the issue looks small or every criterion could be
-  tested by a command.
-- **Autonomous** → continue to Gate 3. Human involvement may still occur at the
-  beginning or end, but it is not a phase-by-phase progress gate.
-- **Trivial** → direct implementation is available only when the change is small,
-  obvious, low-risk, and self-evidently complete.
+Treat explicit user preference as an override. Otherwise, base the recommendation
+on the evidence above; do not ask a context-free "human-gated or autonomous?"
+question. Linear size, labels, and testability are evidence, not a decision by
+themselves.
 
-Do not infer the control model solely from the Linear issue's wording, size,
-labels, or apparent testability. Those inform the recommendation, but the user's
-desired mode of involvement decides this gate.
+Calibration examples:
+
+- A bounded change whose design tradeoffs should be discussed as they appear →
+  ordinary session.
+- A release with stakeholder-approved behavior, several consequential decisions,
+  and required acceptance review → `dev-workflow-kickoff`.
+- A concrete multi-file change with visible steps and observable acceptance →
+  `exec-plan`.
+- A repository-wide migration whose intermediate route will evolve across stages
+  → native `/goal`.
+- An obvious one-file fix with a direct check → implement immediately.
 
 ### Gate 3 — Which autonomous mode?
 
@@ -121,41 +145,63 @@ Use **distance and planning horizon** to distinguish the two autonomous routes:
   inline and batch-reviews those decisions at the end.
 
 If most steps require human judgment, the work is not autonomous: return to the
-human-gated choice. If the direction itself is still unsettled, return to
-`inception`. If parked decisions would block most of the visible plan, prefer
+ordinary-session or durable-human-gates choice according to whether that judgment
+needs a persistent contract. If the direction itself is still unsettled, return
+to `inception`. If parked decisions would block most of the visible plan, prefer
 native `/goal` only when the larger outcome can guide useful route discovery;
-otherwise return to the human-gated choice.
+otherwise recommend ordinary-session collaboration or `dev-workflow-kickoff`
+according to the same contract test.
 
-## Present one stage at a time
+## Present a concrete recommendation
 
-Use one `AskUserQuestion` for the active gate.
+Complete the relevant gates internally, then recommend one terminal route. Do not
+make the user answer Gate 2 and then Gate 3 as separate questionnaires.
 
 - At Gate 1, present only the recommended thinking operation (plus the user's
   ability to decline through free-form input). State the diagnosed gap in one
   line: interpretation, concept, or confidence. If two routes genuinely remain
   plausible, contrast only those adjacent outcomes and let the user choose.
-- At Gate 2, present **human-gated dev-workflow** versus **autonomous execution**;
-  include direct implementation only when the work is genuinely trivial.
-- At Gate 3, present native `/goal` versus `exec-plan`.
+- For executable work, name the concrete destination — `dev-workflow-kickoff`,
+  ordinary-session collaboration, `exec-plan`, native `/goal`, or immediate
+  implementation — and explain the task evidence in one or two lines.
+- When recommending autonomy, include the Gate 3 result in that same recommendation;
+  never first ask "autonomous?" and then ask "`exec-plan` or `/goal`?"
+- State the recommendation immediately before handoff and mention that the user
+  can redirect it; do not turn that notice into a confirmation question. Proceed
+  with the recommended handoff in the same turn when the user already asked to
+  start and no consequential ambiguity remains. If two terminal routes are
+  genuinely tied, ask one focused question that names the consequence separating
+  them.
 
-Put the recommendation first and explain it in one line. The user owns the
-choice, but each prompt is single-stage and mutually exclusive; never flatten
-thinking routes, control-model choices, and autonomous-engine choices into one
-list.
+Do not flatten thinking routes and execution routes into one menu. Do not present
+every available execution route merely to prove that it exists; mention that the
+user can choose a different mode without forcing a generic choice.
 
 ## Handoff
 
-After the user chooses:
+After stating the recommendation:
 
 - `discuss-toolkit-dig`, `inception`, `grill-me`, `exec-plan`, or
   `dev-workflow-kickoff` → invoke that skill.
-- direct implementation → return control to the ordinary session and implement.
+- ordinary-session collaboration or direct implementation → return control to the
+  ordinary session and proceed without invoking a workflow skill.
 - native `/goal` → use the host's built-in goal mechanism. If the host exposes it
   only as a user command, provide a compact goal statement and ask the user to run
   `/goal`; do not substitute a repository skill or invent a portable loop.
 
 The destination receives the task context from session history. Do not perform
 its intake inside this router.
+
+## Success criteria
+
+- [ ] Recommend exactly one thinking route or one terminal execution route.
+- [ ] Cite the task-specific evidence that drove the recommendation.
+- [ ] If recommending autonomy, name `exec-plan` or native `/goal` in the same
+  recommendation.
+- [ ] Consider ordinary-session collaboration for work that needs dialogue but
+  not durable workflow gates.
+- [ ] Ask a routing question only when a consequential tie remains, and name the
+  consequence that separates the tied routes.
 
 ## Anti-patterns
 
@@ -164,11 +210,16 @@ its intake inside this router.
 - Do not use dig to shape a concept or grill-me to discover what proposition the
   user might mean.
 - Do not present any thinking route alongside execution modes.
-- Do not choose human-gated versus autonomous solely from issue-content/skill
-  similarity.
+- Do not force every executable task through a human-gated-versus-autonomous
+  questionnaire; conversational in-session work is a first-class route.
+- Do not ask a second autonomous-mode question after recommending autonomy;
+  recommend `exec-plan` or native `/goal` from the planning horizon.
+- Do not choose a route solely from issue-content/skill similarity; apply the
+  judgment, contract, reversibility, and horizon criteria.
 - Do not send a user who selected human gates through another autonomous-fit
   assessment in kickoff.
 - Do not equate "has tests" with "must be autonomous"; control preference comes
   first.
 - Do not run a requirements interview or implementation inside this skill.
-- Do not silently dispatch before the user chooses.
+- Do not hide a consequential routing assumption; state the recommendation and
+  its reason before handing off.

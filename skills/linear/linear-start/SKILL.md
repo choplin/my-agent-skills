@@ -110,7 +110,7 @@ Summarize for the user what is done, what is in progress, and what remains, **be
 
 ### 7. Hand off to an execution skill
 
-**Starting:** the issue is now In Progress with a workspace ready. **Delegate the execution-mode choice to `dispatch-work`** (Skill tool): it recommends among its routes — including implementing a small, obvious change directly in-session with no skill — based on how "done" is decided, presents the recommendation, and lets the user make the final call before handing off. The issue context (identifier, title, Type, size) is available via session history to inform its recommendation.
+**Starting:** the issue is now In Progress with a workspace ready. **Delegate execution-mode routing to `dispatch-work`** (Skill tool): it recommends one concrete destination from the task's judgment, risk, and planning horizon — including ordinary in-session collaboration with no workflow skill — and hands off in the same turn unless a consequential tie requires one focused question. The issue context (identifier, title, Type, size) is available via session history as evidence for the recommendation.
 
 **Resuming:** the execution mode has usually already been chosen — **continue it rather than re-picking one.** `dispatch-work` is a front door for *starting* work and would re-litigate a settled decision, so route by the artifact found at step 6:
 
