@@ -97,9 +97,9 @@ Multiple facets of the *same* point are fine; a second, distinct point is not.
 
 ## Relationship to Other Skills
 
-- **dig** — clarifies *unclear intent* through a structured interview. one-point
-  assumes intent is clear enough; it manages the *pacing* of an already-framed
-  discussion that has many points. Independent skills.
+- **dig** — clarifies or broadens thinking while tracking the whole discussion.
+  one-point assumes the discussion is framed enough; it manages the *pacing* of
+  multiple known points. Independent skills.
 
 ## Success Criteria
 

@@ -1,16 +1,22 @@
 ---
 name: discuss-toolkit-dig
-description: This skill should be used when the user's intent is unclear and needs to be clarified before proceeding. Triggers when user request lacks specifics (e.g., "create X" without details), when AI would need to make assumptions to proceed, or when user explicitly calls "/dig". Also used as a base skill by other skills. Should NOT trigger for quick decisions with clear context, or when requirements are already well-defined. 「意図が不明確」「曖昧な依頼」「詳細を確認したい」
+description: This skill should be used when the user's intent is unclear, when their thinking would benefit from guided exploration, or when they explicitly call "/dig". It maintains a whole-discussion map while asking questions that clarify, broaden, test, or converge the user's thinking. Also used as a base skill by other skills before consequential work. Should NOT trigger for quick decisions with clear context, or when requirements are already well-defined. 「意図が不明確」「曖昧な依頼」「発想を広げたい」「詳細を確認したい」
 user-invocable: true
 ---
 
-# dig - Intent Clarification
+# dig - Guided Exploration
 
-Dig deep to understand user intent before proceeding. Never fill gaps with assumptions.
+Clarify or expand the user's thinking while keeping sight of the whole
+discussion. Treat questions as moves in that discussion, not items in an
+interview checklist.
 
 ## Why This Skill Exists
 
-AI tends to fill unclear intent with general best practices. This produces outputs that don't reflect the user's actual context and fail to solve real problems. This skill ensures AI understands user intent through structured interview before acting.
+AI tends to fill unclear intent with general practices or to ask stock questions
+without knowing how the answers will affect the discussion. The first behavior
+loses the user's context; the second creates interrogation without progress. dig
+maintains a provisional map of the discussion and asks only questions that can
+meaningfully update it.
 
 ## Invocation Patterns
 
@@ -22,7 +28,7 @@ When AI detects that user's request lacks specifics needed to proceed:
 - "Create a login feature" → What authentication method? What fields? What happens on failure?
 - "Improve performance" → Which part? What's the current bottleneck? What's acceptable?
 
-**When to invoke**: AI would need to make assumptions to fill gaps in user's request.
+**When to invoke**: AI would need to make a material assumption to proceed.
 
 ### 2. Base Skill for Other Skills
 
@@ -31,52 +37,98 @@ Specialized skills call dig to ensure intent clarity before their work:
 
 ### 3. Direct User Invocation
 
-User explicitly calls `/dig` when they want structured clarification.
+User explicitly calls `/dig` when they want to clarify or broaden their
+thinking.
 
 **Key implication**:
-The "never fill gaps with assumptions" principle applies to the entire workflow—
-both the clarification process AND any content created based on the result.
-If certain information remains unclarified, it must not be filled with general practices.
+The caller provides the subject, what it needs to learn, and which later decision
+or action this understanding will inform. It does not prescribe the questions.
+dig chooses questions from the evolving discussion.
 
-## Interview Structure: Axes and Subject
+## The Discussion Map
 
-dig provides three **axes** (perspectives) to clarify intent:
-1. **Intent & Motivation** - WHY is this needed?
-2. **Use Cases & Edge Cases** - HOW will it be used concretely?
-3. **Constraints & Priorities** - WHAT limits exist, what matters most?
+Before asking the first question, build a provisional map from the entire
+conversation and the caller's context:
 
-The **subject** (what to clarify) comes from the caller's context.
+- **Subject and desired movement**: what is being explored, and whether the user
+  wants to clarify, broaden, choose, or prepare for action
+- **Established ground**: what the user has already stated or confirmed
+- **Open areas**: material uncertainties, tensions, and promising branches
+- **Downstream consequence**: which decision, artifact, or next step this
+  discussion is meant to inform
+- **Convergence condition**: what must become clear before further questioning
+  stops being useful
 
-**How axes and subject work together**:
-- Caller specifies the subject and context (what needs to be clarified and why)
-- dig dynamically constructs questions based on user responses and the provided context
-- Each axis is applied as needed to explore different aspects of the subject
+Keep this map provisional. Update it after every answer. Do not force the user to
+approve every internal update, but surface a short reframe when the map changes
+materially, the conversation may be drifting, or several turns have passed
+without restating the whole.
 
-**Important**: Callers provide the **purpose and context** (e.g., "need to understand experiential rationale, success criteria, and trigger conditions"), NOT specific questions to ask. dig determines the actual questions dynamically based on how the conversation unfolds.
+## Core Rule: Every Question Must Move the Discussion
 
-**Example**:
-```
-Caller context: "Creating a skill for code review"
-Subject: "code review skill requirements"
-Context: Need to understand experiential rationale (lessons from past failures),
-         binary success criteria, and intent-based triggers
+Before asking, identify internally:
 
-dig dynamically explores through axes:
-- Intent & Motivation → Why do you need a code review skill? What problem does it solve?
-- (Based on response) → When did code reviews fail in the past? What happened?
-- Use Cases & Edge Cases → Walk through a concrete code review scenario.
-- (Based on response) → What's a borderline case where you're unsure if this skill should trigger?
-- Constraints & Priorities → What trade-offs would you accept?
+1. **Target**: the open area or branch in the discussion map
+2. **Role**: clarify, diverge, test, choose, or converge
+3. **Expected update**: how plausible answers would change the map or the
+   downstream decision
 
-Questions adapt based on user responses - not predetermined from caller's context.
-```
+If the expected update cannot be named, do not ask the question. In particular,
+do not ask merely to cover an axis, fill a summary field, or collect an example.
 
-## Core Rule: Never Assume, Always Ask
+Prioritize the question with the highest expected effect on the direction of the
+discussion. Do not ask about information already established, and do not ask a
+question when different answers would lead to the same next step.
 
-When information is missing:
-1. Do NOT fill with assumptions or general practices
-2. Do NOT proceed with guesses
-3. DO ask the user using the host agent's available user-input mechanism (see below)
+When a question could sound generic or disconnected, briefly make its relevance
+visible: state which distinction or direction the answer will clarify. Keep this
+to a short clause rather than narrating the entire internal map. For example,
+instead of only asking "When would you use it?", say that the answer will
+distinguish between a pull-based search tool and proactive reminders, then ask
+about the intended situation. Avoid empty framing such as "to clarify the
+direction"; name the actual alternatives, consequence, or decision area. If
+naming alternatives would unduly narrow a divergent discussion, name the
+decision area without presenting a closed menu.
+
+## Exploration Lenses
+
+Use these as optional lenses, not mandatory rounds:
+
+- **Intent and motivation**: why this matters and what change the user seeks
+- **Possibilities and alternatives**: what other framings, options, or outcomes
+  may be worth considering
+- **Use and boundaries**: where the idea must work, fail, or distinguish itself
+- **Constraints and priorities**: what limits exist and which trade-offs govern
+  a choice
+- **Consequences**: what a decision enables, prevents, or leaves open
+
+Choose only lenses that can update the current discussion map. It is valid to
+stay with one lens or skip several.
+
+## Handling Unknowns and Hypotheses
+
+Do not silently turn missing information into fact.
+
+- Ask about a gap when different answers would materially change the direction,
+  output, or risk.
+- For a low-impact or reversible gap, state a provisional working assumption or
+  leave it unresolved instead of interrupting the discussion.
+- Present a useful hypothesis as a possibility and explain which part of the map
+  it would change. Ask for confirmation only when proceeding on it would be
+  consequential.
+
+### Concrete examples are conditional
+
+Ask for a real example only when it can resolve a named uncertainty—for example,
+an abstract term has competing meanings, behavior depends on the situation, or
+a boundary must be tested. A hypothetical scenario proposed by the agent can
+serve the same purpose.
+
+Do not require the user to recall a past incident when their stated criterion,
+a hypothetical case, or direct comparison already supplies the needed
+information. When asking for situational detail, make the design or discussion
+branch it distinguishes visible. Examples are a means of inquiry, never a
+completion condition.
 
 ## User-Input Mechanism (host-adaptive)
 
@@ -88,92 +140,68 @@ strongest mechanism the host agent provides:
    - Codex: `request_user_input` when the current mode allows it; otherwise ask in the normal assistant reply
    - Other agents: the agent's equivalent confirmation or question tool, if one exists
 2. If no structured tool is available, ask one concise question in the assistant reply and wait for the answer.
-3. Ask at most three questions at once. Use a single question when the answer will materially change the next step.
-4. Do not treat tool unavailability as permission to guess. If a required answer cannot be obtained, stop and state what is blocked.
+3. Default to one question. Ask at most three only when they are independent and
+   answering them together will not obscure how each updates the discussion.
+4. Do not treat tool unavailability as permission to hide a material assumption.
+   If a required answer cannot be obtained, state what is blocked.
 
-When making hypotheses based on general knowledge:
-1. Present as hypothesis: "Generally X applies, but for your case..."
-2. Explicitly ask for confirmation
-3. Never use unconfirmed hypotheses in final understanding
+## Exploration Loop
 
-## Interview Process
+1. **Map**: form or update the whole discussion map before composing a question.
+2. **Choose the move**: decide whether the discussion most needs clarification,
+   divergence, testing, choice, or convergence.
+3. **Ask**: ask the smallest question that can make that move.
+4. **Integrate**: incorporate the answer into the map; do not treat it as an
+   isolated field value.
+5. **Reorient**: decide again from the updated whole, rather than continuing a
+   predetermined sequence of questions.
 
-### Phase 1: Initial Assessment
+Continue only while another question has a meaningful expected effect. When the
+remaining uncertainty is low-impact, intentionally open, or irrelevant to the
+downstream consequence, move to confirmation. The user may also say "done" or
+"complete" to end exploration early.
 
-Identify what's unclear in user's request:
-- What is the goal?
-- Why do they want this?
-- What constraints exist?
+## Confirmation and Completion
 
-### Phase 2: Deep Interview
+AI initiates confirmation when the convergence condition is met. Present a short
+understanding summary containing:
 
-**Critical**: Continue until quality indicators in Phase 3 are satisfied. No upper limit on questions.
+- the subject and desired movement
+- the conclusions, choices, or possibilities that now shape the direction
+- material constraints and intentionally unresolved areas
+- the next step, if this discussion feeds one
 
-Use the host's user-input mechanism repeatedly (see "User-Input Mechanism (host-adaptive)"). **AI decides when to move to Phase 3** by self-evaluating quality indicators after each answer. User can say "done" or "complete" to end early (because prolonged questioning may frustrate users who already know their intent), but the default is AI-driven progression.
+Ask for explicit confirmation when another skill or consequential action will
+rely on the summary. For open-ended exploration with no downstream action,
+reflect the current map and let the user continue or stop without manufacturing
+a required decision.
 
-**Interview Rounds**:
+Return results in the format requested by the caller:
 
-1. **Intent & Motivation**
-   - "Why do you need this?"
-   - "What happens if you don't have it?"
-   - Follow up until you can state the underlying need with specific criteria
-     (not "user wants good performance" but "user needs <5s response time")
-
-2. **Use Cases & Edge Cases**
-   - "Walk me through a specific example"
-   - "What's a borderline case?"
-   - "What would failure look like?"
-   - Follow up until you have a specific example with concrete inputs and outputs
-
-3. **Constraints & Priorities**
-   - "What trade-offs would you accept?"
-   - "What must be avoided?"
-   - "What's the minimum viable outcome?"
-   - Follow up until decision criteria are clear
-
-**Follow-up Question Patterns**:
-- "Why?" - uncover motivation
-- "For example?" - convert abstract to concrete
-- "What else did you consider?" - reveal trade-offs
-- "When did this fail before?" - extract lessons learned
-- Present hypothesis for confirmation - validate assumptions
-
-### Phase 3: Confirmation
-
-**AI initiates this phase** once quality indicators are likely satisfied. Do NOT ask the user "Do you have anything else to clarify?" or wait for user to signal completion. The user's role is to confirm accuracy, not to decide when AI is done asking.
-
-Before presenting the summary, verify quality indicators:
-
-- [ ] **Motivation documented**: Summary includes user's answer to "why is this important?"
-- [ ] **Examples collected**: Summary contains at least one example with specific inputs/outputs
-- [ ] **Action determined**: Summary ends with "Next step: [specific action]"
-- [ ] **Verification complete**: Every claim in summary was either stated by user or explicitly confirmed by user
-
-Present understanding summary to user and get explicit confirmation ("correct", "yes", "approved" - not "maybe" or "I think so").
-
-**Anti-patterns to avoid**:
-- "Is there anything else you'd like to clarify?" - Incorrectly delegates completion decision to user
-- "Do you have more questions?" - Same issue
-- Waiting for user to say "that's all" before moving to summary - AI should proactively move forward
-
-### Phase 4: Completion
-
-Return results in format requested by caller:
 - If called by specialized skill: format they need
 - If called directly: verbal confirmation in session
 
 ## Success Criteria
 
 The intent clarification deliverable is complete when:
-- [ ] User explicitly confirms understanding with "correct", "yes", or "approved" (not "maybe" or "I think so")
-- [ ] Every statement in summary can be traced to a specific user answer in the conversation
-- [ ] Summary contains zero adjectives (appropriate, proper, good, clean, etc.) without accompanying measurable criteria
-- [ ] Summary includes at least one concrete example provided by the user
-- [ ] Summary states the user's underlying motivation in user's own words or confirmed paraphrase
+- [ ] The summary states what the discussion was trying to clarify, broaden, or decide
+- [ ] Every conclusion is traceable to the user's input or labeled as provisional
+- [ ] Material constraints, tensions, and intentionally open questions are visible
+- [ ] Further questions would not materially change the present direction or next step
+- [ ] If a caller or consequential action depends on the result, the user explicitly confirmed the summary
+
+## Gotchas
+
+- Do not mistake a list of unanswered topics for a discussion map. The map must
+  show why an area matters to the direction of the discussion.
+- Do not continue along a promising line merely because the previous answer
+  supports a follow-up. Re-evaluate it against the whole map first.
+- Do not force convergence when the user's desired movement is divergence.
+- Do not make the user supply evidence for a hypothetical possibility before it
+  is useful enough to test.
 
 ## When NOT to Use
 
 - Quick decisions with obvious context
 - Requirements already documented and clear
 - User explicitly wants fast action without discussion
-
