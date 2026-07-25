@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git Commit Message"
+  short_description: "Create consistent, review-friendly Git commit messages"
+  default_prompt: "Use $git-helpers-commit to create a commit with a message that explains the staged change at the right level of detail."

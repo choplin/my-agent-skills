@@ -37,6 +37,5 @@ When working in this repository, actively use these skills:
 
 ## Commit Convention
 
-Conventional commit style: `type(module): description`
-- Types: `feat`, `fix`, `refactor`, `docs`, `test`, `chore`
-- Module is the plugin name (optional for cross-plugin changes)
+Use the skill group as the commit scope when a change is limited to one group.
+Omit the scope for repository-wide changes.

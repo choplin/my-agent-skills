@@ -54,9 +54,15 @@ This skill is **explicit-invocation only** — never run it proactively.
    - `COUNT=$(git rev-list --count <base>..HEAD)`.
    - If `COUNT == 1`: already a single commit — skip to step 4.
    - If `COUNT > 1`:
-     - Propose a commit message: a concise subject summarizing the whole change,
-       with the original commit subjects (`git log --reverse --format='- %s' <base>..HEAD`)
-       listed in the body. Show it and let the user confirm or edit.
+     - Apply the `git-helpers-commit` skill to compose the final message from
+       the combined diff and complete commit range. Use the original subjects
+       (`git log --reverse --format='- %s' <base>..HEAD`) as evidence, but
+       describe the final outcome and its why/how instead of copying the
+       implementation history into the body.
+       If that skill is unavailable, apply the same rule inline: summarize the
+       final outcome in the subject and explain non-obvious motivation,
+       approach, constraints, or consequences in the body.
+     - Show the proposed message and let the user confirm or edit it.
      - `git reset --soft <base>` then `git commit` with the agreed message.
      - Verify the tree is unchanged: `git diff --quiet <base>..HEAD` content-wise
        must equal the pre-squash tree (the squash must not alter files).

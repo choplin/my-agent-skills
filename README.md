@@ -95,7 +95,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), grill-me (candidate robustness), one-point (discussion pacing) |
-| `git-helpers` | draft-pr, explain-pr, pr-description, rebase-onto-rewritten |
+| `git-helpers` | commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten, squash-merge |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
 | `lang-reference` | go, java, python, scala, sql, typescript |
 | `jira-cli` | jira-cli |
@@ -151,6 +151,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **git-helpers**
 - draft-pr → pr-description
 - explain-pr → understanding-explain-diff `(ext; explainer-studio)`
+- squash-merge → commit
 
 **linear**
 - linear-start → linear, **dispatch-work**, **dev-workflow-resume-work**, **exec-plan**, wtm-worktree `(ext)`

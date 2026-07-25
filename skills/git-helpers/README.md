@@ -1,11 +1,12 @@
 # git-helpers
 
-Git helper skills for Claude Code.
+Portable Git helper skills for coding agents.
 
 ## Skills
 
 | Skill | Description |
 |-------|-------------|
+| `commit` | Create, amend, or draft review-friendly commits with consistent message granularity |
 | `draft-pr` | Push and create a draft PR |
 | `explain-pr` | Generate and publish a reviewer-facing HTML explanation page for the current PR (delegates generation to `understanding-explain-diff`) |
 | `pr-description` | Write a review-friendly PR description (purpose, design, design→code map) |
@@ -14,6 +15,7 @@ Git helper skills for Claude Code.
 
 ## When Skills Activate
 
+- **commit**: any `git commit`, amend, squash/rebase message, or commit-message draft
 - **draft-pr**: "create a draft PR", "open a draft PR", "draft pull request"
 - **explain-pr**: "explain this PR", "PRの解説ページを作って", "attach an explanation page to the PR"
 - **pr-description**: "write a PR description", "draft the PR body", or delegated from `draft-pr` for non-trivial PRs
@@ -30,12 +32,5 @@ The skill cherry-picks commits one-by-one for better handling of file moves and 
 
 ## Installation
 
-Add to your `.claude/settings.json`:
-
-```json
-{
-  "plugins": [
-    "/path/to/git-helpers"
-  ]
-}
-```
+Install these skills through the repository's `skills add` workflow documented
+in the root README.
