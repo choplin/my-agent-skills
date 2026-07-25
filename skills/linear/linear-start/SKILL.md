@@ -1,6 +1,6 @@
 ---
 name: linear-start
-description: Start or resume work on a Linear issue for the current repository. List all Repo-label issues in In Progress, Todo, or Backlog, including issues outside a Project; let the user choose; present the selected issue's full contents before taking action; prepare or recover its workspace; and hand off to an execution skill. An In Progress pick resumes its existing worktree, reconstructs completed work, and continues the execution mode already in flight. After the picked issue reaches Done, report its Project status when applicable and suggest related work to continue with. Use when the user wants to pick up new or half-finished Linear work for the repo. Triggers include "start a Linear issue", "pick an issue to work on", and "resume an in-progress issue". Do not use for creating or grooming issues (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
+description: Start or resume work on a Linear issue for the current repository. List all Repo-label issues in In Progress, Todo, or Backlog, including issues outside a Project; let the user choose; present the selected issue's full contents before taking action; autonomously prepare or recover the appropriate workspace; and hand off to an execution skill. An In Progress pick resumes its existing workspace, reconstructs completed work, and continues the execution mode already in flight. After the picked issue reaches Done, report its Project status when applicable and suggest related work to continue with. Use when the user wants to pick up new or half-finished Linear work for the repo. Triggers include "start a Linear issue", "pick an issue to work on", and "resume an in-progress issue". Do not use for creating or grooming issues (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
 user-invocable: true
 ---
 
@@ -59,10 +59,12 @@ Backlog picks are allowed — but after presenting a chosen Backlog issue, check
 
 #### If starting
 
-**Ask the user** how to set up the workspace; don't assume:
+Choose the workspace **autonomously** from the selected issue's expected deliverable. Do not ask the user to choose between these defaults:
 
-- **Isolated worktree** (typical) — keeps the work off the main branch.
-- **Current branch, no worktree** (e.g. proceed on `main`) — some changes are better done in place. Skip worktree creation entirely and work where you are.
+- **Isolated worktree** — use when completing the issue entails implementation or other repository changes intended for a commit or PR. This is normally an `impl` issue.
+- **Current workspace, no new worktree** — use when the work is analysis, design, research, discussion, or another task whose deliverable does not require repository changes. This is normally a `design` or `research` issue.
+
+Treat the Type label as a strong hint, not a substitute for reading the issue: decide from the actual deliverable and acceptance criteria. If the classification is imperfect but the likely deliverable is clear, use best judgment rather than asking. An explicit user instruction to use or avoid a worktree overrides these defaults. Briefly state the chosen setup and proceed.
 
 **If worktree** — delegate to the `wtm-worktree` skill (`wtm` CLI):
 
@@ -75,11 +77,11 @@ Backlog picks are allowed — but after presenting a chosen Backlog issue, check
 
   The note is later readable with `wtm notes show`, so the branch stays clean while the link to Linear is preserved.
 
-**If current branch** — skip `wtm` entirely. There is no worktree note to hold the link, so keep the issue identifier/URL in session context only — per `linear-base`'s "Linear references stay internal", it must **not** end up in the commit message or PR. Preserve the link from the Linear side instead: attach the eventual PR to the issue (Git integration or a `links` attachment).
+**If current workspace** — skip `wtm` entirely. There is no worktree note to hold the link, so keep the issue identifier/URL in session context only — per `linear-base`'s "Linear references stay internal", it must **not** end up in the commit message or PR. Preserve the link from the Linear side instead: attach the eventual PR to the issue (Git integration or a `links` attachment).
 
 #### If resuming
 
-**Do not create a new worktree — find the existing one.** Because the issue ID never appears in a branch or worktree name, the **worktree note** written at step 5 on start is the only local link back to Linear. Search the notes for the issue identifier:
+**Do not create a new worktree before checking for the existing workspace.** Because the issue ID never appears in a branch or worktree name, a **worktree note** written at step 5 on start is the strongest local link back to Linear. Search the notes for the issue identifier:
 
 ```bash
 wtm list --format json | jq -r '.[].name' | while read -r wt; do
@@ -91,7 +93,7 @@ done
 
 - **Exactly one match** → that is the workspace. Tell the user which worktree/branch, and continue there.
 - **Several matches** → list them with their notes and **ask** which to continue in.
-- **No match** → the work was done on the current branch, or the worktree was removed. **Ask** the user: continue on the current branch, or create a fresh worktree (as in the start path, `-m` note included) and carry the work forward there. Also check the Linear side — an attached branch/PR link on the issue may name the branch, so offer that branch if one is attached.
+- **No match** → the work was done in the current workspace, or the worktree was removed. Check the Linear side first: if an attached branch/PR identifies the existing workspace, recover and use it. Otherwise inspect the current branch, status, commits, and diffs for evidence of the selected issue; continue there when the work is plausibly present. If no existing work is recoverable, apply the same autonomous deliverable rule as the start path: create a fresh worktree (with the `-m` note) for implementation or other repository-changing work; continue in the current workspace for non-repository work. State the choice and proceed without asking merely because the note was missing.
 
 ### 6. Reconstruct what's already been done — resume only
 
