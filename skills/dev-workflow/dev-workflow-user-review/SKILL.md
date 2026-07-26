@@ -1,8 +1,8 @@
 ---
 name: dev-workflow-user-review
-description: Drive the user-review phase for a dev-workflow Story. Applies the human acceptance criteria (Verify=human), delegates the item-resolution loop to review-tools-resolve, handles postponed (design-level) items via create-spec, and concludes via review-tools-report and post-task.
+description: Internal user-review phase for an active dev-workflow Story in in_review. Invoked from dev-workflow phase transitions or resumption to apply human acceptance criteria, delegate item resolution to review-tools-resolve, handle postponed items, and conclude the workflow. Should NOT be selected to start a review or outside an active dev-workflow Story; standalone review flows begin with the appropriate review-tools ingestion operation.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill, Task
-user-invocable: true
+user-invocable: false
 ---
 
 # User Review (dev-workflow Story wrapper)
@@ -10,8 +10,6 @@ user-invocable: true
 Run the human review of a completed **Story**. Two things happen here: the human
 **acceptance** judgment (the `Verify: human` criteria), and the **resolution** of the
 review items — the latter delegated to `review-tools-resolve`.
-
-**Trigger phrases**: "user review", "ユーザーレビュー", "レビュー対応"
 
 ## Scope
 
