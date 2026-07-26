@@ -5,10 +5,9 @@ description: Guide production-quality codebase structure from a shared domain an
 
 # Codebase Structure
 
-Write code around the concepts and use cases the program represents, not around
-a list of procedures or the capability set of its infrastructure. Preserve the
-shared model in the code so a reviewer can navigate from an agreed concept or
-workflow to its implementation and back again.
+Read [the human reviewability goal](references/reviewability-goal.md) before
+modeling the structure. Use that objective to choose between otherwise valid
+designs, then apply the workflow below.
 
 ## Model concepts and use cases first
 
@@ -72,10 +71,7 @@ taxonomy alone.
 - Prefer a direct, readable model over an abstraction created only to remove a
   small amount of duplication.
 
-## Preserve static legibility and traceability
-
-Optimize the structure for local human review, especially when a shared model
-is designed collaboratively and implementation is delegated.
+## Make the structure statically legible and traceable
 
 - Give every relevant concept, invariant, and workflow an identifiable semantic
   owner or entry point.
@@ -89,9 +85,8 @@ is designed collaboratively and implementation is delegated.
   need not be one-to-one, but a reviewer should be able to find the
   implementation of a model element and explain the domain purpose of public
   code.
-- Do not fragment code merely to make the directory tree look architectural. A
-  boundary improves legibility only when it reduces the context needed to
-  understand or verify a change.
+- Keep one coherent rule readable without excessive file navigation. Do not
+  fragment code merely to make the directory tree look architectural.
 
 ## Structure modules by responsibility
 
