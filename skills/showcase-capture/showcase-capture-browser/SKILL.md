@@ -1,11 +1,13 @@
 ---
 name: showcase-capture-browser
-description: Capture polished screenshots or video demonstrations of a web application in a browser. Use after a capture plan identifies a browser surface, or when the user asks to record or screenshot a web app, website, product flow, or browser-based tool for documentation, release notes, marketing, or a demo. Use browser automation/control when it can produce the planned artifact; otherwise hand off to general screen capture.
+description: Capture polished screenshots or video demonstrations of a web application in a browser. Use after a capture plan identifies a browser surface, or when the user asks to record or screenshot a web app, website, product flow, or browser-based tool for documentation, release notes, marketing, or a demo. Use browser automation/control for page-owned states and route inherently OS-owned shots to general screen capture.
 ---
 
 # Browser showcase capture
 
 Capture a controlled web-app story, not an incidental browser session. Use `showcase-capture-plan` first if the intended claim, states, or shot list is undecided. For the Playwright/Nix implementation pattern, read `references/playwright-recording.md`.
+
+Own browser-specific state preparation, acquisition, state-preserving crop/resize/padding/export, and verification for both screenshots and video. Do not hand off merely because the requested artifact is a still. Treat the capture plan as the owner of the proof point, composition, target dimensions/format, and annotation intent.
 
 ## Prepare the browser state
 
@@ -33,10 +35,16 @@ For video, perform only the scripted interaction at an intentional pace:
 - Scroll deliberately with a smooth, visible transition. Avoid `scrollIntoViewIfNeeded()` as the visible movement because it may jump; make the target readable, then click it.
 - Do not show retries, hover noise, loading time, unrelated scrolling, or cursor warps. Keep the cursor still while a result needs to be read.
 
-## Escalate to screen capture
+## Route out-of-scope shots to screen capture
 
-Delegate to `showcase-capture-screen` when browser control cannot create the requested video, cannot reach the needed authenticated/native/multi-window state, or cannot capture the required browser chrome. Give it the URL/state, viewport, interaction sequence, and planned framing.
+Do not use `showcase-capture-screen` as a generic fallback when browser control is unavailable or fails. If the planned proof point remains inside the page, report the blocked browser capability instead of silently changing the acquisition method.
+
+Route to `showcase-capture-screen` only when the shot inherently requires browser chrome, a native authentication dialog, multiple windows, or another OS-owned state. Give it the URL/state, viewport, interaction sequence, and planned framing.
 
 ## Verify and hand off
 
-Keep only the named final artifact; do not accumulate “final-v2” comparison files. Open or inspect the output and use `ffprobe` to confirm duration and file size. Confirm the correct viewport and final state, readable text, intentional framing, and absence of secrets, personal data, or notifications. Re-capture any shot that shows an unintended intermediate or stale state. Report paths, duration, size, and completed shots.
+Keep only the named final artifact; do not accumulate “final-v2” comparison files. Open or inspect the output. For video, use `ffprobe` to confirm duration and file size. For a still, confirm its pixel dimensions and format. Confirm the correct viewport and final state, readable text, intentional framing, and absence of secrets, personal data, or notifications.
+
+Limit processing during capture to operations that preserve the represented state: crop, resize, padding, color-profile normalization, metadata removal, and export in the planned format. Do not add callouts, blur sensitive data, composite multiple images, or otherwise change represented product state. Re-capture a shot that exposes sensitive data or shows an unintended intermediate or stale state.
+
+When the plan explicitly requires annotations, a comparison layout, compositing, or decorative framing, preserve a clean source artifact and delegate it with the exact edit specification to `showcase-still-finish`. Otherwise return the finished screenshot directly. Report paths, dimensions or duration, file size, format, and completed shots.
