@@ -46,6 +46,10 @@ unclear rather than conceptually open, use `discuss-toolkit-dig`.
 
 ## Required integrations and degradation
 
+- Load `mvp-toolkit-base` first and apply its
+  `references/mvp-delivery-model.md`. It owns the MVP Contract, classifications,
+  readiness, persistence boundary, Linear mapping, issue contract, and handoff
+  payload used below.
 - Use `discuss-toolkit-dig` for the MVP-defining dialogue. Ask only questions
   that can change the scope cut, unknown classification, or delivery structure.
 - Use the installed llm-wiki skills to retrieve and persist durable knowledge.
@@ -83,32 +87,18 @@ user.
 
 ### 2. Define the MVP contract through dialogue
 
-Use `discuss-toolkit-dig` to establish:
-
-- **Target user and problem** — whose situation changes;
-- **Smallest value loop** — the shortest end-to-end use that delivers real value;
-- **Hypothesis** — what the MVP is intended to prove or disprove;
-- **Evidence** — what observable result would count as learning or success;
-- **Constraints** — safety, legal, operational, integration, or timing limits;
-- **Non-goals** — what this MVP deliberately does not establish.
-
-The MVP contract has converged when target user, problem, value loop, hypothesis,
-evidence, constraints, and non-goals are specific enough to decide whether a
-candidate capability belongs in the MVP.
+Use `discuss-toolkit-dig` to complete and confirm the MVP Contract defined by
+`mvp-toolkit-base`. Apply the base convergence condition rather than accepting a
+generic product summary.
 
 Do not require every product question to be closed. Close only those that change
 the MVP boundary or make the delivery graph ambiguous.
 
 ### 3. Cut scope against the value loop
 
-Classify every proposed capability:
-
-- **MVP** — required for the smallest value loop, its evidence, safe operation,
-  or a constraint that would make later reversal disproportionately expensive;
-- **Deferred** — potentially valuable, but unnecessary for the current
-  hypothesis and safely addable after learning;
-- **Rejected** — inconsistent with the direction, duplicated, or no longer
-  justified.
+Apply the base Scope Disposition to every proposed capability. Record a concrete
+rationale for each disposition. Only MVP capabilities may become executable
+work in the current Project.
 
 Require a concrete reason for every MVP inclusion. Challenge:
 
@@ -129,21 +119,15 @@ Project.
 
 ### 4. Classify remaining unknowns
 
-Classify each uncertainty by what must happen next:
-
-1. **Scope-defining decision** — resolve it with the user now. Do not hide a
-   product-direction choice inside a later issue.
-2. **Blocking research or design** — plan it before implementation because its
-   outcome can invalidate the MVP route, change a material contract, or prevent
-   downstream issues from being self-complete.
-3. **Reversible implementation choice** — leave it to the executor. Do not create
-   an issue merely to decide a low-impact detail.
+Apply the base Unknown Class and Decision Authority. Resolve scope-defining
+unknowns with the user now. Plan blocking research/design before implementation,
+and leave reversible implementation choices to their executor.
 
 Front-load only genuine blockers. A question needed solely by a later milestone,
 or answerable safely while implementing one issue, is not pre-implementation
 work.
 
-For category 2:
+For blocking research/design:
 
 - a `research` issue produces evidence, constraints, or evaluated options;
 - a `design` issue consumes evidence and produces one binding decision, including
@@ -152,20 +136,14 @@ For category 2:
 - say whether AI may decide, AI must recommend for a human decision, or an
   external input is required.
 
-The later `mvp-toolkit-resolution` skill is expected to complete this lane,
-apply its outcomes to affected implementation issues, and leave the Project
-ready to implement. Planning only prepares that work.
+The `mvp-toolkit-resolution` skill completes this lane, applies its outcomes to
+affected implementation issues, and leaves the Project ready to implement.
+Planning only prepares that work.
 
 ### 5. Assign readiness
 
-Assign exactly one state:
-
-- **READY** — no blocking unknown remains; the first implementation issue is
-  self-complete and executable.
-- **READY_AFTER_RESOLUTION** — the resolution lane is executable, but
-  implementation is not. List every blocker and the chain that resolves it.
-- **BLOCKED** — no useful autonomous work can begin without missing human or
-  external input. Name the input and owner.
+Assign exactly one readiness state using the base state machine and record its
+required blocker or handoff summary.
 
 Do not label a plan READY merely because all unknowns have issues. READY means
 implementation itself may start.
@@ -199,16 +177,9 @@ dependency and is modeled as such.
 
 Create the smallest meaningful deliverables, not mechanical file edits.
 
-Every issue must:
-
-- express one coherent outcome in one sentence;
-- be feasible in one focused executor session;
-- be independently verifiable;
-- declare all inputs that cannot be reconstructed from the repository;
-- name completed blocker outcomes it consumes;
-- contain no unresolved scope or product-direction choice;
-- state what is explicitly out of scope;
-- provide observable acceptance and a verification method.
+Apply the base Issue execution contract. Additionally require that the outcome
+fits in one sentence, one focused executor session, and one independently
+verifiable deliverable.
 
 Use `impl`, `research`, and `design` according to the deliverable produced. Git
 packaging is not part of planning: an issue is an atomic deliverable, while the
@@ -240,12 +211,11 @@ scope cut to llm-wiki. Incorporate corrections into the proposal first.
 After approval:
 
 1. Persist the MVP contract, scope cut, Deferred rationale, and product decisions
-   in the current repository scope in llm-wiki. Update an existing authoritative
-   note when one clearly owns the subject; otherwise create a linked MVP planning
+   under the base durable-ownership rules. Update an existing authoritative note
+   when one clearly owns the subject; otherwise create a linked MVP planning
    note. Do not duplicate complete PRD or design content.
 2. Create or update one finite Linear Project for the MVP outcome, following
-   `linear-base`. Summarize Goal, Scope, Out of Scope, evidence, and readiness in
-   its description.
+   the base MVP mapping and `linear-base` mechanics.
 3. Create Milestones only when the outcome has distinct observable stages.
 4. Create issues with Type and Repo labels, status, milestone, and `blocked by`
    relations. Do not create Deferred roadmap issues.
@@ -262,7 +232,7 @@ Report:
 - the llm-wiki note and Linear Project updated;
 - the appropriate next route.
 
-For READY_AFTER_RESOLUTION, hand off to `mvp-toolkit-resolution` when installed.
+For READY_AFTER_RESOLUTION, hand off to `mvp-toolkit-resolution`.
 For READY, hand off to `mvp-toolkit-orchestration` when installed. If the
 destination skill does not yet exist, name the missing capability without
 silently substituting implementation in this session.

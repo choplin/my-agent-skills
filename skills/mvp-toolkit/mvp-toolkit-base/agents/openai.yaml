@@ -1,0 +1,4 @@
+interface:
+  display_name: "MVP Toolkit Base"
+  short_description: "Shared MVP delivery model and handoff contracts"
+  default_prompt: "Use $mvp-toolkit-base to apply the shared MVP contract, readiness, and delivery model."
