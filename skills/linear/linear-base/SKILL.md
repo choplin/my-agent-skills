@@ -8,7 +8,7 @@ user-invocable: false
 
 This skill defines **how work is structured and managed in this Linear workspace**. The agent owns the full issue lifecycle — capturing, grooming, commenting, moving through statuses, and closing. Follow Linear's recommended semantics rather than fighting the tool.
 
-**Context:** a solo, single-person workspace (one team). Team-collaboration features (assignee routing, velocity across a team) carry little value here and are deliberately skipped. Optimize instead for a two-tier authoring model: an expensive model (Opus/Fable) grooms issues into self-complete work orders, and a cheaper model (Sonnet) executes the implementation ones by reference. Not every issue fits the cheap-executor mould — design and research issues stay on the expensive model to execute; the **Type** label carries that signal so an executor can pick issues matching its capability (see Label groups). Everything below serves that model.
+**Context:** a solo, single-person workspace (one team). Team-collaboration features (assignee routing, velocity across a team) carry little value here and are deliberately skipped. Optimize instead for a two-tier authoring model: an expensive model (Opus/Fable) grooms issues into self-complete work orders, and a cheaper model (Sonnet) executes the implementation ones by reference. Not every issue fits the cheap-executor mould — design and research issues stay on the expensive model, while orchestration stays in the high-judgment main session. The **Type** label carries that signal so an executor can pick issues matching its capability (see Label groups). Everything below serves that model.
 
 The MCP field names referenced (`state`, `project`, `milestone`, `parentId`, `blockedBy`/`blocks`/`relatedTo`, `labels`, `priority`) are stable Linear API fields; use whichever Linear MCP server is wired.
 
@@ -22,7 +22,7 @@ How each Linear primitive is treated here:
 | **Project** | A **finite outcome/goal** with a target ("ship X"), not a repo or a permanent bucket. Always tagged with its repo via the **Repo** project-label group (required; single-select — `1 Project = 1 repo`). | Linear projects have target dates and a completed state; a permanent project makes all of that formless. A project must be able to *complete*. The mandatory Repo tag makes "which repo does this outcome target" directly queryable. |
 | **Milestone** | Phases **within** a project. Use only when a project has distinct stages. | Structure only when it earns its keep; skip for small projects. |
 | **Cycle** | **Not used** (leave disabled). | Solo velocity tracking has little value; priority + status already order work. |
-| **Issue** | The unit of work. **1 Issue = 1 atomic deliverable** — for implementation, one coherent code change on one branch; for design, 1 decision (ADR); for research, 1 findings document. An implementation Issue may produce a PR, but a PR is not part of the atomicity rule or required for completion. Always **self-complete** (see below). | Keeps each deliverable reviewable and lets a context-free executor pick up any Todo without making Linear structure depend on whether review happens through a PR. |
+| **Issue** | The unit of work. **1 Issue = 1 atomic deliverable** — for implementation, one coherent code change on one branch; for design, 1 decision (ADR); for research, 1 findings document. An implementation Issue may produce a PR, but a PR is not part of the atomicity rule or required for completion. Always **self-complete** (see below). A reserved `Type/orchestration` Issue is the explicit control-plane exception: it records one Project run and its final human approval rather than an atomic work deliverable. | Keeps each deliverable reviewable and lets a context-free executor pick up any Todo without making Linear structure depend on whether review happens through a PR. The explicit orchestration exception gives cross-session graph execution one durable ledger without distorting work dependencies. |
 | **Sub-issue** | Avoid by default. Use **only** to group a small effort with a few atomic deliverables (see grouping). | Prevents needless hierarchy; solo work rarely needs it. |
 | **Label** | Issues: two single-select groups, **Type** (deliverable kind — also drives executor-model choice) and **Repo**. Projects: a **Repo** project-label group (single-select), **required on every Project**. See Label groups. | Cheap, queryable classification; single-select keeps each axis unambiguous. A Project targets one repo (multi-repo projects are rare and out of this model). |
 | **Status** | Keep the 6 defaults; each carries a distinct machine-meaning (see Lifecycle). | The agent maintains status, so granularity costs nothing and aids agent decisions. |
@@ -147,7 +147,7 @@ Grooming is where a rough Backlog item becomes a ready Todo. Three things are se
 
 1. **Self-completeness** — bring the description up to the authoring standard above.
 2. **True size** — decide whether it's really one deliverable, or splits into several.
-3. **Deliverable type** — set the **Type** label (`impl`/`design`/`research`), which fixes both the atomic-deliverable unit and which model will execute the issue.
+3. **Deliverable type** — set the **Type** label (`impl`/`design`/`research`), which fixes both the atomic-deliverable unit and which model will execute the issue. `orchestration` is reserved for the control Issue created by `orchestration-toolkit-orchestrate`; ordinary grooming does not assign it.
 
 If grooming reveals the work is **multiple atomic deliverables**, apply the
 grouping rule — and note the asymmetry in *how* to convert:
@@ -169,10 +169,12 @@ Two single-select groups (a Linear label group makes its members mutually exclus
   - `impl` — deliverable is a coherent code change on one branch. Convergent, groomable to self-completeness → executes on the **cheap** model (Sonnet). The active execution workflow decides how many commits it needs and whether to open a PR.
   - `design` — deliverable is a decision/ADR. Divergent, judgement-heavy → executes on the **expensive** model (Opus/Fable).
   - `research` — deliverable is a document/findings. Exploratory → executes on the **expensive** model.
+  - `orchestration` — reserved control record for one finite Project execution. It is created and driven by `orchestration-toolkit-orchestrate` in the expensive main session, remains outside the work dependency graph, and completes only after its final human approval gate. Do not use it for ordinary implementation, design, research, or backlog grouping.
 
   The executor **picks the issues that match its capability**: a cheap-model
-  session takes `impl`, an expensive-model session takes `design`/`research`.
-  Start with these three; add a Type only when a recurring deliverable is a
+  session takes `impl`, an expensive-model session takes `design`/`research`,
+  and the main orchestrator owns `orchestration`. Start with these four; add a
+  Type only when a recurring deliverable is a
   genuinely different artefact from code-change/decision/document (e.g. a
   throwaway `spike`), never merely to describe a variation of one. A
   documentation change that ships as code-repository work (README etc.) is
@@ -200,7 +202,7 @@ branches as labels or assume every Issue must produce a PR.
 
 Create the issue label groups (`isGroup: true`, then members with `parent: <group>` — both supported by the label-create MCP tool):
 
-1. Create the issue **Type** group and its 3 members (`impl` / `design` / `research`).
+1. Create the issue **Type** group and its 4 members (`impl` / `design` / `research` / `orchestration`).
 2. Create the issue **Repo** group; add a member per active repository on demand.
 3. Create the **Repo** project-label group in the project-label namespace (mirror the issue Repo group and its members). **This is a manual UI step — the MCP cannot create project labels.** Every Project must carry exactly one Repo label; when a repo's label is missing, ask the user to add it in the UI.
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Adversarial Review"
+  short_description: "Stress-test artifacts with predefined lenses"
+  default_prompt: "Use $orchestration-toolkit-adversarial-review to adversarially review this artifact."

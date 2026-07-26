@@ -22,7 +22,7 @@ Retain each candidate's Project, if any, as context for display and the post-com
 
 ### 2. List the issues to choose from
 
-List **all issues with Repo label = R**, regardless of whether they belong to a Project or which Project they belong to, in two sections. For each issue show: identifier, title, Status, Priority, Type label (`impl`/`design`/`research`), and Project (`<project name>` or `No Project`).
+List **all issues with Repo label = R**, regardless of whether they belong to a Project or which Project they belong to, in two sections. For each issue show: identifier, title, Status, Priority, Type label (`impl`/`design`/`research`/`orchestration`), and Project (`<project name>` or `No Project`).
 
 **Section 1 — In flight (resume candidates):** issues whose `state` is **In Progress**. Show these **first**, as their own section — they are candidates because work already exists on them, not because of their priority, so they are not ranked against the section below. Surfacing them at the top is deliberate: it makes half-finished work visible before new work is picked up.
 
@@ -50,6 +50,13 @@ Show:
 Do not replace the description with a summary and do not merely say that the issue was read. Only after presenting it may the flow continue.
 
 Backlog picks are allowed — but after presenting a chosen Backlog issue, check whether it is self-complete (see `linear-base`'s authoring standard). If it is not, flag that it may need grooming first and offer to groom it via `linear-base` before starting.
+
+**Reserved orchestration path:** if the selected Issue has
+`Type/orchestration`, hand it directly to
+`orchestration-toolkit-orchestrate` after presenting it. Do not create an Issue
+worktree, reroute it through `dispatch-work`, or treat it as an atomic
+deliverable. The orchestration skill reconstructs its Project graph, integration
+workspace, checkpoint, and pending human gate.
 
 ### 4. Move the issue to In Progress — start only
 

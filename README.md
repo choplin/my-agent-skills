@@ -93,6 +93,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `dispatch` | dispatch-work (separates intent clarification, concept shaping, candidate pressure-testing, human-gated work, autonomous work, and direct implementation) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
 | `mvp-toolkit` | planning, resolution, base (define a narrow MVP and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; share the cross-phase delivery model) |
+| `orchestration-toolkit` | orchestrate, adversarial-review (drive a ready Linear Project through delegated graph execution, mandatory global adversarial review, and final human approval; independently stress-test artifacts through predefined lenses) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), grill-me (candidate robustness), one-point (discussion pacing) |
@@ -157,13 +158,16 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - squash-merge → commit
 
 **linear**
-- linear-start → linear, **dispatch-work**, **dev-workflow-resume-work**, **exec-plan**, wtm-worktree `(ext)`
+- linear-start → linear, **dispatch-work**, **dev-workflow-resume-work**, **exec-plan**, **orchestration-toolkit-orchestrate**, wtm-worktree `(ext)`
 - linear-groom → linear
 
 **mvp-toolkit**
 - planning → base, **discuss-toolkit-dig**, **linear-base**, llm-wiki-base `(ext)`, llm-wiki retrieval skills `(ext)`
 - resolution → base, **discuss-toolkit-dig**, **linear-base**, llm-wiki-base `(ext)`, llm-wiki retrieval skills `(ext)`
 - base → **linear-base**, llm-wiki-base `(ext)`
+
+**orchestration-toolkit**
+- orchestrate → adversarial-review, **linear-base**, **git-helpers-commit**, llm-wiki-overview `(ext)`, llm-wiki-retrieve `(ext)`, wtm-worktree `(ext)`
 
 **skill-quality**
 - skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-creator `(ext)`
