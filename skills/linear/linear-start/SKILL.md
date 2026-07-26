@@ -1,6 +1,6 @@
 ---
 name: linear-start
-description: Start or resume work on a Linear issue for the current repository. List all Repo-label issues in In Progress, Todo, or Backlog, including issues outside a Project; let the user choose; present the selected issue's full contents before taking action; autonomously prepare or recover the appropriate workspace; and hand off to an execution skill. An In Progress pick resumes its existing workspace, reconstructs completed work, and continues the execution mode already in flight. After the picked issue reaches Done, report its Project status when applicable and suggest related work to continue with. Use when the user wants to pick up new or half-finished Linear work for the repo. Triggers include "start a Linear issue", "pick an issue to work on", and "resume an in-progress issue". Do not use for creating or grooming issues (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
+description: Start or resume work on a Linear issue for the current repository. List all Repo-label issues in In Progress, Todo, or Backlog, including issues outside a Project; let the user choose; present the selected issue's full contents before taking action; autonomously prepare or recover the appropriate workspace; and hand off to an execution skill. An In Progress pick resumes its existing workspace, reconstructs completed work, and continues the execution mode already in flight. After the picked issue reaches Done, optionally suggest opening a PR for completed implementation work, report its Project status when applicable, and suggest related work to continue with. Use when the user wants to pick up new or half-finished Linear work for the repo. Triggers include "start a Linear issue", "pick an issue to work on", and "resume an in-progress issue". Do not use for creating or grooming issues (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
 user-invocable: true
 ---
 
@@ -28,7 +28,9 @@ List **all issues with Repo label = R**, regardless of whether they belong to a 
 
 **Section 2 — Open (start candidates):** issues whose `state` type is in {backlog, unstarted}, i.e. **Todo and Backlog together**. Order by **priority** (Urgent → High → Medium → Low → None), and within a priority keep Todo above Backlog.
 
-**In Review is deliberately excluded** from both sections: a PR is already open on those, and what they need is review response, not resumption of implementation.
+**In Review is deliberately excluded** from both sections: the deliverable is
+already submitted for review (for example, a PR is open), so it needs review
+response rather than selection as new or resumed work.
 
 Present both sections and let the user pick one.
 
@@ -77,7 +79,7 @@ Treat the Type label as a strong hint, not a substitute for reading the issue: d
 
   The note is later readable with `wtm notes show`, so the branch stays clean while the link to Linear is preserved.
 
-**If current workspace** — skip `wtm` entirely. There is no worktree note to hold the link, so keep the issue identifier/URL in session context only — per `linear-base`'s "Linear references stay internal", it must **not** end up in the commit message or PR. Preserve the link from the Linear side instead: attach the eventual PR to the issue (Git integration or a `links` attachment).
+**If current workspace** — skip `wtm` entirely. There is no worktree note to hold the link, so keep the issue identifier/URL in session context only — per `linear-base`'s "Linear references stay internal", it must **not** end up in the commit message or PR. If a PR is later opened, preserve the link from the Linear side by attaching it to the issue (Git integration or a `links` attachment).
 
 #### If resuming
 
@@ -123,15 +125,28 @@ Summarize for the user what is done, what is in progress, and what remains, **be
 | Active host-native `/goal` | Continue the existing goal through the host |
 | None | `dispatch-work` — but frame the remaining work (from step 6) as the task, not the whole issue |
 
-Whichever way it goes, remember the later lifecycle transitions owned by `linear-base`: **In Progress → In Review** when a PR opens, **In Review → Done** when it merges. When the issue reaches **Done**, continue with step 8.
+Whichever way it goes, remember the later lifecycle transitions owned by
+`linear-base`: use **In Progress → In Review → Done** when the deliverable goes
+through review, or **In Progress → Done** when it completes without a review
+step. When the issue reaches **Done**, continue with step 8.
 
-### 8. After Done — show context and suggest the next related work
+### 8. After Done — suggest follow-up actions and show context
 
-Once the issue this flow put In Progress reaches **Done** (the completion note is left by `linear-base` at that transition), don't stop at "merged". Surface its Project context when it has one, then show what to pick up next so the user can chain into the next piece without re-running the whole selection from scratch. This may land in a later session or turn than the one that started the issue; run it whenever the completion this flow set in motion reaches Done.
+Once the issue this flow put In Progress reaches **Done** (the completion note is
+left by `linear-base` at that transition), surface any useful Git follow-up, its
+Project context when it has one, and what to pick up next. This may land in a
+later session or turn than the one that started the issue; run it whenever the
+completion this flow set in motion reaches Done.
 
-**8a. Report Project status when applicable.** If the completed issue belongs to a Project, tally that Project's issues with **Repo label = R** by `state` type and present the compact per-Project block exactly as the `linear` overview skill does (its step 2–3 — `In Progress` / `Todo` / `Backlog`, optional `(Done N)`, `canceled` excluded). Close with a one-line read of the shape (e.g. "one In Progress left, three Todo ready"). If it has **No Project**, state that it was a standalone issue and skip the Project tally; do not invent or require a Project.
+**8a. Suggest a PR when useful.** For a completed `impl` Issue whose branch has
+no PR, suggest opening one when review or integration through a PR would be
+useful. Present it as an optional next action and let the user accept or decline;
+do not open it automatically, and do not treat its absence as incomplete Issue
+work. Skip this suggestion when a PR already exists or would add no value.
 
-**8b. Suggest the next related task(s).** Propose the issue(s) to pick up next, **related to the one just completed** — one or several. Search issues with **Repo label = R** and rank by relatedness first, then fall back to the repo's ready work:
+**8b. Report Project status when applicable.** If the completed issue belongs to a Project, tally that Project's issues with **Repo label = R** by `state` type and present the compact per-Project block exactly as the `linear` overview skill does (its step 2–3 — `In Progress` / `Todo` / `Backlog`, optional `(Done N)`, `canceled` excluded). Close with a one-line read of the shape (e.g. "one In Progress left, three Todo ready"). If it has **No Project**, state that it was a standalone issue and skip the Project tally; do not invent or require a Project.
+
+**8c. Suggest the next related task(s).** Propose the issue(s) to pick up next, **related to the one just completed** — one or several. Search issues with **Repo label = R** and rank by relatedness first, then fall back to the repo's ready work:
 
 1. **Related to the completed issue, first** — issues that share its **Milestone**, are linked to it by a **Linear relation** (parent, sub-issue, or blocking/blocked — a blocked issue the completed one just unblocked is a strong candidate), or share a **Type/topic label**. Prefer these, ordered by readiness (Todo above Backlog) then priority.
 2. **Fallback — the repo's ready work** — if nothing is related, or to round out the list, offer the top open issues by priority exactly as step 2's Section 2 orders them (Todo above Backlog, Urgent → None), including standalone issues.

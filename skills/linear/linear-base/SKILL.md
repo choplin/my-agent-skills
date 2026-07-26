@@ -22,7 +22,7 @@ How each Linear primitive is treated here:
 | **Project** | A **finite outcome/goal** with a target ("ship X"), not a repo or a permanent bucket. Always tagged with its repo via the **Repo** project-label group (required; single-select — `1 Project = 1 repo`). | Linear projects have target dates and a completed state; a permanent project makes all of that formless. A project must be able to *complete*. The mandatory Repo tag makes "which repo does this outcome target" directly queryable. |
 | **Milestone** | Phases **within** a project. Use only when a project has distinct stages. | Structure only when it earns its keep; skip for small projects. |
 | **Cycle** | **Not used** (leave disabled). | Solo velocity tracking has little value; priority + status already order work. |
-| **Issue** | The unit of work. **1 Issue = 1 atomic deliverable** — for implementation, one coherent code change; for design, 1 decision (ADR); for research, 1 findings document. The execution workflow decides how an implementation Issue maps to commits, branches, and PRs. Always **self-complete** (see below). | Keeps each deliverable reviewable and lets a context-free executor pick up any Todo without coupling Linear structure to one Git strategy. |
+| **Issue** | The unit of work. **1 Issue = 1 atomic deliverable** — for implementation, one coherent code change on one branch; for design, 1 decision (ADR); for research, 1 findings document. An implementation Issue may produce a PR, but a PR is not part of the atomicity rule or required for completion. Always **self-complete** (see below). | Keeps each deliverable reviewable and lets a context-free executor pick up any Todo without making Linear structure depend on whether review happens through a PR. |
 | **Sub-issue** | Avoid by default. Use **only** to group a small effort with a few atomic deliverables (see grouping). | Prevents needless hierarchy; solo work rarely needs it. |
 | **Label** | Issues: two single-select groups, **Type** (deliverable kind — also drives executor-model choice) and **Repo**. Projects: a **Repo** project-label group (single-select), **required on every Project**. See Label groups. | Cheap, queryable classification; single-select keeps each axis unambiguous. A Project targets one repo (multi-repo projects are rare and out of this model). |
 | **Status** | Keep the 6 defaults; each carries a distinct machine-meaning (see Lifecycle). | The agent maintains status, so granularity costs nothing and aids agent decisions. |
@@ -108,6 +108,12 @@ Transitions (who/when):
 - **In Progress → (session boundary, stays In Progress)**: not a status change, but a checkpoint. When work on an issue **spans sessions** and this session ends before the issue finishes, **leave a handoff note** (see below) so a fresh session can resume it.
 - **any → Canceled**: dropped or superseded. Use Canceled, never Done, for work that wasn't actually completed.
 
+For an `impl` Issue, opening a PR is one possible **next action after the code
+change is complete**, not an acceptance criterion. If no PR exists and review or
+integration through one would be useful, suggest opening it; do not create it
+without the user's authorization, and do not keep the Issue open solely because
+no PR was created.
+
 ### Completion note (record what was decided & changed)
 
 **Required, not optional.** When an issue leaves active work into **In Review** — or jumps **straight to Done** where there is no review step — leave a comment on the issue recording, in the issue's own terms:
@@ -160,7 +166,7 @@ Rule of thumb: **sub-issue split = promote (keep the issue); Project split = reb
 Two single-select groups (a Linear label group makes its members mutually exclusive — right for "exactly one per axis"):
 
 - **Type** (one per issue) — the issue's **deliverable kind**, which also drives which model executes it:
-  - `impl` — deliverable is a coherent code change. Convergent, groomable to self-completeness → executes on the **cheap** model (Sonnet). The active execution workflow decides whether that change maps to one commit, one PR, or another Git grouping.
+  - `impl` — deliverable is a coherent code change on one branch. Convergent, groomable to self-completeness → executes on the **cheap** model (Sonnet). The active execution workflow decides how many commits it needs and whether to open a PR.
   - `design` — deliverable is a decision/ADR. Divergent, judgement-heavy → executes on the **expensive** model (Opus/Fable).
   - `research` — deliverable is a document/findings. Exploratory → executes on the **expensive** model.
 
@@ -184,12 +190,11 @@ choice back to the expensive model. This is an **exception patch, not a primary
 axis** — introduce it only once real usage shows how often `impl` issues actually
 need it; until then leave it out and rely on Type alone.
 
-Branch/PR linkage is **not** a label. When the execution workflow creates an
-individual branch or PR for an Issue, attach it through Linear's Git integration
-or a manual `links` attachment. The Repo label answers "which repo"; the
-Project/parent answers "which effort"; the optional git link answers "which Git
-artifact". Do not encode branches as labels or assume every Issue must have its
-own branch or PR.
+Branch/PR linkage is **not** a label. An `impl` Issue uses one branch; attach
+that branch and any optional PR through Linear's Git integration or a manual
+`links` attachment. The Repo label answers "which repo"; the Project/parent
+answers "which effort"; the git link answers "which Git artifact". Do not encode
+branches as labels or assume every Issue must produce a PR.
 
 ### Initial setup
 
