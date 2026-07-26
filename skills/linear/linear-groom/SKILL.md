@@ -33,10 +33,15 @@ Repeat until **no groomable Backlog item remains** (not merely until the Backlog
 
 1. **Auto-pick** the top-priority remaining **groomable** Backlog issue (one whose grooming isn't blocked by an unresolved dependency, per above). State which one you picked and why (its priority rank) — don't ask the user to choose. The user may redirect ("skip this / do ISSUE-123 first") or stop the loop at any point.
 2. **Groom it interactively**, following `linear-base`'s grooming step. Grooming is **not** automated — do it *with* the user in this session, because What/Why/Acceptance often live only in the user's head. Settle the three things together:
-   - **Self-completeness** — bring the description up to `linear-base`'s authoring standard (What & why / Where / Acceptance / Constraints). Ask the user for whatever is missing; propose a draft description and confirm.
-   - **True size** — decide whether it's really one deliverable or splits. If it splits, apply `linear-base`'s grouping rule and its promote-vs-rebuild asymmetry (small multi-PR → promote to parent + sub-issues; distinct outcome → build a Project, Cancel+link or reuse the original). Add `blocked by` relations for execution order when needed.
+   - **Self-completeness** — bring the description up to `linear-base`'s authoring standard (What & why / Where / Inputs / Acceptance / Constraints). Ask the user for whatever is missing; propose a draft description and confirm.
+   - **True size** — decide whether it's really one deliverable or splits. If it splits, apply `linear-base`'s grouping rule and its promote-vs-rebuild asymmetry (small multi-deliverable effort → promote to parent + sub-issues; distinct outcome → build a Project, Cancel+link or reuse the original). Add `blocked by` relations for execution order when needed.
    - **Type label** — set `impl` / `design` / `research` (drives the executor-model choice).
-3. **Move Backlog → Todo** once the self-check passes (*could a fresh agent open only this issue and produce the intended PR without further questions?*). If it can't be made self-complete now (missing a decision, blocked on external input), **leave it in Backlog**, note what it's waiting on, and move to the next item.
+3. **Move Backlog → Todo** once the self-check passes (*could a fresh agent open
+   this Issue, follow its explicit inputs to completed blocker outcomes, and
+   produce the atomic deliverable without further questions?*). If it can't be
+   made self-complete now (missing a decision, unresolved blocker, or external
+   input), **leave it in Backlog**, note what it's waiting on, and move to the
+   next item.
 4. **Re-evaluate the queue** before the next pick — grooming may have split an issue into new Backlog items, promoted one out, or *unblocked* a previously-blocked item (settling this issue can resolve a dependency others were waiting on). Then pick the next top-priority groomable Backlog issue.
 
 ### 4. Wrap up

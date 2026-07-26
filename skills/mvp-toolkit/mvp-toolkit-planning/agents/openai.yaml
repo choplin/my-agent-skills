@@ -1,0 +1,4 @@
+interface:
+  display_name: "MVP Planning"
+  short_description: "Shape an MVP into autonomous-ready delivery work"
+  default_prompt: "Use $mvp-toolkit-planning to define the MVP boundary and prepare autonomous-ready work in Linear."

@@ -92,6 +92,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `exec-plan` | exec-plan, exec-plan-base (rough-goal autonomous plan; decision log + parking lot) |
 | `dispatch` | dispatch-work (separates intent clarification, concept shaping, candidate pressure-testing, human-gated work, autonomous work, and direct implementation) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
+| `mvp-toolkit` | planning (define the MVP boundary, separate deferred scope, front-load blocking research/design, and create an autonomous-ready llm-wiki + Linear delivery plan) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), grill-me (candidate robustness), one-point (discussion pacing) |
@@ -158,6 +159,9 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **linear**
 - linear-start → linear, **dispatch-work**, **dev-workflow-resume-work**, **exec-plan**, wtm-worktree `(ext)`
 - linear-groom → linear
+
+**mvp-toolkit**
+- planning → **discuss-toolkit-dig**, **linear-base**, llm-wiki-base `(ext)`, llm-wiki retrieval skills `(ext)`
 
 **skill-quality**
 - skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-creator `(ext)`
