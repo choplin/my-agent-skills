@@ -1,6 +1,6 @@
 ---
 name: dev-workflow-acceptance-review
-description: Verify an implementation against the human-judged acceptance criteria in a dev-workflow spec — the Given-When-Then criteria whose `Verify:` line is `human` and cannot be checked by a command. Use during self-review to evaluate acceptance criteria. This is the portable review procedure; under Claude Code it is also wrapped by the dev-workflow:acceptance-reviewer subagent for isolated execution. Should NOT be used to re-judge criteria with an executable `Verify:` command (those are machine-checked separately).
+description: Verify an implementation against the human-judged acceptance criteria in a dev-workflow spec — the Given-When-Then criteria whose `Verify:` line is `human` and cannot be checked by a command. Invoked by dev-workflow-user-review during the human acceptance step. This is the portable review procedure; under Claude Code it is also wrapped by the dev-workflow:acceptance-reviewer subagent for isolated execution. Should NOT be used to re-judge criteria with an executable `Verify:` command (those are machine-checked separately).
 ---
 
 # Acceptance Criteria Review
@@ -13,7 +13,7 @@ subagent (a thin wrapper around this skill) for an isolated context.
 ## Input
 
 - `spec`: the spec's **Acceptance Criteria** content (Given-When-Then with `Verify:`
-  lines) as text. self-review supplies it from the Story's Linear Issue; this skill
+  lines) as text. user-review supplies it from the Story's Linear Issue; this skill
   stays Linear-agnostic — it judges the criteria it is given, not a file path.
 
 ## Scope

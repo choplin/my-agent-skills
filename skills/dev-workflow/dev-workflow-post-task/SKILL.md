@@ -1,7 +1,7 @@
 ---
 name: dev-workflow-post-task
 description: Use this skill after completing implementation and review. Triggers on phrases like "task complete", "finish up", "wrap up this task", "commit and document", or after self-review passes.
-allowed-tools: Read, Write, Edit, Glob, Grep
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill
 user-invocable: false
 ---
 
