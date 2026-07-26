@@ -98,6 +98,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `git-helpers` | commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten, squash-merge |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
 | `lang-reference` | go, java, python, rust, scala, sql, typescript |
+| `app-reference` | backend, frontend (application-specific architecture and framework recommendations) |
 | `jira-cli` | jira-cli |
 | `showcase-capture` | plan, terminal, browser, screen (plan app/tool demo media; capture each planned shot on its appropriate surface) |
 | `product-showcase` | readme (create or improve the product front door: value, proof, first success, and routes to deeper documentation) |
@@ -170,6 +171,12 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **product-showcase**
 - readme → **showcase-capture-plan** (when useful README media is missing and the user wants it produced)
+
+**codebase-structure**
+- codebase-structure → **app-reference-\<kind\>**, **lang-reference-\<language\>** when matching installed skills exist
+
+**app-reference**
+- backend → **lang-reference-rust** when Rust is selected
 
 **standalone**
 - dispatch-work → **discuss-toolkit-dig**, **grill-me**, **inception**, **exec-plan**, **dev-workflow-kickoff**; native `/goal` is a host command

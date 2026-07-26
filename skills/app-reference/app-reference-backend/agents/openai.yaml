@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backend App Reference"
+  short_description: "Backend architecture and language recommendations"
+  default_prompt: "Use $app-reference-backend to choose and implement an appropriate backend architecture."

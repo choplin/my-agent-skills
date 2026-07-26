@@ -1,6 +1,6 @@
 ---
 name: codebase-structure
-description: Guide production-quality codebase structure by modeling domain concepts, types, invariants, and state transitions before defining module boundaries. Use when starting a new project or reviewing an implementation that needs its core concepts, ownership, module boundaries, or dependency direction designed or reshaped. Apply matching lang-reference skills for language-specific conventions. Do not use for a small localized change, a formatting-only request, or a refactor whose target structure is already decided; use codebase-structure-refactor for the latter.
+description: Guide production-quality codebase structure by modeling domain concepts, types, invariants, and state transitions before defining module boundaries. Use when starting a new project or reviewing an implementation that needs its core concepts, ownership, module boundaries, or dependency direction designed or reshaped. Apply matching lang-reference skills for language conventions and app-reference skills for application-specific architecture. Do not use for a small localized change, a formatting-only request, or a refactor whose target structure is already decided; use codebase-structure-refactor for the latter.
 ---
 
 # Codebase Structure
@@ -57,14 +57,20 @@ Map persistence representations to domain concepts at the adapter boundary.
 Prefer a direct, readable model over an abstraction created only to remove a
 small amount of duplication.
 
-## Apply language-specific guidance
+## Apply language- and application-specific guidance
 
 Identify the implementation languages and apply the matching installed
 `lang-reference-<language>` skill when available. Use it for language-specific
-style, idioms, and verification; keep this skill language-agnostic. Repository
-configuration and established conventions take precedence.
+style, idioms, and verification.
 
-Do not invent a language rule when no matching reference exists.
+Identify the application kind and apply the matching installed
+`app-reference-<kind>` skill when available. Use it for platform architecture,
+framework recommendations, rendering or state boundaries, and platform-specific
+verification.
+
+Keep this skill language- and platform-agnostic. Repository configuration and
+established conventions take precedence. Do not invent guidance when no matching
+reference exists.
 
 ## Check the resulting structure
 

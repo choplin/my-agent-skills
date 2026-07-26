@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend App Reference"
+  short_description: "Frontend architecture and framework recommendations"
+  default_prompt: "Use $app-reference-frontend to choose and implement an appropriate frontend architecture."
