@@ -16,6 +16,8 @@ Use this skill for the capture surfaces that specialized terminal or browser too
 
 ## Capture the planned take
 
+On macOS, read `references/macos-capture.md` before choosing an acquisition path. Prefer CleanShot X when it is already installed and enabled; use its URL scheme for the operations it exposes, then fall back to macOS-native capture when CleanShot is unavailable or cannot satisfy the planned take. Do not install or enable a capture tool without approval.
+
 Use the operating system's accessible screenshot/screen-recording tool or an available screen-capture integration. Request needed permissions through the normal UI; do not bypass privacy or OS security controls.
 
 - For a still, capture after the intended state is fully settled and verify the crop before saving.
