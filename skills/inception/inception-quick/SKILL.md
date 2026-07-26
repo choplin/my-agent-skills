@@ -1,6 +1,13 @@
 ---
 name: inception-quick
-description: The lightweight route of the inception family — when the user wants to capture just the background and purpose of an idea into a short PRD, without the full diverge/structure/deepen/converge session or the thinking-graph machinery. Runs a brief dig on the framing (why, what, for whom) and writes it straight to prd-quick.md. Triggers on "sketch the background and purpose of an idea", "quickly note down the background and purpose", "サクッと背景と目的をまとめる", "軽く構想を書き留める", "write a quick PRD/brief". Should NOT trigger when the user wants to actually shape/pressure-test the idea (use inception); to start and route executable work (use dispatch-work); an already-defined task ready to implement; or a one-off decision.
+description: >-
+  Turn an early idea into a lightweight short PRD through a focused framing
+  discussion. Use when the user wants enough dialogue to articulate and confirm
+  the background, problem, purpose, central question, and target users while
+  keeping the session lighter than full inception. Produces prd-quick.md without
+  the thinking graph or the full divergence, structure, deepening, and convergence
+  sequence; if foundational exploration or decisions emerge, offer to upgrade the
+  same topic to full inception.
 user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
 ---
