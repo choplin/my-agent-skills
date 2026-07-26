@@ -41,34 +41,36 @@ tagline does not do all three.
 
 <visual proof when it materially improves understanding>
 
-<positioning block>
+<positioning>
 ```
 
 Prefer a tagline that identifies the category or outcome over a clever but ambiguous slogan. If the tagline is memorable but not literal, follow it with the explanatory sentence.
 
 ## Positioning and differentiation
 
-### Positioning block
+### Positioning
 
-Include a positioning block near the top for nearly every product README. It answers **Why should I care?** without comparing the product with alternatives.
+Include concise positioning near the top for nearly every product README. It answers **Why should I care?** without comparing the product with alternatives.
 
-Use three to five items. Write each as:
+Use three to five items. Make the bold lead a short, self-contained message that carries the benefit at a glance. The explanation after it may be longer when the mechanism, evidence, or implication needs room.
 
-> **Outcome for the user** — feature, mechanism, or evidence that enables it.
+Prefer:
+
+> **Short benefit message.** Explanation, mechanism, or evidence.
 
 Example:
 
 ```markdown
-## What you get
+## Why ReviewFlow?
 
-- **Shorter review cycles** — Surface design decisions before reviewers inspect the diff.
-- **Traceable decisions** — Keep rationale connected to the resulting implementation.
-- **Fits existing workflows** — Work with the repository and review process already in use.
+- **Align before the diff.** Surface design decisions while they are still cheap to change.
+- **Keep decisions traceable.** Connect the rationale to the resulting implementation.
+- **Stay in your existing workflow.** Use the repository and review process already in place.
 ```
 
-Do not use feature names alone, repeat the tagline, split one benefit into several bullets, or use comparative superlatives without evidence. A short README may place one or two positioning bullets directly below the opening without a heading; use a heading for three or more.
+Do not let the explanatory clause bury the message, use feature names alone, repeat the tagline, split one benefit into several bullets, or use comparative superlatives without evidence.
 
-Suitable headings include `What you get`, `Key benefits`, or `Why teams use <product>`. Reserve `Why <product>?` for explicit differentiation to avoid ambiguity.
+A dedicated section is optional. Place the items directly in the opening when they read naturally there. When a heading improves scanning, prefer the product-specific `Why <product>?`; use another descriptive heading when it better fits the product or repository tone. Do not add `What you get` merely to satisfy a template.
 
 ### Explicit differentiation
 
@@ -79,7 +81,7 @@ Add a separate differentiation section only when all of these are true:
 3. The difference can be verified from the repository, official information, or user-provided facts.
 4. Explaining the difference helps readers make an adoption decision.
 
-Omit the section when alternatives are vague, differences are minor, the positioning block already answers the question, or comparison would require speculation.
+Omit the section when alternatives are vague, differences are minor, positioning already answers the question, or comparison would require speculation.
 
 Prefer `How it is different`, `When to choose <product>`, or a neutral comparison table. Explain whom the product is designed for and what it prioritizes. Do not criticize another product, construct a weak comparison, or claim to be uniquely best. When useful, state when another approach is a better fit.
 
@@ -107,7 +109,7 @@ Choose media by the claim it must prove:
 | CLI behavior is the value | Input plus meaningful terminal output |
 | Several components must be understood together | A small architecture or flow diagram |
 
-Do not add media only as decoration. Keep the positioning block visible near the opening instead of letting a large image push all useful explanation far below it.
+Do not add media only as decoration. Keep the positioning visible near the opening instead of letting a large image push all useful explanation far below it.
 
 When media is missing, request it with:
 
@@ -189,7 +191,8 @@ Keep lengthy contribution, operations, API, and troubleshooting material in dedi
 - [ ] The first screen explains the product and intended user.
 - [ ] The tagline is concise and literal, or followed by a literal description.
 - [ ] The value proposition describes an outcome, not a list of implementation details.
-- [ ] A positioning block states three to five distinct user outcomes when the product warrants it.
+- [ ] Positioning states three to five distinct user outcomes when the product warrants it.
+- [ ] Each positioning item leads with a concise message; supporting detail does not bury it.
 - [ ] Explicit differentiation appears only when the inclusion criteria are satisfied.
 - [ ] Comparative claims are material, positive, and verifiable.
 - [ ] Claims are supported by repository evidence or clearly qualified.

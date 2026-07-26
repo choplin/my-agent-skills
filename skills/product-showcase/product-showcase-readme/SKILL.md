@@ -42,12 +42,12 @@ Lead with:
 - a short, literal tagline;
 - a one-sentence description when the tagline alone does not identify the product, audience, and outcome;
 - a concrete proof point, such as a representative example, screenshot, output, or short workflow;
-- a concise positioning block near the top;
+- concise positioning near the top;
 - the shortest verified path to the primary outcome.
 
-Treat the positioning block and explicit differentiation as separate devices:
+Treat positioning and explicit differentiation as separate devices:
 
-- **Positioning block — nearly always include.** State three to five outcomes readers get from the product. Write each item as an outcome followed by the feature, mechanism, or evidence that enables it. Do not compare with alternatives here.
+- **Positioning — nearly always include.** State three to five outcomes readers get from the product. Lead each item with a short, memorable message; use the rest of the item for the longer explanation, mechanism, or evidence. Group the items under `Why <product>?` when a section improves scanning, but do not require a dedicated heading when the opening already carries them clearly. Do not compare with alternatives here.
 - **Differentiation section — include conditionally.** Add it only when readers face a meaningful alternative, the product has material and verifiable differences, and explaining them improves the adoption decision. Describe target users, design priorities, workflows, or trade-offs positively. Do not criticize alternatives or invent comparative claims.
 
 Place prerequisites before commands that depend on them. Keep conceptual explanation close to the example it clarifies. Move exhaustive reference content to dedicated documentation and link it at the point of need.
