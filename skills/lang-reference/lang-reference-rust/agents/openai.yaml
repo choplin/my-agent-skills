@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rust Language Reference"
+  short_description: "Rust conventions, tooling, safety, and project guidance"
+  default_prompt: "Use $lang-reference-rust to write or review idiomatic Rust code."

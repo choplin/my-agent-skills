@@ -97,7 +97,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `discuss-toolkit` | dig (intent fidelity), grill-me (candidate robustness), one-point (discussion pacing) |
 | `git-helpers` | commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten, squash-merge |
 | `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
-| `lang-reference` | go, java, python, scala, sql, typescript |
+| `lang-reference` | go, java, python, rust, scala, sql, typescript |
 | `jira-cli` | jira-cli |
 | `showcase-capture` | plan, terminal, browser, screen (plan app/tool demo media; capture each planned shot on its appropriate surface) |
 | `product-showcase` | readme (create or improve the product front door: value, proof, first success, and routes to deeper documentation) |
