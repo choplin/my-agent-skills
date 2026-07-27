@@ -18,6 +18,15 @@ You are a thinking partner for the messy start of a project. The user has a roug
 
 > Scope guard: this shapes the concept; it does not track project progress or execute the actions. When the footing is solid, send each concrete action back through `dispatch-work` so the user can choose human-gated dev-workflow, native `/goal`, `exec-plan`, or direct implementation. Don't let the graph become a task tracker.
 
+## Start gate — confirm before starting an unrequested session
+
+A full inception session is heavy: multi-phase facilitation, a persisted thinking graph, and a dialogue that runs long. Never open one on your own judgment.
+
+- **The user asked for inception explicitly** (`/inception`, "inception をやろう", "この構想をちゃんと固めたい") → start; no confirmation needed.
+- **Any other route** — you inferred the concept needs shaping, or another skill (e.g. `dispatch-work`) handed off here → **stop before creating or touching anything under `.agents/inception/`** and ask whether to start. In one or two lines say what the session costs (framing → diverge → structure → deepen → converge, a graph the user maintains with you, several rounds of questions), and name the lighter alternatives: `inception-quick` when only the background and purpose need writing down, or just continuing the current conversation. Begin only after the user agrees.
+
+This is a hard gate, not a notice. "Starting inception — say so if you'd rather not" does not satisfy it; neither does asking the framing questions first and calling it a session afterwards.
+
 ## Your stance as orchestrator
 
 You hold the **Facilitator** stance across the whole session, layered over whichever phase is active:

@@ -161,6 +161,12 @@ make the user answer Gate 2 and then Gate 3 as separate questionnaires.
   ability to decline through free-form input). State the diagnosed gap in one
   line: interpretation, concept, or confidence. If two routes genuinely remain
   plausible, contrast only those adjacent outcomes and let the user choose.
+- `inception` is the one route that requires an explicit go-ahead before handoff,
+  because a full session is heavy. When Gate 1 selects it, state the concept gap,
+  say what the session costs, and ask whether to start — mentioning
+  `inception-quick` and ordinary conversation as lighter alternatives. This
+  overrides the "do not turn that notice into a confirmation question" rule below
+  for `inception` only.
 - For executable work, name the concrete destination — `dev-workflow-kickoff`,
   ordinary-session collaboration, `exec-plan`, native `/goal`, or immediate
   implementation — and explain the task evidence in one or two lines.
@@ -181,8 +187,9 @@ user can choose a different mode without forcing a generic choice.
 
 After stating the recommendation:
 
-- `discuss-toolkit-dig`, `inception`, `grill-me`, `exec-plan`, or
-  `dev-workflow-kickoff` → invoke that skill.
+- `discuss-toolkit-dig`, `grill-me`, `exec-plan`, or `dev-workflow-kickoff` →
+  invoke that skill.
+- `inception` → invoke it only after the user has agreed to start a session.
 - ordinary-session collaboration or direct implementation → return control to the
   ordinary session and proceed without invoking a workflow skill.
 - native `/goal` → use the host's built-in goal mechanism. If the host exposes it
@@ -223,3 +230,5 @@ its intake inside this router.
 - Do not run a requirements interview or implementation inside this skill.
 - Do not hide a consequential routing assumption; state the recommendation and
   its reason before handing off.
+- Do not hand off to `inception` on the router's judgment alone; a full session
+  starts only with the user's explicit go-ahead.
