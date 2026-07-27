@@ -16,9 +16,9 @@
 
 ## Still-image shot list
 
-| Shot | Scene and proof point | Composition / crop | Required state | Surface |
-| --- | --- | --- | --- | --- |
-| 1 |  |  |  |  |
+| Shot | Scene and proof point | Composition / crop | Required state | Dimensions / format | Annotation tool / edits | Surface |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 |  |  |  |  |  |  |
 
 ## Capture readiness
 
@@ -27,3 +27,4 @@
 - Reset point before each take:
 - Privacy check (tokens, personal data, notifications):
 - Output naming and destination:
+- Clean source naming when annotation is required:

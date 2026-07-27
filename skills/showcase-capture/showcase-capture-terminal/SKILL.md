@@ -116,6 +116,6 @@ Confirm that text is readable, the command/result pair fits in frame, no secrets
 
 Limit processing during capture to operations that preserve the represented state: crop, resize, padding, color-profile normalization, metadata removal, and export in the planned format. Do not add callouts, blur sensitive data, composite multiple images, or otherwise change represented terminal state. Re-take rather than crop away essential context or hide a mistake with misleading edits.
 
-When the plan explicitly requires annotations, a comparison layout, compositing, or decorative framing, preserve a clean source artifact and delegate it with the exact edit specification to `showcase-still-finish`. Otherwise return the finished screenshot directly.
+When the plan explicitly requires annotations, a comparison layout, compositing, or decorative framing, preserve a clean source artifact and delegate it with the exact edit specification to the tool-specific skill named by the plan: `showcase-cleanshot-annotate` or `showcase-figma-annotate`. Otherwise return the finished screenshot directly.
 
 Report the output path, the completed shot(s), and any remaining planned captures.

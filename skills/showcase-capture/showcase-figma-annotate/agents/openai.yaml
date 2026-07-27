@@ -1,0 +1,4 @@
+interface:
+  display_name: "Showcase Figma Annotate"
+  short_description: "Annotate showcase screenshots collaboratively in Figma."
+  default_prompt: "Use $showcase-figma-annotate to annotate this screenshot in Figma and return the verified result."

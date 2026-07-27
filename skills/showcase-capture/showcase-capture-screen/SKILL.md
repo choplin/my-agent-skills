@@ -7,6 +7,8 @@ description: Capture polished screenshots or video demonstrations from the visib
 
 Use this skill for the capture surfaces that specialized terminal or browser tooling cannot handle. Prefer `showcase-capture-terminal` or `showcase-capture-browser` when their surface-specific output is sufficient.
 
+Own visible-screen state preparation, acquisition, state-preserving crop/resize/padding/export, and verification for both screenshots and video. Do not route by media type: use this skill for stills as well as video when the surface is a native app, OS UI, multi-window workflow, or another general screen. Treat the capture plan as the owner of the proof point, composition, target dimensions/format, and annotation intent.
+
 ## Prepare a controlled desktop
 
 - Put every required window at its planned size and position; close or hide everything else.
@@ -26,4 +28,8 @@ Use the operating system's accessible screenshot/screen-recording tool or an ava
 
 ## Verify and hand off
 
-Review the saved file at the target size. Confirm framing, readability, audio only if requested, and that no notifications, credentials, personal data, or unrelated windows are visible. Re-take a flawed shot; do not rely on destructive editing of the source capture. Report output paths and any unavailable OS permission or tool limitation.
+Review the saved file at the target size. Confirm pixel dimensions and format for a still, or duration and file size for video. Confirm framing, readability, audio only if requested, and that no notifications, credentials, personal data, or unrelated windows are visible.
+
+Limit processing during capture to operations that preserve the represented state: crop, resize, padding, color-profile normalization, metadata removal, and export in the planned format. Do not add callouts, blur sensitive data, composite multiple images, or otherwise change represented product state. Re-take a flawed or unsafe shot instead of repairing it with a misleading edit.
+
+When the plan explicitly requires annotations, a comparison layout, compositing, or decorative framing, preserve a clean source artifact and delegate it with the exact edit specification to the tool-specific skill named by the plan: `showcase-cleanshot-annotate` or `showcase-figma-annotate`. Otherwise return the finished screenshot directly. CleanShot acquisition does not imply a CleanShot annotation handoff; use the path selected in the plan. Report output paths and any unavailable OS permission or tool limitation.

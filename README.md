@@ -102,7 +102,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `lang-reference` | go, java, python, rust, scala, sql, typescript |
 | `app-reference` | backend, frontend (application-specific architecture and framework recommendations) |
 | `jira-cli` | jira-cli |
-| `showcase-capture` | plan, terminal, browser, screen (plan app/tool demo media; capture each planned shot on its appropriate surface) |
+| `showcase-capture` | plan, terminal, browser, screen, cleanshot-annotate, figma-annotate (plan app/tool demo media; capture each shot on its appropriate surface; route planned annotations to a concrete editor workflow) |
 | `product-showcase` | readme (create or improve the product front door: value, proof, first success, and routes to deeper documentation) |
 | `codebase-structure` | codebase-structure, codebase-structure-refactor (model code around concepts, types, invariants, and ownership; safely refactor existing code toward that structure) |
 | `refactoring-tools` | refactoring-tools-planner (inspect a repository and create an evidence-based, implementation-ready refactor plan without changing production code) |

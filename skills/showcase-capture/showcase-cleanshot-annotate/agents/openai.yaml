@@ -1,0 +1,4 @@
+interface:
+  display_name: "Showcase CleanShot Annotate"
+  short_description: "Hand off screenshot annotation through CleanShot X."
+  default_prompt: "Use $showcase-cleanshot-annotate to prepare and complete this screenshot annotation in CleanShot X."
