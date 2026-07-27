@@ -135,7 +135,7 @@ The completion note's mid-work sibling. When an issue is **still In Progress** a
 - **Open questions** — what is still undecided.
 - **Current state & next step** — where the work actually stands, and the first concrete action a resumer should take.
 
-Record only what a fresh reader **cannot reconstruct from git and the tracked artifacts**. Do **not** re-describe the diff (git holds it) or transcribe local execution state — `state.json`, exec-plan files, and loop artifacts are read directly on resume (see `linear-start` step 6 and `dev-workflow-resume-work`). The note carries the judgement those files cannot.
+Record only what a fresh reader **cannot reconstruct from git and the tracked artifacts**. Do **not** re-describe the diff (git holds it) or transcribe execution state that already lives elsewhere — exec-plan files and loop artifacts are read directly on resume (see `linear-start` step 6). The note carries the judgement those files cannot. A skill that keeps its running record on the issue itself, such as `orchestration-toolkit-execute`, is not transcribing: there the issue *is* the original, and the same rule applies to its content — judgement, not diffs.
 
 The issue **stays In Progress** — a handoff note is not a status transition. The `linear-handoff` skill drives this end-to-end (identify issue → align → draft → verify self-completeness → post as a comment).
 
@@ -229,7 +229,7 @@ Linear is this workspace's internal tracker. **Never write Linear references —
 Keep the work↔issue link in the other direction — on the Linear side or in local-only state:
 
 - **Linear side**: attach the branch/PR to the issue via the Git integration or a `links` attachment on the issue.
-- **Local side**: worktree notes (`wtm add -m`, see `linear-start`), `state.json.linear_issue_id` (dev-workflow), or session context.
+- **Local side**: worktree notes (`wtm add -m`, see `linear-start`) or session context.
 
 When exporting issue content into a repo (e.g. a spec/plan → `docs/`), carry the content but strip issue IDs/URLs from it.
 
@@ -237,11 +237,6 @@ When exporting issue content into a repo (e.g. a spec/plan → `docs/`), carry t
 
 The following are intentionally *not* covered here:
 
-- **Mapping to the `dev-workflow` family** — now **owned by `dev-workflow`**: an Epic
-  is a **Project**, a Story is an **Issue** (its description holds the spec + plan;
-  `state.json.linear_issue_id` links back). `dev-workflow-create-spec`/`create-epic`
-  create or adopt them following this skill's conventions. See the `dev-workflow-base`
-  skill (`references/state-schema.md` § Linear backing).
 - Linking to `git-helpers` / PR flow. (Where Linear references may and may not appear is already settled above — they stay internal.)
 - Linear ⇄ GitHub native integration setup.
 

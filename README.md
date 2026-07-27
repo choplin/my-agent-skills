@@ -15,12 +15,12 @@ skills/                      # portable, agent-agnostic skills (the source of tr
 opts/                        # agent-specific add-ons, installed per agent
   claude/
     agents/                  #   flat subagents  -> ~/.claude/agents/
-    skills/dev-workflow/     #   a minimal plugin (hooks + namespaced subagents)
+    skills/<group>/          #   (when a group needs hooks) a minimal plugin
 scripts/install-opts.sh      # distributes opts/<agent>/* into each agent's config
 docs/                        # research + decision records
 ```
 
-**Naming / namespace:** Neither the Agent Skills standard nor the skills CLI has a namespace mechanism (installs are flat by `name`; same names overwrite). So skills are namespaced by a `<group>-` prefix baked into the flat name (e.g. `dev-workflow-create-spec`). See the architecture doc for details.
+**Naming / namespace:** Neither the Agent Skills standard nor the skills CLI has a namespace mechanism (installs are flat by `name`; same names overwrite). So skills are namespaced by a `<group>-` prefix baked into the flat name (e.g. `orchestration-toolkit-execute`). See the architecture doc for details.
 
 ## Install
 
@@ -72,10 +72,10 @@ Or run each piece directly:
 ```bash
 skills add choplin/my-agent-skills --list          # browse
 skills add choplin/my-agent-skills --skill '*'     # install all
-skills add choplin/my-agent-skills --skill dev-workflow-kickoff   # one
+skills add choplin/my-agent-skills --skill orchestration-toolkit-execute   # one
 ```
 
-**Claude-Code add-ons** (subagents + dev-workflow hooks) — not carried by the skills CLI:
+**Claude-Code add-ons** (subagents, plus hooks when a group ships them) — not carried by the skills CLI:
 
 ```bash
 scripts/install-opts.sh claude        # symlink opts/claude/* into ~/.claude/
@@ -86,15 +86,13 @@ scripts/install-opts.sh --dry-run     # preview
 
 | Group | Skills |
 |-------|--------|
-| `dev-workflow` | kickoff, create-epic/spec/plan, self-review, user-review, acceptance-review, plan-compliance-review, resume-work, post-task, base |
-| `code-review-session` | import-ai, import-pr, import-ci, run-checks, resolve, reply-pr, report, base (the record of one code review: a review.md list of items fed by ingestion sources — AI review / PR / CI / local checks / direct — and worked to resolution; used by dev-workflow and other flows) |
+| `code-review-session` | import-ai, import-pr, import-ci, run-checks, resolve, reply-pr, report, base (the record of one code review: a review.md list of items fed by ingestion sources — AI review / PR / CI / local checks / direct — and worked to resolution) |
 | `artifact-review-toolkit` | quick, adversarial (how a work artifact is reviewed: a one-off review redirected to the host's reviewer, or a lens-selected adversarial pass with independent reviewers; called by code-review-session and orchestration-toolkit) |
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
-| `exec-plan` | exec-plan, exec-plan-base (rough-goal autonomous plan; decision log + parking lot) |
-| `dispatch` | dispatch-work (separates intent clarification, concept shaping, candidate pressure-testing, human-gated work, autonomous work, and direct implementation) |
+| `exec-plan` | exec-plan, exec-plan-base (ad-hoc autonomous run with no tracker issue behind it; decision log + parking lot) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
 | `mvp-toolkit` | planning, resolution, base (define a narrow MVP and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; share the cross-phase delivery model) |
-| `orchestration-toolkit` | orchestrate (drive a ready Linear Project through delegated graph execution, mandatory global adversarial review, and final human approval) |
+| `orchestration-toolkit` | execute, orchestrate (carry groomed Linear work to completion: one Issue inline, or a whole Project through delegated graph execution, mandatory global adversarial review, and final human approval) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), grill-me (candidate robustness), one-point (discussion pacing) |
@@ -120,26 +118,14 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **Cross-group hubs** (one skill that many groups delegate to):
 
-- `discuss-toolkit-dig` ← dispatch-work, grill-me, dev-workflow-kickoff, inception (+framing/deepen), inception-quick, exec-plan, code-review-session-resolve
-- `grill-me` ← dispatch-work
-- `dev-workflow-kickoff` ← dispatch-work
-- `inception` / `exec-plan` ← dispatch-work (shaping/execution routing; native `/goal` is host-provided)
-- `code-review-session` (import-ai, resolve, report) ← dev-workflow (self-review, user-review)
-- `artifact-review-toolkit` (quick, adversarial) ← code-review-session (import-ai), orchestration-toolkit (orchestrate)
-
-**dev-workflow**
-- kickoff → create-spec, create-epic, **discuss-toolkit-dig**
-- create-spec → base, create-plan
-- create-epic → base, create-spec
-- create-plan → base, resume-work
-- resume-work → base, create-plan, self-review, user-review, post-task
-- self-review → base, plan-compliance-review, **code-review-session-import-ai**
-- user-review → acceptance-review, create-spec, post-task, **code-review-session-resolve**, **code-review-session-report**
+- `discuss-toolkit-dig` ← grill-me, inception (+framing/deepen), inception-quick, exec-plan, code-review-session-resolve
+- `linear-base` ← orchestration-toolkit (execute, orchestrate), mvp-toolkit, inception-finalize
+- `artifact-review-toolkit` (quick, adversarial) ← code-review-session (import-ai), orchestration-toolkit (execute, orchestrate)
 
 **inception**
 - inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**
-- inception-quick → inception, **discuss-toolkit-dig**, **dispatch-work**
-- inception-finalize → llm-wiki-base `(ext)`, **linear**, **dispatch-work**
+- inception-quick → inception, **discuss-toolkit-dig**, **linear-start**
+- inception-finalize → llm-wiki-base `(ext)`, **linear-base**, **linear-start**
 - inception-framing → **discuss-toolkit-dig**
 - inception-deepen → **discuss-toolkit-dig**
 - inception-converge → finalize
@@ -164,7 +150,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - squash-merge → commit
 
 **linear**
-- linear-start → linear, **dispatch-work**, **dev-workflow-resume-work**, **exec-plan**, **orchestration-toolkit-orchestrate**, wtm-worktree `(ext)`
+- linear-start → linear, **orchestration-toolkit-execute**, **orchestration-toolkit-orchestrate**, **exec-plan**, wtm-worktree `(ext)`
 - linear-groom → linear
 
 **mvp-toolkit**
@@ -173,6 +159,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - base → **linear-base**, llm-wiki-base `(ext)`
 
 **orchestration-toolkit**
+- execute → **artifact-review-toolkit-adversarial**, **linear-base**, **linear-handoff**, **git-helpers-commit**, llm-wiki-overview `(ext)`, llm-wiki-retrieve `(ext)`, wtm-worktree `(ext)`
 - orchestrate → **artifact-review-toolkit-adversarial**, **linear-base**, **git-helpers-commit**, llm-wiki-overview `(ext)`, llm-wiki-retrieve `(ext)`, wtm-worktree `(ext)`
 
 **skill-quality**
@@ -196,5 +183,3 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **app-reference**
 - backend → **lang-reference-rust** when Rust is selected
 
-**standalone**
-- dispatch-work → **discuss-toolkit-dig**, **grill-me**, **inception**, **exec-plan**, **dev-workflow-kickoff**; native `/goal` is a host command

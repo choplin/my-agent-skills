@@ -7,7 +7,7 @@ append to it.
 ## 1. Resolve `review_dir`
 
 1. **Caller-injected** — if a driving workflow passed an explicit `review_dir`, use
-   it verbatim (e.g. `dev-workflow` passes `.claude/dev-workflow/story/{story-dir}/`).
+   it verbatim, so the record lands beside that workflow's own artifacts.
 2. **Standalone default** — otherwise `.agents/code-review-session/{name}/`, where `{name}` =
    `{yyyy-mm-dd}-{branch-with-dashes}` (current git branch, `/` → `-`, date-prefixed).
 

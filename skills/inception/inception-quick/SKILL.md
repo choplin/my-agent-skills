@@ -88,11 +88,11 @@ No `graph.json`, no CLI, no `decisions.md` / `action-items.md` / `open-questions
    - Any section not filled from the user's input reads `_not yet defined_` (not fabricated).
    Then show the user the `prd-quick.md` and name the two paths out:
    - **Keep it.** To persist this footing into durable memory, offer **`inception-finalize`** (確定) — it writes `prd-quick.md` to the llm-wiki knowledge base as a keep-forever PRD note. `prd-quick.md` under `.agents/` is transient; finalize is what makes it last.
-   - **Upgrade it.** If they later want to pressure-test the idea, generate options, or record decisions and first actions, run full `inception` on the **same topic** — it detects this hand-written `prd-quick.md`, seeds its graph's `session.*` fields from it, and continues from there (the capture is carried forward, not lost). If a concrete next action is already obvious instead, offer to hand it to `dispatch-work`.
+   - **Upgrade it.** If they later want to pressure-test the idea, generate options, or record decisions and first actions, run full `inception` on the **same topic** — it detects this hand-written `prd-quick.md`, seeds its graph's `session.*` fields from it, and continues from there (the capture is carried forward, not lost). If a concrete next action is already obvious instead, offer to register it as a Linear Issue and start it through `linear-start`.
 
 ## Scope guard
 
-This route captures the footing; it does not shape it. No divergence, no options, no decisions, no action tracking — those are exactly what full `inception` (then `dev-workflow`) are for. If the conversation starts genuinely wrestling with the idea (weighing alternatives, needing to decide), that is the signal to propose switching to full `inception`, not to grow this file.
+This route captures the footing; it does not shape it. No divergence, no options, no decisions, no action tracking — those are exactly what full `inception` (then the tracker) are for. If the conversation starts genuinely wrestling with the idea (weighing alternatives, needing to decide), that is the signal to propose switching to full `inception`, not to grow this file.
 
 ## Gotchas
 

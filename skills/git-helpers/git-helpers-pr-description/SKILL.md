@@ -43,7 +43,7 @@ git diff <base>..HEAD            # only the parts you actually need
 
 Also read, if present:
 
-- Linked spec / plan / design doc (look under `.claude/dev-workflow/`, `docs/`, issue links in commits)
+- Linked spec / plan / design doc (look under `.agents/`, `docs/`, issue links in commits)
 - Linked issue / ticket (commit trailers, branch name)
 - The repo's PR template (see §4)
 

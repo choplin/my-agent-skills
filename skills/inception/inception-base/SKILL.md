@@ -9,7 +9,7 @@ allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
 
 Shared substrate for the `inception` skill family: a phase-driven, dialogic facilitation that helps the user shape a fuzzy idea into a solid footing at the *start* of a project. This skill holds the parts every phase shares — the data model, the CLI, and the cross-cutting conventions.
 
-> Scope guard: inception solidifies the founding concept. It does **not** track project progress or execute the actions — once actions are concrete, send them back through `dispatch-work` for an explicit execution-mode choice. Keep the graph about thinking, not task management.
+> Scope guard: inception solidifies the founding concept. It does **not** track project progress or execute the actions — once actions are concrete, they leave for the tracker (see `inception-finalize`), and execution starts from there. Keep the graph about thinking, not task management.
 
 ## The one idea: a graph, projected
 

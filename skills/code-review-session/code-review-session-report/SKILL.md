@@ -55,8 +55,7 @@ on.
 ## Notes
 
 - **Postponed = follow-ups.** They are the primary signal a downstream consumer acts
-  on: a driving workflow (e.g. dev-workflow) turns them into scope changes; standalone,
-  the user decides.
+  on: a driving workflow turns them into scope changes; standalone, the user decides.
 - This skill is read-only over the record; it does not change item statuses. If items
   are still `open`, it says so rather than pretending the review is done.
 

@@ -54,9 +54,9 @@ Backlog picks are allowed — but after presenting a chosen Backlog issue, check
 **Reserved orchestration path:** if the selected Issue has
 `Type/orchestration`, hand it directly to
 `orchestration-toolkit-orchestrate` after presenting it. Do not create an Issue
-worktree, reroute it through `dispatch-work`, or treat it as an atomic
-deliverable. The orchestration skill reconstructs its Project graph, integration
-workspace, checkpoint, and pending human gate.
+worktree or treat it as an atomic deliverable. The orchestration skill
+reconstructs its Project graph, integration workspace, checkpoint, and pending
+human gate.
 
 ### 4. Move the issue to In Progress — start only
 
@@ -111,7 +111,10 @@ Before touching anything, establish where the work actually stands, and report i
 - **The issue's comments** — the progress recorded on it. The **most recent handoff note** (see `linear-base`'s *Handoff note*), if one exists, is the canonical pickup record: it states the goal, the decisions made while working, the open questions, and the next step to take. Read it first, then any earlier comments for fuller history. This is the primary account of what was decided and how far it got.
 - **The git state** — commits on the branch versus its base, plus uncommitted and staged changes (`git status`, `git log`, `git diff`).
 - **In-flight execution artifacts** — the trace left by whichever execution mode was running:
-  - `dev-workflow` → its `state.json` (`linear_issue_id` links back to the issue)
+  - `orchestration-toolkit-execute` → its run record, kept as checkpoint comments
+    on this issue (read with the comments above; there is no local file)
+  - `orchestration-toolkit-orchestrate` → the Project's `Type/orchestration`
+    control issue and its latest checkpoint
   - `exec-plan` → a plan file under `.agents/exec-plans/`
   - host-native `/goal` → active goal state, when the host exposes it to the
     current session (there is no repository artifact to search)
@@ -121,16 +124,30 @@ Summarize for the user what is done, what is in progress, and what remains, **be
 
 ### 7. Hand off to an execution skill
 
-**Starting:** the issue is now In Progress with a workspace ready. **Delegate execution-mode routing to `dispatch-work`** (Skill tool): it recommends one concrete destination from the task's judgment, risk, and planning horizon — including ordinary in-session collaboration with no workflow skill — and hands off in the same turn unless a consequential tie requires one focused question. The issue context (identifier, title, Type, size) is available via session history as evidence for the recommendation.
+**Starting:** the issue is now In Progress with a workspace ready. The issue is
+the work unit, so the destination follows from what it asks for — do not run a
+mode questionnaire:
 
-**Resuming:** the execution mode has usually already been chosen — **continue it rather than re-picking one.** `dispatch-work` is a front door for *starting* work and would re-litigate a settled decision, so route by the artifact found at step 6:
+| The selected issue | Hand off to |
+|---|---|
+| Entails repository changes toward a commit (normally `impl`) | `orchestration-toolkit-execute` |
+| Produces a non-repository deliverable — analysis, design, research (normally `design` / `research`) | Ordinary in-session work; record the deliverable on the issue |
+| Is a trivial, self-evident change | Implement it directly and note it on the issue |
+
+State the choice in one line and proceed. If dependencies on sibling issues
+surface while working, that is the signal to stop and hand the Project to
+`orchestration-toolkit-orchestrate` instead of widening this run.
+
+**Resuming:** the execution mode has usually already been chosen — **continue it
+rather than re-picking one.** Route by the artifact found at step 6:
 
 | Artifact found at step 6 | Hand off to |
 |---|---|
-| `dev-workflow` `state.json` | `dev-workflow-resume-work` |
+| Checkpoint comments from `orchestration-toolkit-execute` | `orchestration-toolkit-execute` (continue the existing run record; do not open a new one) |
+| A `Type/orchestration` control issue for the Project | `orchestration-toolkit-orchestrate` |
 | Plan file under `.agents/exec-plans/` | `exec-plan` (drive the existing plan; do not write a new one) |
 | Active host-native `/goal` | Continue the existing goal through the host |
-| None | `dispatch-work` — but frame the remaining work (from step 6) as the task, not the whole issue |
+| None | Apply the Starting table above, but frame the remaining work (from step 6) as the task, not the whole issue |
 
 Whichever way it goes, remember the later lifecycle transitions owned by
 `linear-base`: use **In Progress → In Review → Done** when the deliverable goes

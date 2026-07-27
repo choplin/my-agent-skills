@@ -61,7 +61,7 @@ in-spec proposals #109/#312 and CLI PRs #250/#1464 are all unmerged; the CLI
 installs flat to `.agents/skills/<name>` and same-name skills overwrite). So we
 namespace by **baking a `<group>-` prefix into the flat `name`**:
 
-- Skill `name` = `<group>-<skill>` (e.g. `dev-workflow-create-spec`). The
+- Skill `name` = `<group>-<skill>` (e.g. `orchestration-toolkit-execute`). The
   group's "root" skill may keep the bare group name (e.g. `inception`).
 - **An opt add-on under `opts/<agent>/skills/<name>` must not reuse any portable
   skill's `name`.** Both mechanisms install to `<agent-home>/skills/<name>`, so
@@ -81,7 +81,8 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
 - Forward-compatible: if the standard later adopts slash namespaces (#109-style
   `name: group/skill`), migration is renaming `-` to `/`.
 - Claude-Code subagents in `opts/` keep the real plugin namespace
-  (`dev-workflow:acceptance-reviewer`); only flat skills need the prefix.
+  (`<group>:<agent>`) when their group ships a plugin; only flat skills need the
+  prefix.
 
 ## Authoring conventions
 
@@ -159,16 +160,22 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
   Plugin format retired: removed all `.claude-plugin/` manifests and the root
   `marketplace.json`; refreshed the root `README.md` and `CLAUDE.md`.
 
+- **Step 4** — consolidate the task-execution skills. ✅ `dev-workflow` (11 skills,
+  `workflow-state.py`, and the `opts/claude/skills/dev-workflow/` plugin) and
+  `dispatch` were removed. Execution now routes on where the work comes from:
+  `orchestration-toolkit-execute` for one groomed Linear Issue,
+  `orchestration-toolkit-orchestrate` for a multi-Issue Project, `exec-plan` for
+  an ad-hoc task with no Issue behind it. With no group currently shipping hooks,
+  `opts/claude/` holds only flat subagents; the minimal-plugin convention above
+  still stands for the next group that needs one.
+
 All groups are now skill-first. Top level is just `skills/`, `opts/`, `scripts/`,
 `docs/`.
 
 ## Notes / open issues
 
-- dev-workflow's state tracking is intrinsically Claude-Code-specific (it uses
-  `$CLAUDE_CODE_SESSION_ID` and the hooks). Other agents get the portable
-  workflow guidance; the session-binding mechanics degrade gracefully.
-- Cross-skill delegation phrasing (`` `dev-workflow-base` skill (`references/X`) ``,
-  `dev-workflow-base/scripts/...`) is a convention, not a spec mechanism — refine
+- Cross-skill delegation phrasing (`` `<group>-base` skill (`references/X`) ``,
+  `<group>-base/scripts/...`) is a convention, not a spec mechanism — refine
   with real use.
 - Running the skills CLI / `install-opts.sh` against real agent homes is validated
   in real use; the repo structure and discovery (`skills add ./skills --list`)

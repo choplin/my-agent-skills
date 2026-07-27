@@ -1,24 +1,36 @@
 # Orchestration Toolkit
 
-The Orchestration Toolkit drives a ready Linear Project through delegated
-execution while keeping judgment, assurance, and final authority in the right
-places.
+The Orchestration Toolkit carries **already-groomed Linear work** to completion
+while keeping judgment, assurance, and final authority in the right places.
 
-It is built around a simple premise:
+Grooming is the entry condition. Once the tracker holds a settled work unit, the
+question is no longer *what to build* but *how to carry it out* — and that answer
+depends only on scale:
 
-> Large autonomous work is graph execution, not a larger implementation prompt.
+> One Issue is an implementation run. Many interdependent Issues are graph
+> execution, not a larger implementation prompt.
 
-Linear already describes the work nodes and their `blocked by` edges. llm-wiki
-holds the design and decision context that gives those nodes meaning. Git holds
-the implementation evidence. The toolkit connects those systems into a durable
-execution loop without asking one agent to carry the entire Project in its
-conversation context.
+Linear describes the work and its `blocked by` edges. llm-wiki holds the design
+and decision context that gives the work meaning. Git holds the implementation
+evidence. The toolkit connects those systems into a durable execution loop.
+
+Work that is *not* yet groomed belongs elsewhere: `linear-groom` to settle an
+Issue's requirements, `inception` to shape an unformed concept, and `exec-plan`
+for an ad-hoc task with no tracker Issue behind it.
 
 ## Skills
 
+- [`orchestration-toolkit-execute`](./orchestration-toolkit-execute/SKILL.md)
+  carries one groomed Issue to Done inline — no delegation, no graph — keeping
+  its run record on the Issue and its high-impact decisions in a parking lot.
 - [`orchestration-toolkit-orchestrate`](./orchestration-toolkit-orchestrate/SKILL.md)
   drives one ready Linear Project through dependency-aware delegation,
   integration, assurance, and final human approval.
+
+The split is scale, not ambition. A single node needs no wave scheduling, no
+integration branch, and no control Issue; paying that cost for one deliverable
+buys nothing. When dependencies between Issues appear mid-run, `execute` stops and
+hands the Project to `orchestrate` rather than growing into it.
 
 Independent review is not performed here. The orchestrator calls
 [`artifact-review-toolkit-adversarial`](../artifact-review-toolkit/README.md),
@@ -240,29 +252,18 @@ Consider making it optional only if repeated short runs show that the control
 Issue adds noise without improving review, recovery, or judgment capture. Do not
 remove it from long-running, cross-session, or human-gated runs.
 
-### Automatic routing from `dispatch-work`
-
-The toolkit initially relies on explicit invocation and handoff from workflows
-that already produce a READY Project, such as MVP Toolkit.
-
-Add automatic `dispatch-work` routing only after real usage establishes a
-reliable distinction between:
-
-- one distant goal that native `/goal` should drive;
-- one visible near-horizon plan for `exec-plan`;
-- one ready multi-Issue Project that needs delegated graph orchestration.
-
-Premature routing would make the new skill trigger on large but non-graph work.
-
 ### Root router and shared base skill
 
-The group contains one directly usable skill and no
-`orchestration-toolkit` root router or `orchestration-toolkit-base`.
+The group contains two directly usable skills and no `orchestration-toolkit`
+root router or `orchestration-toolkit-base`.
 
-Extract a base skill only when at least two group skills need to interpret the
-same durable contract independently. Add a root router only when the group gains
-enough user-facing operations that callers cannot select the right entry point
-from intent. One skill justifies neither abstraction.
+Callers select between them from scale alone — one Issue or a Project — and
+`linear-start` already routes on that basis, so a router would add a hop without
+adding a decision. The two skills do share contracts that are currently restated
+rather than centralized: the risk criteria that select adversarial review, the
+Linear/llm-wiki/repository authority split, and the scope-discipline checks.
+Extract `orchestration-toolkit-base` when those restatements start drifting apart,
+not before.
 
 ### Exact monetary and token budgets
 

@@ -7,8 +7,8 @@ resolving.
 
 The record is the single source of truth for review state, so a review survives
 `/clear`, a crash, or a new session. It knows nothing about specs, plans, or any
-task-management system: run it standalone on a diff, or let a workflow (e.g.
-`dev-workflow`) drive it by injecting where the record lives.
+task-management system: run it standalone on a diff, or let a workflow drive it by
+injecting where the record lives.
 
 **The session performs no review of its own.** How a review is actually conducted
 belongs to the [`artifact-review-toolkit`](../artifact-review-toolkit/README.md)
@@ -51,8 +51,8 @@ to a commit already pushed.
 
 - **Standalone** (default): `.agents/code-review-session/{yyyy-mm-dd}-{branch}/review.md`
   (agent-agnostic, transient — `.gitignore` it unless you want it committed).
-- **Workflow-driven**: the caller injects `review_dir` (e.g. `dev-workflow` passes the
-  Story directory).
+- **Workflow-driven**: the caller injects `review_dir`, pointing at its own working
+  directory for that unit of work.
 
 ## Typical flow (standalone)
 

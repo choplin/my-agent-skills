@@ -23,7 +23,6 @@ It builds on the `linear-base` skill for all status/label/issue semantics and ow
 Resolve which In Progress issue this session was working, using `linear-base`'s local-side link (in priority order):
 
 - the **worktree note** (`wtm notes show`) if in a worktree started via `linear-start` (it holds the issue identifier),
-- `state.json.linear_issue_id` if a `dev-workflow` unit is active,
 - otherwise **session context** — the issue named earlier this session.
 
 If none resolves, **ask** the user which issue. Do not guess.
@@ -64,7 +63,7 @@ The note has to stand on its own for a session that knows only the issue ID. Han
 
 - Post the verified note as a **comment on the issue** (the issue stays In Progress — do not transition it).
 - Per `linear-base`'s *Linear references stay internal*, the note lives on the issue only; do not copy it into commits, branch names, or PR text.
-- Tell the user it is recorded, and how the next session resumes: `linear-start` (pick the In Progress issue) reconstructs from this note plus git and the execution artifacts; a `dev-workflow` unit resumes via `dev-workflow-resume-work`, which reads the same note. The resumer does not need a pasted prompt — the issue carries the context.
+- Tell the user it is recorded, and how the next session resumes: `linear-start` (pick the In Progress issue) reconstructs from this note plus git and the execution artifacts. The resumer does not need a pasted prompt — the issue carries the context.
 
 ## Success criteria
 

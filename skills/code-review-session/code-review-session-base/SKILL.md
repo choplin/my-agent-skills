@@ -49,8 +49,8 @@ directory**): `` `code-review-session-base` skill (`references/<file>`) ``.
 Every code-review-session operation acts on one `review.md` (and any source ledgers)
 inside `review_dir`, resolved in this order:
 
-1. **Caller-injected** — a driving workflow passes an explicit `review_dir` (e.g.
-   `dev-workflow` passes `.claude/dev-workflow/story/{story-dir}/`). Use it verbatim.
+1. **Caller-injected** — a driving workflow passes an explicit `review_dir` so the
+   record lands beside that workflow's own artifacts. Use it verbatim.
 2. **Standalone default** — `.agents/code-review-session/{name}/`, where `{name}` =
    `{yyyy-mm-dd}-{branch-with-dashes}` (current git branch, `/` → `-`, date-prefixed).
 

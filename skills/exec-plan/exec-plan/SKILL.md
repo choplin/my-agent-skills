@@ -1,12 +1,14 @@
 ---
 name: exec-plan
 description: >-
-  Invoked explicitly or via dispatch-work for a clear, near-horizon goal whose
-  route is visible enough to plan and drive inline. Pin the direction, resolve
-  reversible calls autonomously, and park the few high-impact decisions for one
-  batch review at the end. Lighter than native /goal, which fits distant outcomes
-  whose route must be discovered or reorganized while working; unlike
-  dev-workflow, exec-plan has no spec or phase-approval gates. Not for work where
+  Run an ad-hoc task autonomously from a clear, near-horizon goal whose route is
+  visible enough to plan and drive inline. Pin the direction, resolve reversible
+  calls autonomously, and park the few high-impact decisions for one batch review
+  at the end, driving a self-contained plan file. Use when there is no tracker
+  Issue behind the work — a groomed Linear Issue belongs to
+  orchestration-toolkit-execute, which keeps the same decision split but holds its
+  record on the Issue. Lighter than native /goal, which fits distant outcomes
+  whose route must be discovered or reorganized while working. Not for work where
   most steps need human judgment, requirements must be decided up front, or the
   concept itself is still fuzzy.
 user-invocable: true
@@ -76,9 +78,9 @@ There is no fixed numeric threshold. The two axes are the guide; the agreed
 
 ### 1. Draft the direction and plan
 
-Keep this light. Do **not** run a heavy interview (that's `dev-workflow`) or a
-thinking session (that's `inception`). A short back-and-forth, or
-`discuss-toolkit-dig` only if the goal is genuinely unclear, is enough.
+Keep this light. Do **not** run a requirements interview or a thinking session
+(that's `inception`). A short back-and-forth, or `discuss-toolkit-dig` only if the
+goal is genuinely unclear, is enough.
 
 Settle just three things and write them into the plan file:
 
@@ -165,8 +167,9 @@ decisions — not an up-front plan, and not a stream of mid-run questions.
 - **Keep the plan in sync.** If Progress / Decision Log / Parking Lot drift from
   reality, the run stops being restartable and the final review can't be trusted.
 - **If the Parking Lot is filling up faster than Progress** — most steps need a
-  parked decision — this task isn't a fit. Stop and route to `dev-workflow` (decide
-  requirements first) or `inception` (the concept isn't shaped yet).
+  parked decision — this task isn't a fit. Stop and route to `inception` (the
+  concept isn't shaped yet), or settle the requirements with the user directly
+  before restarting.
 
 ## Success criteria
 
@@ -180,9 +183,10 @@ decisions — not an up-front plan, and not a stream of mid-run questions.
 
 ## When NOT to use
 
-- Most steps need human judgment as you go → `dev-workflow` (or just collaborate directly).
+- Most steps need human judgment as you go → just collaborate directly in the session.
 - The outcome is distant and the route must be discovered or reorganized while
   working → native `/goal`.
-- Requirements must be decided before "done" can be defined → `dev-workflow-create-spec`.
+- Requirements must be decided before "done" can be defined → settle them with the user first, or `inception` if the concept is unformed.
+- The work is already a groomed Issue in the tracker → `orchestration-toolkit-execute`.
 - The concept itself is still fuzzy and needs shaping → `inception`.
 - A quick one-off change with nothing to defer → just do it.

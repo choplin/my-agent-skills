@@ -18,7 +18,7 @@ docs/                                      # research + decision records
 Key conventions (details in the architecture doc):
 - **Namespace by prefix.** No namespace exists in the standard or the CLI, so skill `name` = `<group>-<skill>` (the leaf dir matches `name`; the `<group>/` folder is organization only). A group's root skill may keep the bare group name.
 - **Portable SKILL.md.** No plugin-root paths or `${CLAUDE_PLUGIN_ROOT}`; share across skills by delegating to a base skill by name; cross-skill references use the full prefixed name.
-- **Agent-specific = opt-in.** Subagents/hooks live under `opts/` and install via `install-opts.sh`. `dev-workflow` keeps a minimal opt-plugin (for hooks; its subagents stay `dev-workflow:`-namespaced); agent-only groups distribute flat, group-prefixed agents.
+- **Agent-specific = opt-in.** Subagents/hooks live under `opts/` and install via `install-opts.sh`. A group that needs hooks ships a minimal opt-plugin (whose subagents stay `<group>:`-namespaced); agent-only groups distribute flat, group-prefixed agents.
 - **Runtime & dependencies.** Default to bash+jq; escalate runtime (Python/Node) only by fit, declare it in a leaf-bundled `flake.nix`, and resolve it in a preflight (PATH → `nix develop` → aggregated fail). Full policy: [`docs/skill-runtime-and-dependencies.md`](./docs/skill-runtime-and-dependencies.md).
 
 ## Recommended Skills
