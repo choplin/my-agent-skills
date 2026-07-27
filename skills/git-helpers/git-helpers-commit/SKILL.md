@@ -153,9 +153,27 @@ context, mixed scope, or history rewriting requires a decision. Otherwise, once
 the user has authorized the commit and the scope is coherent, create it without
 adding an unnecessary confirmation step.
 
-Use a message-file mechanism for non-trivial bodies when available so shell
-quoting cannot alter punctuation, backticks, or other content. Never stage
-additional files merely to make the message more complete.
+Pass the commit message so the shell never has to interpret newline escapes.
+
+Default to one `-m` per paragraph. Git joins multiple `-m` values with a blank
+line, which is the correct way to structure subject and body:
+
+```bash
+git commit -m "feat(scope): summarize the outcome" \
+  -m "Why the change was necessary." \
+  -m "How the final solution addresses it."
+```
+
+Use a message file (`git commit -F path`) only when the body needs bullets,
+backticks, `$`, quotes, or other content that is awkward to quote safely in
+shell arguments. Write the file with real newlines; do not encode them as
+escape sequences.
+
+Never put literal `\n` or `\n\n` inside a `-m` argument, a heredoc, or a
+message file in place of an actual newline. Never rely on a single `-m` plus
+escaped newlines, or on `echo -e` / similar, to assemble a multi-paragraph
+message. Never stage additional files merely to make the message more
+complete.
 
 ## 9. Verify the recorded result
 
