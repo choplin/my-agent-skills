@@ -11,15 +11,13 @@ Ensure that technical documents contain ONLY verified facts - no assumptions, gu
 ## Execution — isolate the verification reads
 
 Fact-checking reads many files, runs commands, and searches the web to confirm each
-claim. That bulk should not land in the caller's context.
+claim. That bulk does not belong in the caller's context: if the agent can run a
+subagent, run the Process below in one and have it return only the findings.
+Otherwise apply the Process inline.
 
-- **Under Claude Code**, dispatch the `document-toolkit-fact-check` subagent
-  (`subagent_type: document-toolkit-fact-check`) so those reads stay out of this
-  context; it runs the Process below in isolation and returns only the findings.
-- **Otherwise**, apply the Process below inline.
-
-Either way the verification procedure and the four-state output are exactly the same
-— the subagent is only a context boundary, not a different check.
+The procedure and the four-state output are the same either way — isolation is a
+context boundary, not a different check. Whichever way it runs, return the findings
+and leave rewriting the document to the caller.
 
 ## Process
 
