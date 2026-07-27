@@ -91,7 +91,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
 | `exec-plan` | exec-plan, exec-plan-base (ad-hoc autonomous run with no tracker issue behind it; decision log + parking lot) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
-| `mvp-toolkit` | planning, resolution, base (define a narrow MVP and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; share the cross-phase delivery model) |
+| `planning-toolkit` | plan, resolve, mvp, base (turn an established direction into a finite outcome and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; `mvp` is a scope policy, not a phase — the smallest-build-that-teaches standard the cut is judged against) |
 | `orchestration-toolkit` | execute, orchestrate (carry groomed Linear work to completion: one Issue inline, or a whole Project through delegated graph execution, mandatory global adversarial review, and final human approval) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
@@ -119,7 +119,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **Cross-group hubs** (one skill that many groups delegate to):
 
 - `discuss-toolkit-dig` ← grill-me, inception (+framing/deepen), inception-quick, exec-plan, code-review-session-resolve
-- `linear-base` ← orchestration-toolkit (execute, orchestrate), mvp-toolkit, inception-finalize
+- `linear-base` ← orchestration-toolkit (execute, orchestrate), planning-toolkit, inception-finalize
 - `artifact-review-toolkit` (quick, adversarial) ← code-review-session (import-ai), orchestration-toolkit (execute, orchestrate)
 
 **inception**
@@ -153,9 +153,10 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - linear-start → linear, **orchestration-toolkit-execute**, **orchestration-toolkit-orchestrate**, **exec-plan**, wtm-worktree `(ext)`
 - linear-groom → linear
 
-**mvp-toolkit**
-- planning → base, **discuss-toolkit-dig**, **linear-base**, llm-wiki-base `(ext)`, llm-wiki retrieval skills `(ext)`
-- resolution → base, **discuss-toolkit-dig**, **linear-base**, llm-wiki-base `(ext)`, llm-wiki retrieval skills `(ext)`
+**planning-toolkit**
+- plan → base, **discuss-toolkit-dig**, **linear-base**, llm-wiki-base `(ext)`, llm-wiki retrieval skills `(ext)`
+- resolve → base, **discuss-toolkit-dig**, **linear-base**, llm-wiki-base `(ext)`, llm-wiki retrieval skills `(ext)`
+- mvp → base, plan (a scope policy; it declares the standard and delegates the workflow)
 - base → **linear-base**, llm-wiki-base `(ext)`
 
 **orchestration-toolkit**

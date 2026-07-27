@@ -1,4 +1,4 @@
-# MVP Resolution Records
+# Resolution Records
 
 Use these formats for durable findings, decisions, downstream application, and
 the final readiness report. Preserve the owning system's existing frontmatter
@@ -62,7 +62,7 @@ citations in the durable finding when external research was required.
 
 ## Rationale
 
-<why this best satisfies the MVP contract and evidence>
+<why this best satisfies the Outcome Contract and evidence>
 
 ## Downstream Effects
 
@@ -87,7 +87,7 @@ Why it blocks implementation:
 Evidence:
 - ...
 
-| Option | MVP consequence | Reversal cost | Risk |
+| Option | Outcome consequence | Reversal cost | Risk |
 |---|---|---|---|
 | A | ... | ... | ... |
 | B | ... | ... | ... |
@@ -137,7 +137,7 @@ For each affected implementation issue:
 - [ ] Acceptance is observable and no longer conditional
 - [ ] Verification is executable or concretely inspectable
 - [ ] Constraints include the binding decision
-- [ ] Out of Scope still protects the MVP cut
+- [ ] Out of Scope still protects the scope cut
 - [ ] Atomic size remains valid
 - [ ] Milestone and dependency relations are correct
 - [ ] Status is Backlog until self-complete, then Todo
@@ -171,7 +171,7 @@ Durable records:
 - Linear Project:
 
 Next route:
-- READY → mvp-toolkit-orchestration
+- READY → execution may start; hand the named work to the executor
 - READY_AFTER_RESOLUTION → continue resolution frontier
-- BLOCKED → obtain input or return to mvp-toolkit-planning
+- BLOCKED → obtain input or return to planning-toolkit-plan
 ```

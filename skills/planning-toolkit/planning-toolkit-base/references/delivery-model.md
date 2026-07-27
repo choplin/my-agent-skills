@@ -1,73 +1,108 @@
-# MVP Delivery Model
+# Delivery Model
 
-This is the shared vocabulary and handoff contract for the MVP Toolkit family.
-Caller skills own workflow; this model owns the meaning of the records they
-exchange.
+This is the shared vocabulary and handoff contract for the Planning Toolkit
+family. Caller skills own workflow; this model owns the meaning of the records
+they exchange.
 
 ## Contents
 
-1. MVP Contract
-2. Scope Disposition
-3. Unknown Class
-4. Decision Authority
-5. Readiness state machine
-6. Durable ownership
-7. Linear mapping
-8. Issue execution contract
-9. Handoff contracts
-10. Cross-phase invariants
+1. Outcome Contract
+2. Scope Policy
+3. Scope Disposition
+4. Unknown Class
+5. Decision Authority
+6. Readiness state machine
+7. Durable ownership
+8. Linear mapping
+9. Issue execution contract
+10. Handoff contracts
+11. Cross-phase invariants
 
-## 1. MVP Contract
+## 1. Outcome Contract
 
-The MVP Contract is the confirmed product boundary against which scope,
-research, decisions, and implementation are judged.
+The Outcome Contract is the confirmed boundary against which scope, research,
+decisions, and implementation are judged.
 
 | Field | Meaning |
 |---|---|
 | **Target user** | The specific user or actor whose situation must change. |
-| **Problem** | The concrete problem the MVP addresses for that user. |
-| **Smallest value loop** | The shortest end-to-end use that delivers real value. |
-| **Hypothesis** | What the MVP is intended to prove or disprove. |
-| **Evidence** | The observable result that counts as learning or success. |
+| **Problem** | The concrete problem this outcome addresses for that user. |
+| **Outcome** | The finite, completable result. Not a direction or a permanent area of work. |
 | **Constraints** | Safety, legal, operational, integration, timing, and other binding limits. |
-| **Non-goals** | What this MVP deliberately does not establish or provide. |
+| **Non-goals** | What this outcome deliberately does not establish or provide. |
+
+An active Scope Policy may require **additional fields** and may constrain how
+Outcome is expressed. Those fields are part of the contract while that policy is
+in force.
 
 The contract has converged when every candidate capability can be judged against
-these fields without inventing product direction.
+these fields — generic and policy-added together — without inventing direction.
 
 A change is a **planning invalidation** when it materially changes Target user,
-Problem, Smallest value loop, Hypothesis, Evidence, a binding Constraint, or the
-finite MVP outcome. Phase-local workflows must not repair a planning
-invalidation silently.
+Problem, Outcome, a binding Constraint, or any field the active Scope Policy
+requires. Phase-local workflows must not repair a planning invalidation
+silently.
 
-## 2. Scope Disposition
+## 2. Scope Policy
+
+A Scope Policy is the justification standard applied when cutting scope. Exactly
+one policy is in force per planning run, supplied by a caller skill. A policy is
+a declaration; it owns no workflow.
+
+A policy declares:
+
+| Element | Meaning |
+|---|---|
+| **Outcome expression** | How the Outcome field must be phrased to satisfy the policy. |
+| **Additional contract fields** | Fields the Outcome Contract must carry under this policy. |
+| **Inclusion test** | The bar a capability must clear to be dispositioned In Scope. |
+| **Challenge lenses** | The specific inclusions the policy requires be argued against. |
+| **Deferred handling** | What must be preserved about excluded capabilities and what would promote them. |
+
+When no policy is supplied, apply the **default policy**:
+
+- **Outcome expression** — a finite, completable result stated as an observable
+  end state.
+- **Additional contract fields** — none.
+- **Inclusion test** — the capability is required to reach the stated Outcome,
+  to operate it safely, or by a binding Constraint.
+- **Challenge lenses** — work that does not change whether the Outcome is
+  reached; abstraction without a present second use; capacity for unobserved
+  scale.
+- **Deferred handling** — preserve the exclusion rationale durably.
+
+Do not hard-code any single policy's vocabulary into this model or into a
+workflow. Read the active policy, apply its elements, and record which policy
+was in force in the durable planning record.
+
+## 3. Scope Disposition
 
 Assign exactly one disposition to each candidate capability:
 
 | Disposition | Meaning | Operational treatment |
 |---|---|---|
-| **MVP** | Required for the smallest value loop, its evidence, safe operation, or a constraint with disproportionate reversal cost. | May become executable Linear work. |
-| **Deferred** | Potentially valuable but unnecessary for the current hypothesis and safely addable after learning. | Preserve in llm-wiki with exclusion rationale; do not create executable MVP issues. |
+| **In Scope** | Clears the active Scope Policy's inclusion test. | May become executable Linear work. |
+| **Deferred** | Potentially valuable but not required by the inclusion test, and safely addable later. | Preserve in llm-wiki with exclusion rationale; do not create executable issues. |
 | **Rejected** | Inconsistent, duplicated, obsolete, or unjustified. | Preserve rationale only when it prevents re-litigation. |
 
 Deferred is not a shadow backlog. Promote a Deferred capability only through a
 new planning decision. A later committed finite outcome belongs in a separate
-Project rather than the current MVP Project.
+Project rather than the current one.
 
-## 3. Unknown Class
+## 4. Unknown Class
 
 Classify uncertainty by the action needed to prevent guessing:
 
 | Class | Meaning | Owner |
 |---|---|---|
-| **Scope-defining** | The answer changes the MVP Contract or Scope Disposition. | Planning resolves with the user before handoff. |
+| **Scope-defining** | The answer changes the Outcome Contract or a Scope Disposition. | Planning resolves with the user before handoff. |
 | **Blocking research** | Evidence is required before feasibility, a material contract, or downstream work can be fixed. | Resolution produces findings. |
 | **Blocking design** | One binding choice is required before downstream work can be fixed. | Resolution settles the decision from completed inputs. |
-| **Reversible implementation** | Low-impact, easily reversible detail that an executor can choose safely. | Orchestration/implementation; no pre-implementation issue. |
+| **Reversible implementation** | Low-impact, easily reversible detail that an executor can choose safely. | Execution; no pre-implementation issue. |
 
-Front-load only genuine blockers. A question needed solely by a later
-milestone, or safely answerable within one implementation issue, is not part of
-the pre-implementation resolution lane.
+Front-load only genuine blockers. A question needed solely by a later milestone,
+or safely answerable within one implementation issue, is not part of the
+pre-implementation resolution lane.
 
 Research produces evidence, constraints, and evaluated options. Design consumes
 completed evidence and produces one binding decision. The canonical dependency
@@ -79,7 +114,7 @@ research → design → affected implementation
 
 Represent ordering with Linear `blocked by`, not hierarchy.
 
-## 4. Decision Authority
+## 5. Decision Authority
 
 Every blocking design issue names exactly one authority:
 
@@ -100,14 +135,14 @@ Every decision record contains:
 - affected downstream work;
 - scope effect, including whether Planning was invalidated.
 
-## 5. Readiness state machine
+## 6. Readiness state machine
 
 Readiness states what autonomous work may start now. It is not schedule,
 progress, or confidence.
 
 | State | Meaning | Allowed next autonomous work |
 |---|---|---|
-| **READY** | No implementation-blocking unknown remains and at least the first implementation work is self-complete. | Implementation orchestration. |
+| **READY** | No implementation-blocking unknown remains and at least the first implementation work is self-complete. | Execution. |
 | **READY_AFTER_RESOLUTION** | The resolution lane is self-complete and executable, but implementation is not. | Blocking research/design resolution only. |
 | **BLOCKED** | No useful autonomous work can proceed without named human/external input or a new Planning decision. | Obtain the named input or return to Planning. |
 
@@ -131,12 +166,12 @@ without hidden context.
 The readiness value and a proportional blocker summary live in the Linear
 Project description. Detailed rationale lives in llm-wiki and issue records.
 
-## 6. Durable ownership
+## 7. Durable ownership
 
 ### llm-wiki owns durable knowledge
 
-- confirmed MVP Contract;
-- Scope / Deferred / Rejected disposition and rationale;
+- the confirmed Outcome Contract and the Scope Policy in force;
+- Scope Disposition and rationale for In Scope, Deferred, and Rejected;
 - research evidence and constraints;
 - binding decisions, alternatives, and rationale;
 - planning invalidation evidence;
@@ -144,7 +179,7 @@ Project description. Detailed rationale lives in llm-wiki and issue records.
 
 ### Linear owns current executable state
 
-- the finite MVP Project and its readiness summary;
+- the finite Project and its readiness summary;
 - observable delivery Milestones;
 - atomic research, design, and implementation Issues;
 - Type/Repo labels, statuses, priorities, and `blocked by` relations;
@@ -159,36 +194,32 @@ Apply `llm-wiki-base` for scope, frontmatter, slug links, setup, and write
 mechanics. Apply `linear-base` for generic lifecycle, labels, grouping,
 completion notes, and repository resolution.
 
-## 7. Linear mapping
+## 8. Linear mapping
 
-| MVP concept | Linear primitive | Rule |
+| Planning concept | Linear primitive | Rule |
 |---|---|---|
-| Finite MVP outcome | **Project** | One completable outcome, not a permanent repo bucket. |
+| Finite outcome | **Project** | One completable outcome, not a permanent repo bucket. |
 | Observable delivery stage | **Milestone** | Use only when distinct stages earn structure; never solely as a review gate. |
 | Atomic deliverable | **Issue** | One coherent, independently verifiable outcome sized for one focused session. |
 | Deliverable kind | **Type label** | `research`, `design`, or `impl`. |
 | Execution order | **`blocked by`** | Use only when an outcome is a real input to later work. |
 
 Milestones describe reviewable increments. Whether execution pauses for human
-review is an Orchestration policy and does not create a dependency by itself.
+review is an execution policy and does not create a dependency by itself.
 
-Git packaging is also an execution policy. MVP Toolkit Issues do not prescribe
-how atomic deliverables map to commits, branches, or PRs.
+Git packaging is also an execution policy. Planning Toolkit Issues do not
+prescribe how atomic deliverables map to commits, branches, or PRs.
 
 The Project description carries the compact execution-facing contract:
 
 ```markdown
 ## Goal
 
-<finite MVP outcome>
+<finite outcome>
 
-## Target User and Value Loop
+## Target User and Problem
 
-<who, problem, and shortest end-to-end value>
-
-## Hypothesis and Evidence
-
-<what is tested and how the result is observed>
+<who, and what changes for them>
 
 ## Scope
 
@@ -209,6 +240,9 @@ READY / READY_AFTER_RESOLUTION / BLOCKED
 <blocking summary when not READY>
 ```
 
+When the active Scope Policy requires additional contract fields, add one
+section per field directly after `Target User and Problem`.
+
 Each Milestone carries:
 
 ```markdown
@@ -216,10 +250,10 @@ Outcome: <observable state>
 Included: <bounded scope>
 Excluded: <explicit non-scope>
 Acceptance: <demo, behavior, or check>
-Becomes assessable: <hypothesis, risk, or decision>
+Becomes assessable: <risk or decision, plus anything the active policy makes assessable>
 ```
 
-## 8. Issue execution contract
+## 9. Issue execution contract
 
 A context-free executor starts from:
 
@@ -314,13 +348,13 @@ READY_AFTER_RESOLUTION Project normally has Todo research/design work and
 provisional Backlog implementation work. A READY Project has at least its first
 unblocked implementation work in Todo.
 
-## 9. Handoff contracts
+## 10. Handoff contracts
 
 ### Planning → Resolution
 
 Required when readiness is READY_AFTER_RESOLUTION:
 
-- confirmed MVP Contract and Scope Disposition in llm-wiki;
+- confirmed Outcome Contract, Scope Policy, and Scope Disposition in llm-wiki;
 - Linear Project with readiness summary;
 - unknown register;
 - self-complete Todo research/design issues;
@@ -329,17 +363,17 @@ Required when readiness is READY_AFTER_RESOLUTION:
 - Decision Authority for every design issue;
 - explicit human/external inputs and owners.
 
-### Planning → Orchestration
+### Planning → Execution
 
 Allowed only when readiness is READY:
 
-- confirmed contract and scope;
+- confirmed contract, policy, and scope;
 - observable milestones when useful;
 - self-complete implementation issues;
 - first unblocked Todo work;
 - no implementation-critical unresolved input.
 
-### Resolution → Orchestration
+### Resolution → Execution
 
 Allowed only when readiness is READY:
 
@@ -350,6 +384,12 @@ Allowed only when readiness is READY:
 - implementation Inputs and Acceptance fixed;
 - first unblocked implementation work in Todo;
 - Project readiness summary updated.
+
+Execution lives outside this family. This handoff is complete when the Project
+is READY and the first unblocked work is named. Do not encode which execution
+skill takes it from there: that choice belongs to the executor's own routing,
+and naming it here would couple planning to an arrangement that can change
+without the delivery model changing.
 
 Use this proportional handoff summary:
 
@@ -364,19 +404,21 @@ Human/external inputs:
 - <input, owner, and when it is needed>
 
 Next route:
-- READY_AFTER_RESOLUTION → mvp-toolkit-resolution
-- READY → mvp-toolkit-orchestration
-- BLOCKED → obtain the named input or return to mvp-toolkit-planning
+- READY_AFTER_RESOLUTION → planning-toolkit-resolve
+- READY → execution may start; hand the named work to the executor
+- BLOCKED → obtain the named input or return to planning-toolkit-plan
 ```
 
-## 10. Cross-phase invariants
+## 11. Cross-phase invariants
 
-- Optimize for the smallest end-to-end value loop, not feature count.
+- Judge every inclusion against the active Scope Policy's test, not against
+  feature count or completeness.
 - Preserve Deferred rationale without creating executable Deferred work.
 - Resolve scope-defining choices in Planning, genuine blockers in Resolution,
-  and reversible details during implementation.
+  and reversible details during execution.
 - Do not let a phase cross its authority boundary to keep work moving.
 - Do not treat issue closure as outcome propagation; apply results downstream.
 - Keep milestones observable but separate reviewability from review gating.
 - Keep the Project, llm-wiki, and issue graph mutually consistent.
-- Return to Planning when the confirmed MVP Contract is materially invalidated.
+- Return to Planning when the confirmed Outcome Contract is materially
+  invalidated.

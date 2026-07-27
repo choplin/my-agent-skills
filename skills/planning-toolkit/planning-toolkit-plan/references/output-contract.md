@@ -1,4 +1,4 @@
-# MVP Planning Output Contract
+# Planning Output Contract
 
 Read this reference when drafting the user preview or persisting the approved
 plan. Keep the content proportional; omit empty optional sections rather than
@@ -7,23 +7,26 @@ filling them with generic prose.
 ## Proposal preview
 
 ```markdown
-# MVP Planning Proposal
+# Planning Proposal
 
-## MVP Contract
+## Scope Policy
+
+<policy name, or "default (outcome necessity)">
+
+## Outcome Contract
 
 - Target user:
 - Problem:
-- Smallest value loop:
-- Hypothesis:
-- Evidence:
+- Outcome:
 - Constraints:
 - Non-goals:
+- <policy-required field>:
 
 ## Scope Cut
 
 | Candidate | Disposition | Reason |
 |---|---|---|
-| ... | MVP / Deferred / Rejected | ... |
+| ... | In Scope / Deferred / Rejected | ... |
 
 ## Unknown Register
 
@@ -67,40 +70,42 @@ Readiness: READY / READY_AFTER_RESOLUTION / BLOCKED
 - ...
 ```
 
-## llm-wiki MVP planning record
+## llm-wiki planning record
 
 Prefer updating an authoritative existing note. When no note clearly owns the
-MVP scope, create one linked note under the current repository scope:
+outcome, create one linked note under the current repository scope:
 
 ```markdown
 ---
 <frontmatter created by llm-wiki's template>
-tags: [mvp]
+tags: [planning]
 ---
 
-# MVP Contract
+# Outcome Contract
+
+Scope policy: <policy name, or "default (outcome necessity)">
 
 ## Target User and Problem
 
 ...
 
-## Smallest Value Loop
+## Outcome
 
 ...
 
-## Hypothesis and Evidence
+## <policy-required field>
 
 ...
 
 ## Scope
 
-### MVP
+### In Scope
 
-- <capability> — <why it is required now>
+- <capability> — <why the inclusion test is met>
 
 ### Deferred
 
-- <capability> — <why it is safe to defer and what evidence would promote it>
+- <capability> — <why it is safe to defer and what would promote it>
 
 ### Rejected
 
@@ -123,9 +128,12 @@ tags: [mvp]
 - <milestone> — <observable outcome>
 ```
 
+Add a policy tag alongside `planning` when the active policy names one, so the
+record can be found by the standard it was cut against.
+
 Use llm-wiki's template and write verbs; do not hand-author incompatible
 frontmatter. Link source PRD/design/decision notes using slug-form wikilinks.
 
 Use the Project, Milestone, Issue, and readiness formats in
-`mvp-toolkit-base`'s `references/mvp-delivery-model.md`. Those are shared
-handoff contracts, not Planning-specific templates.
+`planning-toolkit-base`'s `references/delivery-model.md`. Those are shared
+handoff contracts, not planning-specific templates.

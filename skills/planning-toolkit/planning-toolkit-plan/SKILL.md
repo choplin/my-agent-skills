@@ -1,21 +1,22 @@
 ---
-name: mvp-toolkit-planning
+name: planning-toolkit-plan
 description: >-
-  Define a deliberately small MVP and turn it into autonomous-ready delivery
-  work. Use when a PRD, design notes, decision logs, or rough actions already
-  exist, but the MVP boundary, deferred roadmap, blocking research/design,
-  milestones, or atomic Linear issues still need shaping. Includes guided
-  dialogue to establish the MVP hypothesis and scope; persists durable product
-  decisions to llm-wiki and, after explicit approval, creates or updates the
-  finite MVP Project, Milestones, Issues, and dependencies in Linear. Not for
-  shaping a still-unformed product concept, resolving the planned research or
-  decisions, or orchestrating implementation.
+  Turn an established direction into a finite outcome and autonomous-ready
+  delivery work. Use when a PRD, design notes, decision logs, or rough actions
+  already exist, but the outcome boundary, deferred roadmap, blocking
+  research/design, milestones, or atomic Linear issues still need shaping. Cuts
+  scope against the caller's scope policy, or a default outcome-necessity test
+  when none is supplied; persists durable decisions to llm-wiki and, after
+  explicit approval, creates or updates the Project, Milestones, Issues, and
+  dependencies in Linear. Ends once the work is registered and its readiness
+  stated, leaving the planned research, design, and implementation to later
+  steps.
 ---
 
-# MVP Planning
+# Plan a Finite Outcome
 
-Shape an existing product direction into the smallest credible MVP and a
-delivery graph that a context-free orchestrator can drive.
+Shape an established direction into one finite outcome and a delivery graph that
+a context-free executor can drive.
 
 The output is not merely a detailed backlog. It is an explicit scope cut, an
 inventory of remaining uncertainty, and ordered work whose inputs and completion
@@ -25,32 +26,32 @@ conditions are visible.
 
 Own:
 
-- defining the MVP hypothesis through dialogue when it is not yet explicit;
-- separating MVP scope from deferred roadmap;
+- defining the outcome through dialogue when it is not yet explicit;
+- separating in-scope work from deferred roadmap under the active scope policy;
 - identifying the few unknowns that must be resolved before implementation;
 - arranging those unknowns before implementation work;
 - defining outcome-oriented milestones and atomic deliverables;
-- persisting durable product knowledge to llm-wiki;
+- persisting durable knowledge to llm-wiki;
 - proposing, then creating or updating, the corresponding Linear structure.
 
 Do not:
 
-- reopen the whole product concept when its direction is already established;
+- reopen the whole concept when its direction is already established;
 - execute research or settle design decisions planned for later resolution;
 - implement code, choose agents, branches, commits, or PR topology;
 - insert routine human-review gates into the dependency graph;
 - create executable Linear issues for speculative future work.
 
-If the product concept itself is still unformed, use `inception`. If a request is
-unclear rather than conceptually open, use `discuss-toolkit-dig`.
+If the concept itself is still unformed, use `inception`. If a request is unclear
+rather than conceptually open, use `discuss-toolkit-dig`.
 
 ## Required integrations and degradation
 
-- Load `mvp-toolkit-base` first and apply its
-  `references/mvp-delivery-model.md`. It owns the MVP Contract, classifications,
-  readiness, persistence boundary, Linear mapping, issue contract, and handoff
-  payload used below.
-- Use `discuss-toolkit-dig` for the MVP-defining dialogue. Ask only questions
+- Load `planning-toolkit-base` first and apply its
+  `references/delivery-model.md`. It owns the Outcome Contract, the Scope Policy
+  shape, classifications, readiness, persistence boundary, Linear mapping, issue
+  contract, and handoff payload used below.
+- Use `discuss-toolkit-dig` for the outcome-defining dialogue. Ask only questions
   that can change the scope cut, unknown classification, or delivery structure.
 - Use the installed llm-wiki skills to retrieve and persist durable knowledge.
   Apply `llm-wiki-base` for setup, scope, and note-model rules. If llm-wiki or
@@ -74,7 +75,7 @@ materially constrain the plan.
 
 Build a source map:
 
-- established product direction and target user;
+- established direction and target user;
 - explicit decisions and rejected alternatives;
 - rough requested capabilities and actions;
 - known technical or operational constraints;
@@ -85,37 +86,41 @@ Do not invent a source-precedence rule. When two sources conflict and the answer
 would change scope or sequencing, surface the conflict and resolve it with the
 user.
 
-### 2. Define the MVP contract through dialogue
+### 2. Fix the scope policy and the Outcome Contract
 
-Use `discuss-toolkit-dig` to complete and confirm the MVP Contract defined by
-`mvp-toolkit-base`. Apply the base convergence condition rather than accepting a
-generic product summary.
+Determine which Scope Policy is in force. A caller skill supplies one — for
+example `planning-toolkit-mvp` when the goal is to validate a hypothesis with
+the smallest build. When no caller supplied a policy, apply the base default
+policy and say so.
 
-Do not require every product question to be closed. Close only those that change
-the MVP boundary or make the delivery graph ambiguous.
+Before defaulting, check how the work was framed. If the user called it an MVP,
+a first version, a proof of concept, or a smallest slice to learn from, load
+`planning-toolkit-mvp` and use its policy instead of the default — the default
+test does not defend that narrowness.
 
-### 3. Cut scope against the value loop
+Then use `discuss-toolkit-dig` to complete and confirm the Outcome Contract
+defined by `planning-toolkit-base`, including every additional field the active
+policy requires and its constraint on how Outcome is expressed. Apply the base
+convergence condition rather than accepting a generic summary.
 
-Apply the base Scope Disposition to every proposed capability. Record a concrete
-rationale for each disposition. Only MVP capabilities may become executable
-work in the current Project.
+Do not require every open question to be closed. Close only those that change
+the outcome boundary or make the delivery graph ambiguous.
 
-Require a concrete reason for every MVP inclusion. Challenge:
+### 3. Cut scope against the active policy
 
-- abstractions with only one current implementation;
-- flexibility for hypothetical future variants;
-- optimization for unobserved scale;
-- completeness that does not change the MVP evidence;
-- infrastructure whose only benefit is making later work cleaner;
-- feature parity beyond the smallest value loop.
+Apply the base Scope Disposition to every proposed capability, judged by the
+active policy's **inclusion test**. Record a concrete rationale for each
+disposition. Only In Scope capabilities may become executable work in the
+current Project.
 
-Prefer a temporary manual step or narrow implementation when it can test the
-same hypothesis without unacceptable risk.
+Argue every inclusion against the active policy's **challenge lenses**. Do not
+substitute a different standard, and do not weaken the policy's lenses because a
+capability looks obviously useful.
 
-Keep Deferred items in llm-wiki with their exclusion rationale. Do not turn them
-into executable Linear issues. If a later phase is already a committed finite
-outcome, propose a separate future Project rather than mixing it into the MVP
-Project.
+Keep Deferred items in llm-wiki with their exclusion rationale and whatever the
+policy says would promote them. Do not turn them into executable Linear issues.
+If a later phase is already a committed finite outcome, propose a separate future
+Project rather than mixing it into this one.
 
 ### 4. Classify remaining unknowns
 
@@ -136,7 +141,7 @@ For blocking research/design:
 - say whether AI may decide, AI must recommend for a human decision, or an
   external input is required.
 
-The `mvp-toolkit-resolution` skill completes this lane, applies its outcomes to
+The `planning-toolkit-resolve` skill completes this lane, applies its outcomes to
 affected implementation issues, and leaves the Project ready to implement.
 Planning only prepares that work.
 
@@ -150,9 +155,9 @@ implementation itself may start.
 
 ### 6. Design delivery milestones
 
-Define milestones as observable increments within the finite MVP outcome. A
-milestone must produce a state that can be demonstrated, inspected, or tested.
-Prefer a thin vertical value slice before breadth or hardening.
+Define milestones as observable increments within the finite outcome. A milestone
+must produce a state that can be demonstrated, inspected, or tested. Prefer a
+thin vertical slice before breadth or hardening.
 
 Do not organize milestones as technical layers such as "database", "API", then
 "UI" when no usable behavior appears until the end.
@@ -162,7 +167,8 @@ For each milestone define:
 - outcome available at completion;
 - included and excluded scope;
 - observable acceptance or demo;
-- hypothesis, risk, or decision that becomes assessable;
+- risk or decision that becomes assessable, plus anything the active policy makes
+  assessable;
 - constituent issues and necessary dependencies.
 
 When resolution work exists, place it before implementation milestones. It is a
@@ -183,7 +189,7 @@ verifiable deliverable.
 
 Use `impl`, `research`, and `design` according to the deliverable produced. Git
 packaging is not part of planning: an issue is an atomic deliverable, while the
-execution workflow decides how issues map to commits, branches, and PRs.
+execution skill decides how issues map to commits, branches, and PRs.
 
 If an implementation issue still depends on unresolved blocker results, create
 it in Backlog with the dependency and enough provisional intent to show the
@@ -195,8 +201,9 @@ issues in Todo.
 
 Present one proposal containing:
 
-- MVP contract;
-- MVP / Deferred / Rejected scope table;
+- the scope policy in force;
+- Outcome Contract;
+- In Scope / Deferred / Rejected scope table;
 - unknown register and readiness;
 - milestones, issues, and dependency graph;
 - planned llm-wiki changes;
@@ -210,12 +217,12 @@ scope cut to llm-wiki. Incorporate corrections into the proposal first.
 
 After approval:
 
-1. Persist the MVP contract, scope cut, Deferred rationale, and product decisions
-   under the base durable-ownership rules. Update an existing authoritative note
-   when one clearly owns the subject; otherwise create a linked MVP planning
-   note. Do not duplicate complete PRD or design content.
-2. Create or update one finite Linear Project for the MVP outcome, following
-   the base MVP mapping and `linear-base` mechanics.
+1. Persist the scope policy, Outcome Contract, scope cut, Deferred rationale,
+   and decisions under the base durable-ownership rules. Update an existing
+   authoritative note when one clearly owns the subject; otherwise create a
+   linked planning note. Do not duplicate complete PRD or design content.
+2. Create or update one finite Linear Project for the outcome, following the
+   base Linear mapping and `linear-base` mechanics.
 3. Create Milestones only when the outcome has distinct observable stages.
 4. Create issues with Type and Repo labels, status, milestone, and `blocked by`
    relations. Do not create Deferred roadmap issues.
@@ -232,15 +239,16 @@ Report:
 - the llm-wiki note and Linear Project updated;
 - the appropriate next route.
 
-For READY_AFTER_RESOLUTION, hand off to `mvp-toolkit-resolution`.
-For READY, hand off to `mvp-toolkit-orchestration` when installed. If the
-destination skill does not yet exist, name the missing capability without
-silently substituting implementation in this session.
+For READY_AFTER_RESOLUTION, hand off to `planning-toolkit-resolve`. For READY,
+report that execution may start and name the first unblocked work. Do not pick
+an execution skill for the user, and do not implement in this session.
 
 ## Gotchas
 
-- **Detailed is not ready.** More subtasks do not compensate for an unsettled MVP
-  boundary or missing acceptance.
+- **Detailed is not ready.** More subtasks do not compensate for an unsettled
+  outcome boundary or missing acceptance.
+- **Do not swap the policy mid-cut.** One policy governs the whole scope cut; if
+  it turns out to be the wrong one, say so and re-cut deliberately.
 - **Do not manufacture discovery.** Research that cannot change scope, contract,
   feasibility, or sequencing is probably implementation detail.
 - **Do not freeze provisional implementation issues.** Resolution may update,
@@ -254,16 +262,18 @@ silently substituting implementation in this session.
 
 ## Success criteria
 
-- [ ] The MVP contract is explicit and confirmed by the user.
-- [ ] Every included capability is justified by the value loop, evidence,
-      constraints, or disproportionate reversal cost.
+- [ ] The scope policy in force is explicit and recorded.
+- [ ] The Outcome Contract, including policy-required fields, is explicit and
+      confirmed by the user.
+- [ ] Every included capability clears the policy's inclusion test and survives
+      its challenge lenses.
 - [ ] Deferred scope and its rationale are durable but absent from executable
-      MVP issues.
+      issues.
 - [ ] Every pre-implementation research/design item is a genuine blocker with a
       concrete deliverable and dependency chain.
 - [ ] Milestones are observable increments rather than technical layers.
 - [ ] Issues are atomic, verifiable, and sized for one focused session.
 - [ ] The readiness state matches what may actually start.
 - [ ] llm-wiki and Linear match the user-approved proposal.
-- [ ] A context-free orchestrator can identify the next work and every blocker
+- [ ] A context-free executor can identify the next work and every blocker
       without relying on this conversation.

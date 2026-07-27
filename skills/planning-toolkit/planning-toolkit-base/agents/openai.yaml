@@ -1,0 +1,4 @@
+interface:
+  display_name: "Planning Toolkit Base"
+  short_description: "Shared delivery model and handoff contracts"
+  default_prompt: "Use $planning-toolkit-base to apply the shared outcome contract, scope policy shape, readiness, and delivery model."

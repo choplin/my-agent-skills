@@ -1,0 +1,4 @@
+interface:
+  display_name: "MVP Scope Policy"
+  short_description: "Plan under the smallest-build-that-teaches standard"
+  default_prompt: "Use $planning-toolkit-mvp to plan this work under the MVP scope policy."

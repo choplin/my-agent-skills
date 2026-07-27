@@ -1,0 +1,4 @@
+interface:
+  display_name: "Resolve Pre-Implementation Blockers"
+  short_description: "Close research and design blockers and make implementation ready"
+  default_prompt: "Use $planning-toolkit-resolve to resolve the research and design blockers before implementation."

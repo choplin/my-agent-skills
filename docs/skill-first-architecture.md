@@ -169,6 +169,24 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
   `opts/claude/` holds only flat subagents; the minimal-plugin convention above
   still stands for the next group that needs one.
 
+- **Step 5** — generalize the planning skills. ✅ `mvp-toolkit` became
+  `planning-toolkit`. Almost all of its content was generic delivery planning —
+  the readiness state machine, unknown/authority classification, the
+  llm-wiki/Linear ownership split, the context-free issue contract, and the whole
+  research→design→apply lane never depended on the work being an MVP. Only the
+  scope-cut standard did. That standard is now a first-class **Scope Policy**: a
+  declaration (outcome expression, extra contract fields, inclusion test,
+  challenge lenses, deferred handling) that `planning-toolkit-plan` plugs into its
+  scope-cut step, with a neutral default when no caller supplies one.
+  `planning-toolkit-mvp` is the first policy — declaration only, no workflow — so
+  a migration or hardening Project can reuse the same spine without inheriting
+  MVP semantics. `mvp-toolkit-resolution` had no MVP-specific content at all and
+  moved to `planning-toolkit-resolve` unchanged in substance. The handoffs used to
+  name a specific downstream skill (the never-built `mvp-toolkit-orchestration`);
+  they now stop at "READY, and here is the first unblocked work", leaving the
+  choice of executor to the executor's own routing. Planning states readiness;
+  it does not know who acts on it.
+
 All groups are now skill-first. Top level is just `skills/`, `opts/`, `scripts/`,
 `docs/`.
 

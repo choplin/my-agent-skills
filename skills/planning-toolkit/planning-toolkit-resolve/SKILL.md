@@ -1,21 +1,20 @@
 ---
-name: mvp-toolkit-resolution
+name: planning-toolkit-resolve
 description: >-
-  Resolve an MVP Project's pre-implementation research and design blockers and
-  leave its implementation work autonomous-ready. Use when
-  mvp-toolkit-planning marked a Linear Project READY_AFTER_RESOLUTION, or when
-  explicit research/design issues block the MVP implementation lane. Executes
-  research, settles decisions according to recorded AI/human/external authority,
-  persists evidence and rationale to llm-wiki and Linear, applies outcomes to
-  affected implementation issues, and promotes self-complete work to Todo before
-  marking the Project READY. Not for defining the MVP, implementing it, or
-  enforcing routine review checkpoints.
+  Resolve a Project's pre-implementation research and design blockers and leave
+  its implementation work autonomous-ready. Use when planning-toolkit-plan
+  marked a Linear Project READY_AFTER_RESOLUTION, or when explicit
+  research/design issues block the implementation lane. Executes research,
+  settles decisions according to recorded AI/human/external authority, persists
+  evidence and rationale to llm-wiki and Linear, applies outcomes to affected
+  implementation issues, and promotes self-complete work to Todo before marking
+  the Project READY, which is where it stops.
 ---
 
-# MVP Resolution
+# Resolve Pre-Implementation Blockers
 
-Close the uncertainty that must be closed before MVP implementation, then make
-the resulting implementation graph executable without hidden context.
+Close the uncertainty that must be closed before implementation, then make the
+resulting implementation graph executable without hidden context.
 
 Resolution is complete only when findings and decisions have changed the
 downstream work they govern. Closing research/design issues without applying
@@ -34,23 +33,23 @@ Own:
 
 Do not:
 
-- redefine the MVP value loop, hypothesis, or scope cut silently;
+- redefine the Outcome Contract or the scope cut silently;
 - execute production implementation issues;
 - turn non-blocking implementation details into up-front design;
 - impose milestone review cadence;
 - choose a human-owned or external decision by default;
 - declare READY while any implementation-critical input remains unresolved.
 
-If the research invalidates the MVP contract itself, stop and return to
-`mvp-toolkit-planning`. Treat this as an exceptional planning invalidation, not a
-normal reconcile phase.
+If the research invalidates the Outcome Contract itself, stop and return to
+`planning-toolkit-plan`. Treat this as an exceptional planning invalidation, not
+a normal reconcile phase.
 
 ## Required integrations and records
 
-- Load `mvp-toolkit-base` first and apply its
-  `references/mvp-delivery-model.md`. It owns the contract, classifications,
-  authority, readiness state machine, persistence boundary, issue contract, and
-  handoff payload used below.
+- Load `planning-toolkit-base` first and apply its
+  `references/delivery-model.md`. It owns the contract, the scope policy shape,
+  classifications, authority, readiness state machine, persistence boundary,
+  issue contract, and handoff payload used below.
 - Apply `linear-base` for Project resolution, Issue lifecycle, Type/Repo labels,
   self-completeness, dependencies, completion notes, and grouping.
 - Apply the installed llm-wiki skills for retrieval and durable writes. Use
@@ -69,14 +68,14 @@ executing an issue, asking for a human decision, or reporting readiness.
 
 ### 1. Load and verify the resolution contract
 
-Resolve the finite MVP Project and retrieve its MVP planning record from
-llm-wiki. Load every field in the base Planning → Resolution handoff, plus
-completion notes on already-finished blockers.
+Resolve the finite Project and retrieve its planning record from llm-wiki. Load
+every field in the base Planning → Resolution handoff, including the scope policy
+in force, plus completion notes on already-finished blockers.
 
 Require `READY_AFTER_RESOLUTION` or equivalent explicit pre-implementation
 blockers. If the Project is already READY, report that Resolution is unnecessary.
-If the MVP contract or resolution issues are too incomplete to identify what
-must be learned or decided, return to `mvp-toolkit-planning` rather than
+If the Outcome Contract or resolution issues are too incomplete to identify what
+must be learned or decided, return to `planning-toolkit-plan` rather than
 improvising a new plan.
 
 Build a live resolution graph from Linear. Do not create a separate local state
@@ -152,7 +151,7 @@ Do not convert uncertainty into a confident conclusion to unblock the graph.
 
 ### 5. Settle design according to authority
 
-Consume only completed Inputs. Evaluate the options against the MVP contract,
+Consume only completed Inputs. Evaluate the options against the Outcome Contract,
 research evidence, and issue constraints.
 
 Follow the base Decision Authority:
@@ -173,17 +172,17 @@ decisions. Preserve one binding outcome per design issue.
 
 ### 6. Detect planning invalidation
 
-After each material finding or decision, compare it with the confirmed MVP
-contract using the base planning-invalidation rule.
+After each material finding or decision, compare it with the confirmed Outcome
+Contract using the base planning-invalidation rule.
 
 Apply locally when the result only changes:
 
-- a technical approach within the agreed value loop;
+- a technical approach within the agreed outcome;
 - files, APIs, or constraints of affected issues;
 - issue size, dependency order, or milestone composition;
 - an implementation capability that remains inside the agreed scope.
 
-When invalidated, return to `mvp-toolkit-planning`, set readiness to BLOCKED,
+When invalidated, return to `planning-toolkit-plan`, set readiness to BLOCKED,
 record the invalidating evidence in llm-wiki and the Project, and do not keep
 resolving work derived from the old contract.
 
@@ -199,7 +198,7 @@ explicit completed Inputs under the base Issue execution contract:
 - remove work made unnecessary by the outcome;
 - split work that is no longer one atomic deliverable;
 - cancel work whose intended outcome is no longer needed;
-- add newly necessary work only when it remains inside the confirmed MVP scope;
+- add newly necessary work only when it remains inside the confirmed scope;
 - repair milestones and `blocked by` relations.
 
 Follow `linear-base` grouping rules when splitting or rebuilding. Keep completed
@@ -223,11 +222,11 @@ After the resolution graph is empty, verify:
 - each first-wave implementation issue is atomic, verifiable, and Todo-ready;
 - dependencies and milestone membership match the resolved plan;
 - Deferred scope has not leaked into executable issues;
-- the MVP contract still holds.
+- the Outcome Contract still holds.
 
 Set the Project to READY only after this audit and the base Resolution →
-Orchestration handoff both pass. Update its readiness summary and identify the
-first unblocked implementation issue or issues.
+Execution handoff both pass. Update its readiness summary and identify the first
+unblocked implementation issue or issues.
 
 If any check fails, keep `READY_AFTER_RESOLUTION` while autonomous resolution can
 continue. Use BLOCKED only for missing human/external input or planning
@@ -245,9 +244,8 @@ Report:
 - first unblocked Todo implementation work;
 - llm-wiki and Linear records updated.
 
-For READY, hand off to `mvp-toolkit-orchestration` when installed. If that skill
-is absent, report the missing execution capability without implementing in this
-session.
+For READY, report that execution may start and name the first unblocked work. Do
+not pick an execution skill for the user, and do not implement in this session.
 
 ## Resume behavior
 
@@ -272,7 +270,7 @@ Never repeat research merely because the chat context was cleared.
   production behavior belongs to the implementation lane.
 - **Do not preserve obsolete tickets for completeness.** Cancel or reshape them
   when evidence changes the route.
-- **Do not patch a broken MVP contract locally.** Return to Planning.
+- **Do not patch a broken contract locally.** Return to Planning.
 
 ## Success criteria
 
@@ -287,5 +285,4 @@ Never repeat research merely because the chat context was cleared.
 - [ ] At least the first unblocked implementation work is self-complete and Todo.
 - [ ] The Project is READY, or BLOCKED with an exact human/external/planning
       blocker.
-- [ ] A context-free implementation orchestrator can start without this
-      conversation.
+- [ ] A context-free executor can start without this conversation.

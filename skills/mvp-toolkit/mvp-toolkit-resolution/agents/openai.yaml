@@ -1,4 +1,0 @@
-interface:
-  display_name: "MVP Resolution"
-  short_description: "Resolve MVP blockers and make implementation ready"
-  default_prompt: "Use $mvp-toolkit-resolution to resolve the MVP research and design blockers before implementation."
