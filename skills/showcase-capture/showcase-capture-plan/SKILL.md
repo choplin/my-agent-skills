@@ -13,6 +13,14 @@ Establish the audience, destination, format (video, stills, or both), desired le
 
 If a fact is uncertain, label it as an assumption in the plan instead of inventing a UI state or product capability.
 
+Define each shot by the user benefit or product claim it proves, not merely by the operation performed. Before accepting a shot, ask:
+
+- Does this frame make the difference from the user's previous workflow visible?
+- Does the claim require several states, objects, or results rather than one isolated result?
+- Are the available choices, relationships, or result scale part of the evidence?
+
+Plan enough context to answer those questions. A search followed by opening one item may prove that search works, but several related results followed by a meaningful selection may be necessary to prove discovery or synthesis.
+
 ## Choose the story
 
 Use this order unless the intended audience needs another structure:
@@ -25,6 +33,8 @@ Prefer one idea per shot. For every claim, state the evidence that must be visib
 
 Target 30–40 seconds for a browser demo by default. Preserve explanatory states; shorten the result by removing dead time and duplicate coverage, not by rushing the proof.
 
+Preserve visual continuity when one result motivates the next action. Do not insert a reset or clear merely to make every beat look pristine; use one only when it improves comprehension or establishes the required reset point.
+
 ## Produce the plan
 
 Use the templates in `references/capture-plan-template.md`. Create a concise plan containing:
@@ -32,9 +42,16 @@ Use the templates in `references/capture-plan-template.md`. Create a concise pla
 - **Video**: target duration; a beat-by-beat script with on-screen action, spoken/narration copy when applicable, expected state, evidence shown, hold/transition timing, and capture surface.
 - **Stills**: a shot list with the exact scene, visible proof point, framing/crop, target dimensions or aspect ratio, output format, any intended annotation or composition, capture surface, and selected annotation tool when needed.
 - **Capture routing**: assign each shot to `showcase-capture-terminal`, `showcase-capture-browser`, or `showcase-capture-screen`.
-- **Readiness**: fixtures/accounts, seeded data, viewport/window size, required reset point, privacy checks, and the fixed final artifact name.
+- **Readiness**: fixture provenance, the real execution path, visible environment, viewport/window size, operation-specific completion signals, required reset point, continuity requirements, privacy checks, and the fixed final artifact name.
+- **Reproduction bundle**: the capture source, representative fixture, setup helper, fixed display settings, and final output names that must remain available for a future re-take.
 
 For a mixed deliverable, share the same narrative but do not merely extract random frames from video: specify composed stills separately.
+
+## Protect execution fidelity
+
+Fixtures may be artificial, but the demonstrated product path must be real. Prefer **real execution against representative seeded data**: run actual initialization, indexing, application logic, search, selection, and preview behavior instead of replaying stub output or prewritten logs.
+
+Treat the rehearsal as a lightweight acceptance test. If the planned claim cannot be reproduced, or observed behavior contradicts product documentation, stop and report the expected and observed behavior. Do not adjust the fixture, script, or framing to conceal a product inconsistency.
 
 ## Route the capture
 

@@ -12,6 +12,7 @@ Own browser-specific state preparation, acquisition, state-preserving crop/resiz
 ## Prepare the browser state
 
 - Use a dedicated profile or clean browser context with representative test data. Do not expose personal tabs, credentials, extension UI, or notifications.
+- Representative data may be seeded, but exercise the real application path. Do not replace requests, results, or activity with stub responses or prewritten output solely to make the capture succeed.
 - Set the planned viewport, zoom, theme, locale, and logged-in state. Use a stable URL and wait for the final meaningful content, not a loading skeleton.
 - Close devtools and unrelated tabs. Reset the application to the planned entry state before each take.
 - Make a narrow, reversible adjustment to test data or the app only when it is necessary to make the planned outcome reproducible; disclose that adjustment.
@@ -45,6 +46,8 @@ Route to `showcase-capture-screen` only when the shot inherently requires browse
 
 Keep only the named final artifact; do not accumulate “final-v2” comparison files. Open or inspect the output. For video, use `ffprobe` to confirm duration and file size. For a still, confirm its pixel dimensions and format. Confirm the correct viewport and final state, readable text, intentional framing, and absence of secrets, personal data, or notifications.
 
+Treat the rehearsal as a lightweight acceptance test. If the real application cannot produce the documented or planned state, stop and report the action, expected behavior, and observed behavior. Do not alter seeded data, stub the path, or change the framing for the purpose of concealing the discrepancy.
+
 Limit processing during capture to operations that preserve the represented state: crop, resize, padding, color-profile normalization, metadata removal, and export in the planned format. Do not add callouts, blur sensitive data, composite multiple images, or otherwise change represented product state. Re-capture a shot that exposes sensitive data or shows an unintended intermediate or stale state.
 
-When the plan explicitly requires annotations, a comparison layout, compositing, or decorative framing, preserve a clean source artifact and delegate it with the exact edit specification to the tool-specific skill named by the plan: `showcase-cleanshot-annotate`, `showcase-figma-annotate`, or `showcase-pen-annotate`. Otherwise return the finished screenshot directly. Report paths, dimensions or duration, file size, format, and completed shots.
+When the plan explicitly requires annotations, a comparison layout, compositing, or decorative framing, preserve a clean source artifact and delegate it with the exact edit specification to the tool-specific skill named by the plan: `showcase-cleanshot-annotate`, `showcase-figma-annotate`, or `showcase-pen-annotate`. Otherwise return the finished screenshot directly. Report paths, dimensions or duration, file size, format, and completed shots. Keep and report the browser automation or capture recipe, seeded-data setup, fixed viewport/display settings, and final media filenames as the reproduction bundle.

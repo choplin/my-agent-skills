@@ -4,27 +4,41 @@
 
 - Audience:
 - Destination and format:
-- Core outcome:
+- Core user benefit / product claim:
+- Difference from the previous workflow:
 - Assumptions:
 - Target duration (video; default 30–40 s):
 
 ## Video script
 
-| Beat | Duration | On-screen action | Narration / on-screen copy | State / evidence shown | Hold / transition | Surface |
-| --- | --- | --- | --- | --- | --- |
-| 1 |  |  |  |  |  |  |
+| Beat | Duration | Benefit / claim | On-screen action | Narration / on-screen copy | Visible evidence | Hold / transition | Surface |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 |  |  |  |  |  |  |  |
 
 ## Still-image shot list
 
-| Shot | Scene and proof point | Composition / crop | Required state | Dimensions / format | Annotation tool / edits | Surface |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1 |  |  |  |  |  |  |
+| Shot | Benefit / claim | Scene and visible proof | Composition / crop | Required state | Dimensions / format | Annotation tool / edits | Surface |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 |  |  |  |  |  |  |  |
 
 ## Capture readiness
 
-- Fixtures / seeded data:
+- Representative fixture / seeded-data provenance:
+- Real execution path (no stub output or prewritten logs):
+- Required choices, relationships, result scale, or before/after states:
 - Window or viewport:
+- Visible environment (prompt, pager, tool options, font, size, theme, locale as applicable):
+- Exact operation-specific completion text / state (must first appear after that operation):
 - Reset point before each take:
+- Continuity requirements (state that must remain visible; pager / alternate-screen policy):
 - Privacy check (tokens, personal data, notifications):
+- Expected behavior to verify during rehearsal:
 - Output naming and destination:
 - Clean source naming when annotation is required:
+
+## Reproduction bundle
+
+- Capture source (`.tape`, `.cast`, browser automation, or capture recipe):
+- Fixture and setup helper:
+- Fixed display / environment settings:
+- Final output filenames:

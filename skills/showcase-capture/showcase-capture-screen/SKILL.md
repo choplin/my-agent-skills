@@ -14,7 +14,7 @@ Own visible-screen state preparation, acquisition, state-preserving crop/resize/
 - Put every required window at its planned size and position; close or hide everything else.
 - Disable or silence notifications, calendar popups, and messaging indicators. Check menus, dock/taskbar, wallpaper, account names, recent-file lists, and cursor position for sensitive or distracting material.
 - Choose the smallest region that still explains the shot. Use a fixed display scale and do one rehearsal before recording.
-- Start the application from a known reset point and use only representative, non-sensitive data.
+- Start the application from a known reset point and use only representative, non-sensitive data. Seeded data may be artificial, but exercise the real application path rather than showing stub responses or prewritten activity.
 
 ## Capture the planned take
 
@@ -30,6 +30,8 @@ Use the operating system's accessible screenshot/screen-recording tool or an ava
 
 Review the saved file at the target size. Confirm pixel dimensions and format for a still, or duration and file size for video. Confirm framing, readability, audio only if requested, and that no notifications, credentials, personal data, or unrelated windows are visible.
 
+Treat the rehearsal as a lightweight acceptance test. If the real application cannot produce the documented or planned state, stop and report the action, expected behavior, and observed behavior. Do not change the fixture or framing to conceal the discrepancy.
+
 Limit processing during capture to operations that preserve the represented state: crop, resize, padding, color-profile normalization, metadata removal, and export in the planned format. Do not add callouts, blur sensitive data, composite multiple images, or otherwise change represented product state. Re-take a flawed or unsafe shot instead of repairing it with a misleading edit.
 
-When the plan explicitly requires annotations, a comparison layout, compositing, or decorative framing, preserve a clean source artifact and delegate it with the exact edit specification to the tool-specific skill named by the plan: `showcase-cleanshot-annotate`, `showcase-figma-annotate`, or `showcase-pen-annotate`. Otherwise return the finished screenshot directly. CleanShot acquisition does not imply a CleanShot annotation handoff; use the path selected in the plan. Report output paths and any unavailable OS permission or tool limitation.
+When the plan explicitly requires annotations, a comparison layout, compositing, or decorative framing, preserve a clean source artifact and delegate it with the exact edit specification to the tool-specific skill named by the plan: `showcase-cleanshot-annotate`, `showcase-figma-annotate`, or `showcase-pen-annotate`. Otherwise return the finished screenshot directly. CleanShot acquisition does not imply a CleanShot annotation handoff; use the path selected in the plan. Report output paths and any unavailable OS permission or tool limitation. Keep and report the capture recipe, fixture/setup instructions, fixed display settings, and final media filenames as the reproduction bundle.
