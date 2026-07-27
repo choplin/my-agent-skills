@@ -1,6 +1,6 @@
 ---
 name: dev-workflow-self-review
-description: Verify a dev-workflow Story is actually complete, then prepare its review record. Runs the completion gate (machine-verification against state.json criteria, plan-compliance) — fixing or returning to implementation if anything is incomplete — then seeds an AI code review into review.md via the review-tools family. Can be invoked directly or after implementation completes.
+description: Verify a dev-workflow Story is actually complete, then prepare its review record. Runs the completion gate (machine-verification against state.json criteria, plan-compliance) — fixing or returning to implementation if anything is incomplete — then seeds an AI code review into review.md via the code-review-session family. Can be invoked directly or after implementation completes.
 allowed-tools: Read, Write, Glob, Grep, Bash, Task, Skill
 user-invocable: true
 ---
@@ -9,7 +9,7 @@ user-invocable: true
 
 Confirm a **Story**'s implementation is complete, then open its review. This skill runs
 dev-workflow's **completion gate** and seeds the review record (`review.md`, owned by the
-`review-tools` family) with an AI code review. The recorded items are then worked to
+`code-review-session` family) with an AI code review. The recorded items are then worked to
 resolution by `dev-workflow-user-review`.
 
 **Trigger phrases**: "self-review", "セルフレビュー", "自動レビュー"
@@ -43,8 +43,8 @@ Stories; autonomous work is selected before kickoff and has no dev-workflow stat
 1. Run `python3 dev-workflow-base/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID"` and read `active_path`. If `null`, identify the unit from `work_units[]` by `matches_current_branch`; if ambiguous, ask. See `dev-workflow-base` skill (`references/state-schema.md`).
 2. **Story** → proceed. Use its `path` as `{story-dir}`.
 3. **No active Story** (Task-level or no dev-workflow unit) → self-review does not apply.
-   Point the user at the Task route (or an ad-hoc `review-tools-ai-review` +
-   `review-tools-resolve` on the diff). Stop.
+   Point the user at the Task route (or an ad-hoc `code-review-session-import-ai` +
+   `code-review-session-resolve` on the diff). Stop.
 
 ### 1. Completion Gate (not review — fix, don't itemize)
 
@@ -72,14 +72,15 @@ acceptance step in `dev-workflow-user-review`.
 The implementation is complete. Open the review by seeding it with an AI code review:
 
 ```
-Skill(skill: "review-tools-ai-review")
+Skill(skill: "code-review-session-import-ai")
 - review_dir: .claude/dev-workflow/story/{story-dir}/
 - scope: current branch changes
 ```
 
-It runs an available AI code reviewer (+ Codex), creates `review.md` (Phase `open`), and
-appends findings as `open` items (`Source: ai`). It does not fix or gate. (If it finds
-nothing, `review.md` is still created — the human review below is the point.)
+It delegates the review itself to `artifact-review-toolkit`, creates `review.md` (Phase
+`open`), and appends the findings as `open` items (`Source: ai`). It does not fix or
+gate. (If it finds nothing, `review.md` is still created — the human review below is
+the point.)
 
 ### 3. Bind and hand off
 
@@ -119,6 +120,6 @@ nothing, `review.md` is still created — the human review below is the point.)
 - [ ] Active unit confirmed to be a Story
 - [ ] Machine predicates run and fixed to green; `state.json` criteria updated (Default-FAIL honored)
 - [ ] Plan fully implemented (gaps completed or returned to implementation) — not itemized
-- [ ] AI code review seeded via `review-tools-ai-review` (`ai` items); `review.md` at Phase `open`
+- [ ] AI code review seeded via `code-review-session-import-ai` (`ai` items); `review.md` at Phase `open`
 - [ ] Session bound; unit left at `in_review` for the next session to resume
 - [ ] No dev-workflow items written to `review.md`; only `criteria` results written to `state.json`

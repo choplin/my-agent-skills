@@ -1,6 +1,6 @@
 ---
 name: dev-workflow-user-review
-description: Internal user-review phase for an active dev-workflow Story in in_review. Invoked from dev-workflow phase transitions or resumption to apply human acceptance criteria, delegate item resolution to review-tools-resolve, handle postponed items, and conclude the workflow. Should NOT be selected to start a review or outside an active dev-workflow Story; standalone review flows begin with the appropriate review-tools ingestion operation.
+description: Internal user-review phase for an active dev-workflow Story in in_review. Invoked from dev-workflow phase transitions or resumption to apply human acceptance criteria, delegate item resolution to code-review-session-resolve, handle postponed items, and conclude the workflow. Should NOT be selected to start a review or outside an active dev-workflow Story; standalone review flows begin with the appropriate code-review-session ingestion operation.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill, Task
 user-invocable: false
 ---
@@ -9,7 +9,7 @@ user-invocable: false
 
 Run the human review of a completed **Story**. Two things happen here: the human
 **acceptance** judgment (the `Verify: human` criteria), and the **resolution** of the
-review items — the latter delegated to `review-tools-resolve`.
+review items — the latter delegated to `code-review-session-resolve`.
 
 ## Scope
 
@@ -48,17 +48,17 @@ user signs off.
 ### 3. Resolve the review items
 
 ```
-Skill(skill: "review-tools-resolve")
+Skill(skill: "code-review-session-resolve")
 - review_dir: .claude/dev-workflow/story/{story-dir}/
 ```
 
-`review-tools-resolve` presents the open items (the AI code findings seeded by
+`code-review-session-resolve` presents the open items (the AI code findings seeded by
 self-review, plus any imported PR/CI items and direct feedback — including anything from
 Step 2) and works each to `resolved` / `skipped` / `postponed` via propose → approve →
 apply. On "LGTM" / "以上" it sets Phase `done`.
 
 **PR / CI items**: to pull the Story's PR review comments or CI failures in, invoke
-`review-tools-import-pr` / `review-tools-import-ci` (and later `review-tools-reply-pr`)
+`code-review-session-import-pr` / `code-review-session-import-ci` (and later `code-review-session-reply-pr`)
 with the same `review_dir`.
 
 ### 4. Drive postponed follow-ups (design-level)
@@ -75,7 +75,7 @@ with the same `review_dir`.
 Once Phase is `done`, acceptance is signed off, and postponed items are handled or
 deferred:
 
-1. `Skill(skill: "review-tools-report")` with the Story's `review_dir` — the completion
+1. `Skill(skill: "code-review-session-report")` with the Story's `review_dir` — the completion
    summary (resolved / postponed / skipped).
 2. `Skill(skill: "dev-workflow-post-task")`, feeding it the report (postponed items are
    the outer-loop signal).
@@ -84,9 +84,9 @@ deferred:
 
 - [ ] Active Story resolved and session bound
 - [ ] Human acceptance criteria judged and signed off (not fabricated); unmet ones → feedback or postponed / back to implementation
-- [ ] Item resolution delegated to `review-tools-resolve`
+- [ ] Item resolution delegated to `code-review-session-resolve`
 - [ ] `postponed` items driven via `dev-workflow-create-spec` + re-review (or deferred with the user's agreement)
-- [ ] Completion summary via `review-tools-report`; `dev-workflow-post-task` run
+- [ ] Completion summary via `code-review-session-report`; `dev-workflow-post-task` run
 - [ ] No review state written to `state.json` (it lives in review.md)
 
 ## Next Session

@@ -19,12 +19,11 @@ conversation context.
 - [`orchestration-toolkit-orchestrate`](./orchestration-toolkit-orchestrate/SKILL.md)
   drives one ready Linear Project through dependency-aware delegation,
   integration, assurance, and final human approval.
-- [`orchestration-toolkit-adversarial-review`](./orchestration-toolkit-adversarial-review/SKILL.md)
-  independently stress-tests a concrete artifact through predefined,
-  selectable review lenses.
 
-The orchestration skill calls the adversarial-review skill. Adversarial review
-also remains useful on its own.
+Independent review is not performed here. The orchestrator calls
+[`artifact-review-toolkit-adversarial`](../artifact-review-toolkit/README.md),
+which owns the review lenses and reviewer independence; this toolkit owns when
+and at which scope a review is required.
 
 ## Control plane and execution plane
 
@@ -114,31 +113,15 @@ cover both:
 Two fresh reviewers are the default. When capacity allows only one, that
 reviewer must cover both lenses and the loss of independence must remain visible.
 
-## Predefined adversarial lenses
+## Selecting review coverage
 
-Adversarial review is not an improvised “be critical” prompt. Every review uses
-a stable Lens ID with:
+Every review the orchestrator requests names stable Lens IDs and a scope, and it
+records which lenses were selected and which the budget omitted. Coverage is
+chosen from risk before reviewer count is considered, so a small budget bundles
+lenses rather than quietly examining less.
 
-- a falsification objective;
-- explicit triggers;
-- required inputs;
-- concrete checks;
-- non-goals;
-- severity guidance.
-
-The orchestrator first selects lenses from risk, then packs those lenses into
-the available reviewer budget. This separates the assurance coverage decision
-from the number of agents available to execute it.
-
-Reviewers receive the artifact, acceptance, constraints, evidence, and assigned
-Lens—not the producer's confidence, the orchestrator's preferred verdict, or
-another reviewer's result. Their independent passes are aggregated only after
-they finish.
-
-This is intentionally different from
-`ai-council-adversarial-panel`. A panel debates a contested question through
-cross-critique and revision. This toolkit reviews a concrete output through
-independent falsification and returns structured findings.
+The lens definitions, the packing rules, and the independence requirements
+belong to [`artifact-review-toolkit`](../artifact-review-toolkit/README.md).
 
 ## Quick autonomy, durable judgment
 
@@ -273,13 +256,13 @@ Premature routing would make the new skill trigger on large but non-graph work.
 
 ### Root router and shared base skill
 
-The group currently contains two directly usable skills and no
+The group contains one directly usable skill and no
 `orchestration-toolkit` root router or `orchestration-toolkit-base`.
 
 Extract a base skill only when at least two group skills need to interpret the
 same durable contract independently. Add a root router only when the group gains
 enough user-facing operations that callers cannot select the right entry point
-from intent. Two skills do not yet justify either abstraction.
+from intent. One skill justifies neither abstraction.
 
 ### Exact monetary and token budgets
 
@@ -300,32 +283,6 @@ mappings, not an exhaustive model catalog.
 Expand provider-specific mappings only when another host is actually used or an
 existing mapping repeatedly selects the wrong capability tier. Verify mappings
 at runtime rather than treating a checked-in model name as permanent truth.
-
-### Domain-specific Lens catalog
-
-The initial catalog contains generic goal, integration, acceptance, regression,
-scope, graph, and decision lenses. It reserves names for security,
-authorization, data integrity, migration, API compatibility, concurrency,
-performance, and accessibility without defining speculative procedures for all
-of them.
-
-Promote a domain Lens into the catalog when:
-
-- a concrete run requires it; or
-- the same `custom.*` Lens recurs across runs.
-
-Until then, use a run-local custom Lens with an explicit falsification objective
-and record why the generic catalog was insufficient.
-
-### Lens versioning and registry machinery
-
-Lens IDs are stable names, but the initial toolkit does not version Lens
-definitions or maintain a machine-readable registry.
-
-Add versioning when review reproducibility must distinguish materially different
-definitions under the same Lens ID. Add registry tooling only when the catalog
-becomes large enough that manual selection, packing, or validation causes
-observed errors.
 
 ### Mandatory adversarial review for every Issue
 

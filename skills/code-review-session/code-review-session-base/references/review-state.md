@@ -10,7 +10,7 @@ Each item under `## Items` has these fields:
 | Field | Required | Meaning |
 |-------|----------|---------|
 | summary | ✓ | One-line description (the `### Item {N}:` heading) |
-| `Source` | ✓ | Where the item came from — a ref, not the data itself: `ai`, `pr:comment/{id}`, `ci:job/{id}`, or `direct` |
+| `Source` | ✓ | Where the item came from — a ref, not the data itself: `ai`, `pr:comment/{id}`, `ci:job/{id}`, `check:{command}`, or `direct` |
 | `Status` | ✓ | `open`, `resolved`, `skipped`, or `postponed` |
 | `Detail` | ✓ | The finding or feedback text |
 | `Approach` | | The proposed response, recorded during resolve (free text) |
@@ -19,7 +19,7 @@ Each item under `## Items` has these fields:
 ### Item status
 
 Deliberately minimal — no intermediate "proposed/agreed/implementing" states. The
-propose → approve → apply interaction happens live within a `review-tools-resolve`
+propose → approve → apply interaction happens live within a `code-review-session-resolve`
 turn; only the outcome is persisted. The `Approach` field carries any proposed
 response across sessions, so an `open` item with an `Approach` is a resumable
 "discussed but not yet applied" item.
@@ -32,7 +32,7 @@ response across sessions, so an `open` item with an `Approach` is a resumable
 | `postponed` | Acknowledged but deferred — needs a larger/design-level change beyond this review's scope | yes |
 
 `postponed` items are the review's **follow-ups**: not done here, surfaced by
-`review-tools-report` for a driving workflow or the user to act on.
+`code-review-session-report` for a driving workflow or the user to act on.
 
 ## Review-level phase (in review.md `## Status`)
 
@@ -52,10 +52,11 @@ resolves into it. Examples:
 - `sources/pr.json` — per PR comment: comment id, author, inline path/line, thread,
   `imported` and `replied` flags.
 - `sources/ci.json` — per CI result: run id, job/check name, conclusion, log ref.
+- `sources/check.json` — per locally-run check: command, exit code, output excerpt.
 
 An ingestion skill writes both: the generic item in `review.md` and the source record
-in its ledger. `review-tools-resolve` reads only `review.md`; source skills
-(`review-tools-reply-pr`, etc.) read their own ledger.
+in its ledger. `code-review-session-resolve` reads only `review.md`; source skills
+(`code-review-session-reply-pr`, etc.) read their own ledger.
 
 ## Legacy value normalization
 

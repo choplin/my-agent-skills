@@ -1,5 +1,5 @@
 ---
-name: review-tools-import-ci
+name: code-review-session-import-ci
 description: Ingestion source — import failing CI results (checks/jobs) as items in review.md, keeping CI-specific data (run id, job/check name, conclusion, log ref) in a separate sources/ci.json ledger. Triggers on "import CI results", "CIの失敗を取り込んで", "pull CI failures".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(gh *), Bash(git branch *), Bash(git remote *)
 user-invocable: true
@@ -15,7 +15,7 @@ The generic item goes into `review.md`; CI-specific data goes into a separate
 
 ## Input
 
-- `review_dir` — where the record lives (default: standalone; see `review-tools-base`
+- `review_dir` — where the record lives (default: standalone; see `code-review-session-base`
   skill (`references/review-init-guide.md`)).
 - CI checks for the current branch / PR (default source: GitHub checks via `gh`).
 
@@ -77,7 +77,7 @@ Update the `Resolved: X / Y` denominator to the new total.
 ```markdown
 {count} items imported from CI ({sha or #number}).
 
-Run `review-tools-resolve` to work through them.
+Run `code-review-session-resolve` to work through them.
 ```
 
 ## Success Criteria

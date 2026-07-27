@@ -87,13 +87,14 @@ scripts/install-opts.sh --dry-run     # preview
 | Group | Skills |
 |-------|--------|
 | `dev-workflow` | kickoff, create-epic/spec/plan, self-review, user-review, acceptance-review, plan-compliance-review, resume-work, post-task, base |
-| `review-tools` | ai-review, import-pr, import-ci, resolve, reply-pr, report, base (portable review process: a review.md record of items fed by ingestion sources — AI review / PR / CI / direct — and worked to resolution; used by dev-workflow and other flows) |
+| `code-review-session` | import-ai, import-pr, import-ci, run-checks, resolve, reply-pr, report, base (the record of one code review: a review.md list of items fed by ingestion sources — AI review / PR / CI / local checks / direct — and worked to resolution; used by dev-workflow and other flows) |
+| `artifact-review-toolkit` | quick, adversarial (how a work artifact is reviewed: a one-off review redirected to the host's reviewer, or a lens-selected adversarial pass with independent reviewers; called by code-review-session and orchestration-toolkit) |
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
 | `exec-plan` | exec-plan, exec-plan-base (rough-goal autonomous plan; decision log + parking lot) |
 | `dispatch` | dispatch-work (separates intent clarification, concept shaping, candidate pressure-testing, human-gated work, autonomous work, and direct implementation) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
 | `mvp-toolkit` | planning, resolution, base (define a narrow MVP and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; share the cross-phase delivery model) |
-| `orchestration-toolkit` | orchestrate, adversarial-review (drive a ready Linear Project through delegated graph execution, mandatory global adversarial review, and final human approval; independently stress-test artifacts through predefined lenses) |
+| `orchestration-toolkit` | orchestrate (drive a ready Linear Project through delegated graph execution, mandatory global adversarial review, and final human approval) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), grill-me (candidate robustness), one-point (discussion pacing) |
@@ -119,11 +120,12 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **Cross-group hubs** (one skill that many groups delegate to):
 
-- `discuss-toolkit-dig` ← dispatch-work, grill-me, dev-workflow-kickoff, inception (+framing/deepen), inception-quick, exec-plan, review-tools-resolve
+- `discuss-toolkit-dig` ← dispatch-work, grill-me, dev-workflow-kickoff, inception (+framing/deepen), inception-quick, exec-plan, code-review-session-resolve
 - `grill-me` ← dispatch-work
 - `dev-workflow-kickoff` ← dispatch-work
 - `inception` / `exec-plan` ← dispatch-work (shaping/execution routing; native `/goal` is host-provided)
-- `review-tools` (ai-review, resolve, report) ← dev-workflow (self-review, user-review)
+- `code-review-session` (import-ai, resolve, report) ← dev-workflow (self-review, user-review)
+- `artifact-review-toolkit` (quick, adversarial) ← code-review-session (import-ai), orchestration-toolkit (orchestrate)
 
 **dev-workflow**
 - kickoff → create-spec, create-epic, **discuss-toolkit-dig**
@@ -131,8 +133,8 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - create-epic → base, create-spec
 - create-plan → base, resume-work
 - resume-work → base, create-plan, self-review, user-review, post-task
-- self-review → base, plan-compliance-review, **review-tools-ai-review**
-- user-review → acceptance-review, create-spec, post-task, **review-tools-resolve**, **review-tools-report**
+- self-review → base, plan-compliance-review, **code-review-session-import-ai**
+- user-review → acceptance-review, create-spec, post-task, **code-review-session-resolve**, **code-review-session-report**
 
 **inception**
 - inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**
@@ -145,12 +147,16 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **exec-plan**
 - exec-plan → base, **discuss-toolkit-dig**
 
-**review-tools**
-- ai-review → base, code-review `(ext)`
+**code-review-session**
+- import-ai → base, **artifact-review-toolkit-quick**, **artifact-review-toolkit-adversarial**
 - import-pr → base
 - import-ci → base
+- run-checks → base
 - resolve → base, **discuss-toolkit-dig**
 - report → base
+
+**artifact-review-toolkit**
+- quick → code-review `(ext; host-provided)`
 
 **git-helpers**
 - draft-pr → pr-description
@@ -167,7 +173,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - base → **linear-base**, llm-wiki-base `(ext)`
 
 **orchestration-toolkit**
-- orchestrate → adversarial-review, **linear-base**, **git-helpers-commit**, llm-wiki-overview `(ext)`, llm-wiki-retrieve `(ext)`, wtm-worktree `(ext)`
+- orchestrate → **artifact-review-toolkit-adversarial**, **linear-base**, **git-helpers-commit**, llm-wiki-overview `(ext)`, llm-wiki-retrieve `(ext)`, wtm-worktree `(ext)`
 
 **skill-quality**
 - skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-creator `(ext)`

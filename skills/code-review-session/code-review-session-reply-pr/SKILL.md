@@ -1,6 +1,6 @@
 ---
-name: review-tools-reply-pr
-description: Output — draft and optionally post replies to the PR review comments that were imported via review-tools-import-pr, using the resolution recorded on each item and the PR data in sources/pr.json. Triggers on "reply to PR comments", "PRコメントに返信", "返信案を作って".
+name: code-review-session-reply-pr
+description: Output — draft and optionally post replies to the PR review comments that were imported via code-review-session-import-pr, using the resolution recorded on each item and the PR data in sources/pr.json. Triggers on "reply to PR comments", "PRコメントに返信", "返信案を作って".
 allowed-tools: Read, Edit, Glob, Grep, Bash(gh *), Bash(git log *), Bash(git remote *), Bash(git branch *), mcp__github__add_reply_to_pull_request_comment, mcp__github__add_issue_comment
 user-invocable: true
 ---
@@ -8,13 +8,13 @@ user-invocable: true
 # Reply to PR Comments (output)
 
 Post replies on the PR for items sourced from it. Uses each item's recorded
-`Resolution` (from `review-tools-resolve`) and the PR data in `sources/pr.json`.
+`Resolution` (from `code-review-session-resolve`) and the PR data in `sources/pr.json`.
 
 **Trigger phrases**: "reply to PR comments", "PRコメントに返信", "返信案を作って", "draft PR replies"
 
 ## Input
 
-- `review_dir` — where the record lives (default: standalone; see `review-tools-base`).
+- `review_dir` — where the record lives (default: standalone; see `code-review-session-base`).
 - `review.md` with `pr:comment/*` items, and `{review_dir}/sources/pr.json`.
 
 ## Process
@@ -22,7 +22,7 @@ Post replies on the PR for items sourced from it. Uses each item's recorded
 ### 1. Load record + PR data
 
 1. Find `review.md` at `{review_dir}/review.md` (standalone: search
-   `.agents/review-tools/*/review.md`). If not found, stop.
+   `.agents/code-review-session/*/review.md`). If not found, stop.
 2. Read `{review_dir}/sources/pr.json` for comment ids, authors, types, and the
    `replied` flags. Derive owner/repo via `gh repo view --json nameWithOwner`.
 

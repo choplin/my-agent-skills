@@ -24,7 +24,7 @@ import time
 
 # --- State contract (see references/state-schema.md) -------------------------
 
-# review.md (owned by the review-tools family) uses phase open/done and item
+# review.md (owned by the code-review-session family) uses phase open/done and item
 # statuses open/resolved/skipped/postponed. Map any legacy value onto those.
 LEGACY_PHASE = {
     "REVIEWING": "open",
@@ -247,7 +247,7 @@ def build_unit(unit_dir, branch_now):
     has_spec = bool(state_obj.get("criteria"))
 
     # Review state is read from review.md — the single source of truth owned by
-    # the review-tools skills. state.json carries no `review` block.
+    # the code-review-session skills. state.json carries no `review` block.
     review_phase = None
     items = []
     review_txt = read(os.path.join(unit_dir, "review.md"))

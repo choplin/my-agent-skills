@@ -50,10 +50,10 @@ without `state.json` is not a work unit.
 
 **Review state is not in `state.json`.** The review phase (`open`/`done`) and item
 statuses (`open`/`resolved`/`skipped`/`postponed`) live in `review.md`, owned by the
-`review-tools` skill family (see `review-tools-base` skill (`references/review-state.md`)).
+`code-review-session` skill family (see `code-review-session-base` skill (`references/review-state.md`)).
 `scripts/workflow-state.py` reads them by parsing `review.md`. dev-workflow's review
-phase delegates to review-tools (`review-tools-ai-review`, `review-tools-resolve`,
-`review-tools-report`), which never write to `state.json`.
+phase delegates to code-review-session (`code-review-session-import-ai`, `code-review-session-resolve`,
+`code-review-session-report`), which never write to `state.json`.
 
 ### Field reference
 
@@ -76,7 +76,7 @@ phase delegates to review-tools (`review-tools-ai-review`, `review-tools-resolve
 | `steps[].done` | bool | Completion flag. Best-effort mirrored to the Linear Issue checklist on change. |
 
 Review phase/mode/item fields are **not** part of `state.json` — they live in
-`review.md` (see `review-tools-base` skill (`references/review-state.md`)). The
+`review.md` (see `code-review-session-base` skill (`references/review-state.md`)). The
 evaluator parses `review.md` for the review phase and item statuses.
 
 ### Default-FAIL contract
@@ -171,7 +171,7 @@ by consumer skills — see [Linear backing](#linear-backing-bootstrap-contract))
 
 ### Legacy value mappings
 
-The review phase/item statuses are read from `review.md` (owned by review-tools).
+The review phase/item statuses are read from `review.md` (owned by code-review-session).
 The script normalizes these older values when parsing it:
 
 | Legacy value | Normalized to |
@@ -247,7 +247,7 @@ python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_I
 python3 dev-workflow/scripts/workflow-state.py --session "$CLAUDE_CODE_SESSION_ID" --clear
 ```
 
-Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review) **bind** at the point the unit is identified — normally at create-spec, when the Story directory is created. (The `review-tools` skills that self-review/user-review delegate to do not bind; the dev-workflow wrapper binds before delegating.) `dev-workflow-post-task` **clears**. A unit left mid-flight is rebound by `dev-workflow-resume-work` in the next session (the SessionStart hook injects its summary so no prompt is carried across).
+Skills that operate on a specific unit (create-spec, create-plan, resume-work, self-review, user-review) **bind** at the point the unit is identified — normally at create-spec, when the Story directory is created. (The `code-review-session` skills that self-review/user-review delegate to do not bind; the dev-workflow wrapper binds before delegating.) `dev-workflow-post-task` **clears**. A unit left mid-flight is rebound by `dev-workflow-resume-work` in the next session (the SessionStart hook injects its summary so no prompt is carried across).
 
 ### Consumer rule
 

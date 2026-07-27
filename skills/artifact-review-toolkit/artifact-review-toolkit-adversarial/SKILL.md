@@ -1,15 +1,16 @@
 ---
-name: orchestration-toolkit-adversarial-review
+name: artifact-review-toolkit-adversarial
 description: >-
   Adversarially inspect a concrete artifact or completed output with predefined,
-  selectable review lenses and fresh independent agents. Use for a node,
-  execution graph, code change, document, integrated Project result, or final
+  selectable review lenses and fresh independent agents. Use for a work node,
+  execution graph, code change, document, integrated project result, or final
   completion claim that needs falsification-oriented review, structured
   findings, explicit coverage gaps, and a budget-aware verdict. Callable
-  standalone or from orchestration-toolkit-orchestrate. Unlike
-  ai-council-adversarial-panel, this reviews artifacts without cross-panel
-  debate; unlike review-tools-ai-review, it is not limited to diffs and does not
-  persist or resolve findings.
+  standalone, from code-review-session-import-ai, or from an orchestrator.
+  Unlike ai-council-adversarial-panel, this reviews artifacts without
+  cross-panel debate; unlike artifact-review-toolkit-quick, it requires
+  observable acceptance and runs independent lens-assigned reviewers; unlike
+  document-toolkit-review, it falsifies a claim and never revises the artifact.
 ---
 
 # Adversarial Review
@@ -36,7 +37,7 @@ Own:
 
 Do not:
 
-- change code, documents, Linear, Git, or the reviewed artifact;
+- change code, documents, trackers, Git, or the reviewed artifact;
 - resolve findings or accept risk;
 - invent missing acceptance criteria;
 - expose one reviewer to another's result before independent passes finish;
@@ -45,8 +46,13 @@ Do not:
 
 Use `ai-council-adversarial-panel` instead when the object is a contested
 question that benefits from cross-critique and revised positions. Use
-`review-tools-ai-review` when the required outcome is specifically to ingest
-code-review items into `review.md`.
+`artifact-review-toolkit-quick` when an ordinary code review of a change is
+enough and no acceptance claim needs falsifying. Use `document-toolkit-review`
+when the object is prose to be critiqued or revised as writing.
+
+Findings returned here are not persisted. When they must be tracked and driven
+to resolution, the caller records them —
+`code-review-session-import-ai` does that for a code review.
 
 ## Input contract
 
@@ -159,7 +165,7 @@ Do not include:
 
 - another reviewer's output;
 - the producer's confidence or conclusion;
-- the orchestrator's expected verdict;
+- the caller's expected verdict;
 - hints about a suspected bug unless that suspicion is itself the artifact under
   review;
 - unrelated conversation history.
@@ -232,7 +238,7 @@ or evidence is missing. `ready` means no supported blocking finding within the
 reported coverage; it is not human approval.
 
 For standalone use, render the same record readably for the user. For an
-orchestrator caller, preserve the structured fields so it can record and route
+programmatic caller, preserve the structured fields so it can record and route
 findings.
 
 ## Success criteria

@@ -1,6 +1,6 @@
 ---
 name: document-toolkit-review
-description: Use this skill when the user wants a document, plan, or proposal reviewed or revised, and you need to fix the stance and the deliverable up front. Triggers on "review this", "review this critically", "critique this", "find problems with", "what's wrong with", "review objectively", "how does this read", "assess this content", "revise this", "improve this writing", "make this clearer", "polish this document". Should NOT trigger for fact-checking accuracy (use document-toolkit-fact-check) or for reworking a whole set of documents (use document-toolkit-distill).
+description: Use this skill when the user wants a document, plan, or proposal reviewed or revised, and you need to fix the stance and the deliverable up front. Triggers on "review this", "review this critically", "critique this", "find problems with", "what's wrong with", "review objectively", "how does this read", "assess this content", "revise this", "improve this writing", "make this clearer", "polish this document". Should NOT trigger for fact-checking accuracy (use document-toolkit-fact-check), for reworking a whole set of documents (use document-toolkit-distill), nor for falsifying a completed artifact's claim against observable acceptance criteria (use artifact-review-toolkit-adversarial).
 allowed-tools: Read, Write, Edit, MultiEdit
 ---
 

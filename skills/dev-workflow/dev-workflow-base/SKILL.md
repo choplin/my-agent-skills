@@ -29,10 +29,10 @@ skill, then read/run the named file from its own root):
 | Workflow concepts | `references/workflow-concepts.md` | Epic/Story/Task model and promotion flow |
 
 > **Review resources moved.** `review.md` and its templates now live in the
-> **`review-tools`** skill family (`review-tools-base` skill: `references/review-template.md`,
+> **`code-review-session`** skill family (`code-review-session-base` skill: `references/review-template.md`,
 > `references/review-init-guide.md`, `references/review-state.md`). dev-workflow's
-> review phase delegates to review-tools (`review-tools-ai-review` to record findings,
-> `review-tools-resolve` to work them, `review-tools-report` to summarize). The state
+> review phase delegates to code-review-session (`code-review-session-import-ai` to record findings,
+> `code-review-session-resolve` to work them, `code-review-session-report` to summarize). The state
 > evaluator reads the review phase (`open`/`done`) and item statuses from `review.md` —
 > there is no `review` block in `state.json`.
 

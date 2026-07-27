@@ -107,8 +107,11 @@ Concrete, rename-prone names are confined here.
   stays in `dev-workflow`; autonomous work expected to surface parked decisions
   uses `exec-plan`. The routing boundary is the "don't run the loop on a signal
   you don't trust" caveat applied to loop engineering.
-- **`review-tools`** and the AI-review paths are ingestion/adjudication
-  plumbing that a verifier stage can reuse.
+- **`artifact-review-toolkit`** holds the review procedures themselves: a
+  lens-selected, independence-preserving adversarial pass over a concrete
+  artifact, and a lighter one-off review. **`code-review-session`** is the
+  ingestion/adjudication plumbing a verifier stage reuses to record and resolve
+  what a review returns.
 - **Direction — autonomous skill-quality loops.** Applying the loop-time regime
   to skill documents themselves (a verifier that hardens its own checks against
   a skill-generator, or machine-checkable anchors driving iteration) is a wanted

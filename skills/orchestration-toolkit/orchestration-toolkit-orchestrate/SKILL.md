@@ -175,7 +175,7 @@ safe ready set within executor concurrency. Record:
 Quick mode records this plan and proceeds without a wave-plan approval gate.
 Graph changes outside the authority boundary below still require the user.
 
-Before dispatch, call `orchestration-toolkit-adversarial-review` with
+Before dispatch, call `artifact-review-toolkit-adversarial` with
 `scope: graph` when a material scheduling judgment needs an independent check:
 
 - a missing or repaired dependency → `graph.dependency-integrity`;
@@ -228,7 +228,7 @@ diffs, commits, and raw check evidence. Confirm that the result:
 - can integrate without invalidating completed or parallel nodes.
 
 Select risk-based node adversarial review through
-`orchestration-toolkit-adversarial-review` when the change has broad blast
+`artifact-review-toolkit-adversarial` when the change has broad blast
 radius, low reversibility, weakly observable acceptance, design deviation,
 security/data/API impact, repeated failure, or many downstream dependents.
 
@@ -266,7 +266,7 @@ decides, return it to In Progress and continue.
 ### 9. Run mandatory global adversarial review
 
 When all target work nodes are Done and integration checks pass, call
-`orchestration-toolkit-adversarial-review` with `scope: global`.
+`artifact-review-toolkit-adversarial` with `scope: global`.
 
 Always require:
 

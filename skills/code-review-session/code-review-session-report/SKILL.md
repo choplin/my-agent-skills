@@ -1,5 +1,5 @@
 ---
-name: review-tools-report
+name: code-review-session-report
 description: Output — produce a completion summary of a review from review.md (what was resolved, skipped, and postponed) so it can be handed to a downstream consumer such as a driving workflow's post step, a written report, or an issue tracker. Triggers on "summarize the review", "review report", "レビュー結果をまとめて", "完了サマリ".
 allowed-tools: Read, Glob, Grep, Bash
 user-invocable: true
@@ -16,12 +16,12 @@ on.
 
 ## Input
 
-- `review_dir` — where the record lives (default: standalone; see `review-tools-base`).
+- `review_dir` — where the record lives (default: standalone; see `code-review-session-base`).
 
 ## Process
 
 1. Find `review.md` at `{review_dir}/review.md` (standalone: search
-   `.agents/review-tools/*/review.md`). Normalize legacy values (see `review-tools-base`
+   `.agents/code-review-session/*/review.md`). Normalize legacy values (see `code-review-session-base`
    skill (`references/review-state.md`)).
 2. Aggregate items by `Status` and by `Source`.
 3. Emit the summary (below). If the caller is a driving workflow, this is the value it

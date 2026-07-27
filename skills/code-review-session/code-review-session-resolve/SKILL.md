@@ -1,6 +1,6 @@
 ---
-name: review-tools-resolve
-description: The resolution loop of the review-tools family — work the open items in review.md to a terminal outcome (resolved / skipped / postponed). For each item the AI proposes a response; the user approves it, discusses to refine it, or defers it. Direct feedback typed in the session is added as an item and resolved the same way. Triggers on "resolve review items", "work through the review", "レビュー対応", "指摘を解決".
+name: code-review-session-resolve
+description: The resolution loop of the code-review-session family — work the open items in review.md to a terminal outcome (resolved / skipped / postponed). For each item the AI proposes a response; the user approves it, discusses to refine it, or defers it. Direct feedback typed in the session is added as an item and resolved the same way. Triggers on "resolve review items", "work through the review", "レビュー対応", "指摘を解決".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill, Task
 user-invocable: true
 ---
@@ -8,8 +8,8 @@ user-invocable: true
 # Resolve (resolution loop)
 
 Drive the `open` items in `review.md` to a terminal outcome. This is the core of the
-review process; ingestion skills (`review-tools-ai-review`, `review-tools-import-pr`,
-`review-tools-import-ci`) fill the record, and this skill empties it — moving freely
+review process; ingestion skills (`code-review-session-import-ai`, `code-review-session-import-pr`,
+`code-review-session-import-ci`) fill the record, and this skill empties it — moving freely
 back and forth with them as new items arrive.
 
 **Trigger phrases**: "resolve review items", "work through the review", "レビュー対応", "指摘を解決"
@@ -31,7 +31,7 @@ within a turn; the item's `Approach` field records the proposed response so a di
 
 ## Input
 
-- `review_dir` — where the record lives (default: standalone; see `review-tools-base`
+- `review_dir` — where the record lives (default: standalone; see `code-review-session-base`
   skill (`references/review-init-guide.md`)).
 - Direct feedback from the user during the session.
 
@@ -40,9 +40,9 @@ within a turn; the item's `Approach` field records the proposed response so a di
 ### 0. Load the record
 
 Find `review.md` at `{review_dir}/review.md` (standalone: search
-`.agents/review-tools/*/review.md`). If it does not exist, create it (via
-`review-tools-base` skill (`references/review-init-guide.md`)) so direct feedback has a
-home. Normalize any legacy values (see `review-tools-base` skill
+`.agents/code-review-session/*/review.md`). If it does not exist, create it (via
+`code-review-session-base` skill (`references/review-init-guide.md`)) so direct feedback has a
+home. Normalize any legacy values (see `code-review-session-base` skill
 (`references/review-state.md`)).
 
 Present a short summary: how many items, how many `open`, grouped by `Source`.
@@ -93,7 +93,7 @@ code yet.
 After each item, report briefly and go to the next (or wait for more feedback).
 
 For PR-sourced items, resolution is recorded on the item; replying on the PR is a
-separate step (`review-tools-reply-pr`).
+separate step (`code-review-session-reply-pr`).
 
 #### Plan mode
 
@@ -106,9 +106,9 @@ When no `open` items remain — or the user signals done ("LGTM" / "以上"):
 
 1. Set `## Status` Phase to `done`.
 2. If any items are `postponed`, note that follow-ups remain.
-3. Offer `review-tools-report` to produce a completion summary for downstream (a
+3. Offer `code-review-session-report` to produce a completion summary for downstream (a
    driving workflow, a report, or a tracker), and — if there are PR-sourced items —
-   `review-tools-reply-pr` to reply on the PR.
+   `code-review-session-reply-pr` to reply on the PR.
 
 The user can `/clear` and resume later by re-invoking this skill; `open` items and
 their recorded `Approach`es are read back from `review.md`.

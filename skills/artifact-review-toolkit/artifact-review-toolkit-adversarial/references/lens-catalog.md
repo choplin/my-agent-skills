@@ -12,6 +12,7 @@ finding schema from the parent skill.
 4. Graph lenses
 5. Decision lenses
 6. Domain extension points
+7. Caller-supplied lenses
 
 ## 1. Selection and packing
 
@@ -44,9 +45,9 @@ packing_group: outcome
 mandatory_when: global review
 effort: medium
 objective: Falsify the claim that the integrated result achieves the original
-  finite goal and every Project acceptance criterion.
+  finite goal and every stated acceptance criterion.
 required_inputs:
-  - original goal and Project acceptance
+  - original goal and stated acceptance
   - final artifacts and completed Issue outputs
   - acceptance evidence
 checks:
@@ -203,7 +204,7 @@ triggers:
   - several plausible wave plans have materially different risk
   - model or assurance budget must be reallocated
   - repeated failures make the cause unclear
-  - orchestrator proposes a high-impact graph change
+  - the caller proposes a high-impact graph change
 effort: medium
 objective: Find unsupported assumptions in wave order, model routing, retry,
   integration, and assurance allocation.
@@ -276,3 +277,14 @@ A domain Lens must define scope, triggers, effort, falsification objective,
 required inputs, reproducible checks, non-goals, and severity guidance. Until it
 earns a catalog entry, use `custom.<descriptive-name>` and record why the generic
 lenses are insufficient.
+
+## 7. Caller-supplied lenses
+
+A caller with its own durable review concerns may supply Lens definitions of its
+own, as `<caller>.<descriptive-name>` (for example an orchestrator's lenses over
+its wave planning). A supplied Lens must carry the same fields as a catalog Lens
+and is selected, packed, and reported exactly like one.
+
+Supplied lenses stay with the caller that owns them. Promote one into this
+catalog only when a second, unrelated caller needs it — that is what keeps this
+file a shared registry rather than a union of every caller's concerns.

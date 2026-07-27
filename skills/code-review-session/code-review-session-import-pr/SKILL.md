@@ -1,5 +1,5 @@
 ---
-name: review-tools-import-pr
+name: code-review-session-import-pr
 description: Ingestion source — import GitHub PR review comments as items in review.md, keeping PR-specific data (comment id, author, inline location, thread, replied flag) in a separate sources/pr.json ledger. Triggers on "import PR comments", "PRコメントを取り込んで", "PRレビューをインポート".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(gh *), Bash(git branch *), Bash(git remote *)
 user-invocable: true
@@ -15,7 +15,7 @@ so PR bookkeeping never mixes into review state.
 
 ## Input
 
-- `review_dir` — where the record lives (default: standalone; see `review-tools-base`
+- `review_dir` — where the record lives (default: standalone; see `code-review-session-base`
   skill (`references/review-init-guide.md`)).
 - An open PR on the current branch.
 
@@ -23,7 +23,7 @@ so PR bookkeeping never mixes into review state.
 
 ### 1. Resolve the record and PR
 
-1. Resolve `review_dir`; ensure `review.md` exists (create via `review-tools-base`
+1. Resolve `review_dir`; ensure `review.md` exists (create via `code-review-session-base`
    skill (`references/review-init-guide.md`) if not).
 2. **Find the open PR**: `gh pr view --json number,url,state` for the current branch.
    If none or not OPEN/DRAFT: stop and report "No open PR found for the current branch."
@@ -62,7 +62,7 @@ Wait for confirmation.
 
 For each new comment:
 
-1. **Item in `review.md`** (see `review-tools-base` skill (`references/review-state.md`)):
+1. **Item in `review.md`** (see `code-review-session-base` skill (`references/review-state.md`)):
    - **Source**: `pr:comment/{commentId}`
    - **Status**: `open`
    - **Detail**: the comment body (and, for inline, `{path} L{line}`)
@@ -82,12 +82,12 @@ Update the `Resolved: X / Y` denominator to the new total.
 ```markdown
 {count} items imported from PR #{number}.
 
-Run `review-tools-resolve` to work through them, then `review-tools-reply-pr` to reply.
+Run `code-review-session-resolve` to work through them, then `code-review-session-reply-pr` to reply.
 ```
 
 ## Notes
 
-- Classification/approach is decided in `review-tools-resolve`, not here — this skill
+- Classification/approach is decided in `code-review-session-resolve`, not here — this skill
   only records the raw comment as an `open` item. (An inline comment with a clear ask
   resolves quickly there; a vague review-body gets discussed.)
 - `sources/pr.json` is the single home for PR-specific state (author, location,
