@@ -1,5 +1,5 @@
 ---
-name: writing-toolkit-fact-check
+name: document-toolkit-fact-check
 description: Use this skill when the user wants to verify claims in a technical document. Triggers on phrases like "fact-check this", "verify this document", "check if this is accurate", "validate these claims", or when reviewing documentation for accuracy.
 allowed-tools: Read, Grep, Glob, Task, Bash, WebSearch
 ---
@@ -13,8 +13,8 @@ Ensure that technical documents contain ONLY verified facts - no assumptions, gu
 Fact-checking reads many files, runs commands, and searches the web to confirm each
 claim. That bulk should not land in the caller's context.
 
-- **Under Claude Code**, dispatch the `writing-toolkit-fact-check` subagent
-  (`subagent_type: writing-toolkit-fact-check`) so those reads stay out of this
+- **Under Claude Code**, dispatch the `document-toolkit-fact-check` subagent
+  (`subagent_type: document-toolkit-fact-check`) so those reads stay out of this
   context; it runs the Process below in isolation and returns only the findings.
 - **Otherwise**, apply the Process below inline.
 

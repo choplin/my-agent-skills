@@ -98,7 +98,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), grill-me (candidate robustness), one-point (discussion pacing) |
 | `git-helpers` | commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten, squash-merge |
-| `writing-toolkit` | critical-review, fact-check, objective-review, revise-document |
+| `document-toolkit` | review, fact-check |
 | `lang-reference` | go, java, python, rust, scala, sql, typescript |
 | `app-reference` | backend, frontend (application-specific architecture and framework recommendations) |
 | `jira-cli` | jira-cli |

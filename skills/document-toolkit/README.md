@@ -1,6 +1,6 @@
-# writing-toolkit
+# document-toolkit
 
-Document review and writing improvement skills for Claude Code.
+Skills for working on documents: reviewing one and verifying its claims.
 
 ## Skills
 
@@ -16,12 +16,5 @@ Document review and writing improvement skills for Claude Code.
 
 ## Installation
 
-Add to your `.claude/settings.json`:
-
-```json
-{
-  "plugins": [
-    "/path/to/writing-toolkit"
-  ]
-}
-```
+Install these skills through the repository's `skills add` workflow documented
+in the root README.

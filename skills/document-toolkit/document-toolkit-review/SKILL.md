@@ -1,10 +1,10 @@
 ---
-name: writing-toolkit-review
-description: Use this skill when the user wants a document, plan, or proposal reviewed or revised, and you need to fix the stance and the deliverable up front. Triggers on "review this", "review this critically", "critique this", "find problems with", "what's wrong with", "review objectively", "how does this read", "assess this content", "revise this", "improve this writing", "make this clearer", "polish this document". Should NOT trigger for fact-checking accuracy (use writing-toolkit-fact-check).
+name: document-toolkit-review
+description: Use this skill when the user wants a document, plan, or proposal reviewed or revised, and you need to fix the stance and the deliverable up front. Triggers on "review this", "review this critically", "critique this", "find problems with", "what's wrong with", "review objectively", "how does this read", "assess this content", "revise this", "improve this writing", "make this clearer", "polish this document". Should NOT trigger for fact-checking accuracy (use document-toolkit-fact-check).
 allowed-tools: Read, Write, Edit, MultiEdit
 ---
 
-# Writing Review
+# Document Review
 
 A thin selector over two axes. The review/revision *substance* — what to look at,
 which flaws matter, how to phrase feedback — is yours to supply natively; this

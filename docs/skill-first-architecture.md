@@ -151,7 +151,7 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
     rewrite. Placing the plugin there also preserves the `dev-workflow:` namespace
     for the reviewer subagents.
 - **Step 3** — migrate the remaining plugins. ✅ Done: discuss-toolkit,
-  discussion-continuity, git-helpers, jira-cli, lang-reference, writing-toolkit,
+  discussion-continuity, git-helpers, jira-cli, lang-reference, document-toolkit,
   ai-council (advisor agents → flat group-prefixed agents under `opts/claude/agents/`).
   **moonbit was dropped**, not migrated — it was a vendored submodule of upstream
   `moonbitlang/skills`, which is directly installable (`skills add moonbitlang/skills`,
