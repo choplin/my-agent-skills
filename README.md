@@ -104,7 +104,7 @@ scripts/install-opts.sh --dry-run     # preview
 | `jira-cli` | jira-cli |
 | `showcase-capture` | plan, terminal, browser, screen, cleanshot-annotate, figma-annotate, pen-annotate (plan app/tool demo media; capture each shot on its appropriate surface; route planned annotations to a concrete editor workflow) |
 | `product-showcase` | readme (create or improve the product front door: value, proof, first success, and routes to deeper documentation) |
-| `codebase-structure` | codebase-structure, codebase-structure-refactor (model code around concepts, types, invariants, and ownership; safely refactor existing code toward that structure) |
+| `codebase-structure` | codebase-structure, codebase-structure-review, codebase-structure-refactor, base (design a target structure; review ownership and boundaries without changing code; safely migrate an implementation; share the reviewability and boundary model) |
 | `refactoring-tools` | refactoring-tools-planner (inspect a repository and create an evidence-based, implementation-ready refactor plan without changing production code) |
 
 > MoonBit skills are **not** vendored here — install them straight from upstream: `skills add moonbitlang/skills`.
@@ -183,7 +183,9 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - readme → **showcase-capture-plan** (when useful README media is missing and the user wants it produced)
 
 **codebase-structure**
-- codebase-structure → **app-reference-\<kind\>**, **lang-reference-\<language\>** when matching installed skills exist
+- codebase-structure → base, codebase-structure-review, **app-reference-\<kind\>**, **lang-reference-\<language\>** when matching installed skills exist
+- codebase-structure-review → base
+- codebase-structure-refactor → base, codebase-structure-review; codebase-structure when the target is undecided; **lang-reference-sql** when SQL changes
 
 **app-reference**
 - backend → **lang-reference-rust** when Rust is selected

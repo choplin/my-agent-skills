@@ -1,8 +1,8 @@
 # Structure review
 
-Use this after proposing boundaries and before concluding a design or structural
-review. Review observable dependency and ownership relationships, not just the
-directory tree.
+Use this before concluding a review of proposed boundaries or an implemented
+structure. Review observable dependency and ownership relationships, not just
+the directory tree.
 
 ## Falsify with representative changes
 
@@ -20,9 +20,9 @@ tests, adapters, and composition code would have to change.
 - Change the lifecycle or sharing policy of a connection, process, filesystem
   handle, or similar resource.
 
-Revise the structure when a scenario forces an unrelated consumer or concern to
-change. Do not optimize for hypothetical replaceability without a representative
-change driver.
+Recommend a revision when a scenario forces an unrelated consumer or concern
+to change. Do not optimize for hypothetical replaceability without a
+representative change driver.
 
 ## Check boundary closure
 
@@ -40,6 +40,19 @@ Inspect the complete public surface of each selected boundary:
   or test-control reason; none exists only to mirror a use-case directory.
 
 Source placement alone is not evidence of encapsulation.
+
+## Check integration direction when applicable
+
+When an external integration combines external-system-native knowledge,
+application-specific projection, and coordinated persistence, read the
+`codebase-structure-base` skill's `references/integration-boundaries.md`.
+
+Confirm that the use-case owner invokes the external capability and controls
+coupled writes, transaction scope, and its observable result. Treat a
+connection, repository, or sink passed into an external adapter as evidence to
+inspect, not an automatic violation. Revise the direction when persistence or
+atomicity ownership follows technology-hiding convenience rather than the use
+case.
 
 ## Check static structural legibility
 

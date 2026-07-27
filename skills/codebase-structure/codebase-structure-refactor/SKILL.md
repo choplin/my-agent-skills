@@ -5,9 +5,10 @@ description: Safely refactor an initial or AI-generated implementation toward th
 
 # Codebase Structure Refactor
 
-Use `$codebase-structure` as the target design. This skill defines the safe migration
-process: preserve external behavior while moving existing code toward clear
-concept, type, ownership, module, and layer boundaries.
+Use `$codebase-structure` first when the target design is not yet decided. This
+skill defines the safe migration process once the target is clear: preserve
+external behavior while moving existing code toward explicit concept, use-case,
+ownership, capability, consistency, resource, and representation boundaries.
 
 Do not combine feature work, schema migrations, or UX changes with this
 refactor: doing so makes a behavior regression impossible to attribute to either
@@ -22,8 +23,10 @@ State the behavior to preserve and explicitly list excluded changes. Inspect
 repository instructions, the current diff, public entry points, build/test
 commands, schema metadata, and generated SQL artifacts before editing.
 
-Read `$codebase-structure`, then use its concept-model template to inventory the
-relevant concepts. Read [the contract and invariant checklist](references/contract-invariant-checklist.md)
+Load `codebase-structure-base`, read its
+`references/reviewability-goal.md`, `references/concept-model-template.md`, and
+`references/boundary-forces.md`, then inventory the relevant concepts. Read
+[the contract and invariant checklist](references/contract-invariant-checklist.md)
 before choosing extraction order.
 
 ### 2. Model the current code against the target style
@@ -51,8 +54,13 @@ procedural blob.
 
 ### 4. Protect persistence and atomicity
 
-For changes that touch storage, follow `$codebase-structure`'s external-adapter
-boundary and apply `lang-reference-sql` for SQL query style when SQL changes.
+For changes that touch storage, follow the target design's external
+representation and consistency boundaries. Apply `lang-reference-sql` for SQL
+query style when SQL changes.
+
+When an external integration combines native discovery or identity,
+application-specific projection, and coordinated persistence, read the
+`codebase-structure-base` skill's `references/integration-boundaries.md`.
 
 Put every write necessary to preserve one invariant in the same transaction.
 Review failure paths so a failed operation cannot leave an observable
@@ -61,7 +69,8 @@ artifacts in the same change when the project uses them.
 
 ### 5. Review by failure mode, then verify
 
-Independently inspect the final change for:
+Use `$codebase-structure-review` to inspect the final structure. Also verify the
+refactor-specific failure modes:
 
 - ownership or module boundaries that remain procedural or ambiguous;
 - dependencies from concept code outward into coordination, persistence, or transport;

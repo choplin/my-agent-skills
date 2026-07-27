@@ -1,4 +1,4 @@
 interface:
   display_name: "Codebase Structure"
-  short_description: "Design traceable boundaries from concepts and use cases"
-  default_prompt: "Use $codebase-structure to design legible, traceable boundaries from this codebase's concepts and use cases."
+  short_description: "Design target boundaries from concepts and use cases"
+  default_prompt: "Use $codebase-structure to design a legible target structure from this codebase's concepts and use cases."

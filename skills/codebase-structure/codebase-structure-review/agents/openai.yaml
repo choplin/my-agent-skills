@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codebase Structure Review"
+  short_description: "Review ownership, boundaries, and change propagation"
+  default_prompt: "Use $codebase-structure-review to evaluate this codebase structure without changing it."
