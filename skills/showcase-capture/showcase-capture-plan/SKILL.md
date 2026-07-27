@@ -54,5 +54,6 @@ When a still explicitly requires annotations, a comparison layout, compositing, 
 | --- | --- |
 | Quick local edit performed by a person in CleanShot X on macOS | `showcase-cleanshot-annotate` |
 | Reusable layers, comparison layout, shared review, or AI-human iteration in Figma | `showcase-figma-annotate` |
+| Local, agent-writable layers in a repository-adjacent `.pen` artifact | `showcase-pen-annotate` |
 
 Route the clean captured source and exact edit specification to the selected skill. Do not invent a generic finishing handoff or add annotation to an ordinary screenshot. Treat a preventable secret, personal detail, notification, or wrong product state as a re-capture requirement rather than a redaction task.

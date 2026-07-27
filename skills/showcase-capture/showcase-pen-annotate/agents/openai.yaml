@@ -1,0 +1,4 @@
+interface:
+  display_name: "Showcase Pen Annotate"
+  short_description: "Annotate showcase screenshots in a local .pen file."
+  default_prompt: "Use $showcase-pen-annotate to annotate this screenshot in pen.dev and return the verified export."
