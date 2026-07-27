@@ -69,5 +69,7 @@ description: Use this skill when writing, reviewing, debugging, or refactoring R
 - Use `thiserror` for specific, inspectable library and domain errors. Use
   `anyhow` for contextual error reporting at application boundaries.
 - Use `clap` for command-line argument parsing.
+- Use `indicatif` for CLI progress bars and spinners.
+- Use `ratatui` for CLI decoration and TUI interfaces.
 - Use `log` as the lightweight logging facade. Let the executable choose and
   initialize the concrete logger implementation.
