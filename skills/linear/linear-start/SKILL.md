@@ -1,6 +1,6 @@
 ---
 name: linear-start
-description: Start or resume work on a Linear issue for the current repository. List all Repo-label issues in In Progress, Todo, or Backlog, including issues outside a Project; let the user choose; present the selected issue's full contents before taking action; autonomously prepare or recover the appropriate workspace; and hand off to an execution skill. An In Progress pick resumes its existing workspace, reconstructs completed work, and continues the execution mode already in flight. After the picked issue reaches Done, optionally suggest opening a PR for completed implementation work, report its Project status when applicable, and suggest related work to continue with. Use when the user wants to pick up new or half-finished Linear work for the repo. Triggers include "start a Linear issue", "pick an issue to work on", and "resume an in-progress issue". Do not use for creating or grooming issues (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
+description: Start or resume work on a Linear issue for the current repository. List all Repo-label issues in In Progress, Todo, or Backlog, including issues outside a Project; let the user choose; present the selected issue's title and a short summary before taking action; autonomously prepare or recover the appropriate workspace; and hand off to an execution skill. An In Progress pick resumes its existing workspace, reconstructs completed work, and continues the execution mode already in flight. After the picked issue reaches Done, optionally suggest opening a PR for completed implementation work, report its Project status when applicable, and suggest related work to continue with. Use when the user wants to pick up new or half-finished Linear work for the repo. Triggers include "start a Linear issue", "pick an issue to work on", and "resume an in-progress issue". Do not use for creating or grooming issues (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
 user-invocable: true
 ---
 
@@ -38,16 +38,14 @@ The pick decides the mode for the rest of the flow: an issue from section 2 is a
 
 ### 3. Read and present the selected issue
 
-Fetch the selected issue's detailed record. The **first user-facing response after this read** must present the issue itself, before changing its state, setting up or recovering a workspace, analyzing the repository, or handing off to another skill.
+Fetch the selected issue's detailed record (needed for later steps). The **first user-facing response after this read** must confirm the pick to the user, before changing its state, setting up or recovering a workspace, analyzing the repository, or handing off to another skill.
 
-Show:
+Show only:
 
 - identifier and title
-- Status, Priority, Type, Project, and Milestone (when present)
-- the complete description, preserving its headings, lists, checkboxes, acceptance criteria, and constraints; if it has no description, say so explicitly
-- parent/sub-issue and blocking/blocked relations when present
+- a short summary of what the issue asks for (a few sentences); if it has no description, say so explicitly
 
-Do not replace the description with a summary and do not merely say that the issue was read. Only after presenting it may the flow continue.
+Do not dump the full description, metadata fields, or relations into this confirmation. Keep the full record for workspace choice, grooming checks, and hand-off. Only after presenting the title and summary may the flow continue.
 
 Backlog picks are allowed — but after presenting a chosen Backlog issue, check whether it is self-complete (see `linear-base`'s authoring standard). If it is not, flag that it may need grooming first and offer to groom it via `linear-base` before starting.
 
