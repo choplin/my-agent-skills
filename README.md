@@ -88,7 +88,8 @@ scripts/install-opts.sh --dry-run     # preview
 |-------|--------|
 | `code-review-session` | import-ai, import-pr, import-ci, run-checks, resolve, reply-pr, report, base (the record of one code review: a review.md list of items fed by ingestion sources — AI review / PR / CI / local checks / direct — and worked to resolution) |
 | `artifact-review-toolkit` | quick, adversarial (how a work artifact is reviewed: a one-off review redirected to the host's reviewer, or a lens-selected adversarial pass with independent reviewers; called by code-review-session and orchestration-toolkit) |
-| `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, quick, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
+| `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
+| `design-note` | design-note (write down a problem and the approach taken to it as one durable llm-wiki note — lighter than a PRD, shallower than a design doc) |
 | `exec-plan` | exec-plan, exec-plan-base (ad-hoc autonomous run with no tracker issue behind it; decision log + parking lot) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
 | `planning-toolkit` | plan, resolve, mvp, base (turn an established direction into a finite outcome and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; `mvp` is a scope policy, not a phase — the smallest-build-that-teaches standard the cut is judged against) |
@@ -118,17 +119,19 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **Cross-group hubs** (one skill that many groups delegate to):
 
-- `discuss-toolkit-dig` ← grill-me, inception (+framing/deepen), inception-quick, exec-plan, code-review-session-resolve
+- `discuss-toolkit-dig` ← grill-me, inception (+framing/deepen), design-note, exec-plan, code-review-session-resolve
 - `linear-base` ← orchestration-toolkit (execute, orchestrate), planning-toolkit, inception-finalize
 - `artifact-review-toolkit` (quick, adversarial) ← code-review-session (import-ai), orchestration-toolkit (execute, orchestrate)
 
 **inception**
 - inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**
-- inception-quick → inception, **discuss-toolkit-dig**, **linear-start**
 - inception-finalize → llm-wiki-base `(ext)`, **linear-base**, **linear-start**
 - inception-framing → **discuss-toolkit-dig**
 - inception-deepen → **discuss-toolkit-dig**
 - inception-converge → finalize
+
+**design-note**
+- design-note → llm-wiki-base `(ext)`, **discuss-toolkit-dig**, **planning-toolkit-plan**
 
 **exec-plan**
 - exec-plan → base, **discuss-toolkit-dig**

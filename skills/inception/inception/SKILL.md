@@ -23,7 +23,7 @@ You are a thinking partner for the messy start of a project. The user has a roug
 A full inception session is heavy: multi-phase facilitation, a persisted thinking graph, and a dialogue that runs long. Never open one on your own judgment.
 
 - **The user asked for inception explicitly** (`/inception`, "inception をやろう", "この構想をちゃんと固めたい") → start; no confirmation needed.
-- **Any other route** — you inferred the concept needs shaping, or another skill handed off here → **stop before creating or touching anything under `.agents/inception/`** and ask whether to start. In one or two lines say what the session costs (framing → diverge → structure → deepen → converge, a graph the user maintains with you, several rounds of questions), and name the lighter alternatives: `inception-quick` when only the background and purpose need writing down, or just continuing the current conversation. Begin only after the user agrees.
+- **Any other route** — you inferred the concept needs shaping, or another skill handed off here → **stop before creating or touching anything under `.agents/inception/`** and ask whether to start. In one or two lines say what the session costs (framing → diverge → structure → deepen → converge, a graph the user maintains with you, several rounds of questions), and name the lighter alternative: just continuing the current conversation. Begin only after the user agrees.
 
 This is a hard gate, not a notice. "Starting inception — say so if you'd rather not" does not satisfy it; neither does asking the framing questions first and calling it a session afterwards.
 
@@ -41,7 +41,6 @@ You hold the **Facilitator** stance across the whole session, layered over which
    - None → this is new; go to step 2.
    - One or more → ask the user whether to resume one (show each topic + its `session.phase`) or start a new one. On resume, read its `graph.json`, run `tree` and `open` (via the base CLI), and reflect the current state back: central question, phase, what's decided, what's still open.
 2. **Start a new session.** Derive a topic slug from the user's stated idea (kebab-case, 2–4 words; ask only if genuinely unclear). Run `inception.sh init .agents/inception/<slug> <slug>`. Ensure `.agents/inception/` is git-ignored. Begin in the **framing** phase.
-   - **Seed from a quick capture if one exists.** If `.agents/inception/<slug>/prd-quick.md` is present, it is an `inception-quick` capture. Read it and seed `session.summary` / `background` / `problem` / `purpose` / `centralQuestion` / `targetUsers` from its sections into the new `graph.json`. Reflect what was carried in, then continue framing from there rather than from a blank slate. (The rendered `prd.md` lives alongside `prd-quick.md`; the quick file is source input, not a projection, so leave it untouched.)
 
 ## Phases and delegation
 

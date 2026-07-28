@@ -112,4 +112,4 @@ Phases are not strictly linear — deepening often spawns new divergence. Loop a
 
 ### Terminal exit: 確定 Finalize — `inception-finalize`
 
-After converge confirms the footing is done-enough, the session leaves the graph. **Finalize is not a sixth phase** — the five phases shape thinking inside the transient graph; finalize moves the result out to durable memory (one consolidated PRD in the llm-wiki knowledge base), hands concrete actions to a tracker, and retires the graph. It is one-way: reopening means a fresh session or editing the wiki note, not re-rendering the old graph. `inception-quick` also ends here, to keep its `prd-quick.md`.
+After converge confirms the footing is done-enough, the session leaves the graph. **Finalize is not a sixth phase** — the five phases shape thinking inside the transient graph; finalize moves the result out to durable memory (one consolidated PRD in the llm-wiki knowledge base), hands concrete actions to a tracker, and retires the graph. It is one-way: reopening means a fresh session or editing the wiki note, not re-rendering the old graph.

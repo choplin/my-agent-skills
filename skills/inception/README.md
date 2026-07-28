@@ -20,7 +20,6 @@ Each phase is a different AI stance over the same graph. The orchestrator estima
 | Skill | Role |
 |-------|------|
 | `inception` | Orchestrator — owns the graph, estimates the phase, delegates to phase skills (the entry point) |
-| `inception-quick` | Lightweight route — capture just the background and purpose into a short `prd-quick.md`, no graph, no full session |
 | `inception-base` | Shared model: graph JSON schema, the shell+jq CLI, the phase model, the dig-elicitation rule |
 | `inception-framing` | 構想 — Socratic; find the real problem before solutions |
 | `inception-diverge` | 発散 — widen ideas and perspectives, no judging |
@@ -33,9 +32,8 @@ Each phase is a different AI stance over the same graph. The orchestrator estima
 
 Stored under `.agents/inception/<topic-slug>/` (transient, not committed):
 
-- `graph.json` — the single source of truth (full `inception` only)
+- `graph.json` — the single source of truth
 - `prd.md` / `decisions.md` / `action-items.md` / `open-questions.md` — projections (regenerated; do not hand-edit)
-- `prd-quick.md` — the `inception-quick` route's hand-written capture (separate from the rendered `prd.md`, so neither clobbers the other)
 
 Everything above is transient. The **durable** artifact is produced only at the end by `inception-finalize`: one consolidated PRD written to the llm-wiki knowledge base (one note in the repo scope, tagged `prd`), with the decisions' rejected alternatives preserved. After finalize, the wiki PRD is authoritative and the `.agents/` graph is spent.
 
@@ -55,7 +53,6 @@ finalize <graph.json>
 
 - **Decisions are first-class.** Closing a question on a choice creates a `Decision` node with rejected alternatives + rationale — the durable artifact that prevents re-litigation.
 - **Elicit via dig.** All drawing-out of the user's thinking goes through `discuss-toolkit-dig`; never fill gaps with the AI's assumptions.
-- **A full session starts only when asked.** `inception` is heavy, so the agent never opens one on its own judgment: an explicit user request starts it directly, while an inferred need or a handoff from another skill must first state the cost and get a go-ahead (offering `inception-quick` or plain conversation instead).
-- **Two routes.** Full `inception` shapes an idea through the whole phased session and the thinking graph. `inception-quick` skips all of that to capture just the background and purpose into a short `prd-quick.md` — use it when the idea does not need shaping, only recording. The two use separate files so neither clobbers the other, and the upgrade is lossless: starting full `inception` on a slug that already has a `prd-quick.md` seeds the graph from it before rendering.
-- **Finalize is the one-way exit.** Both routes end at `inception-finalize`: the working artifacts stay transient in `.agents/`, and only the consolidated PRD is confirmed into the llm-wiki knowledge base (via `llm-wiki-base`, no directory scheme of its own). Concrete actions leave for Linear (or are handed off as-is); the live open-questions queue is a snapshot and is discarded. After finalize the wiki PRD is the source of truth — reopen by starting a fresh session or editing the note, not by re-rendering the retired graph.
+- **A full session starts only when asked.** `inception` is heavy, so the agent never opens one on its own judgment: an explicit user request starts it directly, while an inferred need or a handoff from another skill must first state the cost and get a go-ahead (offering plain conversation instead).
+- **Finalize is the one-way exit.** A session ends at `inception-finalize`: the working artifacts stay transient in `.agents/`, and only the consolidated PRD is confirmed into the llm-wiki knowledge base (via `llm-wiki-base`, no directory scheme of its own). Concrete actions leave for Linear (or are handed off as-is); the live open-questions queue is a snapshot and is discarded. After finalize the wiki PRD is the source of truth — reopen by starting a fresh session or editing the note, not by re-rendering the retired graph.
 - **Relationship to neighbors.** Earlier than the execution skills (which begin once the work unit is defined and groomed); broader than `discuss-toolkit-dig` (which clarifies one intent without lasting artifacts). Shares its durable store with the `llm-wiki` family (finalize writes a `prd`-tagged note into the same knowledge base).
