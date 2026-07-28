@@ -1,22 +1,6 @@
 ---
 title: "Adversarial Verification — Design Principle"
 date: 2026-07-10
-type: principle
-status: accepted
-tags:
-  - adversarial-verification
-  - agent-skills
-  - quality-assurance
-  - loop-engineering
-  - design-rationale
-summary: >
-  When building anything with LLM agents — an answer, a skill document, an
-  automated improvement loop — deliberately engineer an independent adversary
-  or verifier into the system rather than relying on self-critique. The value
-  comes from the generation/verification asymmetry, but only when the verifier
-  is decorrelated, independent, and its signal verifiable; a weak or correlated
-  verifier is worse than none. Concrete skills are named only in the final
-  section so the principle survives renames.
 ---
 
 # Adversarial Verification — Design Principle

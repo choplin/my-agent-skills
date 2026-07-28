@@ -1,17 +1,6 @@
 ---
 title: "dev-workflow Hooks Design — SessionStart injection & Stop gate"
 date: 2026-06-22
-status: accepted
-type: design-note
-tags:
-  - dev-workflow
-  - hooks
-  - loop-engineering
-summary: >
-  Concrete "What" for Story #2 (workflow-hooks): a SessionStart hook that
-  injects active work-unit state, and a Stop hook that gates on missing
-  self-review. Only the What is decidable up front; behavior is verified by
-  running the hook scripts (the harness contract is discovered empirically).
 ---
 
 # dev-workflow Hooks Design

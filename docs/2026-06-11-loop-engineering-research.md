@@ -1,19 +1,6 @@
 ---
 title: "Loop Engineering vs Spec-Driven Development — Research & dev-workflow Improvement Proposal"
 date: 2026-06-11
-status: accepted
-type: research-note
-tags:
-  - dev-workflow
-  - loop-engineering
-  - spec-driven
-  - agent-harness
-  - research
-summary: >
-  Review of the dev-workflow plugin, a multi-source investigation of recent
-  AI coding-agent practices (especially "loop engineering"), the relationship
-  between spec-driven development and loop engineering, and the agreed v1
-  improvement roadmap.
 ---
 
 # Research Notes: dev-workflow Improvement — Loop Engineering vs Spec-Driven

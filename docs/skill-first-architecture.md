@@ -1,12 +1,6 @@
 ---
 title: "Skill-First Distribution Architecture"
 date: 2026-06-22
-type: decision
-status: in-progress
-tags:
-  - architecture
-  - agent-skills
-  - distribution
 ---
 
 # Skill-First Distribution Architecture

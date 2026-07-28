@@ -1,13 +1,6 @@
 ---
 title: "Skill Runtime & Dependency Policy"
 date: 2026-07-08
-type: decision
-status: active
-tags:
-  - architecture
-  - agent-skills
-  - runtime
-  - dependencies
 ---
 
 # Skill Runtime & Dependency Policy

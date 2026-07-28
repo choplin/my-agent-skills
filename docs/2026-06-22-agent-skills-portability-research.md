@@ -1,14 +1,6 @@
 ---
 title: "Agent Skills Cross-Agent Portability and Shared Resources — Research Report"
 date: 2026-06-22
-type: research
-status: completed
-tags:
-  - agent-skills
-  - vercel-labs-skills
-  - claude-code
-  - portability
-  - shared-resources
 ---
 
 # Research Report: Agent Skills Cross-Agent Portability and Shared Resources
