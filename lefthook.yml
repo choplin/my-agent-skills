@@ -1,5 +1,7 @@
 pre-commit:
   commands:
+    # Validates only the skills the staged files belong to; CI runs the whole
+    # set (`make validate-skills`) so nothing escapes a full check.
     validate-skills:
       glob: "skills/**"
-      run: make validate-skills
+      run: scripts/validate-skills.sh {staged_files}
