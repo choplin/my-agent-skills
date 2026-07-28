@@ -69,7 +69,23 @@ description: Use this skill when writing, reviewing, debugging, or refactoring R
 - Use `thiserror` for specific, inspectable library and domain errors. Use
   `anyhow` for contextual error reporting at application boundaries.
 - Use `clap` for command-line argument parsing.
-- Use `indicatif` for CLI progress bars and spinners.
-- Use `ratatui` for CLI decoration and TUI interfaces.
+- Prefer a non-interactive CLI (flags and stdout/log) when the flow can be fully
+  specified up front. Use `indicatif` for progress bars or spinners in that mode.
+  For richer non-interactive styling (colors, borders, layout, tables), use
+  `lipgloss` (whit3rabbit/lipgloss-rs; `lipgloss-extras` when lists/tables/trees
+  are needed) as a provisional stand-in until an in-house styling layer replaces
+  it. Do not treat Charm ports (`charmed_*`, bubbletea-rs) as the default stack.
+- Use `cliclack` for prompt-driven interactive CLIs (input, select, confirm,
+  intro/outro wizards) and for progress within those flows. Prefer it over
+  dialoguer when the UX should be opinionated and Clack-style. Its `Theme` and
+  `log` cover Clack-session chrome only — not a general lipgloss-like styling
+  foundation for arbitrary non-interactive output.
+- Use `ratatui` for full-screen TUI apps (layouts, widgets, event loops). Do not
+  use it for line-oriented prompts, progress, or non-interactive rich output —
+  those belong to `cliclack`, `indicatif`, or `lipgloss`. Rich showcase looks are
+  usually app-local themes on ratatui's built-in `Style` / `Color` / `Block` /
+  `symbols` and widgets; reach for `tachyonfx` when shader-like effects are
+  needed. There is no Charm/lipgloss-style shared styling layer in the mainstream
+  ratatui ecosystem.
 - Use `log` as the lightweight logging facade. Let the executable choose and
   initialize the concrete logger implementation.
