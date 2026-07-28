@@ -10,8 +10,10 @@ description: >-
   "tidy up this doc set", "ドキュメントを整理して", "重複したドキュメントをまとめて".
   Should NOT trigger for improving one document's writing (use
   document-toolkit-review), for verifying claims (use
-  document-toolkit-fact-check), or for producing a new short summary of a
-  document while leaving the original in place — that is writing, not distilling.
+  document-toolkit-fact-check), for stripping still-correct but no-longer-needed
+  content out of documents that all stay (use document-toolkit-trim), or for
+  producing a new short summary of a document while leaving the original in
+  place — that is writing, not distilling.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 user-invocable: true
 ---
@@ -25,6 +27,13 @@ whenever it is judged useful; there is no schedule and no maturity ladder.
 
 This skill assumes nothing about the set's format: no index, no frontmatter
 contract, no link convention. Everything it needs, it reads from the documents.
+
+**The unit is the document.** Distill changes which documents exist and brings
+their content back in line with what is true now. Content that is still true but
+no longer needed — the route to a settled decision, a migration that completed,
+background the reader has since learned — is not distill's to remove: that is
+`document-toolkit-trim`, and whether it goes is the set owner's policy rather
+than a judgment made here.
 
 ## What you are given, what you decide
 
@@ -91,10 +100,14 @@ rg -l '<recurring term>' <set>             # documents circling the same topic
 ### refresh — bring a document back up to date
 
 1. Reread it against what is known now — the code, the decisions, the rest of
-   the set — and correct, tighten, or confirm it unchanged.
-2. Confirming it unchanged is a real result. Say so; do not edit for the sake of
+   the set — and correct it, or confirm it unchanged.
+2. Correcting includes deleting: a passage that is now plainly wrong and has
+   nothing to be corrected *to* goes. What is still true stays, however dated it
+   reads — dropping that is a policy call, not a correction (see the unit note
+   above).
+3. Confirming it unchanged is a real result. Say so; do not edit for the sake of
    showing work.
-3. A document found inaccurate or superseded is not refreshed — retire it.
+4. A document found inaccurate or superseded is not refreshed — retire it.
 
 ### split — break up a document carrying several ideas
 
