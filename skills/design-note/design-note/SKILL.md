@@ -27,8 +27,8 @@ Most conversations that arrive here have already done the thinking — a discuss
 
 **One note in the llm-wiki knowledge base.** Nothing else — no file under `.agents/`, no working copy, no second step to make it durable.
 
-- **Location** — the current repo's scope directory in the llm-wiki notebook, resolved by `llm-wiki-base`.
-- **Title** — `Design Note - <concise title>`, written **in the same language as the body** (below), so the note does not read as two documents stitched together. What that title becomes as a filename, and how links resolve to it, is `llm-wiki-base`'s business — not this skill's.
+- **Location** — the current repo's scope directory in the llm-wiki notebook, resolved by `llm-wiki-capture`.
+- **Title** — `Design Note - <concise title>`, written **in the same language as the body** (below), so the note does not read as two documents stitched together. What that title becomes as a filename, and how links resolve to it, is llm-wiki's business — not this skill's.
 - **Tag** — `design-note`.
 - **Body language** — **the language the session is being conducted in.** The note is read by the person who wrote it, so match the conversation rather than translating out of it. Whatever the language, keep the discipline: short sentences, concrete nouns, no rhetorical flourish. Technical terms, proper nouns, and code identifiers stay in their original form.
 
@@ -71,18 +71,26 @@ A section that cannot be filled from what the user actually said reads `TODO` �
 
 **Why the reasoning lives inside Approach, not in its own section.** Constraints and rejected alternatives only mean anything as the justification for the choice. Split into separate sections they become a checklist to fill in, which is exactly the PRD-shaped ceremony this note exists to avoid.
 
+## Prerequisite — llm-wiki skills installed
+
+This skill does not write to the knowledge base itself — it delegates to **`llm-wiki-capture`, referenced by skill name**. The skills CLI installs into a flat namespace, so there is no dependency declaration; the llm-wiki skill family being installed is simply assumed. If that skill cannot be loaded, or its write fails, **stop and tell the user**, then ask where to write instead. Do not silently drop the note.
+
 ## How to run it
 
 1. **Take stock of what the conversation already established.** Read back over the discussion and list which sections you can already fill from the user's own words. Only what is genuinely missing goes into elicitation — do not re-ask what was already settled.
 2. **Draw out the gaps.** Delegate elicitation to `discuss-toolkit-dig` (subject: the problem and the approach to it). Keep it to the gaps. Two guardrails while eliciting:
    - **The approach needs its reasoning.** If the user names an approach without saying why it beats the alternatives, ask. The conclusion alone is what makes a note un-reusable six months later.
    - **The problem must survive the approach.** If the stated problem is only "the approach isn't in place yet", it is a solution in disguise — pull back and ask what actually breaks today.
-3. **Resolve the notebook.** Read `llm-wiki-base` and run its Setup (mandatory, idempotent) and scope resolution to get `$wiki` and `$scope` (the current repo's scope directory, resolved via git). Outside a repo, propose a concern name and confirm it, per the base. This skill adds no directory scheme of its own.
-   - If `llm-wiki-base` cannot be loaded, or `zk` is not on PATH, **stop and tell the user**, then ask where to write instead. Do not silently drop the note.
-4. **Check for an existing note on the same topic.** Reach the scope's `design-note`-tagged notes through the base's `scan` verb and look for one covering the same ground. If one exists, show it and ask whether to update it or write a new one. Never clobber.
-5. **Write the note.** Create it through the base's **`new` verb** — not `capture` (this is not a fleeting drop) and not `distill` (nothing is being promoted) — under the title above, tagged `design-note`. Everything else about the write (frontmatter, reindexing, the form links take) belongs to `llm-wiki-base`: follow it, and add nothing to it here.
-   - **Compose the body with `Write` into a temp file and feed that file to the verb**, rather than inlining the body into the command. A note body carries newlines, quotes, and backticks, and inlining it is where the write breaks. Delete the temp file afterwards; it is not an artifact.
-6. **Self-check, then close.** Validate against the section bars above before showing anything — in particular that **Background** is permanent context, **Problem** is falsifiable, **Goals** read as states rather than tasks, and **Approach** carries its reasoning. Then show the user the note and name the path onward: when the approach should become schedulable work, `planning-toolkit-plan` reads design notes from the wiki and cuts them into an outcome, milestones, and issues.
+3. **Write the note to llm-wiki.** Delegate the write to `llm-wiki-capture` and hand it three things:
+
+   - the **body** — the sections above, in the session's language;
+   - the **title** — `Design Note - <concise title>`, in the same language as the body;
+   - the **tag** — `design-note`.
+
+   Everything else about the note — which scope it lands in, its filename, its frontmatter, how it links to related notes and gets indexed — is llm-wiki's domain. Follow that skill and prescribe none of it here; this skill adds no scheme of its own and never reaches into the knowledge base directly.
+
+   - **Never clobber.** Capture resolves duplicates on its own; override that here. If a `design-note`-tagged note already covers the same ground, show it and ask whether to update it or write a new one alongside — do not let it be silently extended or replaced.
+4. **Self-check, then close.** Validate against the section bars above before showing anything — in particular that **Background** is permanent context, **Problem** is falsifiable, **Goals** read as states rather than tasks, and **Approach** carries its reasoning. Then show the user the note and name the path onward: when the approach should become schedulable work, `planning-toolkit-plan` reads design notes from the wiki and cuts them into an outcome, milestones, and issues.
 
 ## Where this stops
 
