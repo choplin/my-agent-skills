@@ -50,7 +50,7 @@ to a commit already pushed.
 ## Where the record lives (`review_dir`)
 
 - **Standalone** (default): `.agents/code-review-session/{yyyy-mm-dd}-{branch}/review.md`
-  (agent-agnostic, transient — `.gitignore` it unless you want it committed).
+  (agent-agnostic, transient).
 - **Workflow-driven**: the caller injects `review_dir`, pointing at its own working
   directory for that unit of work.
 

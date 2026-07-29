@@ -55,7 +55,7 @@ Locate the session under `.agents/inception/<topic-slug>/` (Glob if the slug is 
      groomed Issue to its execution skill. Do not start implementing from inside
      finalize.
    - Or hand the list off as-is. Actions do not stay in the PRD; the PRD records direction, not the to-do list.
-4. **Retire the transient layer.** State plainly: the live open-questions queue is a point-in-time snapshot and is **not** persisted; the wiki PRD is now the authoritative footing and the `.agents/inception/` graph is a spent working note. Leave the `.agents/` files in place (they are gitignored and harmless); delete them only if the user asks.
+4. **Retire the transient layer.** State plainly: the live open-questions queue is a point-in-time snapshot and is **not** persisted; the wiki PRD is now the authoritative footing and the `.agents/inception/` graph is a spent working note. Leave the `.agents/` files in place; delete them only if the user asks.
 
 ## Self-check before declaring done
 

@@ -37,7 +37,7 @@ Everything the user thinks lands in **one thinking graph** (`graph.json`). The P
 └── open-questions.md  # projection: open discussion nodes by nextMove + deferred
 ```
 
-`.agents/inception/` holds transient working notes that should stay out of the committed tree. If it is not already git-ignored, add it to `.gitignore` when running `init`.
+`.agents/inception/` holds transient working notes.
 
 Everything under `.agents/inception/` is transient. The **durable** output is written only at the end, by `inception-finalize`: one consolidated PRD persisted to the llm-wiki knowledge base. After that, the wiki PRD is authoritative and the graph here is a spent working note (see the phase model's terminal exit below).
 

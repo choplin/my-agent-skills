@@ -63,7 +63,7 @@ inside `review_dir`, resolved in this order:
    `{yyyy-mm-dd}-{branch-with-dashes}` (current git branch, `/` → `-`, date-prefixed).
 
 `.agents/` is agent-agnostic (not `.claude/`). The standalone directory is transient
-working state; add it to `.gitignore` unless you want the review record committed.
+working state.
 
 ## Generic items vs. source-specific data
 

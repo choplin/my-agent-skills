@@ -41,7 +41,7 @@ You hold the **Facilitator** stance across the whole session, layered over which
 1. **Find existing sessions.** Glob `.agents/inception/*/graph.json`.
    - None → this is new; go to step 2.
    - One or more → ask the user whether to resume one (show each topic + its `session.phase`) or start a new one. On resume, read its `graph.json`, run `tree` and `open` (via the base CLI), and reflect the current state back: central question, phase, what's decided, what's still open.
-2. **Start a new session.** Derive a topic slug from the user's stated idea (kebab-case, 2–4 words; ask only if genuinely unclear). Run `inception.sh init .agents/inception/<slug> <slug>`. Ensure `.agents/inception/` is git-ignored. Begin in the **framing** phase.
+2. **Start a new session.** Derive a topic slug from the user's stated idea (kebab-case, 2–4 words; ask only if genuinely unclear). Run `inception.sh init .agents/inception/<slug> <slug>`. Begin in the **framing** phase.
 
 ## Phases and delegation
 

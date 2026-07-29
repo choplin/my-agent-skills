@@ -37,9 +37,8 @@ written:
 
 ## Location
 
-Persist at `.agents/exec-plans/{yyyy-mm-dd}-{slug}.md`. Ensure `.agents/` is
-git-ignored (add it if missing). The file lives on disk across sessions even
-though it isn't committed, which is what allows later sessions to reference it.
+Persist at `.agents/exec-plans/{yyyy-mm-dd}-{slug}.md`. The file lives on disk
+across sessions, which is what allows later sessions to reference it.
 
 ## Plan file template
 
