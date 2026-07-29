@@ -43,16 +43,21 @@ Without success criteria for the *deliverable*, an agent completes every step, a
 - **Each criterion must be binary, observable, and specific:** answerable Yes/No (not "mostly"), verifiable by reading the output (no external test required), and unambiguous (two people would agree on the answer).
 - **Add validation loops** where it helps: do the work → run a validator (script, reference checklist, or self-check) → fix → repeat until it passes. See `instruction-patterns.md`.
 
-## B4. Write a triggering description
+## B4. Write the description to its role
 
-The `description` decides whether the skill activates at the right time. Too broad → "always available, never used."
+A `description` does one of two jobs, and which one is a recorded fact rather
+than a judgement made while writing. Score it against the job it has.
 
-- **Intent-based, not keyword-based.** Describe the problem the user is solving, not bare keywords. "Triggers on 'code review'" misfires on "review this code *tutorial*."
-- **Add exclusions when the trigger is ambiguous** ("Should NOT trigger for …"). If the trigger is already specific, exclusions are just noise.
-- Set invocation flags from the user's workflow: `user-invocable` (appears in the slash menu), `disable-model-invocation` (suppress auto-activation).
+- **When the description is a trigger**, it decides whether the skill activates at the right time. Too broad → "always available, never used."
+  - **Intent-based, not keyword-based.** Describe the problem the user is solving, not bare keywords. "Triggers on 'code review'" misfires on "review this code *tutorial*."
+  - **Written in the positive.** The model matches on what is present, not on what has been ruled out. An exclusion earns its characters only after a real mistrigger has been observed — never as a design step.
+- **When the description is documentation**, something else supplies the decision to run the skill: a caller names it, a standing instruction names it, or the user types its name. Trigger phrasings and exclusions buy nothing there and cost listing budget.
+- **Never redirect.** No "use `other-skill` instead", no sibling names. Skills are distributed one at a time, so the neighbour may not be installed. State what this skill does and does not cover, not who covers the rest.
 
 Weak: `description: used when the user mentions "code review"`
-Strong: `description: ...when the user wants to review code changes for quality issues — "review my PR", "check this code for bugs". Should NOT trigger for: reviewing docs, reading code to understand it, or security-specific audits (use security-review).`
+Strong: `description: Reviews code changes for quality issues and returns the findings. Applies when someone asks to review a diff, check code for bugs, or get a read on what was just written.`
+
+The repository-wide policy this scores against is `docs/skill-description.md`.
 
 ## B5. Calibrate control
 
@@ -84,7 +89,7 @@ Run this against the skill (or dispatch `skill-quality-review`):
 - [ ] **Concrete + rationale**: every non-obvious rule has a specific criterion and a "because [real problem]"
 - [ ] **Gotchas present** (if the domain has them) and kept in `SKILL.md`
 - [ ] **Self-evaluable**: deliverable success criteria are binary, observable, specific
-- [ ] **Triggering description**: intent-based, with exclusions where ambiguous
+- [ ] **Description matches its role**: a trigger is intent-based and positive; documentation carries no trigger phrasings; neither names a sibling skill
 - [ ] **Calibrated**: prescriptive where fragile, free where flexible; defaults not menus; procedures not one-off answers
 - [ ] **Context-economical**: lean `SKILL.md`; heavy material in `references/` with explicit load triggers
 - [ ] **Refined**: run against ≥1 real task and revised from the trace (the empirical loop is `skill-quality-optimize`)
