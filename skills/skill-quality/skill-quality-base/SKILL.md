@@ -23,7 +23,7 @@ It holds **two independent domains**, used by different family members, plus one
 precondition that sits under both:
 
 - **Optimization loop** (the run layout, four laws, and `init.sh`/`record.sh`/`gate.sh`) — used by `skill-quality-optimize`, `skill-quality-evaluate`, `skill-quality-improve`.
-- **Content-quality rubric** (`references/content-quality-rubric.md`, `references/anti-patterns.md`, `references/instruction-patterns.md`) — the B1–B6 rubric for judging *what a skill says*. `skill-quality-review` scores against it; `skill-quality-improve` writes edits by it. This is orthogonal to the loop: reviewing text needs no run, no signal, no gate.
+- **Content-quality rubric** (`references/content-quality-rubric.md`, `references/anti-patterns.md`, `references/instruction-patterns.md`, `references/writing-descriptions.md`) — the B1–B6 rubric for judging *what a skill says*. `skill-quality-review` scores against it; `skill-quality-improve` writes edits by it. This is orthogonal to the loop: reviewing text needs no run, no signal, no gate.
 - **B0 loadability preflight** (`scripts/lint-frontmatter.sh`) — mechanical, and it comes before either domain. See below.
 
 References here are addressed in two forms. In both, resolve the path **relative

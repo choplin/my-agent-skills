@@ -96,7 +96,7 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
    cross-skill path reference, and no spec-level dependency resolution, so:
    - Document the dependency in the dependent skill's body, where it can be
      stated as a prerequisite and checked at run time, and in the group README.
-     Not in the `description` — see `skill-description.md`.
+     Not in the `description`.
    - Write a graceful fallback for when the owner skill is absent.
 
 4. **Subagents are opt-in.** Subagent invocation is not portable

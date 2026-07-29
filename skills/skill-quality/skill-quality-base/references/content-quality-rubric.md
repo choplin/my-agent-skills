@@ -57,7 +57,9 @@ than a judgement made while writing. Score it against the job it has.
 Weak: `description: used when the user mentions "code review"`
 Strong: `description: Reviews code changes for quality issues and returns the findings. Applies when someone asks to review a diff, check code for bugs, or get a read on what was just written.`
 
-The repository-wide policy this scores against is `docs/skill-description.md`.
+Read `writing-descriptions.md` before scoring this item or rewriting a
+description: it holds the full guidance behind these bullets, including how to
+settle which job a description has.
 
 ## B5. Calibrate control
 
