@@ -17,6 +17,19 @@ Use these resources as the shared decision model for the `codebase-structure`
 family. Resolve each path relative to this skill's installed directory rather
 than a plugin or repository root.
 
+## Which skill does what
+
+| The work at hand | Skill |
+|---|---|
+| The concepts and boundaries are not decided yet — design a target structure | `codebase-structure` |
+| A structure exists, proposed or implemented, and needs judging without being changed | `codebase-structure-review` |
+| The target is already decided and existing code has to be moved toward it without changing behavior | `codebase-structure-refactor` |
+
+The three compose in either direction: a design is worth reviewing before it is
+implemented, and a refactor is worth reviewing after. Design and refactor both
+apply the language and application conventions for the stack in use; this family
+decides boundaries, not idiom.
+
 ## Objective
 
 Optimize for human reviewability: make it possible to verify an implementation

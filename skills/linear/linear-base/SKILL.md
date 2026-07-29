@@ -20,6 +20,24 @@ This skill defines **how work is structured and managed in this Linear workspace
 
 The MCP field names referenced (`state`, `project`, `milestone`, `parentId`, `blockedBy`/`blocks`/`relatedTo`, `labels`, `priority`) are stable Linear API fields; use whichever Linear MCP server is wired.
 
+## Which skill does what
+
+The conventions below govern every one of these. Reach for a sibling skill when
+the work is one of the repeating loops; otherwise act on the issue directly
+under these conventions.
+
+| The work at hand | Skill |
+|---|---|
+| See what is in flight for the current repository before deciding anything | `linear` |
+| Pick up a Todo or Backlog issue, or resume one already In Progress, and carry it into execution | `linear-start` |
+| Work the Backlog into ready Todo work, issue after issue | `linear-groom` |
+| Pause an unfinished issue so a different session can resume it | `linear-handoff` |
+| Create, comment on, transition, or close a single issue | no separate skill — follow the lifecycle below |
+
+Grooming a single named issue is the same operation `linear-groom` repeats; the
+standard it applies is the authoring standard below, not something the loop
+skill owns.
+
 ## Model mapping
 
 How each Linear primitive is treated here:
@@ -206,13 +224,8 @@ that branch and any optional PR through Linear's Git integration or a manual
 answers "which effort"; the git link answers "which Git artifact". Do not encode
 branches as labels or assume every Issue must produce a PR.
 
-### Initial setup
-
-Create the issue label groups (`isGroup: true`, then members with `parent: <group>` — both supported by the label-create MCP tool):
-
-1. Create the issue **Type** group and its 4 members (`impl` / `design` / `research` / `orchestration`).
-2. Create the issue **Repo** group; add a member per active repository on demand.
-3. Create the **Repo** project-label group in the project-label namespace (mirror the issue Repo group and its members). **This is a manual UI step — the MCP cannot create project labels.** Every Project must carry exactly one Repo label; when a repo's label is missing, ask the user to add it in the UI.
+Creating the label groups themselves is one-time workspace setup: see this
+skill's `references/label-setup.md`.
 
 ## Resolving the current repo's active Project(s)
 
@@ -241,11 +254,3 @@ Keep the work↔issue link in the other direction — on the Linear side or in l
 
 When exporting issue content into a repo (e.g. a spec/plan → `docs/`), carry the content but strip issue IDs/URLs from it.
 
-## Deferred (out of scope for this base skill)
-
-The following are intentionally *not* covered here:
-
-- Linking to `git-helpers` / PR flow. (Where Linear references may and may not appear is already settled above — they stay internal.)
-- Linear ⇄ GitHub native integration setup.
-
-This skill defines the vocabulary and rules those skills build on.

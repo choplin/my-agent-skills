@@ -33,6 +33,19 @@ file from its own root):
 - `` `skill-quality-base` skill (`references/<file>`) `` → read `references/<file>` from this skill.
 - `skill-quality-base/scripts/<name>.sh` → run this skill's script.
 
+## Which skill does what
+
+| The work at hand | Skill |
+|---|---|
+| Judge a skill's text and get findings back, once, with no loop and no gate | `skill-quality-review` |
+| Find out how well a skill actually performs, by running it on real tasks against a mechanical signal | `skill-quality-evaluate` |
+| Improve a skill autonomously until the score plateaus or the budget runs out | `skill-quality-optimize` |
+| Produce one edit step from labeled failure traces, inside a run that is already going | `skill-quality-improve` |
+
+The dividing line is whether a mechanical verification signal exists. With one,
+the loop can run and its score means something. Without one, only the advisory
+read is available — see law 1.
+
 ## The core idea: a skill is an optimizable artifact
 
 Improving a skill from real execution is a training loop. The mapping is exact,
