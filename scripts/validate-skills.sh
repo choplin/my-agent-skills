@@ -9,6 +9,11 @@
 # so a hook can pass staged files straight through. With no paths, every skill
 # in the repository is validated.
 #
+# Output defaults to the validator's compact format — one line per passing
+# skill, plus the errors for each failing one. Pass -o/--output to override it;
+# flags that take a separate value are forwarded as a pair so the value is not
+# mistaken for a path.
+#
 set -uo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -21,12 +26,25 @@ fi
 
 validator_args=()
 paths=()
+expect_value=0
+output_given=0
 for arg in "$@"; do
+  if [[ "$expect_value" -eq 1 ]]; then
+    validator_args+=("$arg")
+    expect_value=0
+    continue
+  fi
   case "$arg" in
+  -o | --output) validator_args+=("$arg") && expect_value=1 && output_given=1 ;;
+  -o=* | --output=*) validator_args+=("$arg") && output_given=1 ;;
   -*) validator_args+=("$arg") ;;
   *) paths+=("$arg") ;;
   esac
 done
+
+if [[ "$output_given" -eq 0 ]]; then
+  validator_args+=(--output=compact)
+fi
 
 # Emit one skill directory per line: every skill when no paths were given,
 # otherwise just the skills the given paths belong to.
