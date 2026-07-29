@@ -11,6 +11,8 @@ description: >-
   dependencies in Linear. Ends once the work is registered and its readiness
   stated, leaving the planned research, design, and implementation to later
   steps.
+metadata:
+  description-role: trigger
 ---
 
 # Plan a Finite Outcome

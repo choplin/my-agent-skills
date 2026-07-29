@@ -15,7 +15,8 @@ description: >-
   producing a separate short version while the original stays (that is writing a
   summary, not trimming).
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
-user-invocable: true
+metadata:
+  description-role: documentation
 ---
 
 # Document Trim

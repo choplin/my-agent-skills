@@ -1,6 +1,9 @@
 ---
 name: showcase-capture-plan
 description: Plan presentation media for a product, app, or developer tool before capturing it. Use when the user wants to decide what screenshots or demo video to make, asks for a demo script, storyboard, shot list, product-tour plan, or media plan for an app or CLI. Produces a video script and/or still-image shot list, routes each shot to terminal, browser, or general screen capture, and names a tool-specific annotation handoff only when a still requires one.
+user-invocable: false
+metadata:
+  description-role: documentation
 ---
 
 # Showcase capture plan

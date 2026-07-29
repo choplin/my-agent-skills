@@ -1,7 +1,8 @@
 ---
 name: discuss-toolkit-one-point
 description: This skill should be used when a complex discussion (design, architecture, planning) has surfaced multiple discussion points (論点) at once, to course-correct into handling them one at a time — first summarize every point as a short labeled list, then present and resolve ONE point in detail before opening the next. Primary trigger is explicit user invocation ("/one-point", "one at a time", "one point at a time", "一つずつ", "論点を整理して", "一気に出さないで", "全部並べないで") as a correction after the AI dumped several points; the AI should ALSO apply it autonomously when it is about to present two or more discussion points. Should NOT trigger for a single clear point (just answer it), for unclear intent that needs clarification first (use dig), or for a quick A-vs-B decision with clear context.
-user-invocable: true
+metadata:
+  description-role: trigger
 ---
 
 # one-point - One Discussion Point at a Time

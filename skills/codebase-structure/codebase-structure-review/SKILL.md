@@ -1,6 +1,8 @@
 ---
 name: codebase-structure-review
 description: Review a proposed or implemented codebase structure without changing it. Use when evaluating semantic ownership, module or port boundaries, dependency direction, transaction and resource ownership, external representations, change propagation, static legibility, or model-to-code traceability. Return evidence-backed findings and unresolved questions. Use codebase-structure to design a replacement and codebase-structure-refactor to implement one.
+metadata:
+  description-role: documentation
 ---
 
 # Codebase Structure Review

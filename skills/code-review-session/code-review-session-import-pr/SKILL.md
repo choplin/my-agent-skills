@@ -2,7 +2,8 @@
 name: code-review-session-import-pr
 description: Ingestion source — import GitHub PR review comments as items in review.md, keeping PR-specific data (comment id, author, inline location, thread, replied flag) in a separate sources/pr.json ledger. Triggers on "import PR comments", "PRコメントを取り込んで", "PRレビューをインポート".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(gh *), Bash(git branch *), Bash(git remote *)
-user-invocable: true
+metadata:
+  description-role: documentation
 ---
 
 # Import PR Comments (ingestion)

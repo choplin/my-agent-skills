@@ -11,7 +11,8 @@ description: >-
   authoring a skill from scratch (use skill-creator), for advisory or static review (use
   skill-quality-review), or when the skill's quality cannot be judged mechanically (no usable
   verification signal — see skill-quality-base law 1).
-user-invocable: true
+metadata:
+  description-role: documentation
 ---
 
 # skill-quality-optimize: the skill training loop

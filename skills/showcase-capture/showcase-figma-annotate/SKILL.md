@@ -1,6 +1,9 @@
 ---
 name: showcase-figma-annotate
 description: Create or continue an editable Figma annotation composition around a clean showcase screenshot, hand it to a person for visual adjustment, then re-inspect and return the verified result. Use when a planned still needs reusable annotation layers, comparison layouts, shared review, or repeated AI-human editing in a Figma Design file rather than a one-off local CleanShot edit.
+user-invocable: false
+metadata:
+  description-role: documentation
 ---
 
 # Annotate a showcase still in Figma

@@ -1,7 +1,8 @@
 ---
 name: discuss-toolkit-dig
 description: This skill should be used when the user's intent is unclear, when their thinking would benefit from guided exploration, or when they explicitly call "/dig". It maintains a whole-discussion map while asking questions that clarify, broaden, test, or converge the user's thinking. Also used as a base skill by other skills before consequential work. Should NOT trigger for quick decisions with clear context, or when requirements are already well-defined. 「意図が不明確」「曖昧な依頼」「発想を広げたい」「詳細を確認したい」
-user-invocable: true
+metadata:
+  description-role: trigger
 ---
 
 # dig - Guided Exploration

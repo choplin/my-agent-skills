@@ -2,7 +2,8 @@
 name: code-review-session-import-ci
 description: Ingestion source — import failing CI results (checks/jobs) as items in review.md, keeping CI-specific data (run id, job/check name, conclusion, log ref) in a separate sources/ci.json ledger. Triggers on "import CI results", "CIの失敗を取り込んで", "pull CI failures".
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(gh *), Bash(git branch *), Bash(git remote *)
-user-invocable: true
+metadata:
+  description-role: documentation
 ---
 
 # Import CI Results (ingestion)

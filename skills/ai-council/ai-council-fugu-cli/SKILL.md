@@ -7,6 +7,9 @@ description: >-
   "get fugu's opinion", "Sakana Fugu". Should NOT trigger for OpenAI Codex
   consultation (use ai-council-codex-cli), troubleshooting the codex-fugu wrapper,
   or casual mentions of Fugu without consultation intent.
+user-invocable: false
+metadata:
+  description-role: documentation
 ---
 
 # Fugu CLI Usage Guide

@@ -1,7 +1,8 @@
 ---
 name: linear-groom
 description: Groom the Backlog of the current repository's Linear Project — resolve the repo to its active Linear Project, auto-pick Backlog issues one at a time in priority order, and walk each through grooming (Backlog → Todo) interactively until no groomable item remains or the user stops. The counterpart to linear-start (which auto-picks Todo work to execute). Use when the user wants to work through the Backlog without naming issues one by one. Triggers on "groom the backlog", "start grooming", "backlog を整理", "Backlog を groom して", "次の backlog を groom". Should NOT trigger for starting/executing a groomed issue (use linear-start), one-off creation or grooming a single named issue (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
-user-invocable: true
+metadata:
+  description-role: documentation
 ---
 
 # Groom the Backlog of a Linear Project

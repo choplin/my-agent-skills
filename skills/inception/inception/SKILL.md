@@ -6,8 +6,9 @@ description: >-
   alternatives, record decisions, and leave with a durable footing and first
   actions. Runs the full inception session: framing, divergence, structure,
   deepening, convergence, and a thinking graph.
-user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
+metadata:
+  description-role: documentation
 ---
 
 # Inception — facilitate shaping a project's founding concept

@@ -8,6 +8,8 @@ description: >-
   from, and planning must aggressively defend that narrowness. Declares the
   policy and hands the workflow to planning-toolkit-plan; it defines no steps of
   its own.
+metadata:
+  description-role: trigger
 ---
 
 # MVP Scope Policy

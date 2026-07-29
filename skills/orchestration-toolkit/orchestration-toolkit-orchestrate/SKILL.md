@@ -12,6 +12,8 @@ description: >-
   goal persistence with delegated delivery. Not for shaping an unformed
   project, planning an ungroomed backlog, executing one isolated Issue, or
   debating a proposition.
+metadata:
+  description-role: trigger
 ---
 
 # Orchestrate a Project

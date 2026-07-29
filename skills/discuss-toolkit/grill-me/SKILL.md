@@ -1,6 +1,8 @@
 ---
 name: grill-me
 description: Interview the user relentlessly to stress-test a plan, design, decision, or idea until reaching shared understanding. Use when the user asks to be grilled, wants assumptions challenged, asks to poke holes in a proposal, or wants critical questioning rather than intent clarification. Before grilling, verify that the thing to challenge can be identified without inventing the user's meaning; if it cannot, use discuss-toolkit-dig only until the test object is clear.
+metadata:
+  description-role: documentation
 ---
 
 # Grill Me

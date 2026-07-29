@@ -1,7 +1,8 @@
 ---
 name: skill-quality-review
 description: Review a skill's quality in one advisory pass and return findings, never as a gate or loop. Static mode scores SKILL.md against the content-quality rubric; deliverable mode runs the skill on a few real tasks and reads the outputs qualitatively. If outputs cannot be observed, run static mode only and say so. Use to validate a new or modified skill, sanity-check one before skill-quality-optimize, or diagnose poor results and frequent clarification requests. This portable procedure is also wrapped by the Claude Code skill-quality-reviewer subagent for isolated execution. Do not use for the autonomous optimize loop (skill-quality-optimize), pass/fail mechanical benchmarking (skill-quality-evaluate), edits inside an active optimization loop (skill-quality-improve), plugin structure questions, or authoring a skill from scratch (skill-creator).
-user-invocable: true
+metadata:
+  description-role: documentation
 ---
 
 # skill-quality-review: one advisory review pass

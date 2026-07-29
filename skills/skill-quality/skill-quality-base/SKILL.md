@@ -2,6 +2,8 @@
 name: skill-quality-base
 description: Shared resources for the skill-quality family, two domains — (1) the optimization-loop model, the run-directory/state.json schema, the four laws, and the agent-agnostic shell+jq scripts (init.sh, record.sh, gate.sh), used by skill-quality-optimize/evaluate/improve; (2) the content-quality rubric (B1–B6) plus anti-patterns and instruction patterns, used by skill-quality-review and skill-quality-improve. It also owns the B0 loadability preflight (lint-frontmatter.sh), the mechanical check that a skill's YAML frontmatter parses at all, which review and improve both run before any judgment. Other skill-quality skills delegate to this skill by name. Use this skill when a skill-quality skill needs the state schema, the verification-signal taxonomy, the content-quality rubric, the frontmatter lint, or a base script. Not typically invoked on its own.
 user-invocable: false
+metadata:
+  description-role: trigger
 ---
 
 # skill-quality base resources

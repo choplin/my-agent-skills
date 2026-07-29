@@ -2,7 +2,8 @@
 name: artifact-review-toolkit-quick
 description: Run a one-off AI code review of a change by redirecting to whichever review capability the host agent provides, and return the findings directly in the conversation. Use for "review this diff", "code review the changes", "AIレビューして" — an ordinary review whose deliverable is the findings themselves. Should NOT be used when the findings must be recorded and driven to resolution (use code-review-session-import-ai, which calls this skill), nor when a completion claim must be falsified against explicit acceptance criteria (use artifact-review-toolkit-adversarial).
 allowed-tools: Read, Glob, Grep, Bash, Skill, Task
-user-invocable: true
+metadata:
+  description-role: trigger
 ---
 
 # Quick Review

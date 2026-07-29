@@ -1,7 +1,8 @@
 ---
 name: linear-start
 description: Start or resume work on a Linear issue for the current repository. List all Repo-label issues in In Progress, Todo, or Backlog, including issues outside a Project; let the user choose; present the selected issue's title and a short summary before taking action; autonomously prepare or recover the appropriate workspace; and hand off to an execution skill. An In Progress pick resumes its existing workspace, reconstructs completed work, and continues the execution mode already in flight. After the picked issue reaches Done, optionally suggest opening a PR for completed implementation work, report its Project status when applicable, and suggest related work to continue with. Use when the user wants to pick up new or half-finished Linear work for the repo. Triggers include "start a Linear issue", "pick an issue to work on", and "resume an in-progress issue". Do not use for creating or grooming issues (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
-user-invocable: true
+metadata:
+  description-role: documentation
 ---
 
 # Start or resume work on a Linear issue

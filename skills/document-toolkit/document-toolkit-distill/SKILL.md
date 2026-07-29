@@ -15,7 +15,8 @@ description: >-
   producing a new short summary of a document while leaving the original in
   place — that is writing, not distilling.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
-user-invocable: true
+metadata:
+  description-role: documentation
 ---
 
 # Document Distill

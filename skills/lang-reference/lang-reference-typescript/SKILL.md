@@ -1,6 +1,9 @@
 ---
 name: lang-reference-typescript
 description: Use this skill when the user asks about TypeScript coding conventions, best practices, tooling preferences, or needs guidance on TypeScript project setup.
+user-invocable: false
+metadata:
+  description-role: documentation
 ---
 
 # TypeScript

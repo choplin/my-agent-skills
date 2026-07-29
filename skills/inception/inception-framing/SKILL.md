@@ -1,8 +1,10 @@
 ---
 name: inception-framing
 description: The framing (構想) phase of the inception family — invoked by the inception orchestrator at the start of a session to find the real problem before any solution. Establishes the purpose, background, and central question. Should NOT be invoked directly by the user; the inception orchestrator delegates here.
-user-invocable: false
 allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
+user-invocable: false
+metadata:
+  description-role: documentation
 ---
 
 # Inception — Framing (構想)

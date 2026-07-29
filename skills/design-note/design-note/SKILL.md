@@ -13,8 +13,9 @@ description: >-
   then inception-finalize), for implementation-level design, for cutting scope
   into milestones and issues (use planning-toolkit-plan), or for reworking
   documents that already exist (use the document-toolkit skills).
-user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
+metadata:
+  description-role: trigger
 ---
 
 # Design Note

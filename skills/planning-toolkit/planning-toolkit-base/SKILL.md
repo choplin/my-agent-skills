@@ -10,6 +10,9 @@ description: >-
   transition a delivery graph, or when a scope policy needs the shape it must
   declare. Supplies vocabulary and invariants for those skills to act on; the
   caller loads it first and then does the work.
+user-invocable: false
+metadata:
+  description-role: trigger
 ---
 
 # Planning Toolkit Base

@@ -1,6 +1,9 @@
 ---
 name: lang-reference-java
 description: Use this skill when the user asks about Java coding conventions, best practices, tooling preferences, or needs guidance on Java project setup.
+user-invocable: false
+metadata:
+  description-role: documentation
 ---
 
 # Java

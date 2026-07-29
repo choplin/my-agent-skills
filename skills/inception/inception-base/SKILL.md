@@ -1,8 +1,10 @@
 ---
 name: inception-base
 description: Shared resources for the inception skill family — the thinking-graph JSON schema, the shell+jq CLI that interprets the graph, the node/graph data model, the phase model, and the convention for eliciting the user's thinking via dig. Other inception skills delegate to this skill to read the model, run the CLI, or render the document projections. Use this skill when an inception skill asks to follow the graph schema, run the inception CLI, or apply the phase/node model. Not typically invoked on its own.
-user-invocable: false
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
+user-invocable: false
+metadata:
+  description-role: documentation
 ---
 
 # Inception Base

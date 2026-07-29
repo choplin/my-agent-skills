@@ -10,8 +10,9 @@ description: >-
   multi-Issue Project with dependencies (use orchestration-toolkit-orchestrate),
   not for ad-hoc work with no Issue behind it (use exec-plan), and not for
   deciding what the Issue should say (use linear-groom or inception).
-user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
+metadata:
+  description-role: trigger
 ---
 
 # Execute one Issue

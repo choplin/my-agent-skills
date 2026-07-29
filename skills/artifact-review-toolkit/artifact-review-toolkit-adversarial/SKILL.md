@@ -11,6 +11,8 @@ description: >-
   cross-panel debate; unlike artifact-review-toolkit-quick, it requires
   observable acceptance and runs independent lens-assigned reviewers; unlike
   document-toolkit-review, it falsifies a claim and never revises the artifact.
+metadata:
+  description-role: trigger
 ---
 
 # Adversarial Review

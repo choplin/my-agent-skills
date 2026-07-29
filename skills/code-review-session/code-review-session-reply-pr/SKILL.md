@@ -2,7 +2,8 @@
 name: code-review-session-reply-pr
 description: Output — draft and optionally post replies to the PR review comments that were imported via code-review-session-import-pr, using the resolution recorded on each item and the PR data in sources/pr.json. Triggers on "reply to PR comments", "PRコメントに返信", "返信案を作って".
 allowed-tools: Read, Edit, Glob, Grep, Bash(gh *), Bash(git log *), Bash(git remote *), Bash(git branch *), mcp__github__add_reply_to_pull_request_comment, mcp__github__add_issue_comment
-user-invocable: true
+metadata:
+  description-role: documentation
 ---
 
 # Reply to PR Comments (output)

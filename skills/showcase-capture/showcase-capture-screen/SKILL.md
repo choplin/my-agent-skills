@@ -1,6 +1,8 @@
 ---
 name: showcase-capture-screen
 description: Capture polished screenshots or video demonstrations from the visible screen when terminal- or browser-specific capture is not suitable. Use for native desktop apps, multi-window workflows, browser flows that need real chrome or cannot be automated, and any general screen recording or screenshot request. Prepare a controlled desktop, capture only the required region, and verify the result.
+metadata:
+  description-role: documentation
 ---
 
 # General screen showcase capture

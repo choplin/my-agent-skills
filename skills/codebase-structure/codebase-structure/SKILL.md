@@ -1,6 +1,8 @@
 ---
 name: codebase-structure
 description: Design a production-quality target codebase structure from a shared domain and use-case model by assigning semantic ownership and choosing capability, consistency, resource, representation, module, and dependency boundaries. Use when starting a project or reshaping a target architecture whose concepts or boundaries are not yet decided. Apply matching lang-reference and app-reference skills. Use codebase-structure-review for a read-only evaluation and codebase-structure-refactor when the target structure is already decided.
+metadata:
+  description-role: trigger
 ---
 
 # Codebase Structure

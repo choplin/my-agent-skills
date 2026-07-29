@@ -1,6 +1,8 @@
 ---
 name: showcase-capture-terminal
 description: Capture polished screenshots or video demonstrations of a CLI, REPL, or text-based developer tool in a terminal. Use after a capture plan identifies a terminal surface, or when the user asks to record or screenshot command-line usage for documentation, a README, release notes, or a product demo. Prepare deterministic terminal state, execute the planned take, and verify the exported media.
+metadata:
+  description-role: documentation
 ---
 
 # Terminal showcase capture

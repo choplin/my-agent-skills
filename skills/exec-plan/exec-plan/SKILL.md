@@ -11,8 +11,9 @@ description: >-
   whose route must be discovered or reorganized while working. Not for work where
   most steps need human judgment, requirements must be decided up front, or the
   concept itself is still fuzzy.
-user-invocable: true
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
+metadata:
+  description-role: documentation
 ---
 
 # Exec Plan

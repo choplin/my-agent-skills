@@ -2,6 +2,8 @@
 name: skill-quality-improve
 description: Produce one improvement step for a skill under optimization — read the labeled failure traces from evaluate, propose edits to SKILL.md that address failures recurring across multiple train trajectories, apply them at a controlled magnitude, and emit a new candidate version for the held-out gate to judge. This is the gradient+update step of the skill-quality-optimize loop; it delegates content-quality judgment to the rubric in skill-quality-base. Triggers on "propose skill edits from traces", "improve step for a skill", "next optimization step". Should NOT trigger for authoring from scratch (use skill-creator) or for deciding whether an edit is kept (that is gate.sh in skill-quality-base).
 user-invocable: false
+metadata:
+  description-role: documentation
 ---
 
 # skill-quality-improve: one improvement step

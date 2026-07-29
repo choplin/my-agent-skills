@@ -10,7 +10,8 @@ description: >-
   adversarial member of the ai-council group — unlike the one-shot ai-council
   root skill, panelists see and attack each other's answers. Should NOT trigger
   for a quick single-AI consult, CLI syntax help, or low-stakes questions.
-user-invocable: true
+metadata:
+  description-role: documentation
 ---
 
 # Adversarial Panel

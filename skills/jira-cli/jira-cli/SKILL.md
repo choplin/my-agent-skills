@@ -7,6 +7,9 @@ description: >
   without "Jira" — those may refer to GitHub issues or other systems.
   Triggers on: "Jira", "jira-cli", "Jira issue", "Jira sprint", "Jira epic", "Jira board", "JQL".
   Should NOT trigger on: "create issue", "list issues", "sprint", "epic" without explicit Jira context.
+user-invocable: false
+metadata:
+  description-role: documentation
 ---
 
 # jira-cli Command Reference

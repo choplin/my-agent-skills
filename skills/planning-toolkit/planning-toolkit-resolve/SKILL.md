@@ -9,6 +9,8 @@ description: >-
   evidence and rationale to llm-wiki and Linear, applies outcomes to affected
   implementation issues, and promotes self-complete work to Todo before marking
   the Project READY, which is where it stops.
+metadata:
+  description-role: documentation
 ---
 
 # Resolve Pre-Implementation Blockers

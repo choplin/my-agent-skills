@@ -1,6 +1,9 @@
 ---
 name: code-review-session-base
 description: Shared resources for the code-review-session skill family — the review record model (review.md holding generic review items), the item state model, the per-source companion-ledger convention, and the review.md initialization guide. Other code-review-session skills delegate to this skill to read a template or resolve where the record lives. Use this skill when another code-review-session skill asks to apply the item model, the source convention, or initialize review.md. Not typically invoked on its own.
+user-invocable: false
+metadata:
+  description-role: trigger
 ---
 
 # code-review-session base resources
