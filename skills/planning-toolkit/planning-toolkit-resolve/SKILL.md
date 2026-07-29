@@ -1,14 +1,11 @@
 ---
 name: planning-toolkit-resolve
 description: >-
-  Resolve a Project's pre-implementation research and design blockers and leave
-  its implementation work autonomous-ready. Use when planning-toolkit-plan
-  marked a Linear Project READY_AFTER_RESOLUTION, or when explicit
-  research/design issues block the implementation lane. Executes research,
-  settles decisions according to recorded AI/human/external authority, persists
-  evidence and rationale to llm-wiki and Linear, applies outcomes to affected
-  implementation issues, and promotes self-complete work to Todo before marking
-  the Project READY, which is where it stops.
+  Resolves a Project's pre-implementation research and design blockers and
+  leaves its implementation work autonomous-ready: executes the research,
+  settles decisions according to recorded authority, persists the evidence and
+  rationale, applies outcomes to the affected implementation issues, and
+  promotes self-complete work to Todo before marking the Project ready.
 metadata:
   description-role: documentation
 ---

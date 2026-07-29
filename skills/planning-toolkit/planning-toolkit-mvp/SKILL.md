@@ -1,13 +1,12 @@
 ---
 name: planning-toolkit-mvp
 description: >-
-  The MVP scope policy for the Planning Toolkit — the justification standard
-  applied when the goal is to prove or disprove a hypothesis with the smallest
-  thing that can be built. Use when the user frames work as an MVP, a first
-  version, a proof of concept, a pilot, or a smallest-possible slice to learn
-  from, and planning must aggressively defend that narrowness. Declares the
-  policy and hands the workflow to planning-toolkit-plan; it defines no steps of
-  its own.
+  The MVP scope policy: the justification standard applied when the goal is to
+  prove or disprove a hypothesis with the smallest thing that can be built.
+  Declares the policy and hands the workflow on; it defines no steps of its
+  own. Applies when work is framed as an MVP, a first version, a proof of
+  concept, a pilot, or the smallest slice worth learning from, and the
+  planning has to defend that narrowness.
 metadata:
   description-role: trigger
 ---

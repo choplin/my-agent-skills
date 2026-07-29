@@ -1,6 +1,8 @@
 ---
 name: document-toolkit-fact-check
-description: Use this skill when the user wants to verify claims in a technical document. Triggers on phrases like "fact-check this", "verify this document", "check if this is accurate", "validate these claims", or when reviewing documentation for accuracy.
+description: >-
+  Verifies the factual claims in a technical document against sources, and
+  reports which hold, which do not, and which could not be checked.
 allowed-tools: Read, Grep, Glob, Task, Bash, WebSearch
 metadata:
   description-role: documentation

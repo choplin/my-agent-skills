@@ -1,6 +1,9 @@
 ---
 name: ai-council
-description: This skill should be used when the user wants to gather opinions from multiple AI systems (Claude, Codex) for better decision-making. Triggers on "AI council", "ask the council", "multiple AI opinions", "different AI perspectives", "council discussion", "consult all AIs", "what do all AIs think". Should NOT trigger for single-AI consultation (use individual advisor agents instead), CLI syntax questions, or troubleshooting AI CLI errors.
+description: >-
+  Gathers opinions from several AI systems on one question in a single blind
+  pass and reports them side by side. The one-shot member of the ai-council
+  group: each panelist answers independently, without seeing the others.
 metadata:
   description-role: documentation
 ---

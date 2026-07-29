@@ -1,6 +1,10 @@
 ---
 name: refactoring-tools-planner
-description: Analyze a repository and produce an evidence-based, implementation-ready refactor-instructions.md without changing production code. Use when the user wants a refactoring assessment, technical-debt map, safe phased refactor plan, or a handoff document for another coding agent. Prioritize behavior preservation, repository-specific validation, bounded changes, and explicit stop-and-ask gates. Do not use when the primary request is to implement the refactor now, add features, migrate schemas, or intentionally change public behavior.
+description: >-
+  Analyzes a repository and produces an evidence-based, implementation-ready
+  refactor-instructions.md without touching production code: a technical-debt
+  map and a safe phased plan with repository-specific validation, bounded
+  changes, and explicit stop-and-ask gates.
 metadata:
   description-role: documentation
 ---

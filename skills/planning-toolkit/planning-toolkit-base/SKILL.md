@@ -1,15 +1,13 @@
 ---
 name: planning-toolkit-base
 description: >-
-  Shared domain model and handoff contract for the Planning Toolkit skill
-  family. Defines the Outcome Contract, the Scope Policy plug point, scope and
-  unknown classifications, decision authority, readiness state machine,
-  llm-wiki/Linear ownership boundary, Project/Milestone/Issue mapping, atomic
-  execution contract, and Planning-to-Resolution-to-Execution handoffs. Use when
-  another planning-toolkit skill needs to create, interpret, validate, or
-  transition a delivery graph, or when a scope policy needs the shape it must
-  declare. Supplies vocabulary and invariants for those skills to act on; the
-  caller loads it first and then does the work.
+  The shared domain model behind planning work: the Outcome Contract, the
+  Scope Policy plug point, scope and unknown classifications, decision
+  authority, the readiness state machine, the boundary between durable
+  knowledge and tracker state, Project/Milestone/Issue mapping, the atomic
+  execution contract, and the handoffs from planning through resolution to
+  execution. Applies whenever a delivery graph is created, interpreted,
+  validated, or transitioned.
 user-invocable: false
 metadata:
   description-role: trigger

@@ -1,6 +1,10 @@
 ---
 name: git-helpers-commit
-description: Create, amend, or draft review-friendly Git commits and commit messages at a consistent level of detail. Use whenever an agent runs git commit, amends or rewrites a commit, proposes a commit message, prepares a squash commit, or combines commits during an interactive rebase.
+description: >-
+  Creates, amends, or drafts review-friendly Git commits and commit messages
+  at a consistent level of detail. Applies whenever a commit is created or
+  rewritten, a commit message is proposed, a squash commit is prepared, or
+  commits are combined during an interactive rebase.
 user-invocable: false
 metadata:
   description-role: trigger

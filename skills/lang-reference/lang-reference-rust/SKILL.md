@@ -1,6 +1,8 @@
 ---
 name: lang-reference-rust
-description: Use this skill when writing, reviewing, debugging, or refactoring Rust; when the user asks about Rust conventions, ownership, error handling, unsafe code, testing, Cargo tooling, or project setup; or when changes to Cargo.toml, crates, workspaces, or Rust APIs are required.
+description: >-
+  Rust conventions for this codebase: ownership and error handling patterns,
+  unsafe code, testing, Cargo tooling, and workspace layout.
 user-invocable: false
 metadata:
   description-role: documentation

@@ -1,6 +1,8 @@
 ---
 name: lang-reference-sql
-description: Use this skill when writing, reviewing, or refactoring SQL queries and SQL style. Apply it to keep queries structurally formatted, readable, and explicit, including when SQL is extracted into an infrastructure layer.
+description: >-
+  SQL conventions for this codebase: structurally formatted, readable,
+  explicit queries, including SQL extracted into an infrastructure layer.
 user-invocable: false
 metadata:
   description-role: documentation

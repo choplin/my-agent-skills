@@ -1,6 +1,10 @@
 ---
 name: git-helpers-pr-description
-description: Use this skill when writing or revising the description/body of a non-trivial pull request, so reviewers can follow the purpose, design, and where each design choice lands in the code. Triggers on phrases like "PRの説明を書いて", "PR本文を書いて", "PR descriptionを書いて", "大きいPRのまとめ", "write a PR description", "draft the PR body", or when the draft-pr skill delegates body authoring for a large change.
+description: >-
+  Writes or revises the body of a non-trivial pull request so reviewers can
+  follow its purpose, its design, and where each design choice lands in the
+  code. Applies whenever a PR description is being written for a change large
+  enough that the diff does not explain itself.
 allowed-tools: Bash(git *), Bash(gh *), Read, Glob, Grep
 user-invocable: false
 metadata:

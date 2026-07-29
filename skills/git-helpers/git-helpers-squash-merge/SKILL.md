@@ -1,6 +1,10 @@
 ---
 name: git-helpers-squash-merge
-description: This skill should be used when the user wants to collapse the current feature branch into a single commit and fast-forward it onto the base branch (default main). Triggers on phrases like "squash-merge", "squash して main にマージ", "ブランチを1コミットにまとめて main へ", "squash then fast-forward merge", "1コミットにして main に着地させる", or when the user wants one clean commit on main from a branch. Rebases onto the base first when needed (backup ref created, no confirmation) and removes the worktree afterward (with confirmation). Should NOT trigger for normal merges that preserve branch history, PR/remote-side merges, or moving uncommitted changes to a new branch (use `git switch -c` then `/commit`).
+description: >-
+  Collapses the current feature branch into a single commit and fast-forwards
+  it onto the base branch, rebasing onto the base first when needed and
+  removing the worktree afterwards. Applies when finished branch work should
+  land on the base as one clean commit.
 allowed-tools: Bash(git *), Bash(wtm *)
 user-invocable: false
 metadata:

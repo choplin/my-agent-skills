@@ -1,6 +1,10 @@
 ---
 name: codebase-structure-refactor
-description: Safely refactor an initial or AI-generated implementation toward the codebase-structure skill while preserving external behavior. Use when responsibilities, handlers, SQL, and business rules are mixed and the code needs incremental restructuring with contract, transaction, generated-artifact, and regression checks. Do not use for a primarily feature, schema, or externally visible contract change.
+description: >-
+  Restructures an existing implementation toward a decided target structure
+  while preserving external behavior, with contract, transaction, generated-
+  artifact, and regression checks. For code where responsibilities, handlers,
+  SQL, and business rules are mixed and the target design is already settled.
 metadata:
   description-role: documentation
 ---

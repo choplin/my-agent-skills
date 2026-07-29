@@ -1,19 +1,10 @@
 ---
 name: document-toolkit-trim
 description: >-
-  Trim a set of documents in place — strip out information that is still correct
-  but no longer needed, so the set stops carrying its own history. Sorts the
-  set's content along four axes (time, topic, granularity, authority), shows the
-  regions it found, and asks the set's owner for a keep-or-drop policy on each
-  axis instead of deciding necessity on its own. Triggers on "trim these docs",
-  "strip the parts we no longer need", "these docs carry too much history", "cut
-  the background nobody needs now", "ドキュメントを削ぎ落として", "経緯が積もっているので削って".
-  Should NOT trigger for content that has become wrong (that is
-  document-toolkit-distill's refresh), for changing which documents exist —
-  merging, splitting, retiring (use document-toolkit-distill), for tightening
-  prose without dropping information (use document-toolkit-review), or for
-  producing a separate short version while the original stays (that is writing a
-  summary, not trimming).
+  Strips information a set of documents no longer needs while it is still
+  correct, so the set stops carrying its own history. Sorts the content along
+  time, topic, granularity, and authority, shows the regions it found, and
+  asks the set's owner for a keep-or-drop policy on each axis.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 metadata:
   description-role: documentation

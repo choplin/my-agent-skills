@@ -1,6 +1,8 @@
 ---
 name: lang-reference-python
-description: Use this skill when the user asks about Python coding conventions, best practices, tooling preferences, or needs guidance on Python project setup.
+description: >-
+  Python conventions for this codebase: coding style, project layout, and
+  tooling preferences.
 user-invocable: false
 metadata:
   description-role: documentation

@@ -1,16 +1,13 @@
 ---
 name: artifact-review-toolkit-adversarial
 description: >-
-  Adversarially inspect a concrete artifact or completed output with predefined,
-  selectable review lenses and fresh independent agents. Use for a work node,
-  execution graph, code change, document, integrated project result, or final
-  completion claim that needs falsification-oriented review, structured
-  findings, explicit coverage gaps, and a budget-aware verdict. Callable
-  standalone, from code-review-session-import-ai, or from an orchestrator.
-  Unlike ai-council-adversarial-panel, this reviews artifacts without
-  cross-panel debate; unlike artifact-review-toolkit-quick, it requires
-  observable acceptance and runs independent lens-assigned reviewers; unlike
-  document-toolkit-review, it falsifies a claim and never revises the artifact.
+  Adversarially inspects a finished artifact against the claim made for it,
+  using predefined review lenses and fresh independent agents. Produces
+  structured findings, explicit coverage gaps, and a budget-aware verdict
+  without revising the artifact. Applies when a code change, document,
+  execution graph, or completion claim needs falsifying against observable
+  acceptance criteria — red-teaming a result, checking whether something is
+  really done, or verifying a claim before accepting it.
 metadata:
   description-role: trigger
 ---

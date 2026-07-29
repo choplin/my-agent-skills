@@ -1,19 +1,10 @@
 ---
 name: document-toolkit-distill
 description: >-
-  Distill an existing set of documents so it stays high-signal and does not
-  bloat — consolidate overlapping documents into one keeper, refresh stale ones,
-  split oversized ones, retire what no longer earns reach. The caller names the
-  set and says what it is for; this skill judges which operation each document
-  needs and carries it out, deleting the sources it folded in. Triggers on
-  "distill these docs", "consolidate these notes", "these documents overlap",
-  "tidy up this doc set", "ドキュメントを整理して", "重複したドキュメントをまとめて".
-  Should NOT trigger for improving one document's writing (use
-  document-toolkit-review), for verifying claims (use
-  document-toolkit-fact-check), for stripping still-correct but no-longer-needed
-  content out of documents that all stay (use document-toolkit-trim), or for
-  producing a new short summary of a document while leaving the original in
-  place — that is writing, not distilling.
+  Reworks a set of documents so it stays high-signal: consolidates overlapping
+  documents into one keeper, refreshes stale ones, splits oversized ones, and
+  retires what no longer earns its place, deleting the sources it folds in.
+  The caller names the set and says what it is for.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
 metadata:
   description-role: documentation

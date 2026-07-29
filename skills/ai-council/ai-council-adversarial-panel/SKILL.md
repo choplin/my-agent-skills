@@ -1,15 +1,11 @@
 ---
 name: ai-council-adversarial-panel
 description: >-
-  Multi-model adversarial review for a high-stakes, contested, or verifiable
-  question: 2+ panelists (different model families where possible) answer
-  blind, then critique each other across rounds and revise under fire, and the
-  main session facilitates and adjudicates into one calibrated answer. Triggers
-  on "red-team this", "devil's advocate", "discuss with Opus and Codex", "get a
-  second opinion", 敵対的レビュー, 殴り合わせて, セカンドオピニオンが欲しい. The
-  adversarial member of the ai-council group — unlike the one-shot ai-council
-  root skill, panelists see and attack each other's answers. Should NOT trigger
-  for a quick single-AI consult, CLI syntax help, or low-stakes questions.
+  Multi-model adversarial review of a high-stakes or contested question. Two
+  or more panelists from different model families answer blind, then critique
+  each other across rounds and revise under fire, while the main session
+  facilitates and adjudicates one calibrated answer. The adversarial member of
+  the ai-council group: panelists see and attack each other's answers.
 metadata:
   description-role: documentation
 ---

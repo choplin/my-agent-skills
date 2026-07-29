@@ -1,6 +1,8 @@
 ---
 name: lang-reference-go
-description: Use this skill when the user asks about Go coding conventions, best practices, error handling patterns, tooling preferences, or needs guidance on Go project setup.
+description: >-
+  Go conventions for this codebase: error handling patterns, project layout,
+  tooling preferences, and idiom.
 user-invocable: false
 metadata:
   description-role: documentation

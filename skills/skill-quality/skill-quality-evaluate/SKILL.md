@@ -1,6 +1,9 @@
 ---
 name: skill-quality-evaluate
-description: Empirically measure how good a skill is — run it on a set of real tasks, score each deliverable against a mechanical verification signal, and report a pass rate with the failing traces. Usable standalone to audit or baseline any existing skill ("how good is this skill really?", "benchmark this skill", "score this skill's outputs"), and used by the skill-quality-optimize loop as its loss-function step. Triggers on "evaluate this skill", "measure this skill", "benchmark a skill", "score a skill's deliverables", "スキルを評価", "スキルの実力を測る". Should NOT trigger for advisory/static review (use skill-quality-review), or for authoring a skill from scratch (use skill-creator).
+description: >-
+  Measures how good a skill is empirically: runs it on a set of real tasks,
+  scores each deliverable against a mechanical verification signal, and
+  reports a pass rate with the failing traces.
 user-invocable: false
 metadata:
   description-role: documentation

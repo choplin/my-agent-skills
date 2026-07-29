@@ -1,6 +1,9 @@
 ---
 name: inception-diverge
-description: The divergence (発散) phase of the inception family — invoked by the inception orchestrator to widen the space of ideas, options, and perspectives before judging any of them. Captures everything as Idea/Question nodes. Should NOT be invoked directly by the user; the inception orchestrator delegates here.
+description: >-
+  The divergence phase of an inception session: widens the space of ideas,
+  options, and perspectives before judging any of them, capturing everything
+  as idea and question nodes.
 allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
 user-invocable: false
 metadata:

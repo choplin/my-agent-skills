@@ -1,6 +1,9 @@
 ---
 name: inception-converge
-description: The convergence (収束) phase of the inception family — invoked by the inception orchestrator to synthesize the resolved graph into a coherent footing (purpose, decisions, sequenced actions) and check it is done-enough before handing off. Should NOT be invoked directly by the user; the inception orchestrator delegates here.
+description: >-
+  The convergence phase of an inception session: synthesizes the resolved
+  graph into a coherent footing — purpose, decisions, sequenced actions — and
+  checks it is done enough.
 allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
 user-invocable: false
 metadata:

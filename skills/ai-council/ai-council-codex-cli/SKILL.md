@@ -1,10 +1,9 @@
 ---
 name: ai-council-codex-cli
 description: >-
-  Use this skill when the user asks about Codex CLI, wants to get another AI's
-  opinion, or needs guidance on using Codex for code review. Triggers on phrases
-  like "Codexに聞いて", "Codexの意見", "他のAIに聞いて", "ask codex", "codex opinion",
-  "get another perspective", or "how to use codex".
+  Command reference for the Codex CLI — subcommands, flags, sandbox and output
+  modes, and how to read its results. Used to run a Codex consultation or code
+  review from the terminal.
 user-invocable: false
 metadata:
   description-role: documentation

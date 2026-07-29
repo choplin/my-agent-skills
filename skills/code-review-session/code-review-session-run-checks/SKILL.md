@@ -1,6 +1,10 @@
 ---
 name: code-review-session-run-checks
-description: Ingestion source — run the project's own checks (tests, lint, type check, static analysis, any predicate command) locally and record each failure as an open item in a code-review-session record (review.md), keeping the command, exit code, and output excerpt in a separate sources/check.json ledger. Use before committing or pushing, when the failures should become tracked review items rather than be fixed on the spot. For failures that already ran on the remote, use code-review-session-import-ci.
+description: >-
+  Runs the project's own checks — tests, lint, type check, static analysis,
+  any predicate command — locally and records each failure as an open item in
+  a code-review session record, keeping the command, exit code, and output
+  excerpt in a companion ledger.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 metadata:
   description-role: documentation

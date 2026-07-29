@@ -1,6 +1,9 @@
 ---
 name: showcase-capture-browser
-description: Capture polished screenshots or video demonstrations of a web application in a browser. Use after a capture plan identifies a browser surface, or when the user asks to record or screenshot a web app, website, product flow, or browser-based tool for documentation, release notes, marketing, or a demo. Use browser automation/control for page-owned states and route inherently OS-owned shots to general screen capture.
+description: >-
+  Captures polished screenshots or video of a web application in a browser,
+  driving page-owned states through browser control and verifying the exported
+  media.
 metadata:
   description-role: documentation
 ---

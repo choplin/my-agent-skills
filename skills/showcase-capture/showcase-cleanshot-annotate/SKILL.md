@@ -1,6 +1,9 @@
 ---
 name: showcase-cleanshot-annotate
-description: Hand a clean showcase screenshot to a person for annotation in CleanShot X, then recover and verify the saved result. Use on macOS when a planned still needs arrows, labels, highlights, a background, or another small visual edit that is faster for a person to perform in CleanShot Annotate than for an agent to reproduce programmatically. Preserves the clean source and uses an explicit edit brief and final path.
+description: >-
+  Hands a clean showcase screenshot to a person for annotation in CleanShot X
+  on macOS, then recovers and verifies the saved result. Preserves the clean
+  source and works from an explicit edit brief and final path.
 user-invocable: false
 metadata:
   description-role: documentation

@@ -1,16 +1,12 @@
 ---
 name: skill-quality-optimize
 description: >-
-  Autonomously improve an existing skill by running it as a training loop — evaluate it on real
-  tasks against a mechanical verification signal, propose edits from the failure traces, and keep
-  only edits that beat a held-out task split, iterating until the score plateaus or a budget is
-  spent. Use when you have a working skill (not a blank draft), a set of real tasks, and a way to
-  mechanically judge its output pass/fail, and you want the agent to drive the improvement loop.
-  Triggers on "optimize this skill", "auto-improve this skill", "run the skill training loop",
-  "tune this skill from traces", "スキルを自律最適化", "スキルを自動改善". Should NOT trigger for
-  authoring a skill from scratch (use skill-creator), for advisory or static review (use
-  skill-quality-review), or when the skill's quality cannot be judged mechanically (no usable
-  verification signal — see skill-quality-base law 1).
+  Improves an existing skill by running it as a training loop: evaluates it on
+  real tasks against a mechanical verification signal, proposes edits from the
+  failure traces, and keeps only edits that beat a held-out task split,
+  iterating until the score plateaus or the budget is spent. Needs a working
+  skill, a set of real tasks, and a way to judge its output pass or fail
+  mechanically.
 metadata:
   description-role: documentation
 ---

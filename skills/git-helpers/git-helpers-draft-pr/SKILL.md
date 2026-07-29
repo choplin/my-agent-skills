@@ -1,6 +1,10 @@
 ---
 name: git-helpers-draft-pr
-description: Use this skill when the user wants to create a draft PR. Triggers on phrases like "draft PRを作って", "draft PRを作成", "ドラフトPRを開いて", "draft PR作って", or when the user wants to push and open a PR in draft mode.
+description: >-
+  Pushes the current branch and opens a pull request in draft mode. Applies
+  when a PR should go up for early visibility rather than for merge — opening
+  a draft PR, putting a branch up before it is finished, or pushing and
+  creating a PR that is not ready yet.
 allowed-tools: Bash(git *), Bash(gh *), Read, Glob
 user-invocable: false
 metadata:

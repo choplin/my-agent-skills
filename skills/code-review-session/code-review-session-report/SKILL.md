@@ -1,6 +1,9 @@
 ---
 name: code-review-session-report
-description: Output — produce a completion summary of a review from review.md (what was resolved, skipped, and postponed) so it can be handed to a downstream consumer such as a driving workflow's post step, a written report, or an issue tracker. Triggers on "summarize the review", "review report", "レビュー結果をまとめて", "完了サマリ".
+description: >-
+  Produces a completion summary of a code-review session — what was resolved,
+  skipped, and postponed — for a downstream consumer such as a driving
+  workflow, a written report, or an issue tracker.
 allowed-tools: Read, Glob, Grep, Bash
 metadata:
   description-role: documentation

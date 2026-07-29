@@ -1,6 +1,11 @@
 ---
 name: codebase-structure-base
-description: Provides the shared reviewability objective and modeling resources used by the codebase-structure family. Use when another codebase-structure skill asks for its concept model, boundary forces, integration guidance, or human-reviewability criteria. Not typically invoked on its own.
+description: >-
+  The reviewability objective and modeling resources behind codebase structure
+  work: the concept model, the boundary forces, integration guidance, and the
+  human-reviewability criteria. Applies whenever a codebase structure is being
+  designed, reviewed, or restructured, so every step judges boundaries by the
+  same criteria.
 user-invocable: false
 metadata:
   description-role: trigger

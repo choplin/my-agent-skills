@@ -1,16 +1,13 @@
 ---
 name: planning-toolkit-plan
 description: >-
-  Turn an established direction into a finite outcome and autonomous-ready
-  delivery work. Use when a PRD, design notes, decision logs, or rough actions
-  already exist, but the outcome boundary, deferred roadmap, blocking
-  research/design, milestones, or atomic Linear issues still need shaping. Cuts
-  scope against the caller's scope policy, or a default outcome-necessity test
-  when none is supplied; persists durable decisions to llm-wiki and, after
-  explicit approval, creates or updates the Project, Milestones, Issues, and
-  dependencies in Linear. Ends once the work is registered and its readiness
-  stated, leaving the planned research, design, and implementation to later
-  steps.
+  Turns an established direction into a finite outcome and autonomous-ready
+  delivery work. Cuts scope against the caller's scope policy, persists the
+  durable decisions, and after explicit approval creates or updates the
+  Project, Milestones, Issues, and dependencies in the tracker. Applies when a
+  PRD, design notes, or rough actions already exist but the outcome boundary,
+  deferred roadmap, blocking research, milestones, and atomic issues still
+  need shaping.
 metadata:
   description-role: trigger
 ---

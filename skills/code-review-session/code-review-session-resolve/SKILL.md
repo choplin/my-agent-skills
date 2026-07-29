@@ -1,6 +1,10 @@
 ---
 name: code-review-session-resolve
-description: The resolution loop of the code-review-session family — work the open items in review.md to a terminal outcome (resolved / skipped / postponed). For each item the AI proposes a response; the user approves it, discusses to refine it, or defers it. Direct feedback typed in the session is added as an item and resolved the same way. Triggers on "resolve review items", "work through the review", "レビュー対応", "指摘を解決".
+description: >-
+  Works the open items of a code-review session to a terminal outcome:
+  resolved, skipped, or postponed. For each item the AI proposes a response
+  and the user approves, refines, or defers it. Feedback typed directly in the
+  session becomes an item and is resolved the same way.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion, Skill, Task
 metadata:
   description-role: documentation

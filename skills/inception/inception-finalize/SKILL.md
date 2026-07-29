@@ -1,6 +1,10 @@
 ---
 name: inception-finalize
-description: The terminal exit of the inception family (確定 / Finalize) — confirm a shaped footing into durable external memory. Takes the consolidated PRD from a full session's graph, writes it to the llm-wiki knowledge base as a keep-forever PRD note (one note, tagged `prd`), hands concrete actions to a tracker (e.g. Linear), and retires the transient thinking graph. Invoked from inception after converge; also usable directly. Triggers on "finalize this footing", "confirm the PRD and hand off the actions", "この構想を確定して保存", "このPRDを確定して残して". Should NOT trigger while the idea still needs shaping (use inception), for writing down a problem and its approach without a full session (use design-note), or to track/execute the actions themselves (that is the tracker's job).
+description: >-
+  The terminal exit of an inception session: takes the consolidated PRD from
+  the session's graph, writes it to the llm-wiki knowledge base as one keep-
+  forever note tagged prd, hands the concrete actions to a tracker, and
+  retires the transient thinking graph.
 allowed-tools: Read, Write, Edit, Glob, Bash, AskUserQuestion
 user-invocable: false
 metadata:

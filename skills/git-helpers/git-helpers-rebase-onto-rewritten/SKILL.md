@@ -1,6 +1,10 @@
 ---
 name: git-helpers-rebase-onto-rewritten
-description: Use this skill when the user needs to rebase onto a branch with rewritten history. Triggers on phrases like "rebase onto rewritten", "base branch was force pushed", "squash merged base", "cherry-pick my commits", or when normal rebase fails due to history rewriting.
+description: >-
+  Rebases a branch onto a base whose history was rewritten — force-pushed,
+  squash-merged, or otherwise no longer sharing a common ancestor — by cherry-
+  picking the branch's own commits. Applies when an ordinary rebase fails
+  because the base branch changed underneath it.
 allowed-tools: Bash(git *)
 user-invocable: false
 metadata:

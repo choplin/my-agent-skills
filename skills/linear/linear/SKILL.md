@@ -1,6 +1,9 @@
 ---
 name: linear
-description: Read-only bird's-eye view of the current repository's active Linear work — resolve the repo to its active Project(s), then for each Project report issue counts by status (In Progress / Todo / Backlog) together with representative issue details that explain what the work is about. Use when the user wants a snapshot of what's in flight for the repo they're in, before deciding what to pick up. Triggers on "Linear overview", "what's in flight", "show active projects and tasks", "Linear の概観", "今動いているプロジェクト", "稼働状況を見せて". Should NOT trigger for starting/executing an issue (use linear-start), grooming the backlog (use linear-groom), creating/updating issues (use linear-base), Jira (jira-cli), or GitHub Issues (github tools).
+description: >-
+  Read-only snapshot of the current repository's active Linear work: resolves
+  the repo to its active Projects and reports issue counts by status, with
+  representative issue details explaining what the work is about.
 metadata:
   description-role: documentation
 ---

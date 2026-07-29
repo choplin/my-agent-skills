@@ -1,6 +1,9 @@
 ---
 name: code-review-session-import-ai
-description: Ingestion source — record the findings of an AI code review as open items in a code-review-session record (review.md). Invokes a reviewer from artifact-review-toolkit (or accepts findings the caller already has) and normalizes each finding into a generic item for code-review-session-resolve to work through. Use when the deliverable is a persistent review record, not a one-off answer in the conversation. Does not review, fix, or gate.
+description: >-
+  Runs an AI code review of a change and records each finding as an open item
+  in a code-review session record. Normalizes findings into generic items; it
+  does not fix anything and gates nothing.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, Task
 metadata:
   description-role: documentation

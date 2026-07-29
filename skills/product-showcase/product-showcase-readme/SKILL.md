@@ -1,6 +1,11 @@
 ---
 name: product-showcase-readme
-description: Create or revise the main product README so prospective users can understand its value and reach a first successful outcome. Use when asked to write or audit the primary repository README for software such as an application or developer tool. Exclude contributor-only documentation and detailed references. Also exclude release notes and landing pages unless the README is explicitly in scope.
+description: >-
+  Writes or revises the main product README so prospective users understand
+  the value of the software and reach a first successful outcome. Applies
+  whenever a repository's primary README for an application or developer tool
+  is being written or audited — the value proposition, the first run, and what
+  the software is for.
 metadata:
   description-role: trigger
 ---

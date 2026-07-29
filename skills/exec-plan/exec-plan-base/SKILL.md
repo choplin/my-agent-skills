@@ -1,10 +1,9 @@
 ---
 name: exec-plan-base
 description: >-
-  Shared resources for the exec-plan skill — the self-contained ExecPlan-style plan file
-  format, its on-disk location convention, and the principles that keep a plan restartable on its
-  own. exec-plan delegates here for the file it drives. Use this skill when exec-plan asks to apply
-  the plan file format or follow the location convention. Not typically invoked on its own.
+  The plan file format behind ad-hoc autonomous execution: the self-contained
+  ExecPlan structure, its on-disk location convention, and the properties that
+  keep a plan restartable from the file alone.
 allowed-tools: Read, Write, Edit, Glob, Bash
 user-invocable: false
 metadata:

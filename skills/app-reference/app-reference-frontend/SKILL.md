@@ -1,6 +1,9 @@
 ---
 name: app-reference-frontend
-description: Use this skill when designing, implementing, or reviewing a web frontend; choosing between server-driven HTML and a client-side application; selecting htmx, CSS frameworks, or UI libraries; or deciding frontend state, rendering, and test boundaries.
+description: >-
+  Conventions for web frontends: choosing between server-driven HTML and a
+  client-side application, selecting htmx, CSS frameworks, and UI libraries,
+  and setting frontend state, rendering, and test boundaries.
 user-invocable: false
 metadata:
   description-role: documentation

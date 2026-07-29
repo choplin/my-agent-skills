@@ -1,12 +1,9 @@
 ---
 name: ai-council-fugu-cli
 description: >-
-  Use this skill when the user wants Sakana AI's Fugu opinion or review via the
-  Codex interface (the `codex-fugu` command). Triggers on phrases like
-  "Fuguに聞いて", "Fuguの意見", "Fuguでレビュー", "ask fugu", "what does fugu think",
-  "get fugu's opinion", "Sakana Fugu". Should NOT trigger for OpenAI Codex
-  consultation (use ai-council-codex-cli), troubleshooting the codex-fugu wrapper,
-  or casual mentions of Fugu without consultation intent.
+  Command reference for `codex-fugu`, which runs Sakana AI's Fugu model
+  through the Codex CLI interface. Covers only the Fugu-specific differences;
+  the shared syntax is documented with the Codex CLI itself.
 user-invocable: false
 metadata:
   description-role: documentation

@@ -1,6 +1,9 @@
 ---
 name: inception-deepen
-description: The deepening (深掘り) phase of the inception family — invoked by the inception orchestrator to drain the open-question queue one foundational point at a time, attacking premises and recording each resolution as a Decision/Action/Insight. Should NOT be invoked directly by the user; the inception orchestrator delegates here.
+description: >-
+  The deepening phase of an inception session: drains the open-question queue
+  one foundational point at a time, attacking premises and recording each
+  resolution as a decision, action, or insight.
 allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
 user-invocable: false
 metadata:

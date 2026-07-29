@@ -1,11 +1,11 @@
 ---
 name: inception
 description: >-
-  Shape an unformed project concept through structured dialogue when the user
-  wants to explore what should be built, resolve foundational questions, compare
-  alternatives, record decisions, and leave with a durable footing and first
-  actions. Runs the full inception session: framing, divergence, structure,
-  deepening, convergence, and a thinking graph.
+  Shapes an unformed project concept through structured dialogue — framing,
+  divergence, structuring, deepening, and convergence over a thinking graph.
+  Ends with a durable footing: the purpose, the resolved foundational
+  questions, the decisions with their rejected alternatives, and the first
+  actions.
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
 metadata:
   description-role: documentation

@@ -1,6 +1,9 @@
 ---
 name: git-helpers-explain-pr
-description: This skill should be used when the user wants to generate and publish a reviewer-facing HTML explanation page for the current branch's PR. Triggers on "explain this PR", "PRの解説ページを作って", "レビュアー向けの解説を公開して", "attach an explanation page to the PR". Gathers PR context, delegates HTML generation to understanding-explain-diff, publishes to gh-pages (public repos) or a pr-docs branch (private repos), and links it from a PR comment. Should NOT trigger for writing the PR description itself (git-helpers-pr-description) or for a local-only diff explanation without publishing (understanding-explain-diff).
+description: >-
+  Generates a reviewer-facing HTML explanation page for the current branch's
+  pull request, publishes it to gh-pages for public repositories or a pr-docs
+  branch for private ones, and links it from a PR comment.
 allowed-tools: Bash(git *), Bash(gh *), Read, Write, Glob
 metadata:
   description-role: documentation

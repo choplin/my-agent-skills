@@ -1,17 +1,13 @@
 ---
 name: orchestration-toolkit-orchestrate
 description: >-
-  Drive one ready Linear Project to completion as a quick, durable
-  orchestration run: recover design and decisions from llm-wiki, reconstruct the
-  Issue dependency graph from Linear, create or resume a Type/orchestration
-  control Issue, schedule safe parallel waves, delegate implementation to
-  economical subagents, integrate and verify each Issue, run mandatory global
-  adversarial review, and stop at a final human approval gate. Use when the user
-  asks an orchestrator to finish a multi-Issue Project, complete an initial
-  development phase, execute a Linear graph with subagents, or combine native
-  goal persistence with delegated delivery. Not for shaping an unformed
-  project, planning an ungroomed backlog, executing one isolated Issue, or
-  debating a proposition.
+  Drives one ready Linear Project to completion: reconstructs the Issue
+  dependency graph, creates or resumes a control Issue, schedules safe
+  parallel waves, delegates implementation to economical subagents, integrates
+  and verifies each Issue, runs global adversarial review, and stops at a
+  final human approval gate. Applies when a multi-Issue Project with
+  dependencies has to be finished, or an initial development phase carried
+  through with subagents.
 metadata:
   description-role: trigger
 ---

@@ -1,18 +1,13 @@
 ---
 name: design-note
 description: >-
-  Write down what to build as a Design Note — a short durable note recording the
-  problem and the approach taken to it, without going as deep into how as a design
-  doc. Use when a conversation, a dig, or an investigation has settled what should
-  be built and it needs capturing: background, problem, target, goals, non-goals,
-  and the approach with the reasoning behind it. Draws out what is still missing
-  through discussion, then writes one note straight into the llm-wiki knowledge
-  base, tagged design-note — no working files. Triggers on "write this up as a
-  design note", "save this direction to the wiki". Should NOT trigger for shaping
-  an idea that is still unformed (use inception), for a product PRD (inception
-  then inception-finalize), for implementation-level design, for cutting scope
-  into milestones and issues (use planning-toolkit-plan), or for reworking
-  documents that already exist (use the document-toolkit skills).
+  Writes what to build as a Design Note — a short durable note recording the
+  problem and the approach taken to it, shallower on how than a design doc.
+  Draws out what is still missing through discussion, then writes one note
+  into the llm-wiki knowledge base tagged design-note, with no working files
+  left behind. Applies when a conversation or investigation has settled what
+  should be built and it needs capturing: background, problem, target, goals,
+  non-goals, and the approach with its reasoning.
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
 metadata:
   description-role: trigger

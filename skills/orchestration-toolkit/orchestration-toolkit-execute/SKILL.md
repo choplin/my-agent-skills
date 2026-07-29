@@ -1,15 +1,13 @@
 ---
 name: orchestration-toolkit-execute
 description: >-
-  Carry one groomed Linear Issue to Done inline — no delegation, no graph. Recover
-  the Issue's knowledge from llm-wiki, prepare its worktree, implement and commit
-  in this session, decide reversible calls autonomously while parking one-way
-  doors, keep the running state on the Issue as checkpoint comments, run
-  risk-based adversarial review, and close with a completion note. Use when the
-  work unit is a single already-groomed Issue in the tracker. Not for a
-  multi-Issue Project with dependencies (use orchestration-toolkit-orchestrate),
-  not for ad-hoc work with no Issue behind it (use exec-plan), and not for
-  deciding what the Issue should say (use linear-groom or inception).
+  Carries one groomed Linear Issue to Done inline, with no delegation and no
+  graph: recovers the Issue's durable knowledge, prepares its worktree,
+  implements and commits in this session, decides reversible calls
+  autonomously while parking one-way doors, keeps the running state on the
+  Issue as checkpoint comments, runs risk-based adversarial review, and closes
+  with a completion note. Applies when the work unit is a single already-
+  groomed Issue in the tracker.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
 metadata:
   description-role: trigger

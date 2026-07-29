@@ -1,6 +1,10 @@
 ---
 name: showcase-pen-annotate
-description: Create or continue an editable screenshot annotation composition in a local pen.dev .pen file, hand it to a person for visual adjustment, then re-inspect and export the verified result through Pencil MCP tools. Use when a planned showcase still needs agent-writable layers, local ownership, repository-adjacent versioning, or repeated AI-human editing without moving the artifact into Figma or limiting editing to CleanShot X.
+description: >-
+  Creates or continues an editable annotation composition in a local pen.dev
+  `.pen` file through Pencil MCP tools, hands it to a person for visual
+  adjustment, then re-inspects and exports the verified result. For stills
+  needing agent-writable layers under repository-adjacent version control.
 user-invocable: false
 metadata:
   description-role: documentation

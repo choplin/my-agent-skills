@@ -1,6 +1,12 @@
 ---
 name: linear-base
-description: Foundation of the Linear skill family and the agent's home for ad-hoc issue work — defines how the agent treats Linear's model (Project / Milestone / Cycle / Issue / Sub-issue / Label / Status / Priority), owns the full issue lifecycle (create, groom, comment, transition status, close), and holds the shared "resolve repo → active Project" procedure that `linear` / `linear-start` / `linear-groom` build on. Not a slash command; the agent auto-invokes it whenever creating, grooming, triaging, updating, or closing Linear issues/projects, or when deciding how to structure work in Linear. Triggers on "Linear issue", "add to Linear", "triage the backlog", "groom this issue", "Linearに積む", "Issueを作って", "Linearで管理". Should NOT trigger for non-Linear trackers (Jira → jira-cli; GitHub Issues → github tools), or for git/PR mechanics (git-helpers).
+description: >-
+  How work is structured and managed in this Linear workspace: the treatment
+  of Project, Milestone, Cycle, Issue, Sub-issue, Label, Status, and Priority;
+  the full issue lifecycle from capture through grooming, status transitions,
+  and closure; and the procedure that resolves a repository to its active
+  Projects. Applies whenever Linear issues or projects are created, groomed,
+  triaged, updated, or closed, and whenever work is being shaped into Linear.
 user-invocable: false
 metadata:
   description-role: trigger

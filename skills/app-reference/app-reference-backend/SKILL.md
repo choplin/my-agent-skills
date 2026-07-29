@@ -1,6 +1,9 @@
 ---
 name: app-reference-backend
-description: Use this skill when designing, implementing, or reviewing a backend application; choosing its implementation language or runtime; deciding whether to split services; or defining database integration tests.
+description: >-
+  Conventions for backend applications: choosing an implementation language
+  and runtime, deciding whether to split services, and defining database
+  integration tests.
 user-invocable: false
 metadata:
   description-role: documentation

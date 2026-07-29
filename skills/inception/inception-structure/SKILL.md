@@ -1,6 +1,9 @@
 ---
 name: inception-structure
-description: The structuring (構造化) phase of the inception family — invoked by the inception orchestrator to cluster divergent material into an issue tree, wire dependencies, and assign each open point a next move. Turns a flat dump into a navigable graph. Should NOT be invoked directly by the user; the inception orchestrator delegates here.
+description: >-
+  The structuring phase of an inception session: clusters divergent material
+  into an issue tree, wires dependencies, and assigns each open point a next
+  move, turning a flat dump into a navigable graph.
 allowed-tools: Read, Write, Edit, AskUserQuestion, Bash
 user-invocable: false
 metadata:

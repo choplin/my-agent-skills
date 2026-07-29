@@ -1,6 +1,10 @@
 ---
 name: linear-handoff
-description: Record an in-progress Linear issue's context as a Handoff note comment so a DIFFERENT session can pick the issue up where this one stopped. Use when work on an issue spans sessions — you are pausing an issue that is still In Progress (not finished) and want the background, discussion, decisions, and next step preserved on the issue itself. Triggers on "hand off this issue", "pause here, save it so I can continue later", "record where we are on this issue", "この issue を引き継げるように残して", "ここで中断、続きは別セッションで", "作業の経緯を issue に残して". Should NOT trigger for finishing an issue (the completion note fires at In Review/Done — see `linear-base`), for continuing a discussion that is not yet a Linear issue (turn it into an issue first — see below), for snapshotting local execution state (that is read back on resume, not written here), or for non-Linear trackers (Jira → jira-cli; GitHub Issues → github tools).
+description: >-
+  Records an in-progress Linear issue's context as a handoff note comment so a
+  different session can resume it: the background, the decisions made while
+  working, the open questions, and the next concrete step. The issue stays In
+  Progress.
 metadata:
   description-role: documentation
 ---

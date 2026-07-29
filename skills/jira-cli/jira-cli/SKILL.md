@@ -1,12 +1,8 @@
 ---
 name: jira-cli
-description: >
-  jira-cli command reference for managing Jira issues, epics, sprints, and boards from the terminal.
-  Use when the user explicitly mentions "Jira" by name (e.g., "Jira issue", "Jira sprint") or
-  references "jira-cli" / "jira" CLI tool. Do NOT trigger on generic issue/sprint/epic mentions
-  without "Jira" — those may refer to GitHub issues or other systems.
-  Triggers on: "Jira", "jira-cli", "Jira issue", "Jira sprint", "Jira epic", "Jira board", "JQL".
-  Should NOT trigger on: "create issue", "list issues", "sprint", "epic" without explicit Jira context.
+description: >-
+  Command reference for jira-cli: managing Jira issues, epics, sprints, and
+  boards from the terminal, including JQL queries.
 user-invocable: false
 metadata:
   description-role: documentation

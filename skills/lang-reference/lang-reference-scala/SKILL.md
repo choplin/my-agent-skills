@@ -1,6 +1,8 @@
 ---
 name: lang-reference-scala
-description: Use this skill when the user asks about Scala coding conventions, best practices, tooling preferences, or needs guidance on Scala project setup.
+description: >-
+  Scala conventions for this codebase: coding style, project layout, and
+  tooling preferences.
 user-invocable: false
 metadata:
   description-role: documentation

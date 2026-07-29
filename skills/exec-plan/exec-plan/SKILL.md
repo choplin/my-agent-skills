@@ -1,16 +1,11 @@
 ---
 name: exec-plan
 description: >-
-  Run an ad-hoc task autonomously from a clear, near-horizon goal whose route is
-  visible enough to plan and drive inline. Pin the direction, resolve reversible
-  calls autonomously, and park the few high-impact decisions for one batch review
-  at the end, driving a self-contained plan file. Use when there is no tracker
-  Issue behind the work — a groomed Linear Issue belongs to
-  orchestration-toolkit-execute, which keeps the same decision split but holds its
-  record on the Issue. Lighter than native /goal, which fits distant outcomes
-  whose route must be discovered or reorganized while working. Not for work where
-  most steps need human judgment, requirements must be decided up front, or the
-  concept itself is still fuzzy.
+  Runs an ad-hoc task autonomously from a clear, near-horizon goal whose route
+  is visible enough to plan up front. Pins the direction, resolves reversible
+  calls on its own, and parks the few high-impact decisions for one batch
+  review at the end, driving a self-contained plan file. For work with no
+  tracker Issue behind it.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
 metadata:
   description-role: documentation
