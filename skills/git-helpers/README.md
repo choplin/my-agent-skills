@@ -8,7 +8,7 @@ Portable Git helper skills for coding agents.
 |-------|-------------|
 | `commit` | Create, amend, or draft review-friendly commits with consistent message granularity |
 | `draft-pr` | Push and create a draft PR |
-| `explain-pr` | Generate and publish a reviewer-facing HTML explanation page for the current PR (delegates generation to `understanding-explain-diff`) |
+| `explain-pr` | Generate and publish a reviewer-facing HTML explanation page for the current PR (delegates page generation to the external `explainer-diff` skill) |
 | `pr-description` | Write a review-friendly PR description (purpose, design, design→code map) |
 | `rebase-onto-rewritten` | Rebase onto force-pushed/squashed branches |
 | `squash-merge` | Squash the current branch into one commit and fast-forward it onto the base (optionally rebase first, then remove the worktree) |

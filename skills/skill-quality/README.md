@@ -1,8 +1,8 @@
 # skill-quality
 
 Tools to keep a skill's quality honest: **measure it, review it, and optimize it.**
-Authoring a skill from scratch is out of scope — use your agent's skill-creation
-path (e.g. `skill-creator` under Claude Code) for that, then bring the result here.
+Authoring a skill from scratch is out of scope — use whatever skill-creation path
+your agent provides for that, then bring the result here.
 
 ## Problem
 
@@ -109,7 +109,6 @@ See [docs/skill-first-architecture.md](../../docs/skill-first-architecture.md) f
 
 ## Which to use
 
-- **Author a new skill** → `skill-creator` (external), then come here.
 - **Is this skill any good? / benchmark it** → `skill-quality-evaluate` (mechanical) or `skill-quality-review` (advisory).
 - **Review before shipping** → `skill-quality-review` (static always; add the deliverable read when observable).
 - **Autonomously tune a skill** → `skill-quality-optimize` — *only* with a working skill, real tasks, and a mechanical pass/fail signal. No signal → the loop makes it worse; review instead.

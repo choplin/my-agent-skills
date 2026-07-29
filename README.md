@@ -149,7 +149,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **git-helpers**
 - draft-pr → pr-description
-- explain-pr → understanding-explain-diff `(ext; explainer-studio)`
+- explain-pr → explainer-diff `(ext; explainer-studio)`
 - squash-merge → commit
 
 **linear**
@@ -167,7 +167,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - orchestrate → **artifact-review-toolkit-adversarial**, **linear-base**, **git-helpers-commit**, llm-wiki-overview `(ext)`, llm-wiki-retrieve `(ext)`, wtm-worktree `(ext)`
 
 **skill-quality**
-- skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-creator `(ext)`
+- skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review
 - skill-quality-evaluate → base
 - skill-quality-improve → base
 - skill-quality-review → base

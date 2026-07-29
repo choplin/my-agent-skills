@@ -21,7 +21,7 @@ signal is the loss. Mechanism and laws live in `skill-quality-base` — load it.
 ## Preconditions (all three, or don't run)
 
 1. **A working skill exists.** This tunes; it does not author. No draft → author
-   it first (e.g. `skill-creator`), then tune here.
+   it first, then tune here.
 2. **Real tasks exist** — enough for a non-trivial train/held-out split (too few
    and the held-out score is noise, not signal; `skill-quality-evaluate` gives the
    sizing, ~5 train / ~3 holdout). If unsure whether your count is enough, say so
@@ -100,5 +100,3 @@ over the real skill.
 - `skill-quality-review` — advisory review (static rubric + deliverable read); a
   cheap pre-filter before committing to a run, and the home for skills this loop
   can't touch (no mechanical signal).
-- `skill-creator` — authoring from scratch (not this skill's job; see
-  Preconditions #1).

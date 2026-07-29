@@ -8,9 +8,8 @@ act on. It is the shared reference for two consumers in the `skill-quality` fami
   well; the improve step decides *which* edits to make).
 
 Authoring a skill from scratch (intent capture, drafting, the create→test→iterate
-lifecycle) is out of scope here — use your agent's skill-creation path (e.g.
-`skill-creator` under Claude Code) for that, and apply this rubric to the content
-it produces.
+lifecycle) is out of scope here — use whatever skill-creation path your agent
+provides for that, and apply this rubric to the content it produces.
 
 These guidelines distill the [agentskills.io best practices](https://agentskills.io/skill-creation/best-practices)
 (reproduced in `agentskills-best-practices.md`). For failure patterns and

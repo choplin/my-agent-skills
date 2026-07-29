@@ -150,11 +150,14 @@ anywhere: no "use `other-skill` instead", no "for X, use Y", no "unlike
 Two reasons, and either one is sufficient.
 
 **The reference does not survive distribution.** Skills here are installed
-individually through the `skills` CLI, so naming a sibling assumes it is
-installed alongside this one. That assumption does not hold, and it has already
-broken: `git-helpers-explain-pr` points at `understanding-explain-diff`, and
-`skill-quality-review` points at `skill-creator` — neither exists in this
-repository.
+individually through the `skills` CLI, so naming another skill assumes it is
+installed alongside this one. That assumption does not hold, and it had already
+broken in two places by the time the rule was written: one description routed to
+a skill that had been renamed and moved to another repository, another to a
+skill that only exists inside one particular agent.
+
+A genuine cross-repository dependency is a different thing, and belongs in the
+body where it can be stated as a prerequisite and checked at run time.
 
 **A redirect is not information about this skill.** The reader arrived to find
 out what this skill covers. Handing them a different name defers that answer and
