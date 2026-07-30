@@ -5,10 +5,16 @@
 | Skill | Description |
 |-------|-------------|
 | `3d-print` | Model a small printable object interactively in OpenSCAD — generate and self-verify from rendered views, settle the dimensions that need measuring, then hand over a parametric `.scad` for live-preview tuning |
+| `3d-print-eufymake-cli` | Slice from the command line with eufyMake Studio's console build, and trace a print warning back to the geometry that causes it by measuring the G-code |
 
 Aimed at small objects: holders, brackets, stands, trays, cases, inserts. It
 writes OpenSCAD rather than meshes, so the deliverable stays parametric and
-hand-editable. It does not find existing models, repair meshes, or slice.
+hand-editable. It does not find existing models or repair meshes.
+
+Modelling and slicing stay separate skills. `3d-print` ends at a `.scad` and an
+`.stl` and judges printability from the mesh; `3d-print-eufymake-cli` is the
+after-the-fact check against the real slicer, for when a warning has to be
+reproduced or proven gone.
 
 ## Prerequisites
 
