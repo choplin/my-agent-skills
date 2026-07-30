@@ -1,12 +1,12 @@
 ---
 title: "Skill-First Distribution Architecture"
-date: 2026-06-22
+date: 2026-07-30
 ---
 
 # Skill-First Distribution Architecture
 
-Decision record for restructuring this repository so its capabilities are
-**agent-agnostic skills first**, with agent-specific features kept opt-in.
+How this repository is organized and distributed: capabilities are
+**agent-agnostic skills first**, with agent-specific add-ons kept opt-in.
 
 Background research: [2026-06-22-agent-skills-portability-research.md](./2026-06-22-agent-skills-portability-research.md).
 
@@ -25,16 +25,23 @@ One source of truth that can be distributed to any coding agent:
 ```
 repo/
   skills/                     # portable, agent-agnostic. Distributed via vercel CLI.
-    <group>/                  #   group = former plugin name (organization + --list readability)
+    <group>/                  #   organization + --list readability; discarded on install
       <skill>/SKILL.md        #   catalog layout: skills/<group>/<skill>/SKILL.md
+      README.md               #   the group's inventory (every group has one)
   opts/                       # agent-specific add-ons. Distributed via scripts/install-opts.sh.
-    claude/                   #   mirrors ~/.claude/ subtree
+    claude/                   #   mirrors the ~/.claude/ subtree; one dir per agent
       agents/<name>.md        #     -> ~/.claude/agents/<name>.md
-      commands/ hooks/ ...
-    codex/ kilo/ ...          #   one dir per agent
   scripts/install-opts.sh     # links opts/<agent>/* into each agent's config home
+  scripts/uninstall-opts.sh   # removes them again (the inverse)
+  scripts/validate-skills.sh  # runs skill-validator over the skills a commit touches
   docs/                       # research + decision records
 ```
+
+Everything the repository ships is a portable skill, except one Claude Code
+subagent (`opts/claude/agents/skill-quality-reviewer.md`). No group currently
+ships hooks or a plugin, so `opts/` carries no `commands/` or `hooks/` subtree
+and no agent other than `claude/` has a directory yet. That is an outcome, not a
+policy: the conventions below still describe what to do when a group needs one.
 
 ## Distribution
 
@@ -66,6 +73,11 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
   plugin; suffix the add-on dir. `install-opts.sh` enforces this:
   it refuses names that match a portable skill and refuses to write through a
   skills-CLI-managed symlink.
+- A group that needs hooks ships them as a **minimal plugin** under
+  `opts/<agent>/skills/<name>/`. For Claude Code this works because the host
+  auto-loads plugins placed under `~/.claude/skills/` (since v2.1.157), so
+  `${CLAUDE_PLUGIN_ROOT}` resolves and the hooks need no rewriting. No group
+  currently needs this.
 - Directory layout keeps the group folder: `skills/<group>/<group>-<skill>/`
   (the leaf equals `name`, so it stays spec-conformant; the `<group>/` folder is
   for repo organization only and is discarded on install).
@@ -74,9 +86,10 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
   author-side convention.
 - Forward-compatible: if the standard later adopts slash namespaces (#109-style
   `name: group/skill`), migration is renaming `-` to `/`.
-- Claude-Code subagents in `opts/` keep the real plugin namespace
-  (`<group>:<agent>`) when their group ships a plugin; only flat skills need the
-  prefix.
+- Subagents under `opts/<agent>/agents/` carry the same `<group>-` prefix as
+  skills, because they install flat into a shared directory. A group that ships a
+  minimal plugin is the exception: its subagents live inside the plugin and keep
+  the real `<group>:<agent>` namespace instead.
 
 ## Authoring conventions
 
@@ -107,6 +120,19 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
    - The calling skill says: use the agent's subagent if available; otherwise
      apply the skill inline. This "fallback procedure" is itself the skill.
 
+   **The wrapper may hold nothing the skill needs.** A fallback path is worthless
+   if the knowledge required to walk it only exists in the wrapper — the skill
+   then degrades into a broken procedure rather than a slower one. Anything the
+   wrapper knows about *doing the work* (required flags, a host permission the
+   call needs, a confirmation to obtain before sending data somewhere) belongs in
+   the portable skill. What legitimately stays in the wrapper is only what the
+   agent layer itself provides: isolation, a tool allowlist, a model choice.
+
+   Judge the wrapper by that residue. If removing it would lose nothing but an
+   output format, it is not carrying its keep — a subagent's descriptions are
+   another routing surface to maintain, and one that host-specific conventions
+   pull away from the repository's own.
+
 5. **When a required capability is absent, a skill does one of three things**,
    depending on how replaceable the capability is:
    - **fallback** — equivalent path exists, full behavior preserved. The subagent
@@ -130,67 +156,21 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
    `nix develop` else aggregated fail) is specified in
    [skill-runtime-and-dependencies.md](./skill-runtime-and-dependencies.md).
 
-## Rollout (incremental, non-destructive until validated)
+## Related policies
 
-- **Step 0** — scaffold `skills/`, `opts/`, `scripts/install-opts.sh`, this doc. ✅
-- **Step 1** — pilot skill-quality tooling end-to-end (the `skill-quality-review`
-  skill + thin `opts/claude/agents/` wrapper). ✅
-  Discovery validated with `skills add ./skills --list`.
-- **Step 2** — migrate **dev-workflow**. ✅
-  - 13 skills → `skills/dev-workflow/`; shared `references/` + `workflow-state.py`
-    + `workflow-concepts.md` → `dev-workflow-base` skill (delegated by name).
-  - `acceptance-reviewer` / `plan-compliance-reviewer` → `dev-workflow-acceptance-review` /
-    `dev-workflow-plan-compliance-review` skills + thin wrappers in the Claude add-on.
-  - hooks → the **minimal plugin** `opts/claude/skills/dev-workflow/` (with
-    `.claude-plugin/` + `hooks/` + a symlink to the base skill's
-    `workflow-state.py`). Claude Code v2.1.157 auto-loads plugins placed under
-    `~/.claude/skills/`, so `${CLAUDE_PLUGIN_ROOT}` resolves and hooks need no
-    rewrite. Placing the plugin there also preserves the `dev-workflow:` namespace
-    for the reviewer subagents.
-- **Step 3** — migrate the remaining plugins. ✅ Done: discuss-toolkit,
-  discussion-continuity, git-helpers, jira-cli, lang-reference, document-toolkit,
-  ai-council (advisor agents → flat group-prefixed agents under `opts/claude/agents/`).
-  **moonbit was dropped**, not migrated — it was a vendored submodule of upstream
-  `moonbitlang/skills`, which is directly installable (`skills add moonbitlang/skills`,
-  9 skills, already `moonbit-*` namespaced and more current than our snapshot).
-  Plugin format retired: removed all `.claude-plugin/` manifests and the root
-  `marketplace.json`; refreshed the root `README.md` and `CLAUDE.md`.
+- **Descriptions** — what a `description` is for, and how the two invocation
+  settings (`user-invocable`, `metadata.description-role`) are decided: the
+  `skill-quality-base` skill (`references/writing-descriptions.md`), summarized in
+  the repo `CLAUDE.md`. It lives with the skill that reviews descriptions rather
+  than in `docs/`, so the reviewer loads it where it is applied.
+- **Runtime & dependencies** — convention 7 above:
+  [skill-runtime-and-dependencies.md](./skill-runtime-and-dependencies.md).
 
-- **Step 4** — consolidate the task-execution skills. ✅ `dev-workflow` (11 skills,
-  `workflow-state.py`, and the `opts/claude/skills/dev-workflow/` plugin) and
-  `dispatch` were removed. Execution now routes on where the work comes from:
-  `orchestration-toolkit-execute` for one groomed Linear Issue,
-  `orchestration-toolkit-orchestrate` for a multi-Issue Project, `exec-plan` for
-  an ad-hoc task with no Issue behind it. With no group currently shipping hooks,
-  `opts/claude/` holds only flat subagents; the minimal-plugin convention above
-  still stands for the next group that needs one.
-
-- **Step 5** — generalize the planning skills. ✅ `mvp-toolkit` became
-  `planning-toolkit`. Almost all of its content was generic delivery planning —
-  the readiness state machine, unknown/authority classification, the
-  llm-wiki/Linear ownership split, the context-free issue contract, and the whole
-  research→design→apply lane never depended on the work being an MVP. Only the
-  scope-cut standard did. That standard is now a first-class **Scope Policy**: a
-  declaration (outcome expression, extra contract fields, inclusion test,
-  challenge lenses, deferred handling) that `planning-toolkit-plan` plugs into its
-  scope-cut step, with a neutral default when no caller supplies one.
-  `planning-toolkit-mvp` is the first policy — declaration only, no workflow — so
-  a migration or hardening Project can reuse the same spine without inheriting
-  MVP semantics. `mvp-toolkit-resolution` had no MVP-specific content at all and
-  moved to `planning-toolkit-resolve` unchanged in substance. The handoffs used to
-  name a specific downstream skill (the never-built `mvp-toolkit-orchestration`);
-  they now stop at "READY, and here is the first unblocked work", leaving the
-  choice of executor to the executor's own routing. Planning states readiness;
-  it does not know who acts on it.
-
-All groups are now skill-first. Top level is just `skills/`, `opts/`, `scripts/`,
-`docs/`.
-
-## Notes / open issues
+## Open issues
 
 - Cross-skill delegation phrasing (`` `<group>-base` skill (`references/X`) ``,
   `<group>-base/scripts/...`) is a convention, not a spec mechanism — refine
   with real use.
-- Running the skills CLI / `install-opts.sh` against real agent homes is validated
-  in real use; the repo structure and discovery (`skills add ./skills --list`)
-  are validated here.
+- Upstream skill sets are installed from upstream, not vendored here. A vendored
+  copy goes stale and re-namespaces what is already namespaced; prefer
+  `skills add <owner>/<repo>` alongside this repo.
