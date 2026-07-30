@@ -10,11 +10,10 @@ This plugin enables Claude Code to consult other AI agents (OpenAI Codex CLI, an
 
 | Component | Name | Purpose |
 |-----------|------|---------|
+| Skill | ai-council | Poll several model families on one question, blind, and report them side by side |
 | Skill | codex-cli | Learn how to use Codex CLI |
-| Agent | codex-advisor | Autonomously query Codex for opinions |
 | Reference | codex-reference.md | Detailed Codex CLI documentation |
 | Skill | fugu-cli | Learn how to use Fugu (Sakana AI) via `codex-fugu` |
-| Agent | fugu-advisor | Autonomously query Fugu for opinions |
 | Skill | adversarial-panel | Multi-round adversarial mutual review: panelists critique each other and the facilitator adjudicates |
 
 ## Prerequisites
@@ -100,7 +99,7 @@ Fuguの使い方を教えて
 ### Code Review
 > User: この関数についてCodexの意見を聞いて
 >
-> Claude: [Uses codex-advisor agent to get Codex's review and presents the findings]
+> Claude: [Consults Codex through the `codex` CLI and presents the findings]
 
 ### Design Discussion
 > User: このアーキテクチャについて他のAIの視点が欲しい

@@ -50,12 +50,33 @@ codex review --base main
 codex review path/to/file.ts
 ```
 
+## Running Codex from inside an agent
+
+Two constraints apply whenever an agent — rather than a person at a shell —
+invokes these commands.
+
+**Pass `-s read-only` unless the run is meant to write.** Without it Codex may
+modify files in the working tree. A consultation or review never needs write
+access, so the flag is mandatory there, not merely advisable.
+
+**Codex needs network access the host may deny.** Under Claude Code's Bash
+sandbox on macOS the call fails, because Codex reaches for the
+SystemConfiguration API that the sandbox blocks
+([sandbox-runtime#30](https://github.com/anthropic-experimental/sandbox-runtime/issues/30)).
+Invoke it with `dangerouslyDisableSandbox: true`. On a host with no such
+sandbox, nothing extra is required. If the call fails for a reason other than
+that block, report it rather than widening permissions further.
+
+**Codex reads the files you name, and they leave the machine.** Before pointing
+it at a path that may hold credentials, keys, or customer data, confirm with the
+user. This is a third-party service, and the prompt plus the file contents go to
+it.
+
 ## Best Practices for Getting Opinions
 
-1. **Use read-only sandbox** for safety: `-s read-only`
-2. **Be specific** in your prompts about what kind of feedback you want
-3. **Provide context** about the codebase or design goals
-4. **Capture output** using `-o` or `--json` for structured responses
+1. **Be specific** in your prompts about what kind of feedback you want
+2. **Provide context** about the codebase or design goals
+3. **Capture output** using `-o` or `--json` for structured responses
 
 ## Example Prompts
 

@@ -56,18 +56,45 @@ Before consulting the AIs, formulate a question that includes these three elemen
 
 **Why this matters**: Vague questions like "Is this good?" produce generic answers. Specific questions enable AIs to provide targeted, actionable feedback.
 
-### Step 2: Gather Opinions in Parallel
+### Step 2: Gather Opinions Blind
 
-Launch two Task tool calls simultaneously with the following agents:
-- `ai-council-claude-advisor` - Claude's perspective (direct analysis)
-- `ai-council-codex-advisor` - Codex's perspective (via Codex CLI)
+Seat one panelist per model family you can reach. Two is the working minimum;
+more only helps if it adds a family, not another voice from the same one.
 
-**Important**: Use `run_in_background: true` for ai-council-codex-advisor to allow parallel execution. Claude-advisor can run in foreground.
+| Panelist | How it answers |
+|---|---|
+| The host model | Reasons directly over the files. Needs a context that has **not** seen this conversation — an opinion formed alongside your own is not independent evidence. |
+| Codex (OpenAI) | Via the `codex` CLI. Apply the `ai-council-codex-cli` skill for the command form and its agent-side constraints. |
+| Fugu (Sakana AI) | Via the `codex-fugu` CLI. Apply the `ai-council-fugu-cli` skill. |
 
-Provide each agent with:
-- The same clear question
-- Relevant file paths to analyze
-- Specific aspects to focus on
+**Every panelist gets the same brief and none sees another's answer.** That is
+what makes agreement mean something here. Give each one the question from Step 1
+verbatim, the file paths to read, and the aspects to weigh — nothing about what
+any other panelist said or is expected to say.
+
+**Dispatch.** If the host can run isolated subagents, give each panelist its own,
+and run the CLI-backed ones concurrently — they spend most of their time waiting
+on a network call. If it cannot, run them sequentially in this same session,
+keeping each panelist's brief and answer separated: state which panelist you are
+speaking as, produce only that answer, then move on. Sequential costs wall-clock
+but not independence; a panelist that reads a previous answer costs independence,
+which is the whole point.
+
+**Bind every panelist to these rules.**
+
+- **Opinion only.** Read and analyze; never modify a file. A consultation that
+  edits the tree has exceeded its mandate.
+- **Attribution.** Each answer is labeled with the model family that produced it.
+  Never merge two panelists' words, and never present the host model's answer as
+  another vendor's.
+- **Evidence.** Cite the file and line an observation rests on. An assertion with
+  nothing behind it is noise in a synthesis.
+- **Uncertainty is reportable.** A panelist that cannot judge says so rather than
+  producing a confident guess.
+
+Each panelist returns: an overall position (recommend / caution / reject) with
+its reasoning, the specific observations behind it, actionable recommendations,
+and at least one trade-off or alternative it would not choose.
 
 ### Step 3: Synthesize and Report
 
@@ -126,9 +153,9 @@ A complete AI Council consultation includes:
 - [ ] Divergent views section presents each AI's position with its reasoning when disagreements exist
 - [ ] Recommendation section: (1) cites specific AI opinions, (2) explains reasoning, (3) notes unresolved disagreements
 
-## Example Prompt for Agents
+## Example Brief for a Panelist
 
-When calling each advisor agent, use a prompt like:
+Give each panelist a brief of this shape:
 
 ```
 Please analyze the {topic} and provide your opinion on:

@@ -33,8 +33,11 @@ Use Fugu when you want **another AI's perspective from a different vendor** than
 
 Command usage is **identical to Codex** — same subcommands and flags (`exec`,
 `review`, `-s read-only`, `-o`, `--json`, `-c key=value`) with the `codex-fugu`
-prefix. See the `ai-council-codex-cli` skill for syntax, examples, best practices,
-and output interpretation. Only two things are Fugu-specific:
+prefix. See the `ai-council-codex-cli` skill for syntax, examples, output
+interpretation, and the constraints that apply when an agent invokes the command
+(mandatory `-s read-only`, the host sandbox that must be disabled on macOS, and
+confirming with the user before sending files that may hold secrets). Those apply
+here unchanged. Only two things are Fugu-specific:
 
 1. **Attribute clearly** — always present the response as Fugu's (Sakana AI),
    distinct from Codex/OpenAI and Claude.
