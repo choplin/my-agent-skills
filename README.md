@@ -31,7 +31,9 @@ make install        # = install-skills + install-opts, from this working tree
 make help           # list all targets; SOURCE/AGENT/SKILL/SCOPE are overridable
 ```
 
-`make install` symlinks skills from `./skills` for `claude-code` globally, so edits to this repo take effect without re-running. To install the published repo instead, override `SOURCE=choplin/my-agent-skills`.
+`make install` installs skills from `./skills` for `claude-code` globally. It copies them into the shared store, so **edits to this repo take effect only after re-running it** — run `make install` again after changing a skill you want to use. To install the published repo instead, override `SOURCE=choplin/my-agent-skills`.
+
+Add-ons are add-and-prune: `install-opts.sh` places every current file under `opts/` and removes links this repo left behind whose source has since been renamed or deleted. `make purge` removes both skills and add-ons; `make reset` is purge followed by a fresh install.
 
 ## Validate
 

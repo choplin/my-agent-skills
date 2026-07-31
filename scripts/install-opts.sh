@@ -11,7 +11,12 @@
 #   opts/claude/agents/foo.md   ->  ~/.claude/agents/foo.md
 #   opts/claude/hooks/bar.py    ->  ~/.claude/hooks/bar.py
 #
-# Removal is handled by the sibling uninstall-opts.sh.
+# Installing is add-and-prune: every current opts file is placed, and links this
+# repo left behind whose source has since been renamed or deleted are removed.
+# Without the prune an add-on outlives its definition — a deleted subagent keeps
+# showing up in the agent's list, backed by a link into a file that is gone.
+#
+# Wholesale removal is handled by the sibling uninstall-opts.sh.
 #
 # Usage:
 #   scripts/install-opts.sh [--copy] [--dry-run] [agent ...]
@@ -25,15 +30,8 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 opts_dir="$repo_root/opts"
 
-# Map an opts/<agent> directory name to that agent's config home.
-# Extend this table as more agents are supported.
-agent_home() {
-  case "$1" in
-    claude) echo "$HOME/.claude" ;;
-    codex)  echo "$HOME/.codex" ;;
-    *)      return 1 ;;
-  esac
-}
+# shellcheck source=./opts-lib.sh
+source "$repo_root/scripts/opts-lib.sh"
 
 mode="symlink"
 dry_run=0
@@ -131,4 +129,17 @@ for agent in "${agents[@]}"; do
     fi
     echo "    $rel"
   done < <(find "$src_base" \( -type f -o -type l \) -print0)
+
+  # Prune: our links whose target no longer exists. Everything current was just
+  # (re)placed above, so a dangling one is a leftover by definition. -e follows
+  # the link, which is exactly the test wanted here.
+  #
+  # Copy mode places files, not links, so it has nothing to prune and the scan
+  # finds nothing — a stale copy is indistinguishable from a user's own file.
+  while IFS= read -r -d '' link; do
+    [[ -e "$link" ]] && continue
+    run rm -f "$link"
+    echo "    pruned ${link#"$dst_base"/}"
+  done < <(opts_links "$src_base" "$dst_base")
+  prune_empty_dirs "$src_base" "$dst_base"
 done

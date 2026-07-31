@@ -4,12 +4,9 @@
 # config location. The inverse of install-opts.sh.
 #
 # install-opts.sh symlinks opts/<agent>/** into <agent-home>/** pointing back
-# into this repo. We identify "our" links by that target: any symlink under the
-# agent home whose target is inside this repo's opts/ is removed. Reading the
-# link's literal target (readlink, not readlink -f) means a stale link left by a
-# renamed/deleted add-on still resolves under opts/ and is cleaned up too, even
-# though its target file is gone. Copy-mode installs are not symlinks and are
-# left untouched.
+# into this repo. Every such link is removed here; install-opts.sh removes only
+# the subset whose target is gone. See opts-lib.sh for how a link is recognised
+# as ours and what that scan cannot see.
 #
 # Usage:
 #   scripts/uninstall-opts.sh [--dry-run] [agent ...]
@@ -21,15 +18,8 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 opts_dir="$repo_root/opts"
 
-# Map an opts/<agent> directory name to that agent's config home.
-# Keep in sync with install-opts.sh.
-agent_home() {
-  case "$1" in
-    claude) echo "$HOME/.claude" ;;
-    codex)  echo "$HOME/.codex" ;;
-    *)      return 1 ;;
-  esac
-}
+# shellcheck source=./opts-lib.sh
+source "$repo_root/scripts/opts-lib.sh"
 
 dry_run=0
 agents=()
@@ -64,23 +54,14 @@ run() {
 
 # Remove every symlink under the agent's config home that points back into this
 # repo's opts/<agent> tree, then prune the now-empty directories opts created.
-# The scan is scoped to the top-level subtrees opts populates (agents/, skills/…).
 uninstall_agent() {
   local src_base="$1" dst_base="$2"
-  local sub subtree link tgt
-  for sub in "$src_base"/*/; do
-    [[ -d "$sub" ]] || continue
-    subtree="$(basename "$sub")"
-    [[ -d "$dst_base/$subtree" ]] || continue
-    while IFS= read -r -d '' link; do
-      tgt="$(readlink "$link")"
-      if [[ "$tgt" == "$src_base/"* ]]; then
-        run rm -f "$link"
-        echo "    rm $subtree/${link#"$dst_base/$subtree/"}"
-      fi
-    done < <(find "$dst_base/$subtree" -type l -print0)
-    run find "$dst_base/$subtree" -mindepth 1 -type d -empty -delete
-  done
+  local link
+  while IFS= read -r -d '' link; do
+    run rm -f "$link"
+    echo "    rm ${link#"$dst_base"/}"
+  done < <(opts_links "$src_base" "$dst_base")
+  prune_empty_dirs "$src_base" "$dst_base"
 }
 
 for agent in "${agents[@]}"; do
