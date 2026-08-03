@@ -122,6 +122,11 @@ Statuses and their machine-meaning:
 | **Done** | completed | The deliverable is accepted and complete (merged or shipped when applicable). |
 | **Canceled** | canceled | Dropped, or superseded (e.g. promoted into a Project). |
 
+**Set a status by its type, not by the name above** — those names are this
+workspace's and a workspace may rename them. Where a type covers two statuses,
+the first `started` one is the working state and the later one is review. Match
+the display name only when the type leaves the choice ambiguous.
+
 Transitions (who/when):
 
 - **→ Backlog**: whenever an idea/task appears. Rough content is fine.

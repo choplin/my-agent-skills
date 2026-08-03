@@ -65,7 +65,7 @@ human gate.
 
 ### 4. Move the issue to In Progress — start only
 
-**Start:** set the selected issue's `state` to **In Progress**. (Todo → In Progress, or Backlog → In Progress if the user started a Backlog item directly.)
+**Start:** set the selected issue's `state` to the workspace's working status — the first one whose type is `started` (see `linear-base`'s *Lifecycle & status transitions* for why the type, not the name, decides). In this workspace that is **In Progress**, reached from either Todo or Backlog.
 
 **Resume:** the issue is already In Progress. No status change — skip this step.
 
@@ -80,6 +80,13 @@ Choose the workspace **autonomously** from the selected issue's expected deliver
 
 Treat the Type label as a strong hint, not a substitute for reading the issue: decide from the actual deliverable and acceptance criteria. If the classification is imperfect but the likely deliverable is clear, use best judgment rather than asking. An explicit user instruction to use or avoid a worktree overrides these defaults. Briefly state the chosen setup and proceed.
 
+**The isolated worktree needs `wtm`, which is an external dependency.** The
+`wtm-worktree` skill is not part of this group and may not be installed. When it
+is unavailable, **do not improvise a worktree** — fall back to the current
+workspace and say so. A bare `git worktree add` would leave nowhere to record
+the issue reference (see below), and the current-workspace path already handles
+that case correctly.
+
 **If worktree** — delegate to the `wtm-worktree` skill (`wtm` CLI):
 
 - **Do not put the Linear issue ID in the branch or worktree name.** Linear references stay internal (see `linear-base`'s "Linear references stay internal") — branch names surface in commits, PRs, and the remote. Name the branch/worktree after the change itself.
@@ -91,11 +98,12 @@ Treat the Type label as a strong hint, not a substitute for reading the issue: d
 
   The note is later readable with `wtm notes show`, so the branch stays clean while the link to Linear is preserved.
 
-**If current workspace** — skip `wtm` entirely. There is no worktree note to hold the link, so keep the issue identifier/URL in session context only — per `linear-base`'s "Linear references stay internal", it must **not** end up in the commit message or PR. If a PR is later opened, preserve the link from the Linear side by attaching it to the issue (Git integration or a `links` attachment).
+**If current workspace** — whether chosen for the deliverable or fallen back to
+because `wtm` is absent — skip `wtm` entirely. There is no worktree note to hold the link, so keep the issue identifier/URL in session context only — per `linear-base`'s "Linear references stay internal", it must **not** end up in the commit message or PR. If a PR is later opened, preserve the link from the Linear side by attaching it to the issue (Git integration or a `links` attachment).
 
 #### If resuming
 
-**Do not create a new worktree before checking for the existing workspace.** Because the issue ID never appears in a branch or worktree name, a **worktree note** written at step 5 on start is the strongest local link back to Linear. Search the notes for the issue identifier:
+**Do not create a new worktree before checking for the existing workspace.** Because the issue ID never appears in a branch or worktree name, a **worktree note** written at step 5 on start is the strongest local link back to Linear. Search the notes for the issue identifier — skip this search entirely when `wtm` is not installed, since no note can exist, and go straight to the no-match path below:
 
 ```bash
 wtm list --format json | jq -r '.[].name' | while read -r wt; do
@@ -107,7 +115,7 @@ done
 
 - **Exactly one match** → that is the workspace. Tell the user which worktree/branch, and continue there.
 - **Several matches** → list them with their notes and **ask** which to continue in.
-- **No match** → the work was done in the current workspace, or the worktree was removed. Check the Linear side first: if an attached branch/PR identifies the existing workspace, recover and use it. Otherwise inspect the current branch, status, commits, and diffs for evidence of the selected issue; continue there when the work is plausibly present. If no existing work is recoverable, apply the same autonomous deliverable rule as the start path: create a fresh worktree (with the `-m` note) for implementation or other repository-changing work; continue in the current workspace for non-repository work. State the choice and proceed without asking merely because the note was missing.
+- **No match** → the work was done in the current workspace, or the worktree was removed. Check the Linear side first: if an attached branch/PR identifies the existing workspace, recover and use it. Otherwise inspect the current branch, status, commits, and diffs for evidence of the selected issue; continue there when the work is plausibly present. If no existing work is recoverable, apply the same autonomous deliverable rule as the start path — including its `wtm` dependency: create a fresh worktree (with the `-m` note) for implementation or other repository-changing work when `wtm` is available, and otherwise continue in the current workspace. State the choice and proceed without asking merely because the note was missing.
 
 ### 6. Reconstruct what's already been done — resume only
 
