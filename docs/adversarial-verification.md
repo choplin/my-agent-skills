@@ -1,6 +1,7 @@
 ---
 title: "Adversarial Verification — Design Principle"
-date: 2026-07-10
+created: 2026-07-10
+updated: 2026-07-29
 ---
 
 # Adversarial Verification — Design Principle
@@ -113,3 +114,7 @@ Concrete, rename-prone names are confined here.
   CoEvoSkills co-evolution and OpenSkill verification anchors), including the
   reported result that a low-precision verification signal (~57%) degrades
   performance as iterations increase. <https://zenn.dev/layerx/articles/9f25ec86a31730>
+
+## History
+
+- **2026-07-10** — Created. Earlier revisions are in git history.

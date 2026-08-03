@@ -1,6 +1,7 @@
 ---
 title: "Skill Runtime & Dependency Policy"
-date: 2026-07-08
+created: 2026-07-08
+updated: 2026-07-29
 ---
 
 # Skill Runtime & Dependency Policy
@@ -244,3 +245,7 @@ Three things follow:
   substituter fetches need network and cache writes, which an agent's command
   sandbox may block. The SKILL.md should tell the reader to **re-run without the
   sandbox** on such a failure.
+
+## History
+
+- **2026-07-08** — Created. Earlier revisions are in git history.

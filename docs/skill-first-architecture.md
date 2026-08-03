@@ -1,6 +1,7 @@
 ---
 title: "Skill-First Distribution Architecture"
-date: 2026-07-30
+created: 2026-06-22
+updated: 2026-08-03
 ---
 
 # Skill-First Distribution Architecture
@@ -8,7 +9,8 @@ date: 2026-07-30
 How this repository is organized and distributed: every capability is an
 **agent-agnostic skill**.
 
-Background research: [2026-06-22-agent-skills-portability-research.md](./2026-06-22-agent-skills-portability-research.md).
+The constraints these conventions answer to:
+[agent-skills-portability.md](./agent-skills-portability.md).
 
 ## Goal
 
@@ -29,7 +31,7 @@ repo/
       <skill>/SKILL.md        #   catalog layout: skills/<group>/<skill>/SKILL.md
       README.md               #   the group's inventory (every group has one)
   scripts/validate-skills.sh  # runs skill-validator over the skills a commit touches
-  docs/                       # research + decision records
+  docs/                       # architecture, policy, and design principles
 ```
 
 Everything the repository ships is a portable skill. The repository is a
@@ -50,9 +52,7 @@ within a group delegate to each other by name (convention 3).
 ## Naming / namespace convention
 
 Neither the Agent Skills standard nor the vercel CLI provides skill namespacing
-(verified 2026-06-23: the standard `name` is a flat slug with no slash/scope, and
-in-spec proposals #109/#312 and CLI PRs #250/#1464 are all unmerged; the CLI
-installs flat to `.agents/skills/<name>` and same-name skills overwrite). So we
+(see [agent-skills-portability.md](./agent-skills-portability.md)). So we
 namespace by **baking a `<group>-` prefix into the flat `name`**:
 
 - Skill `name` = `<group>-<skill>` (e.g. `orchestration-toolkit-execute`). The
@@ -92,7 +92,7 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
    - Write a graceful fallback for when the owner skill is absent.
 
 4. **A skill never depends on subagent invocation.** Dispatching to a subagent
-   is not portable (see research), so the behavior lives in the skill and runs
+   is not portable ([why](./agent-skills-portability.md)), so the behavior lives in the skill and runs
    inline on any agent. A skill may say "dispatch this to an isolated agent if
    the host has one; otherwise apply it inline" — that fallback procedure is
    itself part of the skill.
@@ -148,3 +148,12 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
   copy goes stale and re-namespaces what is already namespaced; prefer
   `skills add <owner>/<repo>` alongside this repo.
 
+## History
+
+- **2026-08-03** — Agent-specific add-ons (`opts/`) and their install scripts
+  removed. The repository became a catalog: it ships only skill directories and
+  no installer, and which skills an environment installs is decided outside it.
+  A group is now stated as the unit of selection, since delegation between
+  skills is unresolved by the standard.
+- **2026-06-22** — Created, alongside the move from Claude Code plugins to
+  portable skills.

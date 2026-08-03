@@ -13,7 +13,7 @@ skills/                      # portable, agent-agnostic skills (the source of tr
   <group>/                   #   organized by group (former plugin name)
     <group>-<skill>/SKILL.md #   names are group-prefixed for namespacing
 scripts/validate-skills.sh   # strict skill-validator check (used by lefthook and CI)
-docs/                        # research + decision records
+docs/                        # architecture, policy, and design principles
 ```
 
 **Naming / namespace:** Neither the Agent Skills standard nor the skills CLI has a namespace mechanism (installs are flat by `name`; same names overwrite). So skills are namespaced by a `<group>-` prefix baked into the flat name (e.g. `orchestration-toolkit-execute`). See the architecture doc for details.
