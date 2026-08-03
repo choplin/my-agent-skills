@@ -1,7 +1,7 @@
 ---
 title: "Skill Runtime & Dependency Policy"
 created: 2026-07-08
-updated: 2026-07-29
+updated: 2026-08-03
 ---
 
 # Skill Runtime & Dependency Policy
@@ -240,7 +240,8 @@ Three things follow:
   per leaf).
 - **Mitigate duplication with a single source of truth + sync.** Keep one
   canonical copy of the env/preflight in the repo and **sync it into each leaf
-  via the `Makefile`**, rather than hand-editing N copies of the lockfiles.
+  with a script under `scripts/`**, rather than hand-editing N copies of the
+  lockfiles.
 - **Sandbox / network caveat.** `uvx`'s first resolve and `nix develop`'s
   substituter fetches need network and cache writes, which an agent's command
   sandbox may block. The SKILL.md should tell the reader to **re-run without the
@@ -248,4 +249,6 @@ Three things follow:
 
 ## History
 
+- **2026-08-03** — The leaf-sync mitigation named the `Makefile`, which the
+  repository no longer has; it now names a script under `scripts/`.
 - **2026-07-08** — Created. Earlier revisions are in git history.

@@ -20,16 +20,20 @@ docs/                        # architecture, policy, and design principles
 
 ## Install
 
-**Everything at once**, via the Makefile:
+Works for Claude Code, Codex, Cursor, Kimi, and 70+ agents:
 
 ```bash
-make install        # install every skill from this working tree
-make help           # list all targets; SOURCE/AGENT/SKILL/SCOPE are overridable
+skills add choplin/my-agent-skills --list                            # browse
+skills add choplin/my-agent-skills/skills/skill-quality --skill '*'  # one group
+skills add choplin/my-agent-skills --skill orchestration-toolkit-execute
+skills add ./skills --skill '*' -a claude-code codex -g -y           # this working tree
 ```
 
-`make install` installs skills from `./skills` for `claude-code` globally. It copies them into the shared store, so **edits to this repo take effect only after re-running it** — run `make install` again after changing a skill you want to use. To install the published repo instead, override `SOURCE=choplin/my-agent-skills`.
+**A group is the unit to install.** Skills within a group delegate to each other by name and the standard resolves no dependencies, so picking individual skills can leave a broken subset. Point the source at `skills/<group>` to keep the group intact.
 
-`make purge` removes the skills this repo installed; `make reset` is purge followed by a fresh install.
+Installs are **copies**, not links into this repository: a global install lands in `~/.agents/skills/<name>/` with the agent's directory symlinked to it. **Edits here take effect only after re-running the install.** To drop skills again, `skills remove <name...> -g`.
+
+Which skills an environment installs is decided outside this repository; there is no installer here.
 
 ## Validate
 
@@ -39,7 +43,7 @@ and run the repository-wide strict check:
 ```bash
 brew tap agent-ecosystem/tap
 brew install skill-validator
-make validate-skills
+scripts/validate-skills.sh
 ```
 
 The validator checks every `skills/<group>/<skill>/SKILL.md`. The
@@ -62,17 +66,6 @@ lefthook install
 
 GitHub Actions runs the same command for pushes and pull requests that change
 skills or validation configuration.
-
-Or run each piece directly:
-
-**Skills** (works for Claude Code, Codex, Cursor, Kimi, and 70+ agents):
-
-```bash
-skills add choplin/my-agent-skills --list          # browse
-skills add choplin/my-agent-skills --skill '*'     # install all
-skills add choplin/my-agent-skills --skill orchestration-toolkit-execute   # one
-skills add choplin/my-agent-skills/skills/skill-quality --skill '*'        # one group
-```
 
 ## Skill groups
 
