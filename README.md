@@ -1,8 +1,8 @@
 # my-agent-skills
 
-A personal collection of **agent-agnostic [Agent Skills](https://agentskills.io)**, plus the Claude-Code-specific add-ons that layer on top of them.
+A personal collection of **agent-agnostic [Agent Skills](https://agentskills.io)**.
 
-Skills are the portable primitive — distributed to any coding agent via the [`vercel-labs/skills`](https://github.com/vercel-labs/skills) CLI. Agent-specific extras (subagents, hooks) are kept separate and installed per agent.
+Skills are the only primitive here — distributed to any coding agent via the [`vercel-labs/skills`](https://github.com/vercel-labs/skills) CLI. The repository is a catalog: it ships no agent-specific extras (subagents, hooks) and no installer.
 
 > Design rationale and the full distribution model: [`docs/skill-first-architecture.md`](./docs/skill-first-architecture.md)
 
@@ -12,11 +12,7 @@ Skills are the portable primitive — distributed to any coding agent via the [`
 skills/                      # portable, agent-agnostic skills (the source of truth)
   <group>/                   #   organized by group (former plugin name)
     <group>-<skill>/SKILL.md #   names are group-prefixed for namespacing
-opts/                        # agent-specific add-ons, installed per agent
-  claude/
-    agents/                  #   flat subagents  -> ~/.claude/agents/
-    skills/<group>/          #   (when a group needs hooks) a minimal plugin
-scripts/install-opts.sh      # distributes opts/<agent>/* into each agent's config
+scripts/validate-skills.sh   # strict skill-validator check (used by lefthook and CI)
 docs/                        # research + decision records
 ```
 
@@ -24,16 +20,16 @@ docs/                        # research + decision records
 
 ## Install
 
-**Everything at once** (skills + Claude-Code add-ons, via the Makefile):
+**Everything at once**, via the Makefile:
 
 ```bash
-make install        # = install-skills + install-opts, from this working tree
+make install        # install every skill from this working tree
 make help           # list all targets; SOURCE/AGENT/SKILL/SCOPE are overridable
 ```
 
 `make install` installs skills from `./skills` for `claude-code` globally. It copies them into the shared store, so **edits to this repo take effect only after re-running it** — run `make install` again after changing a skill you want to use. To install the published repo instead, override `SOURCE=choplin/my-agent-skills`.
 
-Add-ons are add-and-prune: `install-opts.sh` places every current file under `opts/` and removes links this repo left behind whose source has since been renamed or deleted. `make purge` removes both skills and add-ons; `make reset` is purge followed by a fresh install.
+`make purge` removes the skills this repo installed; `make reset` is purge followed by a fresh install.
 
 ## Validate
 
@@ -75,13 +71,7 @@ Or run each piece directly:
 skills add choplin/my-agent-skills --list          # browse
 skills add choplin/my-agent-skills --skill '*'     # install all
 skills add choplin/my-agent-skills --skill orchestration-toolkit-execute   # one
-```
-
-**Claude-Code add-ons** (subagents, plus hooks when a group ships them) — not carried by the skills CLI:
-
-```bash
-scripts/install-opts.sh claude        # symlink opts/claude/* into ~/.claude/
-scripts/install-opts.sh --dry-run     # preview
+skills add choplin/my-agent-skills/skills/skill-quality --skill '*'        # one group
 ```
 
 ## Skill groups

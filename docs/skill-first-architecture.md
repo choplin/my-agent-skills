@@ -5,8 +5,8 @@ date: 2026-07-30
 
 # Skill-First Distribution Architecture
 
-How this repository is organized and distributed: capabilities are
-**agent-agnostic skills first**, with agent-specific add-ons kept opt-in.
+How this repository is organized and distributed: every capability is an
+**agent-agnostic skill**.
 
 Background research: [2026-06-22-agent-skills-portability-research.md](./2026-06-22-agent-skills-portability-research.md).
 
@@ -14,11 +14,11 @@ Background research: [2026-06-22-agent-skills-portability-research.md](./2026-06
 
 One source of truth that can be distributed to any coding agent:
 
-- **Skills** are the portable primitive, distributed to every agent (including
-  Claude Code) via the `vercel-labs/skills` CLI.
-- **Agent-specific add-ons** (Claude Code subagents, commands, hooks; and the
-  equivalents for other agents) are managed per-agent and installed directly
-  into each agent's config location.
+- **Skills** are the only primitive this repository ships, distributed to every
+  agent (including Claude Code) via the `vercel-labs/skills` CLI.
+- **Agent-specific artifacts** (Claude Code subagents, commands, hooks; and the
+  equivalents for other agents) are out of scope. A capability that would need
+  one is written as a skill that runs inline on any agent.
 
 ## Layout
 
@@ -28,31 +28,24 @@ repo/
     <group>/                  #   organization + --list readability; discarded on install
       <skill>/SKILL.md        #   catalog layout: skills/<group>/<skill>/SKILL.md
       README.md               #   the group's inventory (every group has one)
-  opts/                       # agent-specific add-ons. Distributed via scripts/install-opts.sh.
-    claude/                   #   mirrors the ~/.claude/ subtree; one dir per agent
-      agents/<name>.md        #     -> ~/.claude/agents/<name>.md
-  scripts/install-opts.sh     # links opts/<agent>/* into each agent's config home
-  scripts/uninstall-opts.sh   # removes them again (the inverse)
   scripts/validate-skills.sh  # runs skill-validator over the skills a commit touches
   docs/                       # research + decision records
 ```
 
-Everything the repository ships is a portable skill, except one Claude Code
-subagent (`opts/claude/agents/skill-quality-reviewer.md`). No group currently
-ships hooks or a plugin, so `opts/` carries no `commands/` or `hooks/` subtree
-and no agent other than `claude/` has a directory yet. That is an outcome, not a
-policy: the conventions below still describe what to do when a group needs one.
+Everything the repository ships is a portable skill. The repository is a
+catalog: it holds no installer, and nothing is distributed outside a skill
+directory — which skills an environment installs is decided outside it. Skills
+may bundle host-specific *presentation* metadata (`agents/openai.yaml`, an
+interface hint for Codex-style hosts) and JSON schemas (`schema/`); the
+validator allows both as repository extensions.
 
 ## Distribution
 
-| Target | Mechanism | Gets |
-|--------|-----------|------|
-| Claude Code | `npx skills add <repo>` (+ `scripts/install-opts.sh`) | portable skills (+ Claude subagents/commands/hooks from `opts/claude/`) |
-| Other agents | `npx skills add <repo>` (+ `install-opts.sh` if that agent has opts) | portable skills (+ that agent's opts, if any) |
-
-Skills install into each agent's skill directory (e.g. `~/.claude/skills/`).
-`opts/` is **not** the skills CLI's job — `install-opts.sh` symlinks (default) or
-copies (`--copy`) each `opts/<agent>/` subtree into that agent's config home.
+Every agent gets the same thing by the same mechanism: `npx skills add <repo>`,
+which installs skills into that agent's skill directory (e.g. `~/.claude/skills/`).
+A source may be narrowed to a single group by pointing at its subdirectory
+(`<repo>/skills/<group>`), which is the unit selections should use — skills
+within a group delegate to each other by name (convention 3).
 
 ## Naming / namespace convention
 
@@ -64,20 +57,10 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
 
 - Skill `name` = `<group>-<skill>` (e.g. `orchestration-toolkit-execute`). The
   group's "root" skill may keep the bare group name (e.g. `inception`).
-- **An opt add-on under `opts/<agent>/skills/<name>` must not reuse any portable
-  skill's `name`.** Both mechanisms install to `<agent-home>/skills/<name>`, so
-  whichever runs last silently wipes the other — the skills CLI recreates the
-  whole skill dir on every `skills add`, uninstalling the add-on's hooks
-  (observed live with a portable-skill/add-on collision, 2026-07-04). This bites
-  exactly when a group keeps a bare-name root skill *and* ships a same-named opt
-  plugin; suffix the add-on dir. `install-opts.sh` enforces this:
-  it refuses names that match a portable skill and refuses to write through a
-  skills-CLI-managed symlink.
-- A group that needs hooks ships them as a **minimal plugin** under
-  `opts/<agent>/skills/<name>/`. For Claude Code this works because the host
-  auto-loads plugins placed under `~/.claude/skills/` (since v2.1.157), so
-  `${CLAUDE_PLUGIN_ROOT}` resolves and the hooks need no rewriting. No group
-  currently needs this.
+- Anything an environment places into `<agent-home>/skills/<name>` by other
+  means must not reuse a skill's `name`. The skills CLI recreates the whole
+  skill directory on every `skills add`, so whichever runs last silently wipes
+  the other (observed live, 2026-07-04).
 - Directory layout keeps the group folder: `skills/<group>/<group>-<skill>/`
   (the leaf equals `name`, so it stays spec-conformant; the `<group>/` folder is
   for repo organization only and is discarded on install).
@@ -86,10 +69,6 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
   author-side convention.
 - Forward-compatible: if the standard later adopts slash namespaces (#109-style
   `name: group/skill`), migration is renaming `-` to `/`.
-- Subagents under `opts/<agent>/agents/` carry the same `<group>-` prefix as
-  skills, because they install flat into a shared directory. A group that ships a
-  minimal plugin is the exception: its subagents live inside the plugin and keep
-  the real `<group>:<agent>` namespace instead.
 
 ## Authoring conventions
 
@@ -112,32 +91,26 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
      Not in the `description`.
    - Write a graceful fallback for when the owner skill is absent.
 
-4. **Subagents are opt-in.** Subagent invocation is not portable
-   (see research). The pattern:
-   - The behavior lives in a **portable skill** that works inline on any agent.
-   - A **thin agent under `opts/<agent>/agents/`** wraps that skill for isolation
-     (e.g. Claude Code subagent with `skills: [<skill>]`).
-   - The calling skill says: use the agent's subagent if available; otherwise
-     apply the skill inline. This "fallback procedure" is itself the skill.
+4. **A skill never depends on subagent invocation.** Dispatching to a subagent
+   is not portable (see research), so the behavior lives in the skill and runs
+   inline on any agent. A skill may say "dispatch this to an isolated agent if
+   the host has one; otherwise apply it inline" — that fallback procedure is
+   itself part of the skill.
 
-   **The wrapper may hold nothing the skill needs.** A fallback path is worthless
-   if the knowledge required to walk it only exists in the wrapper — the skill
-   then degrades into a broken procedure rather than a slower one. Anything the
-   wrapper knows about *doing the work* (required flags, a host permission the
-   call needs, a confirmation to obtain before sending data somewhere) belongs in
-   the portable skill. What legitimately stays in the wrapper is only what the
-   agent layer itself provides: isolation, a tool allowlist, a model choice.
-
-   Judge the wrapper by that residue. If removing it would lose nothing but an
-   output format, it is not carrying its keep — a subagent's descriptions are
-   another routing surface to maintain, and one that host-specific conventions
-   pull away from the repository's own.
+   **A host-side wrapper is the consuming environment's, and may hold nothing
+   the skill needs.** A fallback path is worthless if the knowledge required to
+   walk it only exists in the wrapper — the skill then degrades into a broken
+   procedure rather than a slower one. Anything about *doing the work* (required
+   flags, a host permission the call needs, a confirmation to obtain before
+   sending data somewhere) belongs in the skill. What legitimately stays in a
+   wrapper is only what the agent layer itself provides: isolation, a tool
+   allowlist, a model choice.
 
 5. **When a required capability is absent, a skill does one of three things**,
    depending on how replaceable the capability is:
    - **fallback** — equivalent path exists, full behavior preserved. The subagent
-     case: the `opts/<agent>/agents/` wrapper is only for isolation; the logic
-     lives in the portable skill and runs inline (convention #4).
+     case: a host-side wrapper is only for isolation; the logic lives in the
+     skill and runs inline (convention #4).
    - **degrade** — only an enhancement is missing, core still runs. The hook case:
      host-side enforcement (`stop-gate`, `session-start`) can't be re-created in
      prose, so it drops while the guidance remains.
@@ -174,3 +147,4 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
 - Upstream skill sets are installed from upstream, not vendored here. A vendored
   copy goes stale and re-namespaces what is already namespaced; prefer
   `skills add <owner>/<repo>` alongside this repo.
+

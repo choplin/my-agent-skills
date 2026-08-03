@@ -1,7 +1,6 @@
-# Makefile — install this repo's skills and Claude-Code add-ons locally.
+# Makefile — install this repo's skills locally.
 #
-# Skills are distributed via the vercel-labs/skills CLI; agent-specific extras
-# (subagents, hooks) under opts/ are distributed by scripts/install-opts.sh.
+# Skills are distributed via the vercel-labs/skills CLI.
 # See README.md and docs/skill-first-architecture.md for the full model.
 
 # --- Overridable knobs -------------------------------------------------------
@@ -22,19 +21,16 @@ MANIFEST := $(HOME)/.agents/.my-agent-skills.manifest
 
 .DEFAULT_GOAL := help
 
-.PHONY: help install install-skills install-opts manifest-record list validate-skills reset purge
+.PHONY: help install install-skills manifest-record list validate-skills reset purge
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) \
 		| awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
-install: install-skills manifest-record install-opts ## Install skills + record them in the manifest + Claude-Code add-ons
+install: install-skills manifest-record ## Install skills + record them in the manifest
 
-install-skills: ## Install skills via the skills CLI (symlink; SCOPE/AGENT/SKILL overridable)
+install-skills: ## Install skills via the skills CLI (SCOPE/AGENT/SKILL overridable)
 	skills add $(SOURCE) --skill '$(SKILL)' -a $(AGENT) $(SCOPE) -y
-
-install-opts: ## Distribute opts/claude/* into ~/.claude (subagents, hooks)
-	scripts/install-opts.sh claude
 
 manifest-record: ## Union the skills the CLI installs from SOURCE into the install manifest
 	@{ cat $(MANIFEST) 2>/dev/null; \
@@ -48,13 +44,12 @@ list: ## Browse available skills in SOURCE without installing
 validate-skills: ## Validate every skill strictly with skill-validator
 	scripts/validate-skills.sh
 
-reset: ## Purge this repo's skills & add-ons, then reinstall from SOURCE (clears renamed/deleted leftovers)
+reset: ## Purge this repo's skills, then reinstall from SOURCE (clears renamed/deleted leftovers)
 	$(MAKE) purge
 	$(MAKE) install
-	@echo "reset complete: renamed/deleted skills and add-ons are gone; current SOURCE is installed."
+	@echo "reset complete: renamed/deleted skills are gone; current SOURCE is installed."
 
-purge: ## Uninstall this repo's skills (per manifest) from the store, clear the manifest, remove opts
+purge: ## Uninstall this repo's skills (per manifest) from the store and clear the manifest
 	@names="$$(cat $(MANIFEST) 2>/dev/null)"; \
 		if [ -n "$$names" ]; then skills remove $$names $(SCOPE) -y; else echo "manifest empty; no skills to remove"; fi
 	@: > $(MANIFEST)
-	scripts/uninstall-opts.sh claude

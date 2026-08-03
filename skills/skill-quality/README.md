@@ -83,26 +83,12 @@ Shared resources, two domains:
   `anti-patterns.md`, `instruction-patterns.md`. What `skill-quality-review` scores
   against and `skill-quality-improve` writes edits by.
 
-### Agent (Claude Code): `skill-quality-reviewer`
-
-A thin subagent wrapper that runs `skill-quality-review` in an isolated context.
-Agent-specific add-on under `opts/claude/`.
-
 ## Installation
 
 Skills are distributed via the [vercel-labs/skills](https://github.com/vercel-labs/skills) CLI:
 
 ```bash
-npx skills add choplin/my-agent-skills \
-  --skill 'skill-quality-optimize' --skill 'skill-quality-evaluate' \
-  --skill 'skill-quality-improve' --skill 'skill-quality-review' \
-  --skill 'skill-quality-base'
-```
-
-Install the Claude Code subagent wrapper with:
-
-```bash
-scripts/install-opts.sh claude
+npx skills add choplin/my-agent-skills/skills/skill-quality --skill '*'
 ```
 
 See [docs/skill-first-architecture.md](../../docs/skill-first-architecture.md) for the distribution model.
