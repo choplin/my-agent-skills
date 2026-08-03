@@ -26,9 +26,9 @@ one-point (independent - pacing of multi-point discussions)
 
 ## When Skills Activate
 
-- **dig**: When intent is unclear, the user wants to broaden their thinking, or `/dig` is called
+- **dig**: When intent is unclear, the user wants to broaden their thinking, or `/discuss-toolkit-dig` is called
 - **grill-me**: When the user has a candidate direction and asks to challenge assumptions, poke holes, or be grilled
-- **one-point**: `/one-point`, "一つずつ", "一気に出さないで" — or the AI is about to raise two or more discussion points
+- **one-point**: `/discuss-toolkit-one-point`, "一つずつ", "一気に出さないで" — or the AI is about to raise two or more discussion points
 
 ## Routing
 
@@ -54,12 +54,5 @@ discussion. Concrete examples are optional tools, not completion requirements.
 
 ## Installation
 
-Add to your `.claude/settings.json`:
-
-```json
-{
-  "plugins": [
-    "/path/to/discuss-toolkit"
-  ]
-}
-```
+Install these skills through the repository's `skills add` workflow documented
+in the root README.

@@ -56,3 +56,8 @@ finalize <graph.json>
 - **A full session starts only when asked.** `inception` is heavy, so the agent never opens one on its own judgment: an explicit user request starts it directly, while an inferred need or a handoff from another skill must first state the cost and get a go-ahead (offering plain conversation instead).
 - **Finalize is the one-way exit.** A session ends at `inception-finalize`: the working artifacts stay transient in `.agents/`, and only the consolidated PRD is confirmed into the llm-wiki knowledge base (via `llm-wiki-base`, no directory scheme of its own). Concrete actions leave for Linear (or are handed off as-is); the live open-questions queue is a snapshot and is discarded. After finalize the wiki PRD is the source of truth — reopen by starting a fresh session or editing the note, not by re-rendering the retired graph.
 - **Relationship to neighbors.** Earlier than the execution skills (which begin once the work unit is defined and groomed); broader than `discuss-toolkit-dig` (which clarifies one intent without lasting artifacts). Shares its durable store with the `llm-wiki` family (finalize writes a `prd`-tagged note into the same knowledge base).
+
+## Installation
+
+Install these skills through the repository's `skills add` workflow documented
+in the root README.

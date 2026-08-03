@@ -86,3 +86,8 @@ decide what happens next — the caller does.
   when review reproducibility must distinguish materially different definitions
   under one ID, and tooling only when manual selection or packing starts causing
   observed errors.
+
+## Installation
+
+Install these skills through the repository's `skills add` workflow documented
+in the root README.

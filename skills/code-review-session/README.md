@@ -78,3 +78,8 @@ code-review-session-report         # completion summary; postponed items are fol
   feedback before proposing an approach. Install `discuss-toolkit` alongside this group.
 - `code-review-session-import-ai` delegates the review itself to
   `artifact-review-toolkit`.
+
+## Installation
+
+Install these skills through the repository's `skills add` workflow documented
+in the root README.

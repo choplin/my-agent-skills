@@ -295,3 +295,8 @@ Reconsider a universal node-review floor only if low-risk Issues repeatedly
 produce defects that survive the global review, or if an audit requirement
 demands independent review of every deliverable. Until then, spend independent
 review capacity on high-blast-radius nodes and the final integrated result.
+
+## Installation
+
+Install these skills through the repository's `skills add` workflow documented
+in the root README.

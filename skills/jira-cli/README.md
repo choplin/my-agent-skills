@@ -1,6 +1,7 @@
 # jira-cli
 
-Claude Code plugin providing a command reference for [jira-cli](https://github.com/ankitpokhrel/jira-cli) — an interactive terminal-based tool for managing Atlassian Jira.
+A command reference for [jira-cli](https://github.com/ankitpokhrel/jira-cli) — an
+interactive terminal-based tool for managing Atlassian Jira.
 
 ## Skills
 
@@ -10,4 +11,11 @@ Claude Code plugin providing a command reference for [jira-cli](https://github.c
 
 ## Usage
 
-This skill auto-triggers when you ask about Jira operations or jira-cli commands. It provides the AI with correct command syntax, flags, and common workflow patterns.
+The skill applies when you ask about Jira operations or jira-cli commands,
+giving the agent the correct command syntax, flags, and common workflow
+patterns.
+
+## Installation
+
+Install these skills through the repository's `skills add` workflow documented
+in the root README.

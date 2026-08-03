@@ -85,13 +85,10 @@ Shared resources, two domains:
 
 ## Installation
 
-Skills are distributed via the [vercel-labs/skills](https://github.com/vercel-labs/skills) CLI:
-
-```bash
-npx skills add choplin/my-agent-skills/skills/skill-quality --skill '*'
-```
-
-See [docs/skill-first-architecture.md](../../docs/skill-first-architecture.md) for the distribution model.
+Install these skills through the repository's `skills add` workflow documented
+in the root README. See
+[docs/skill-first-architecture.md](../../docs/skill-first-architecture.md) for
+the distribution model.
 
 ## Which to use
 
