@@ -1,9 +1,10 @@
 ---
 name: ai-council-fugu-cli
 description: >-
-  Command reference for `codex-fugu`, which runs Sakana AI's Fugu model
-  through the Codex CLI interface. Covers only the Fugu-specific differences;
-  the shared syntax is documented with the Codex CLI itself.
+  What differs when a consultation panelist is Sakana AI's Fugu model, reached
+  through the Codex CLI interface as `codex-fugu`: attribution, and the wrapper
+  flags its own help does not list. The shared constraints come from the Codex
+  CLI skill.
 user-invocable: false
 metadata:
   description-role: documentation
@@ -20,9 +21,8 @@ Use Fugu when you want **another AI's perspective from a different vendor** than
 
 ## Relationship to Codex CLI
 
-- Command mechanics (`exec`, `review`, `-s read-only`, `-o`, `--json`, `-c key=value`)
-  are identical to Codex. For full subcommand/flag details, see the
-  `ai-council-codex-cli` skill.
+- Command mechanics are identical to Codex — `codex-fugu --help` forwards to the
+  Codex help, so read the syntax there.
 - **Key difference**: `codex` runs OpenAI's model; `codex-fugu` runs **Sakana AI's
   Fugu model** behind the same interface. Attribute opinions to Fugu, not to
   Codex/OpenAI.
@@ -31,17 +31,27 @@ Use Fugu when you want **another AI's perspective from a different vendor** than
 
 ## Commands
 
-Command usage is **identical to Codex** — same subcommands and flags (`exec`,
-`review`, `-s read-only`, `-o`, `--json`, `-c key=value`) with the `codex-fugu`
-prefix. See the `ai-council-codex-cli` skill for syntax, examples, output
-interpretation, and the constraints that apply when an agent invokes the command
-(mandatory `-s read-only`, the host sandbox that must be disabled on macOS, and
-confirming with the user before sending files that may hold secrets). Those apply
-here unchanged. Only two things are Fugu-specific:
+Command usage is **identical to Codex**, with the `codex-fugu` prefix — the
+prescribed calls transfer verbatim:
+
+```bash
+codex-fugu exec -s read-only "<the brief>"
+codex-fugu review --uncommitted
+```
+
+Every constraint in the `ai-council-codex-cli` skill applies here unchanged —
+the mandatory read-only sandbox, the host sandbox that must be disabled on
+macOS, and confirming with the user before sending files that may hold secrets.
+Read that skill when seating Fugu; for anything it does not prescribe, ask
+`codex-fugu --help`.
+
+Only two things are Fugu-specific:
 
 1. **Attribute clearly** — always present the response as Fugu's (Sakana AI),
-   distinct from Codex/OpenAI and Claude.
-2. **Wrapper-only management flags** (handled before the model runs):
+   distinct from OpenAI's Codex and from any other panelist on the same panel.
+2. **Wrapper-only management flags.** These are handled by the wrapper before
+   the model runs, and `codex-fugu --help` does **not** list them — it forwards
+   to the Codex help, so this is the only place they are written down:
    - `--status`    — show installed Codex version, Fugu bundle target, and any version mismatch
    - `--recheck`   — clear suppressed update decisions and the update-check throttle
    - `--no-update` — skip the update/version check for this run (also `CODEX_FUGU_NO_UPDATE=1`)

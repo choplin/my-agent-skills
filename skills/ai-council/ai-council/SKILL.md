@@ -10,7 +10,7 @@ metadata:
 
 # AI Council Skill
 
-Gather opinions from multiple AI systems (Claude, Codex) to get diverse perspectives on technical decisions.
+Gather opinions from several AI systems to get diverse perspectives on technical decisions.
 
 ## Why This Skill Exists
 
@@ -56,16 +56,31 @@ Before consulting the AIs, formulate a question that includes these three elemen
 
 **Why this matters**: Vague questions like "Is this good?" produce generic answers. Specific questions enable AIs to provide targeted, actionable feedback.
 
-### Step 2: Gather Opinions Blind
+### Step 2: Agree the Panel, Then Gather Opinions Blind
 
-Seat one panelist per model family you can reach. Two is the working minimum;
-more only helps if it adds a family, not another voice from the same one.
+**Ask the user which systems to seat, before consulting any of them.** Name the
+ones you can reach in this environment and let them confirm, drop, or add. A
+roster fixed in this file goes stale the moment a CLI is renamed, a model family
+is added, or one of them is missing from the machine — and the failure is quiet:
+the report still looks like a council while speaking for fewer members than it
+claims.
 
-| Panelist | How it answers |
-|---|---|
-| The host model | Reasons directly over the files. Needs a context that has **not** seen this conversation — an opinion formed alongside your own is not independent evidence. |
-| Codex (OpenAI) | Via the `codex` CLI. Apply the `ai-council-codex-cli` skill for the command form and its agent-side constraints. |
-| Fugu (Sakana AI) | Via the `codex-fugu` CLI. Apply the `ai-council-fugu-cli` skill. |
+Seat one panelist per **model family**. Two is the working minimum; a third only
+helps if it adds a family, not another voice from one already seated. Usual
+candidates:
+
+- **The host model** — reasons directly over the files. Needs a context that has
+  **not** seen this conversation; an opinion formed alongside your own is not
+  independent evidence.
+- **A CLI-backed model** — this group ships the operating constraints for two:
+  `ai-council-codex-cli` (`codex`) and `ai-council-fugu-cli` (`codex-fugu`).
+  Apply the matching skill when you seat one.
+- **Whatever else the user names** — another CLI, another host-side agent.
+
+If a panelist cannot answer — the command is not installed, authentication
+fails, the call times out — say which seat is empty and ask whether to proceed
+with the rest. Never quietly shrink the panel: the size of the agreement is the
+result here.
 
 **Every panelist gets the same brief and none sees another's answer.** That is
 what makes agreement mean something here. Give each one the question from Step 1
@@ -98,12 +113,13 @@ and at least one trade-off or alternative it would not choose.
 
 ### Step 3: Synthesize and Report
 
-After collecting both opinions, create a unified report using this process:
+After collecting every seated panelist's opinion, create a unified report using
+this process:
 
-1. **Extract consensus**: Identify points where both AIs agree
+1. **Extract consensus**: Identify points where the panelists agree
 
-2. **Document divergence**: When AIs disagree, present each view fairly
-   - State each AI's position clearly
+2. **Document divergence**: When panelists disagree, present each view fairly
+   - State each panelist's position clearly
    - Note the reasoning behind each position
    - Do NOT force a false consensus
 
@@ -122,19 +138,18 @@ After collecting both opinions, create a unified report using this process:
 
 ### Opinions
 
-#### Claude (Anthropic)
-{Summary of Claude's key points and recommendations}
+#### {Model family} ({Vendor})
+{Summary of this panelist's key points and recommendations}
 
-#### Codex (OpenAI)
-{Summary of Codex's key points and recommendations}
+<!-- one section per seated panelist, in the order they were agreed -->
 
 ### Analysis
 
 **Consensus Points**
-- {Points where all/most AIs agree}
+- {Points where all/most panelists agree}
 
 **Divergent Views**
-- {Points where AIs disagree, with each perspective noted}
+- {Points where panelists disagree, with each perspective noted}
 
 **Key Insights**
 - {Unique or particularly valuable observations}
@@ -147,11 +162,12 @@ After collecting both opinions, create a unified report using this process:
 
 A complete AI Council consultation includes:
 - [ ] Question includes all three elements: (1) specific target, (2) decision context, (3) feedback focus
-- [ ] Both AI opinions collected (Claude, Codex) - or documented reason if one failed
-- [ ] Each opinion section explicitly states the AI source (e.g., "#### Claude (Anthropic)")
-- [ ] Consensus analysis explicitly states whether the AIs agree or diverge
-- [ ] Divergent views section presents each AI's position with its reasoning when disagreements exist
-- [ ] Recommendation section: (1) cites specific AI opinions, (2) explains reasoning, (3) notes unresolved disagreements
+- [ ] The panel was agreed with the user before any panelist was consulted
+- [ ] Every seated panelist's opinion collected — or a stated reason for each empty seat
+- [ ] Each opinion section names the model family and vendor that produced it
+- [ ] Consensus analysis explicitly states whether the panelists agree or diverge
+- [ ] Divergent views section presents each panelist's position with its reasoning when disagreements exist
+- [ ] Recommendation section: (1) cites specific panelists' opinions, (2) explains reasoning, (3) notes unresolved disagreements
 
 ## Example Brief for a Panelist
 
