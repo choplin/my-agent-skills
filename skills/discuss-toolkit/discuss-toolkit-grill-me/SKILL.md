@@ -1,5 +1,5 @@
 ---
-name: grill-me
+name: discuss-toolkit-grill-me
 description: >-
   Interviews the user relentlessly to stress-test a plan, design, decision, or
   idea until both sides share the same understanding. Challenges assumptions
@@ -35,14 +35,14 @@ Stop when only low-impact details remain or when the user ends the session.
 ## Position in discuss-toolkit
 
 - `discuss-toolkit-dig` improves **fidelity**: clarify what the user means.
-- `grill-me` improves **robustness**: challenge whether a candidate direction
+- `discuss-toolkit-grill-me` improves **robustness**: challenge whether a candidate direction
   holds.
 - `discuss-toolkit-one-point` improves **pacing**: keep multiple discussion
   points navigable.
 
 Route by the desired outcome, not by how detailed the initial statement looks.
 The same rough idea may fit `dig` when the user wants to discover their intent,
-or `grill-me` when they want a candidate direction challenged.
+or `discuss-toolkit-grill-me` when they want a candidate direction challenged.
 
 ## Provenance
 

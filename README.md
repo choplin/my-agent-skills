@@ -81,7 +81,7 @@ skills or validation configuration.
 | `orchestration-toolkit` | execute, orchestrate (carry groomed Linear work to completion: one Issue inline, or a whole Project through delegated graph execution, mandatory global adversarial review, and final human approval) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
-| `discuss-toolkit` | dig (intent fidelity), grill-me (candidate robustness), one-point (discussion pacing) |
+| `discuss-toolkit` | dig (intent fidelity), discuss-toolkit-grill-me (candidate robustness), one-point (discussion pacing) |
 | `git-helpers` | commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten, squash-merge |
 | `document-toolkit` | review, fact-check, distill, trim (review or revise one document, verify its claims, rework a whole set: consolidate / refresh / split / retire, or strip content the set no longer needs) |
 | `lang-reference` | go, java, python, rust, scala, sql, typescript |
@@ -105,7 +105,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **Cross-group hubs** (one skill that many groups delegate to):
 
-- `discuss-toolkit-dig` ← grill-me, inception (+framing/deepen), design-note, exec-plan, code-review-session-resolve
+- `discuss-toolkit-dig` ← discuss-toolkit-grill-me, inception (+framing/deepen), design-note, exec-plan, code-review-session-resolve
 - `linear-base` ← orchestration-toolkit (execute, orchestrate), planning-toolkit, inception-finalize
 - `artifact-review-toolkit` (quick, adversarial) ← code-review-session (import-ai), orchestration-toolkit (execute, orchestrate)
 
