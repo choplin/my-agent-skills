@@ -145,6 +145,14 @@ integration through one would be useful, suggest opening it; do not create it
 without the user's authorization, and do not keep the Issue open solely because
 no PR was created.
 
+**A PR is optional; a commit is not.** Before moving an `impl` Issue to **In
+Review** or **Done**, verify that all repository changes belonging to the Issue
+are committed on its branch and that no staged, unstaged, or untracked
+Issue-related changes remain. The completion note must cite the resulting
+commit(s). If the deliverable cannot be committed, keep the Issue **In Progress**
+and leave a handoff note when the session ends; an uncommitted working tree is
+not a completed implementation deliverable.
+
 ### Worktree cleanup after Done
 
 After an Issue reaches **Done**, clean up the isolated worktree used for it when

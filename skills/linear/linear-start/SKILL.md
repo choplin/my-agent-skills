@@ -145,7 +145,7 @@ mode questionnaire:
 |---|---|
 | Entails repository changes toward a commit (normally `impl`) | `orchestration-toolkit-execute` |
 | Produces a non-repository deliverable — analysis, design, research (normally `design` / `research`) | Ordinary in-session work; record the deliverable on the issue |
-| Is a trivial, self-evident change | Implement it directly and note it on the issue |
+| Is a trivial, self-evident change | Implement it directly; for repository changes, satisfy `linear-base`'s implementation completion gate before noting and closing it |
 
 State the choice in one line and proceed. If dependencies on sibling issues
 surface while working, that is the signal to stop and hand the Project to
