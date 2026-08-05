@@ -64,6 +64,26 @@ metadata:
 - For a binary package, expose testable behavior through the package's library
   target when integration tests need it; do not create another workspace member.
 
+## Releases
+
+- Respect an existing repository's release process. Do not introduce or replace
+  release tooling merely to conform to these defaults.
+- For libraries and binary applications published to a Cargo registry, prefer
+  `cargo-release` to coordinate version updates, workspace publication order,
+  release commits, tags, and registry publication.
+- For binary applications distributed as prebuilt artifacts or installers,
+  additionally prefer `dist` (formerly `cargo-dist`) to generate and verify
+  release CI, platform artifacts, checksums, installers, and GitHub Releases.
+- When using both, let `cargo-release` own versioning, release commits, tags, and
+  Cargo registry publication. Let `dist` react to the resulting tag to build and
+  publish binary artifacts. Configure both tools to use the same tag scheme, and
+  ensure that each release side effect has exactly one owner.
+- Do not require either tool for unpublished packages or require `dist` for a
+  library that has no binary artifacts to distribute.
+- Exercise each tool's dry-run or planning path before enabling publication. Keep
+  registry tokens, signing keys, and release credentials in the CI secret store,
+  not in repository files.
+
 ## Libraries
 
 - Use `sqlx` for relational database access. Prefer its compile-time checked
