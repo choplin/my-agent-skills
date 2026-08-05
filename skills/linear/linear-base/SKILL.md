@@ -145,6 +145,21 @@ integration through one would be useful, suggest opening it; do not create it
 without the user's authorization, and do not keep the Issue open solely because
 no PR was created.
 
+### Worktree cleanup after Done
+
+After an Issue reaches **Done**, clean up the isolated worktree used for it when
+one exists. This is post-completion housekeeping, not a condition for marking
+the Issue Done.
+
+- Resolve its exact name, path, and branch from the execution workspace or
+  `wtm` note. Do not remove it while staged, unstaged, or untracked changes need
+  preserving.
+- When clean, show those details, explain that the branch will remain, and ask
+  for explicit confirmation. Never infer approval from Done.
+- After confirmation, delegate to `wtm-worktree` and run
+  `wtm remove <name> --force` outside the target. Do not pass `-d` or `-D`
+  without a separate request. If declined, leave it and report the deferral.
+
 ### Completion note (record what was decided & changed)
 
 **Required, not optional.** When an issue leaves active work into **In Review** — or jumps **straight to Done** where there is no review step — leave a comment on the issue recording, in the issue's own terms:
@@ -159,18 +174,15 @@ Keep it proportional: an issue that shipped exactly as groomed needs a sentence;
 
 ### Handoff note (record in-progress context for a cross-session pickup)
 
-The completion note's mid-work sibling. When an issue is **still In Progress** and a session ends before it finishes — the work is large enough to span sessions — leave a comment recording, in the issue's own terms, enough for a **fresh session with no memory of this one** to resume the *same* issue:
+When an Issue remains **In Progress** at a session boundary, leave a comment
+that lets a fresh session resume it: record the path and decisions that led to
+the current state, their rationale and rejected alternatives, open questions,
+and the next concrete step. Record only judgement that git and execution
+artifacts cannot reconstruct; do not restate diffs or local execution state.
 
-- **Why / 経緯 / discussion** — the path that led to where the work now stands.
-- **Decisions made while working** — each with its rationale and the alternatives rejected (the same "why" the completion note captures, but recorded mid-flight).
-- **Open questions** — what is still undecided.
-- **Current state & next step** — where the work actually stands, and the first concrete action a resumer should take.
-
-Record only what a fresh reader **cannot reconstruct from git and the tracked artifacts**. Do **not** re-describe the diff (git holds it) or transcribe execution state that already lives elsewhere — exec-plan files and loop artifacts are read directly on resume (see `linear-start` step 6). The note carries the judgement those files cannot. A skill that keeps its running record on the issue itself, such as `orchestration-toolkit-execute`, is not transcribing: there the issue *is* the original, and the same rule applies to its content — judgement, not diffs.
-
-The issue **stays In Progress** — a handoff note is not a status transition. The `linear-handoff` skill drives this end-to-end (identify issue → align → draft → verify self-completeness → post as a comment).
-
-**Corollary — cross-session work must be an issue.** Because the note's anchor is the issue comment, a discussion or task that has grown to span sessions but is **not yet a Linear issue** is itself in a bad state: create the issue first (there is no local-file handoff fallback), then hand it off. This is why there is no separate "continue this discussion" mechanism — the durable place for anything worth carrying across sessions is the issue.
+Keep the Issue In Progress and use `linear-handoff` for the end-to-end flow. If
+cross-session work has no Issue yet, create one first; there is no local-file
+handoff fallback.
 
 ## The grooming step (Backlog → Todo)
 
