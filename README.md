@@ -135,7 +135,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **git-helpers**
 - draft-pr → pr-description
-- explain-pr → explainer-diff `(ext; explainer-studio)`
+- explain-pr → diff-explainer `(ext; explainer-studio)`
 - squash-merge → commit
 
 **linear**
@@ -172,4 +172,3 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **app-reference**
 - backend → **lang-reference-rust** when Rust is selected
-

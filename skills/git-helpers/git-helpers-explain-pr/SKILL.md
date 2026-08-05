@@ -12,12 +12,20 @@ metadata:
 # Explain PR
 
 Generate an HTML explanation page for the current branch's PR and publish it so
-reviewers can open it from a PR comment. Content generation is delegated to the external
-`explainer-diff` skill; this skill owns PR context gathering,
+reviewers can open it from a PR comment. Content generation is delegated to the
+external `diff-explainer` skill; this skill owns PR context gathering,
 publishing, and the PR comment.
 
 Invocation is deliberately manual — the human decides which PRs deserve an
 explanation page, so there is no triviality heuristic here.
+
+## External prerequisite
+
+This skill requires `diff-explainer` from the `explainer-studio` repository.
+Before gathering PR or issue content, verify that the skill can be loaded. If it
+is unavailable, stop and tell the user to install it; do not gather potentially
+private context or begin publishing. Page generation is the core deliverable,
+so there is no reduced mode that can preserve this skill's outcome.
 
 ## Preconditions
 
@@ -55,7 +63,7 @@ diff content — publishing it is equivalent to publishing the code.
 
 ### 3. Generate the HTML
 
-Delegate to the `explainer-diff` skill with:
+Delegate to the `diff-explainer` skill with:
 
 - Diff: `origin/<base>...HEAD`
 - Context material: PR title/body, commit messages, linked issue bodies
