@@ -28,7 +28,7 @@ under these conventions.
 
 | The work at hand | Skill |
 |---|---|
-| See what is in flight for the current repository before deciding anything | `linear` |
+| See all open work for the current repository, including Project-unassigned Issues, before deciding anything | `linear` |
 | Pick up a Todo or Backlog issue, or resume one already In Progress, and carry it into execution | `linear-start` |
 | Work the Backlog into ready Todo work, issue after issue | `linear-groom` |
 | Pause an unfinished issue so a different session can resume it | `linear-handoff` |
@@ -234,7 +234,7 @@ skill's `references/label-setup.md`.
 
 ## Resolving the current repo's active Project(s)
 
-Several skills use this resolution: `linear` (the overview) and `linear-groom` resolve the repository to its active Linear Project(s), while `linear-start` uses **Step A** to find all candidate Issues for the repository and treats a Project as optional Issue context. The shared label/project mechanics and edge cases are defined once here; each caller adds its own selection behavior.
+Several skills use this resolution: `linear-groom` resolves the repository to its active Linear Project(s), while `linear` and `linear-start` use **Step A** to find all relevant Issues for the repository and treat a Project as grouping context. The shared label/project mechanics and edge cases are defined once here; each caller adds its own selection behavior.
 
 **Step A — repo → Repo label.** Derive the repo name from the current git repository (`git remote get-url origin` basename with any `.git` stripped, else the repo-root directory name). Match it to a member of the **Repo** label group (case-insensitive).
 
@@ -243,10 +243,10 @@ Several skills use this resolution: `linear` (the overview) and `linear-groom` r
 
 **Step B — Repo label → active Project(s).** List the Projects tagged with the **Repo project-label = R**, then retain the ones whose state is **not** `completed` or `canceled`. Here “active” is a local convenience term for a non-terminal Project; it is **not** a Linear `state` value, so never query `state: "active"`. Every Project carries exactly one Repo tag (`1 Project = 1 repo`), so the repo resolves to its active Project(s) directly.
 
-- **The `Repo/R` project-label doesn't exist yet** → the agent **cannot create project labels** (see Label groups). Ask the user to create the `Repo/R` project-label in the Linear UI and tag the relevant Project(s) with it, then continue. (Once-per-repo setup.)
-- **No active Project carries R** → callers that require a Project (`linear`, `linear-groom`) say so and stop; `linear-start` must still list Repo-labeled standalone Issues.
+- **The `Repo/R` project-label doesn't exist yet** → the agent **cannot create project labels** (see Label groups). Ask the user to create the `Repo/R` project-label in the Linear UI and tag the relevant Project(s). `linear` must still report Repo-labeled Project-unassigned Issues; `linear-groom` stops until the label exists. (Once-per-repo setup.)
+- **No active Project carries R** → `linear-groom` says so and stops; `linear` must still report Repo-labeled Project-unassigned Issues, and `linear-start` must still list all Repo-labeled candidate Issues.
 
-The result is a set of **0, 1, or many** active Projects. **What to do with multiple is the caller's choice:** `linear-groom` acts on a single Project (auto-select when there's exactly one, ask the user when there are several); `linear` (the overview) reports on all of them; `linear-start` does not select one before listing Issues.
+The result is a set of **0, 1, or many** active Projects. **What to do with multiple is the caller's choice:** `linear-groom` acts on a single Project (auto-select when there's exactly one, ask the user when there are several); `linear` reports on all of them plus a No Project block; `linear-start` does not select one before listing Issues.
 
 ## Linear references stay internal
 
@@ -258,4 +258,3 @@ Keep the work↔issue link in the other direction — on the Linear side or in l
 - **Local side**: worktree notes (`wtm add -m`, see `linear-start`) or session context.
 
 When exporting issue content into a repo (e.g. a spec/plan → `docs/`), carry the content but strip issue IDs/URLs from it.
-

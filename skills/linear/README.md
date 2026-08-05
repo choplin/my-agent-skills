@@ -8,7 +8,7 @@ setup where the agent owns the whole issue lifecycle.
 | Skill | Description |
 |-------|-------------|
 | `linear-base` | The operating conventions — how Project, Milestone, Issue, Label, Status, and Priority are treated, the issue authoring standard, the lifecycle, and how a repository resolves to its active Projects |
-| `linear` | Read-only snapshot of what is in flight for the current repository |
+| `linear` | Read-only snapshot of all open work for the current repository, grouped by Project or No Project |
 | `linear-start` | Pick up a Todo or Backlog issue, or resume one In Progress, and carry it into execution |
 | `linear-groom` | Work the Backlog into ready Todo work, issue after issue |
 | `linear-handoff` | Pause an unfinished issue so a different session can resume it |
@@ -21,4 +21,3 @@ running. It carries the routing between them.
 
 Install these skills through the repository's `skills add` workflow documented
 in the root README.
-
