@@ -1,7 +1,7 @@
 # Implementation review and completion evidence
 
-Read this before committing work for an `impl` Issue, moving it out of In
-Progress, or moving it from In Review to Done.
+Read this before committing work for an `impl` Issue or moving it among In
+Progress, In Review, and Done.
 
 ## Pre-commit human review
 
@@ -15,12 +15,16 @@ Progress, or moving it from In Review to Done.
      choice, a deviation from the Issue, or a risk-prone area; name the relevant
      entry point when useful. Do not say only "review the diff."
    - **Risks / open points** — residual concerns or `None`.
-3. Keep the Issue In Progress and wait for explicit approval before invoking
+3. Move the Issue to In Review and wait for explicit approval before invoking
    `git-helpers-commit`. Silence is not approval, and requesting implementation
    earlier is not approval of the resulting change.
-4. If review feedback materially changes the prospective commit, implement the
-   correction, rerun relevant checks, and request review again.
-5. Skip this gate only when the user explicitly asks to commit this Linear work
+4. Review feedback returns the Issue to In Progress. If it materially changes
+   the prospective commit, implement the correction, rerun relevant checks,
+   present the result again, and return the Issue to In Review.
+5. Once approved, return the Issue to In Progress while performing the
+   agent-owned commit and integration work. A PR opened during that work moves
+   it back to In Review; verified integration permits Done.
+6. Skip this gate only when the user explicitly asks to commit this Linear work
    without review.
 
 ## Commit and integration evidence

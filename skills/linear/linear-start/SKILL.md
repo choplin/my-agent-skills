@@ -36,8 +36,9 @@ List **all issues with Repo label = R**, regardless of whether they belong to a 
 **Section 2 — Open (start candidates):** issues whose `state` type is in {backlog, unstarted}, i.e. **Todo and Backlog together**. Order by **priority** (Urgent → High → Medium → Low → None), and within a priority keep Todo above Backlog.
 
 **In Review is deliberately excluded** from both sections: the deliverable is
-already submitted for review (for example, a PR is open), so it needs review
-response rather than selection as new or resumed work.
+already awaiting a review response or integration (for example, pre-commit
+human review or an open PR), so it needs that response rather than selection as
+new or resumed work.
 
 Present both sections and let the user pick one.
 
@@ -183,9 +184,11 @@ Issue exists and what was changed together with checks, risks, and concrete
 review focus points, then wait for the user's approval before invoking
 `git-helpers-commit`. The focus points say what the user should inspect or
 decide, not merely "review the diff." This Linear-specific gate overrides an
-execution mode's default commit cadence. The Issue remains **In Progress** while
-awaiting review; feedback that changes the result must be re-verified and
-reviewed again.
+execution mode's default commit cadence. Move the Issue to **In Review** when
+presenting the result. Review feedback returns it to **In Progress**; changes
+must be re-verified and presented for review again. Approval returns it to **In
+Progress** while the agent commits and integrates the change, with later status
+determined by the integration evidence above.
 
 ### 8. After Done — suggest follow-up actions and show context
 

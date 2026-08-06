@@ -122,7 +122,7 @@ Statuses and their machine-meaning:
 | **Backlog** | backlog | Captured, not yet groomed / not ready to start. |
 | **Todo** | unstarted | Groomed & self-complete — an executor can pick it up now. |
 | **In Progress** | started | Actively being worked. |
-| **In Review** | started | The deliverable is submitted for review (for example, a PR is open). |
+| **In Review** | started | Awaiting a review response or integration (e.g. pre-commit review or an open PR). |
 | **Done** | completed | The deliverable is accepted and complete (merged or shipped when applicable). |
 | **Canceled** | canceled | Dropped, or superseded (e.g. promoted into a Project). |
 
@@ -137,13 +137,14 @@ Transitions (who/when):
 - **Backlog → Todo**: the **grooming step** (below). The gate where self-completeness and true size are settled.
 - **Todo → In Progress**: work starts.
 - **In Progress → In Review**: the deliverable is submitted for review. For an
-  `impl` Issue, this means a PR has been opened against the target branch.
-  **Leave a completion note first** (see below).
+  `impl` Issue, both presenting the uncommitted change for human review and
+  opening a PR trigger this transition.
 - **In Review → Done**: the deliverable is accepted and completed. For an
   `impl` Issue, verify that the PR was merged or that the change was otherwise
   integrated into the target branch; approval alone is insufficient. Review
-  requesting changes returns it to In Progress. If Done is reached with **no**
-  In Review step, leave the completion note at this transition instead.
+  feedback or approval that returns work to the agent moves it to In Progress.
+  If Done is reached with **no final-deliverable review step**, leave the
+  completion note at this transition instead.
 - **In Progress → (session boundary, stays In Progress)**: not a status change, but a checkpoint. When work on an issue **spans sessions** and this session ends before the issue finishes, **leave a handoff note** (see below) so a fresh session can resume it.
 - **any → Canceled**: dropped or superseded. Use Canceled, never Done, for work that wasn't actually completed.
 
@@ -153,8 +154,11 @@ For an `impl` Issue, apply both gates in
 `references/implementation-completion.md`: user review precedes the commit;
 target-branch integration completes the Issue.
 
-- Until the user approves, keep the change uncommitted and **In Progress**.
-  Material changes require review again; only an explicit request skips review.
+- Present the verified, uncommitted change and move to **In Review**. Feedback
+  returns it to **In Progress**; material changes require review again. Only an
+  explicit request skips review.
+- Approval returns the Issue to **In Progress** while the agent commits and
+  integrates, unless that immediately establishes a later state below.
 - A clean, committed work branch with no PR and no verified integration stays
   **In Progress**.
 - An open PR against the target branch moves it to **In Review**.
@@ -163,8 +167,9 @@ target-branch integration completes the Issue.
 - An intentionally unintegrated deliverable permits **Done** only after explicit
   user acceptance.
 
-If the gate cannot pass by session end, keep **In Progress** and leave a handoff
-note. A PR is optional; integration is not without the exception above.
+If agent-owned work pauses, keep **In Progress** and leave a handoff note. Once
+the gate is presented, keep **In Review** while awaiting the user. A PR is
+optional; integration is not without the exception above.
 
 ### Worktree cleanup after Done
 
@@ -176,7 +181,10 @@ branch. If any check fails, retain the artifacts and report the exact reason.
 
 ### Completion note (record what was decided & changed)
 
-**Required, not optional.** When an issue leaves active work into **In Review** — or jumps **straight to Done** where there is no review step — leave a comment on the issue recording, in the issue's own terms:
+**Required, not optional.** When an issue's **completed deliverable** enters
+review (for `impl`, an open PR) — or jumps **straight to Done** without that step
+— leave a comment in the issue's own terms. Do not leave this completion note
+for pre-commit review: the deliverable may still change.
 
 - **What was decided** — the choices made *while working* that the groomed issue didn't already fix: the approach taken, alternatives rejected, scope trimmed or added, and anything that deviated from the plan and why.
 - **What was changed** — the actual deliverable: for `impl`, what the code
