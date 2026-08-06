@@ -168,18 +168,11 @@ note. A PR is optional; integration is not without the exception above.
 
 ### Worktree cleanup after Done
 
-After an Issue reaches **Done**, clean up the isolated worktree used for it when
-one exists. This is post-completion housekeeping, not a condition for marking
-the Issue Done.
-
-- Resolve its exact name, path, and branch from the execution workspace or
-  `wtm` note. Do not remove it while staged, unstaged, or untracked changes need
-  preserving.
-- When clean, show those details, explain that the branch will remain, and ask
-  for explicit confirmation. Never infer approval from Done.
-- After confirmation, delegate to `wtm-worktree` and run
-  `wtm remove <name> --force` outside the target. Do not pass `-d` or `-D`
-  without a separate request. If declined, leave it and report the deferral.
+After **Done**, automatically remove the Issue's isolated worktree and local
+work branch without asking for another instruction. Before cleanup, read and
+apply `references/worktree-cleanup.md`. Delete only after verifying integration,
+that no worktree changes need preserving, and that the branch is not the target
+branch. If any check fails, retain the artifacts and report the exact reason.
 
 ### Completion note (record what was decided & changed)
 

@@ -195,13 +195,12 @@ Project context when it has one, and what to pick up next. This may land in a
 later session or turn than the one that started the issue; run it whenever the
 completion this flow set in motion reaches Done.
 
-**8a. Clean up the worktree when used.** Follow `linear-base`'s **Worktree
-cleanup after Done** procedure. Resolve the worktree, verify that it has no
-unpreserved changes, show its exact name/path and branch, and ask the user
-whether to remove it. Remove only the worktree checkout, and only after explicit
-confirmation; keep the branch unless the user separately asks to delete it. If
-this Issue ran in the current workspace or its worktree is already gone, skip
-this step.
+**8a. Clean up local Git artifacts.** Follow `linear-base`'s **Worktree cleanup
+after Done** procedure. Resolve and safety-check the exact worktree and local
+work branch, then remove both automatically without asking for another
+instruction. If this Issue committed directly on the target branch, there is
+nothing to remove. If a safety check fails, retain the artifacts and report the
+failed check instead of forcing cleanup.
 
 **8b. Report Project status when applicable.** If the completed issue belongs to a Project, tally that Project's issues with **Repo label = R** and present the compact per-Project block exactly as the `linear` overview skill does (its step 2–3 — separate `In Progress` and `In Review`, then `Todo` / `Backlog`, optional `(Done N)`, `canceled` excluded). Close with a one-line read of the shape (e.g. "one In Review, three Todo ready"). If it has **No Project**, state that it was a standalone issue and skip the Project tally; do not invent or require a Project.
 
