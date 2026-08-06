@@ -176,6 +176,17 @@ integration, report that the Issue remains **In Progress** and offer the user
 the applicable next action; do not silently turn the missing integration into a
 no-review completion path.
 
+For every `impl` repository change, apply `linear-base`'s pre-commit human review
+gate. Pass this as an explicit constraint to whichever execution mode receives
+the Issue: finish implementation and verification uncommitted, present why the
+Issue exists and what was changed together with checks, risks, and concrete
+review focus points, then wait for the user's approval before invoking
+`git-helpers-commit`. The focus points say what the user should inspect or
+decide, not merely "review the diff." This Linear-specific gate overrides an
+execution mode's default commit cadence. The Issue remains **In Progress** while
+awaiting review; feedback that changes the result must be re-verified and
+reviewed again.
+
 ### 8. After Done — suggest follow-up actions and show context
 
 Once the issue this flow put In Progress reaches **Done** (the completion note is

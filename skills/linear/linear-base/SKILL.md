@@ -147,19 +147,21 @@ Transitions (who/when):
 - **In Progress → (session boundary, stays In Progress)**: not a status change, but a checkpoint. When work on an issue **spans sessions** and this session ends before the issue finishes, **leave a handoff note** (see below) so a fresh session can resume it.
 - **any → Canceled**: dropped or superseded. Use Canceled, never Done, for work that wasn't actually completed.
 
-### Implementation completion gate
+### Implementation review and completion gates
 
-For an `impl` Issue, a commit completes its branch; **integration into the
-intended target branch completes the Issue**. Before changing its status, read
-`references/implementation-completion.md` and apply its evidence checks.
+For an `impl` Issue, apply both gates in
+`references/implementation-completion.md`: user review precedes the commit;
+target-branch integration completes the Issue.
 
+- Until the user approves, keep the change uncommitted and **In Progress**.
+  Material changes require review again; only an explicit request skips review.
 - A clean, committed work branch with no PR and no verified integration stays
   **In Progress**.
 - An open PR against the target branch moves it to **In Review**.
 - A merged PR, verified cherry-pick, other verified integration, or direct
   commit on the target branch permits **Done**.
-- An intentionally unintegrated deliverable permits **Done** only after the user
-  explicitly accepts that exception.
+- An intentionally unintegrated deliverable permits **Done** only after explicit
+  user acceptance.
 
 If the gate cannot pass by session end, keep **In Progress** and leave a handoff
 note. A PR is optional; integration is not without the exception above.
@@ -186,9 +188,8 @@ the Issue Done.
 - **What was decided** — the choices made *while working* that the groomed issue didn't already fix: the approach taken, alternatives rejected, scope trimmed or added, and anything that deviated from the plan and why.
 - **What was changed** — the actual deliverable: for `impl`, what the code
   change does; for `design`, the decision reached; for `research`, the finding.
-- **How it was integrated** — at `impl` Done, record the target branch and the
-  evidence required by `references/implementation-completion.md`; if the note
-  was posted at In Review, add a follow-up comment at Done.
+- **How it was integrated** — at `impl` Done, record the target branch and
+  evidence; follow up if the note was posted at In Review.
 
 Rationale: commit messages and PR text describe only the change and carry **no** Linear references (see *Linear references stay internal*), so the *why* and the delta-from-spec have no home outside the issue. This comment makes the issue a durable, self-contained record of how the work actually resolved — the completion-side counterpart to the self-completeness bar applied at grooming.
 

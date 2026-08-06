@@ -22,6 +22,9 @@ It builds on the `linear-base` skill for all status/label/issue semantics and ow
   a work branch is still unfinished under `linear-base`'s implementation
   completion gate. If the session ends before a PR is opened or integration is
   verified, keep it In Progress and hand it off.
+- **Awaiting pre-commit review:** keep the uncommitted `impl` Issue In Progress.
+  The worktree holds the prospective change; the handoff note identifies user
+  approval as the next gate.
 - **Finished, not paused** → this is a *completion* note, not a handoff. Leave it per `linear-base` at the In Review / Done transition instead.
 - **No issue yet** → a discussion worth carrying across sessions belongs in an issue. If the work spanning sessions is not yet a Linear issue, that is itself the thing to fix: create the issue first (via `linear-base`), then hand it off. There is no local-file fallback — the issue is the anchor.
 
