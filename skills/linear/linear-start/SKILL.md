@@ -163,9 +163,18 @@ rather than re-picking one.** Route by the artifact found at step 6:
 | None | Apply the Starting table above, but frame the remaining work (from step 6) as the task, not the whole issue |
 
 Whichever way it goes, remember the later lifecycle transitions owned by
-`linear-base`: use **In Progress → In Review → Done** when the deliverable goes
-through review, or **In Progress → Done** when it completes without a review
-step. When the issue reaches **Done**, continue with step 8.
+`linear-base`. For an `impl` Issue completed on a work branch, a commit alone
+leaves it **In Progress**. Keep it there while no PR or verified integration
+exists; move it to **In Review** when a PR is opened; move it to **Done** only
+after the PR is merged or a cherry-pick or other explicit integration into the
+target branch is verified. Only an Issue committed directly to the target
+branch, or integrated without review, may go straight from **In Progress** to
+**Done**. Treat an intentionally unintegrated deliverable as Done only after the
+user explicitly accepts that exception. When the issue reaches **Done**,
+continue with step 8. If a committed work branch has neither a PR nor verified
+integration, report that the Issue remains **In Progress** and offer the user
+the applicable next action; do not silently turn the missing integration into a
+no-review completion path.
 
 ### 8. After Done — suggest follow-up actions and show context
 
@@ -183,15 +192,9 @@ confirmation; keep the branch unless the user separately asks to delete it. If
 this Issue ran in the current workspace or its worktree is already gone, skip
 this step.
 
-**8b. Suggest a PR when useful.** For a completed `impl` Issue whose branch has
-no PR, suggest opening one when review or integration through a PR would be
-useful. Present it as an optional next action and let the user accept or decline;
-do not open it automatically, and do not treat its absence as incomplete Issue
-work. Skip this suggestion when a PR already exists or would add no value.
+**8b. Report Project status when applicable.** If the completed issue belongs to a Project, tally that Project's issues with **Repo label = R** and present the compact per-Project block exactly as the `linear` overview skill does (its step 2–3 — separate `In Progress` and `In Review`, then `Todo` / `Backlog`, optional `(Done N)`, `canceled` excluded). Close with a one-line read of the shape (e.g. "one In Review, three Todo ready"). If it has **No Project**, state that it was a standalone issue and skip the Project tally; do not invent or require a Project.
 
-**8c. Report Project status when applicable.** If the completed issue belongs to a Project, tally that Project's issues with **Repo label = R** by `state` type and present the compact per-Project block exactly as the `linear` overview skill does (its step 2–3 — `In Progress` / `Todo` / `Backlog`, optional `(Done N)`, `canceled` excluded). Close with a one-line read of the shape (e.g. "one In Progress left, three Todo ready"). If it has **No Project**, state that it was a standalone issue and skip the Project tally; do not invent or require a Project.
-
-**8d. Suggest the next related task(s).** Propose the issue(s) to pick up next, **related to the one just completed** — one or several. Search issues with **Repo label = R** and rank by relatedness first, then fall back to the repo's ready work:
+**8c. Suggest the next related task(s).** Propose the issue(s) to pick up next, **related to the one just completed** — one or several. Search issues with **Repo label = R** and rank by relatedness first, then fall back to the repo's ready work:
 
 1. **Related to the completed issue, first** — issues that share its **Milestone**, are linked to it by a **Linear relation** (parent, sub-issue, or blocking/blocked — a blocked issue the completed one just unblocked is a strong candidate), or share a **Type/topic label**. Prefer these, ordered by readiness (Todo above Backlog) then priority.
 2. **Fallback — the repo's ready work** — if nothing is related, or to round out the list, offer the top open issues by priority exactly as step 2's Section 2 orders them (Todo above Backlog, Urgent → None), including standalone issues.

@@ -16,7 +16,11 @@ metadata:
 
 This skill defines **how work is structured and managed in this Linear workspace**. The agent owns the full issue lifecycle — capturing, grooming, commenting, moving through statuses, and closing. Follow Linear's recommended semantics rather than fighting the tool.
 
-**Context:** a solo, single-person workspace (one team). Team-collaboration features (assignee routing, velocity across a team) carry little value here and are deliberately skipped. Optimize instead for a two-tier authoring model: an expensive model (Opus/Fable) grooms issues into self-complete work orders, and a cheaper model (Sonnet) executes the implementation ones by reference. Not every issue fits the cheap-executor mould — design and research issues stay on the expensive model, while orchestration stays in the high-judgment main session. The **Type** label carries that signal so an executor can pick issues matching its capability (see Label groups). Everything below serves that model.
+**Context:** one workspace, so assignee routing and velocity are skipped.
+An expensive model grooms self-complete work orders;
+a cheaper model executes implementation by reference. Design and research stay
+on the expensive model, orchestration in the main session, and the
+**Type** label carries that routing signal (see Label groups).
 
 The MCP field names referenced (`state`, `project`, `milestone`, `parentId`, `blockedBy`/`blocks`/`relatedTo`, `labels`, `priority`) are stable Linear API fields; use whichever Linear MCP server is wired.
 
@@ -48,7 +52,7 @@ How each Linear primitive is treated here:
 | **Project** | A **finite outcome/goal** with a target ("ship X"), not a repo or a permanent bucket. Always tagged with its repo via the **Repo** project-label group (required; single-select — `1 Project = 1 repo`). | Linear projects have target dates and a completed state; a permanent project makes all of that formless. A project must be able to *complete*. The mandatory Repo tag makes "which repo does this outcome target" directly queryable. |
 | **Milestone** | Phases **within** a project. Use only when a project has distinct stages. | Structure only when it earns its keep; skip for small projects. |
 | **Cycle** | **Not used** (leave disabled). | Solo velocity tracking has little value; priority + status already order work. |
-| **Issue** | The unit of work. **1 Issue = 1 atomic deliverable** — for implementation, one coherent code change on one branch; for design, 1 decision (ADR); for research, 1 findings document. An implementation Issue may produce a PR, but a PR is not part of the atomicity rule or required for completion. Always **self-complete** (see below). A reserved `Type/orchestration` Issue is the explicit control-plane exception: it records one Project run and its final human approval rather than an atomic work deliverable. | Keeps each deliverable reviewable and lets a context-free executor pick up any Todo without making Linear structure depend on whether review happens through a PR. The explicit orchestration exception gives cross-session graph execution one durable ledger without distorting work dependencies. |
+| **Issue** | The unit of work. **1 Issue = 1 atomic deliverable** — for implementation, one coherent code change on one branch; for design, 1 decision (ADR); for research, 1 findings document. A PR is an optional integration mechanism, not the unit of atomicity; an implementation completed on a work branch must still be integrated into its target branch before the Issue is Done. Always **self-complete** (see below). A reserved `Type/orchestration` Issue is the explicit control-plane exception: it records one Project run and its final human approval rather than an atomic work deliverable. | Keeps each deliverable reviewable and lets a context-free executor pick up any Todo without making Linear structure depend on whether integration happens through a PR, cherry-pick, or direct commit. The explicit orchestration exception gives cross-session graph execution one durable ledger without distorting work dependencies. |
 | **Sub-issue** | Avoid by default. Use **only** to group a small effort with a few atomic deliverables (see grouping). | Prevents needless hierarchy; solo work rarely needs it. |
 | **Label** | Issues: two single-select groups, **Type** (deliverable kind — also drives executor-model choice) and **Repo**. Projects: a **Repo** project-label group (single-select), **required on every Project**. See Label groups. | Cheap, queryable classification; single-select keeps each axis unambiguous. A Project targets one repo (multi-repo projects are rare and out of this model). |
 | **Status** | Keep the 6 defaults; each carries a distinct machine-meaning (see Lifecycle). | The agent maintains status, so granularity costs nothing and aids agent decisions. |
@@ -132,26 +136,33 @@ Transitions (who/when):
 - **→ Backlog**: whenever an idea/task appears. Rough content is fine.
 - **Backlog → Todo**: the **grooming step** (below). The gate where self-completeness and true size are settled.
 - **Todo → In Progress**: work starts.
-- **In Progress → In Review**: the deliverable is submitted for review. **Leave a completion note first** (see below).
-- **In Review → Done**: the deliverable is accepted and completed. Review
+- **In Progress → In Review**: the deliverable is submitted for review. For an
+  `impl` Issue, this means a PR has been opened against the target branch.
+  **Leave a completion note first** (see below).
+- **In Review → Done**: the deliverable is accepted and completed. For an
+  `impl` Issue, verify that the PR was merged or that the change was otherwise
+  integrated into the target branch; approval alone is insufficient. Review
   requesting changes returns it to In Progress. If Done is reached with **no**
   In Review step, leave the completion note at this transition instead.
 - **In Progress → (session boundary, stays In Progress)**: not a status change, but a checkpoint. When work on an issue **spans sessions** and this session ends before the issue finishes, **leave a handoff note** (see below) so a fresh session can resume it.
 - **any → Canceled**: dropped or superseded. Use Canceled, never Done, for work that wasn't actually completed.
 
-For an `impl` Issue, opening a PR is one possible **next action after the code
-change is complete**, not an acceptance criterion. If no PR exists and review or
-integration through one would be useful, suggest opening it; do not create it
-without the user's authorization, and do not keep the Issue open solely because
-no PR was created.
+### Implementation completion gate
 
-**A PR is optional; a commit is not.** Before moving an `impl` Issue to **In
-Review** or **Done**, verify that all repository changes belonging to the Issue
-are committed on its branch and that no staged, unstaged, or untracked
-Issue-related changes remain. The completion note must cite the resulting
-commit(s). If the deliverable cannot be committed, keep the Issue **In Progress**
-and leave a handoff note when the session ends; an uncommitted working tree is
-not a completed implementation deliverable.
+For an `impl` Issue, a commit completes its branch; **integration into the
+intended target branch completes the Issue**. Before changing its status, read
+`references/implementation-completion.md` and apply its evidence checks.
+
+- A clean, committed work branch with no PR and no verified integration stays
+  **In Progress**.
+- An open PR against the target branch moves it to **In Review**.
+- A merged PR, verified cherry-pick, other verified integration, or direct
+  commit on the target branch permits **Done**.
+- An intentionally unintegrated deliverable permits **Done** only after the user
+  explicitly accepts that exception.
+
+If the gate cannot pass by session end, keep **In Progress** and leave a handoff
+note. A PR is optional; integration is not without the exception above.
 
 ### Worktree cleanup after Done
 
@@ -175,6 +186,9 @@ the Issue Done.
 - **What was decided** — the choices made *while working* that the groomed issue didn't already fix: the approach taken, alternatives rejected, scope trimmed or added, and anything that deviated from the plan and why.
 - **What was changed** — the actual deliverable: for `impl`, what the code
   change does; for `design`, the decision reached; for `research`, the finding.
+- **How it was integrated** — at `impl` Done, record the target branch and the
+  evidence required by `references/implementation-completion.md`; if the note
+  was posted at In Review, add a follow-up comment at Done.
 
 Rationale: commit messages and PR text describe only the change and carry **no** Linear references (see *Linear references stay internal*), so the *why* and the delta-from-spec have no home outside the issue. This comment makes the issue a durable, self-contained record of how the work actually resolved — the completion-side counterpart to the self-completeness bar applied at grooming.
 

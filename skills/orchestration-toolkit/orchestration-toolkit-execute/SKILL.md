@@ -1,13 +1,12 @@
 ---
 name: orchestration-toolkit-execute
 description: >-
-  Carries one groomed Linear Issue to Done inline, with no delegation and no
-  graph: recovers the Issue's durable knowledge, prepares its worktree,
-  implements and commits in this session, decides reversible calls
-  autonomously while parking one-way doors, keeps the running state on the
-  Issue as checkpoint comments, runs risk-based adversarial review, and closes
-  with a completion note. Applies when the work unit is a single already-
-  groomed Issue in the tracker.
+  Executes one groomed Linear Issue inline, with no delegation and no graph:
+  recovers the Issue's durable knowledge, prepares its worktree, implements and
+  commits in this session, decides reversible calls autonomously while parking
+  one-way doors, keeps checkpoint comments, runs risk-based adversarial review,
+  and advances status only as far as the integration gate permits. Applies when
+  the work unit is a single already-groomed Issue in the tracker.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
 metadata:
   description-role: trigger
@@ -15,7 +14,9 @@ metadata:
 
 # Execute one Issue
 
-One groomed Issue, one coherent change, driven to Done in this session.
+One groomed Issue, one coherent change, driven through implementation and
+verification in this session. It reaches Done only when `linear-base`'s
+integration gate passes; otherwise it remains In Progress or In Review.
 
 The Issue already says **what** to build; this skill decides **how** and does it.
 Everything runs inline — no executor subagents, no dependency graph, no wave
@@ -179,9 +180,13 @@ with:
 - adversarial findings, or the recorded reason none were sought;
 - residual risks and verification gaps.
 
-Move the Issue to In Review, or to Done when the repository's convention allows
-closing without a separate review step. A PR is optional; open one only when
-separately authorized.
+Apply `linear-base`'s implementation completion gate after committing. If the
+commits exist only on a work branch, keep the Issue In Progress while no PR or
+verified integration exists; move it to In Review when an authorized PR is
+opened. Move it to Done only after verifying integration into the target branch,
+or directly when the commits were made on that target branch. A PR is optional;
+verified integration is not unless the user explicitly accepts an unintegrated
+deliverable as an exception.
 
 ## When NOT to use
 
@@ -199,3 +204,6 @@ separately authorized.
 - [ ] The run advanced every Progress item not blocked by a parked decision, and the Parking Lot was reviewed in one pass.
 - [ ] Independent adversarial review was run, or its absence was recorded with the risk assessment that justified it.
 - [ ] The completion note maps every acceptance criterion to observable evidence or an explicit gap.
+- [ ] A Done implementation is verified on its target branch, or its completion
+      note records the user's explicit decision to accept an unintegrated
+      exception.
