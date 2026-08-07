@@ -22,25 +22,29 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    env:
+      SKILL_VALIDATOR_VERSION: "1.6.0"
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: "1.25.5"
-          cache: false
+      - name: Install skill-validator
+        working-directory: ${{ runner.temp }}
+        run: |
+          archive="skill-validator_${SKILL_VALIDATOR_VERSION}_linux_amd64.tar.gz"
+          release_url="https://github.com/agent-ecosystem/skill-validator/releases/download/v${SKILL_VALIDATOR_VERSION}"
 
-      - name: Check out skill-validator fork
-        uses: actions/checkout@v4
-        with:
-          repository: choplin/skill-validator
-          path: .skill-validator
+          curl --fail --location --silent --show-error \
+            --output "$archive" \
+            "$release_url/$archive"
+          curl --fail --location --silent --show-error \
+            --output checksums.txt \
+            "$release_url/skill-validator_${SKILL_VALIDATOR_VERSION}_checksums.txt"
+          sha256sum --check --ignore-missing checksums.txt
 
-      - name: Install skill-validator fork
-        working-directory: .skill-validator
-        run: go install ./cmd/skill-validator
+          tar --extract --gzip --file "$archive" skill-validator
+          chmod +x skill-validator
+          echo "${{ runner.temp }}" >> "$GITHUB_PATH"
 
       - name: Validate skills
         run: scripts/validate-skills.sh --emit-annotations
