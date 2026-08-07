@@ -69,7 +69,7 @@ Use this shape unless the repository or product calls for a smaller opening:
 One sentence identifying the product, primary user, and outcome when the
 tagline does not do all three.
 
-<visual proof when it materially improves understanding>
+<visual proof or approved review stub when selected>
 
 <positioning>
 ```
@@ -130,6 +130,8 @@ Place differentiation before Quickstart when it is essential to the initial adop
 
 ## Visual proof
 
+Consider screenshots and short videos early because they are often effective in `Orient` and `Motivate`. Use them when visible product state, workflow, or output proves an important claim faster or more credibly than prose. Let the claims determine the medium and number of assets; do not treat either as a requirement.
+
 Choose media by the claim it must prove:
 
 | Claim | Useful media |
@@ -141,17 +143,20 @@ Choose media by the claim it must prove:
 
 Do not add media only as decoration. Keep the positioning visible near the opening instead of letting a large image push all useful explanation far below it.
 
-When media is missing, request it with:
+When suitable media is missing, use `showcase-capture-plan` to design the asset before capture. Put a temporary review stub in the exact README position where the asset would appear:
 
-- the claim to prove;
-- the exact scene and visible state;
-- recommended crop, viewport, or duration;
-- intended README placement;
-- privacy checks for secrets, personal data, and notifications;
-- draft alt text;
-- preferred file name and format when relevant.
+```markdown
+> **Planned visual — approval required**
+> **Claim:** <reader-facing claim this asset must prove>
+> **Asset:** <screenshot or video; proposed dimensions, format, or duration>
+> **Scene:** <exact product state or sequence and visible evidence>
+> **Capture:** <terminal, browser, or screen surface; framing and privacy constraints>
+> **Alt text:** <draft alt text>
+```
 
-Do not create broken links or imply that an unprovided asset exists.
+Keep the stub concise but specific enough to review the claim, medium, content, and placement in context. Use one stub per proposed asset. Do not create broken links or imply that an unprovided asset exists.
+
+Get explicit user approval for the stubs before loading a surface capture skill. After approval, preserve the approved claim and evidence requirements in the capture plan, capture the real product path, and replace the stubs with the final assets. If rehearsal shows that the approved claim cannot be reproduced, stop and return to planning instead of changing the story during capture.
 
 ## Decoration
 
@@ -254,7 +259,10 @@ Keep lengthy contribution, operations, API, and troubleshooting material in dedi
 - [ ] Compatibility, maturity, and material limitations are discoverable.
 - [ ] Security-sensitive examples use obvious placeholders.
 - [ ] Visual media proves a claim and has meaningful alt text.
-- [ ] Missing media is requested with a concrete brief rather than represented by a broken placeholder.
+- [ ] The choice and number of visual assets follow from the `Orient` and `Motivate` claims rather than a quota.
+- [ ] Missing media appears as a reviewable stub with a concrete claim and shot specification, not a broken placeholder.
+- [ ] Capture started only after the user approved the stubs.
+- [ ] Approved stubs were replaced with verified assets rather than left in the final README.
 - [ ] Icons, emoji, and bold text match the product tone and remain accessible.
 - [ ] Badges are current and useful.
 - [ ] Support, issue reporting, and license information are accurate when included.

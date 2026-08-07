@@ -86,9 +86,17 @@ Badges are metadata, not a value proposition. Include only current, maintained b
 
 ## Plan visual proof
 
-Use screenshots, representative output, diagrams, or short video only when they prove a meaningful claim faster than text. Inspect existing media before requesting new assets.
+Treat screenshots and short videos as strong options for `Orient` and `Motivate`: they can help readers recognize the product, understand its workflow, and judge its value before investing in setup. Decide whether to use them, which medium fits, and how many are justified by the claims the README must prove. Do not add media to satisfy a quota.
 
-When useful media is missing, give the user a concrete media brief: the claim to prove, required scene and state, recommended framing or duration, README placement, privacy constraints, and draft alt text. Do not insert fabricated media or broken placeholders. Delegate capture planning to `showcase-capture-plan` when the user wants the assets produced.
+Inspect existing media first. Reuse it only when it proves the intended claim, represents the current product, and fits the planned reader journey. When suitable media is missing, use the `showcase-capture` skill family in this order:
+
+1. Load `showcase-capture-plan` and define the claim, medium, visible evidence, scene or sequence, framing or duration, README placement, privacy constraints, draft alt text, and capture surface.
+2. Put a clearly labeled review stub at the intended location in the README. Use the stub format in `references/readme-patterns.md`; do not create a broken image link or imply that the asset already exists.
+3. Ask the user to approve or revise the stubs. Stop before capture; approval of the README request alone does not authorize producing the planned media.
+4. After approval, follow the capture plan and load the routed surface skill: `showcase-capture-terminal`, `showcase-capture-browser`, or `showcase-capture-screen`. Use an annotation skill only when the approved plan requires annotation or composition.
+5. Replace each approved stub with the captured asset and meaningful alt text. Verify the rendered placement, asset path, represented product state, and absence of sensitive information.
+
+If the task is draft-only, include the review stubs in the draft and request approval without modifying the repository or starting capture.
 
 ## Write and edit
 
@@ -131,6 +139,7 @@ When file changes are requested, update the repository's canonical README unless
 - the reader journey the README now supports;
 - the most important structural or content decisions;
 - requested or newly planned media;
+- the approval or capture status of every visual stub;
 - verification performed and any remaining gaps.
 
 When only a draft or review is requested, do not modify files. Return the proposed README or prioritized findings in the requested format.
