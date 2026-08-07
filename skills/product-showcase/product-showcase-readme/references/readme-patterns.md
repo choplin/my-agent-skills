@@ -5,6 +5,8 @@ Use this reference to choose a small, product-specific structure. A README shoul
 ## Contents
 
 - [Reader journey](#reader-journey)
+- [Coverage boundary](#coverage-boundary)
+- [Stage order and section responsibilities](#stage-order-and-section-responsibilities)
 - [Opening pattern](#opening-pattern)
 - [Positioning and differentiation](#positioning-and-differentiation)
 - [Section structure](#section-structure)
@@ -16,16 +18,44 @@ Use this reference to choose a small, product-specific structure. A README shoul
 
 ## Reader journey
 
-Use these stages as the design model, not as fixed section names.
+Use these stages as the design model, not as fixed section names. A reader who starts at the top should move through them in order.
 
-| Stage | Reader question | Useful evidence |
+| Stage | Reader question | Reader state at the end |
 | --- | --- | --- |
-| Orient | What is this, and is it for me? | Product name, tagline, literal description, audience |
-| Motivate | Why should I care? | Positioning, representative output, screenshot, use cases |
-| Activate | How do I reach a first success? | Prerequisites, installation, minimal verified workflow, expected result |
-| Deepen | How do I keep using and trusting it? | Concepts, recipes, configuration, limitations, docs, support |
+| Orient | What is this, and is it for me? | Can identify the product, intended user, problem, and outcome. |
+| Motivate | Why should I try it? | Has a concrete, credible reason to continue. |
+| Activate | How do I reach a first success? | Has completed or can confidently follow the shortest verified path. |
+| Deepen | How do I continue, adapt, and trust it? | Knows the next relevant task and where to find its guidance. |
 
 Readers may scan or enter midway. Make headings descriptive and give each section enough context to stand on its own.
+
+## Coverage boundary
+
+A product README normally owns `Orient` through `Activate`. Decide before drafting whether it also owns `Deepen`.
+
+Include deeper material when the README is the canonical user documentation, the repository is small enough to keep the path clear, or readers need the information immediately after first success. Otherwise, keep the README focused and route readers to the appropriate documentation type:
+
+- tutorials for guided learning;
+- how-to guides for specific tasks;
+- reference for complete technical facts;
+- explanation for concepts and design rationale.
+
+Do not split the difference by adding fragments of every documentation type. Include only the deeper sections the agreed scope requires.
+
+## Stage order and section responsibilities
+
+Section names may vary, but each section needs one primary job. Use this mapping to choose and order them:
+
+| Stage | Typical sections or elements | Primary responsibility | Keep out |
+| --- | --- | --- | --- |
+| Orient | Name, tagline, literal description, audience | Establish identity and relevance immediately. | Setup detail, architecture, feature inventory |
+| Motivate | Visual proof, representative output, positioning, use cases, conditional differentiation | Turn relevance into a concrete reason to try the product. | Unsupported claims, exhaustive feature lists, long comparisons |
+| Activate | Prerequisites, installation, Quickstart, expected result | Carry the reader through the shortest complete path to first success. | Optional variants, advanced configuration, unrelated concepts |
+| Deepen | Core concepts, common recipes, selected configuration, limitations, security, support, documentation links | Help successful users choose and complete their next action. | Exhaustive API or option reference, unrelated operations, duplicated documentation |
+
+Within a stage, order sections by dependency. For example, put prerequisites before installation, installation before Quickstart, and the expected result directly after the action that produces it. Put contributing, development, acknowledgements, and license sections after the product-use journey unless repository convention dictates otherwise.
+
+Before keeping a section, ask: “Does this help the primary reader reach the end state of its assigned stage?” Remove it, move it later, or link to it when the answer is no.
 
 ## Opening pattern
 
@@ -209,6 +239,9 @@ Keep lengthy contribution, operations, API, and troubleshooting material in dedi
 ### Navigation
 
 - [ ] The overall order supports orienting, motivating, activating, and deepening.
+- [ ] Every user-facing section has one primary stage and contributes to that stage's end state.
+- [ ] A front-to-back reading reaches first success without later-stage material interrupting it.
+- [ ] The agreed coverage boundary is clear, and out-of-scope material has a useful destination.
 - [ ] Each main section answers one clear reader question.
 - [ ] Procedures, benefits, comparisons, and rationale use appropriate structures.
 - [ ] Section order follows the reader's decisions.

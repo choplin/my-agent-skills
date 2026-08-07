@@ -12,7 +12,9 @@ metadata:
 
 # Create a product README
 
-Treat the README as the product's front door, not as an exhaustive manual. Design a scannable path that helps readers orient, become motivated, activate the product, and deepen their use. Readers may enter at any section, so make each section locally understandable as well as part of the overall journey.
+Treat the README as the product's front door, not as an exhaustive manual. Its default job is to help readers understand the product, decide to try it, and reach a first successful outcome. Include deeper guidance only when the repository needs the README to serve that role.
+
+Design the document so a front-to-back reading naturally moves through `Orient → Motivate → Activate → Deepen`, stopping at the agreed scope. Readers may also enter midway, so make each section locally understandable.
 
 ## Inspect before writing
 
@@ -28,6 +30,13 @@ Prefer repository evidence over aspirational language. Do not invent features, c
 
 Preserve repository-specific conventions and unrelated user edits. For a revision, diagnose the existing README before restructuring it; retain useful content even when moving it.
 
+## Load the companion writing skills
+
+Before setting the reading contract or drafting, load and apply the installed `documentation-writer` and `writing-clearly-and-concisely` skills. They are required companions to this skill, not optional references.
+
+- Use `documentation-writer` while setting the reading contract and information architecture. Apply it to define the audience, reader goal, coverage boundary, and exclusions; separate tutorial-like activation from how-to, reference, and explanation material; and decide which deeper material belongs in the README or in dedicated documentation. Adapt its workflow to the agreed README funnel rather than treating the whole README as one Diátaxis document type.
+- Use `writing-clearly-and-concisely` while drafting and again as a final copyedit. In `Orient` and `Motivate`, apply it to make the prose simple, direct, and engaging without becoming rhetorical or promotional. In `Activate` and `Deepen`, apply it to preserve accuracy, logical connections, and sufficient explanation without excess. Keep the README technical in tone throughout.
+
 ## Set the reading contract
 
 Identify:
@@ -36,12 +45,26 @@ Identify:
 2. **Primary outcome** — the smallest meaningful result that proves the product's value.
 3. **Next destination** — where readers should go for exhaustive reference, operations, contribution, or support.
 4. **Meaningful alternatives** — competing products, manual work, in-house solutions, or an existing workflow that readers are likely to compare.
+5. **Coverage boundary** — whether this README stops after `Activate` or also covers part or all of `Deepen`.
 
 Write for the primary reader first. Add secondary paths only after the main path is clear. If the README serves distinct audiences, label their routes instead of interleaving their instructions.
+
+Default to covering `Orient`, `Motivate`, and `Activate`. Include `Deepen` when the README is the repository's canonical user documentation, the product is small enough to explain without obscuring first success, or readers need selected concepts, configuration, limitations, or trust information to continue safely. Otherwise, link to dedicated tutorials, how-to guides, reference, and explanation.
+
+Agree on the coverage boundary before drafting when it would materially change the README's length or structure. Treat an explicit user request or an established repository convention as agreement. Otherwise, propose the boundary and its rationale; if work can proceed safely without an answer, state the assumption.
 
 ## Design the information architecture
 
 Read `references/readme-patterns.md` and select only the sections justified by the product. Adapt the order to the reader's decision journey; do not copy a maximal template.
+
+Assign every user-facing section one primary stage and order sections by stage:
+
+1. **Orient:** identify the product, intended reader, problem, and outcome.
+2. **Motivate:** show concrete value and enough proof to justify trying it.
+3. **Activate:** provide the shortest verified path to first success and its expected result.
+4. **Deepen, when in scope:** help successful users continue, adapt, and trust the product without turning the README into exhaustive documentation.
+
+Do not place optional concepts, configuration, alternatives, or contributor material where they interrupt the path to first success. Put repository utility sections such as contributing and license information after the user journey unless a convention requires another location.
 
 Lead with:
 
@@ -69,7 +92,7 @@ When useful media is missing, give the user a concrete media brief: the claim to
 
 ## Write and edit
 
-Use plain, specific language. Name the user, action, and outcome. Prefer copy-pasteable commands and realistic examples over abstract claims.
+Name the user, action, and outcome. Prefer copy-pasteable commands and realistic examples over abstract claims.
 
 Structure at both levels:
 
@@ -98,6 +121,8 @@ When revising an existing README, make the smallest coherent edit that fixes the
 Validate factual claims against the repository. Run the documented happy path when safe and practical. At minimum, verify referenced files, anchors, commands, package names, environment variables, and version requirements.
 
 Review the positioning claims, differentiation claims, structure, visual proof, and first-success path using the checklist in `references/readme-patterns.md`. Report any command or claim that could not be verified.
+
+Read the finished README from the top once as a continuous journey. Confirm that each section advances the reader to the next agreed stage, no later-stage detail interrupts activation, and the ending routes readers to material outside the README's coverage.
 
 ## Deliver
 
