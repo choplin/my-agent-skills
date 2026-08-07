@@ -178,15 +178,32 @@ the applicable next action; do not silently turn the missing integration into a
 no-review completion path.
 
 For every `impl` repository change, apply `linear-base`'s pre-commit human review
-gate. Pass this as an explicit constraint to whichever execution mode receives
-the Issue: finish implementation and verification uncommitted, present why the
-Issue exists and what was changed together with checks, risks, and concrete
-review focus points, then wait for the user's approval before invoking
-`git-helpers-commit`. The focus points say what the user should inspect or
-decide, not merely "review the diff." This Linear-specific gate overrides an
-execution mode's default commit cadence. Move the Issue to **In Review** when
-presenting the result. Review feedback returns it to **In Progress**; changes
-must be re-verified and presented for review again. Approval returns it to **In
+gate. Pass both the selected Issue's full record and this gate as explicit
+constraints to whichever execution mode receives the Issue: finish
+implementation and verification uncommitted, then present a **self-contained
+review brief** and wait for the user's approval before invoking
+`git-helpers-commit`. The brief must let someone review the result without
+having to recover the earlier selection exchange or open Linear first. Include:
+
+- **Reference** — Issue identifier, title, and URL; Project or parent Issue when
+  it materially explains the scope. Linear references belong in this internal
+  review conversation, even though they must not enter commits, branches, files,
+  or PR text.
+- **Background / problem** — the user-visible or engineering problem that made
+  the work necessary, including the relevant prior behavior.
+- **Goal and acceptance** — the intended outcome and the Issue's checkable done
+  conditions; name important constraints or exclusions when they shape review.
+- **Changes**, **verification**, **risks / open points**, and concrete **review
+  focus** — as required by `linear-base`'s implementation review gate.
+
+Do not collapse background and goal into a generic one-line "purpose" when the
+Issue contains enough detail to state them separately. Re-read the Issue before
+presenting the brief if any of this context was not preserved through the
+execution hand-off. The focus points say what the user should inspect or decide,
+not merely "review the diff." This Linear-specific gate overrides an execution
+mode's default commit cadence. Move the Issue to **In Review** when presenting
+the result. Review feedback returns it to **In Progress**; changes must be
+re-verified and presented for review again. Approval returns it to **In
 Progress** while the agent commits and integrates the change, with later status
 determined by the integration evidence above.
 

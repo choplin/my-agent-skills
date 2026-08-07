@@ -6,8 +6,16 @@ Progress, In Review, and Done.
 ## Pre-commit human review
 
 1. Finish the implementation and run the relevant checks without committing.
-2. Ask the user to review it with a compact summary:
-   - **Purpose** — what outcome the Issue needs and why.
+2. Ask the user to review it with a compact, self-contained brief. It must make
+   sense without the earlier conversation or requiring the user to open Linear:
+   - **Reference** — Issue identifier, title, and URL; Project or parent Issue
+     when it materially explains the scope. Keep these Linear references in the
+     internal review conversation, not in commits, branches, files, or PR text.
+   - **Background / problem** — what user-visible or engineering problem made
+     the work necessary, including the relevant prior behavior.
+   - **Goal and acceptance** — the intended outcome and the Issue's checkable
+     done conditions; include important constraints or exclusions when they
+     shape the review.
    - **Changes** — what was changed, grouped by behavior rather than file list.
    - **Verification** — checks run and their results; identify anything not run.
    - **Review focus** — the concrete points the user should inspect or decide.
@@ -15,6 +23,9 @@ Progress, In Review, and Done.
      choice, a deviation from the Issue, or a risk-prone area; name the relevant
      entry point when useful. Do not say only "review the diff."
    - **Risks / open points** — residual concerns or `None`.
+   Re-read the Issue before writing the brief if its context was not retained
+   through execution. Do not reduce background and goal to a generic one-line
+   purpose when the Issue contains enough detail to distinguish them.
 3. Move the Issue to In Review and wait for explicit approval before invoking
    `git-helpers-commit`. Silence is not approval, and requesting implementation
    earlier is not approval of the resulting change.
