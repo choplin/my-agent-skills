@@ -21,7 +21,7 @@ Access `.pen` contents only through Pencil MCP tools. The format is encrypted: n
 Require:
 
 - a clean PNG or JPEG and the proof point that must remain visible;
-- an open target `.pen` file and destination frame, or a request for the user to create one;
+- the pen.dev desktop app running with the exact target `.pen` file open as its active document, or a request for the user to create or open it and reply when ready;
 - an explicit edit brief;
 - the final frame name, dimensions or aspect ratio, export format, and output directory.
 
@@ -31,7 +31,9 @@ Reject a source with preventable secrets, personal data, notifications, or a wro
 
 ## Inspect before editing
 
-Call `get_editor_state` with `include_schema: true` before any other Pencil tool whenever the schema is not already present, including after resuming in a new session. Keep the returned file path and selection as the editing context.
+Pencil MCP can operate only the document currently open in the pen.dev desktop app. After the user's readiness confirmation, call `get_editor_state` with `include_schema: true` before any other Pencil tool. Verify that its returned file path identifies the expected target `.pen` file. If no editor is available or another file is active, do not issue any further Pencil read or mutation; ask the user to open and activate the expected file, then retry `get_editor_state`.
+
+Repeat the desktop-app, active-document, and returned-path checks after resuming in a new session and after every pause in which the user may have switched documents. Keep the verified file path and selection as the editing context. Never infer the target from the current selection, a similar filename, or the previously stored path alone.
 
 List the available design guidance with `get_guidelines` and load the most relevant compatible guide before using `batch_design`.
 
@@ -63,7 +65,7 @@ Keep the file path and final frame node ID as the resume handle. Do not infer co
 
 ## Recover, verify, and export
 
-After the user reports completion, reconnect to the exact `.pen` file. Refresh the editor schema when needed, resolve the final frame by stored node ID, inspect its nodes with `batch_get`, check structural problems with `snapshot_layout`, and render it with `get_screenshot`.
+After the user reports completion, ask them to leave the exact `.pen` file active in the pen.dev desktop app. Repeat `get_editor_state` and verify the returned path before resolving the final frame by stored node ID. Refresh the editor schema when needed, inspect the frame's nodes with `batch_get`, check structural problems with `snapshot_layout`, and render it with `get_screenshot`.
 
 Confirm:
 

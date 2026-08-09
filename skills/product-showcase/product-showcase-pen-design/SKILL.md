@@ -22,6 +22,7 @@ Require a communication brief containing:
 - the visual type, such as hero, workflow, relationship diagram, comparison, or conceptual overview;
 - any factual claim and the real evidence that must remain visible;
 - approved source assets and their repository paths;
+- the target `.pen` path;
 - target dimensions or aspect ratio, export format, and output directory;
 - visual constraints, repository or product identity, privacy constraints, and draft alt text.
 
@@ -41,9 +42,13 @@ Present the concept in words and ask the user to approve or revise it. Stop befo
 
 ## Prepare the Pen workspace
 
-Require an open target `.pen` file, or ask the user to create one in pen.dev and reply when it is open. Access `.pen` contents only through Pencil MCP tools. The format is encrypted: never parse, inspect, search, or patch it with filesystem text tools. Treat it as opaque for ordinary file operations such as Git status and commit.
+Pencil MCP can operate only the document currently open in the pen.dev desktop app. Require the app to be running with the exact target `.pen` file open as the active document. If that state has not already been established, ask the user to open or create the target file in the desktop app, make it active, and reply when ready; then pause.
 
-After concept approval, call `get_editor_state` with `include_schema: true` before any other Pencil tool whenever the current schema is not already available, including after resuming in a new session. Preserve the returned file path and selection as the editing context.
+After concept approval and the user's readiness confirmation, call `get_editor_state` with `include_schema: true` before any other Pencil tool. Verify that its returned file path identifies the expected target `.pen` file. If no editor is available or another file is active, do not issue any further Pencil read or mutation; ask the user to open and activate the expected file, then retry `get_editor_state`. Preserve the verified file path and selection as the editing context.
+
+Repeat the desktop-app, active-document, and returned-path checks after resuming in a new session and after every pause in which the user may have switched documents. Never infer the target from the current selection, a similar filename, or the previously stored path alone.
+
+Access `.pen` contents only through Pencil MCP tools. The format is encrypted: never parse, inspect, search, or patch it with filesystem text tools. Treat it as opaque for ordinary file operations such as Git status and commit.
 
 List available guidance with `get_guidelines` and load the most relevant compatible guide before using `batch_design`. Use `batch_get` to inspect reusable nodes or imported sources and `snapshot_layout` with bounded depth to find safe canvas space. Follow the returned schema; do not construct operations or node properties from memory.
 
@@ -77,7 +82,7 @@ If the user revises the concept, record the new agreement and rebuild only the d
 
 ## Refine, approve, and export
 
-Preserve the candidate frames and refine the selected direction in the `final` frame. If the user edits the `.pen` file directly, resume from the exact file path and stored frame ID; re-inspect rather than inferring completion from the current selection or a similar frame name.
+Preserve the candidate frames and refine the selected direction in the `final` frame. If the user edits the `.pen` file directly, repeat the workspace verification, then resume from the verified file path and stored frame ID; re-inspect rather than inferring completion from the current selection or a similar frame name.
 
 Before final approval:
 
