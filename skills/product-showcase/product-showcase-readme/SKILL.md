@@ -53,6 +53,12 @@ Default to covering `Orient`, `Motivate`, and `Activate`. Include `Deepen` when 
 
 Agree on the coverage boundary before drafting when it would materially change the README's length or structure. Treat an explicit user request or an established repository convention as agreement. Otherwise, propose the boundary and its rationale; if work can proceed safely without an answer, state the assumption.
 
+## Agree on the tagline
+
+Before drafting the README, determine whether the product tagline is already settled. Treat it as settled only when the user has supplied or approved it, or the repository identifies it as canonical product language. Do not silently invent, select, or preserve a tagline merely because one appears in the current README.
+
+When the tagline is unsettled, finish enough repository inspection to ground the wording, then propose a small set of short, literal candidates. Explain the meaningful distinction between them, such as which audience, category, or outcome each emphasizes. Discuss the wording with the user and pause before drafting until they explicitly choose or revise a candidate. Record the agreed tagline as part of the reading contract.
+
 ## Design the information architecture
 
 Read `references/readme-patterns.md` and select only the sections justified by the product. Adapt the order to the reader's decision journey; do not copy a maximal template.
@@ -69,7 +75,7 @@ Do not place optional concepts, configuration, alternatives, or contributor mate
 Lead with:
 
 - a precise product name;
-- a short, literal tagline;
+- the agreed short, literal tagline;
 - a one-sentence description when the tagline alone does not identify the product, audience, and outcome;
 - a concrete proof point, such as a representative example, screenshot, output, or short workflow;
 - concise positioning near the top;
@@ -97,6 +103,19 @@ Inspect existing media first. Reuse it only when it proves the intended claim, r
 5. Replace each approved stub with the captured asset and meaningful alt text. Verify the rendered placement, asset path, represented product state, and absence of sensitive information.
 
 If the task is draft-only, include the review stubs in the draft and request approval without modifying the repository or starting capture.
+
+### Optionally design a README visual
+
+Separately decide whether a composed visual would materially improve the README. This may be a hero image, workflow illustration, architecture or relationship diagram, comparison panel, conceptual overview, or another graphic that communicates faster than prose. Do not add one as decoration or use it to imply behavior that has not been verified.
+
+When a new visual is justified:
+
+1. Define the communication brief: audience, purpose, core message, README placement, visual type, dimensions or aspect ratio, approved source assets, accessibility requirements, and any claim or evidence that must remain visible. Prefer real product output or screenshots when the visual represents behavior.
+2. Put a clearly labeled visual-design review stub at the intended README location using `references/readme-patterns.md`. Ask the user to approve or revise what the visual must communicate. Stop while those communication choices remain open.
+3. After approval, load `product-showcase-pen-design` and pass it the complete brief, source paths, repository identity or visual constraints, draft alt text, and intended export path. Follow its visual-concept agreement, multiple-direction comparison, selection, refinement, and verified-export workflow.
+4. Replace the stub with the approved export and meaningful alt text. Verify the rendered README placement, image path, dimensions, represented product state, and absence of private, synthetic, or misleading content. Preserve and report the `.pen` source path, candidate frame names, and selected final frame.
+
+If the visual requires a captured product still, complete the approved capture workflow first and pass the clean capture as source evidence. If the task only annotates or frames that still, route it to `showcase-pen-annotate` instead. If the task is draft-only, leave the review stub in place and do not start Pen/Pencil MCP work.
 
 ## Write and edit
 

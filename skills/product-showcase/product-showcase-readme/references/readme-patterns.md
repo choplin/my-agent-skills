@@ -76,6 +76,8 @@ tagline does not do all three.
 
 Prefer a tagline that identifies the category or outcome over a clever but ambiguous slogan. If the tagline is memorable but not literal, follow it with the explanatory sentence.
 
+Do not draft around an unsettled tagline. When the user has not supplied or approved one and the repository does not designate canonical wording, propose a few evidence-based candidates, explain what each emphasizes, and agree on the wording first.
+
 ## Positioning and differentiation
 
 ### Positioning
@@ -132,6 +134,8 @@ Place differentiation before Quickstart when it is essential to the initial adop
 
 Consider screenshots and short videos early because they are often effective in `Orient` and `Motivate`. Use them when visible product state, workflow, or output proves an important claim faster or more credibly than prose. Let the claims determine the medium and number of assets; do not treat either as a requirement.
 
+A designed visual is a separate, optional device. Use a hero, workflow illustration, architecture or relationship diagram, comparison panel, conceptual overview, or another composition when it materially improves identity, orientation, or comprehension. Keep its role explicit: an editorial graphic is not evidence of product behavior, while a design that contains real product output must preserve that evidence accurately.
+
 Choose media by the claim it must prove:
 
 | Claim | Useful media |
@@ -155,6 +159,21 @@ When suitable media is missing, use `showcase-capture-plan` to design the asset 
 ```
 
 Keep the stub concise but specific enough to review the claim, medium, content, and placement in context. Use one stub per proposed asset. Do not create broken links or imply that an unprovided asset exists.
+
+For a designed visual, use this variant:
+
+```markdown
+> **Planned visual design — approval required**
+> **Purpose:** <what this part of the README should communicate>
+> **Type:** <hero, workflow, relationship diagram, comparison, or other form>
+> **Asset:** <proposed dimensions or aspect ratio and export format>
+> **Content:** <real screenshots, output, logo, text, or other source material>
+> **Message:** <core reader-facing message and important constraints>
+> **Evidence:** <claim preserved by real product material, or "Editorial image; not product evidence">
+> **Alt text:** <draft alt text>
+```
+
+Agree on what the visual must communicate, then load `product-showcase-pen-design`. That skill owns visual-concept agreement, two to four comparable directions in one editable `.pen` file, user selection, refinement, final approval, verification, and export. Keep real screenshots and output unchanged as separate source layers.
 
 Get explicit user approval for the stubs before loading a surface capture skill. After approval, preserve the approved claim and evidence requirements in the capture plan, capture the real product path, and replace the stubs with the final assets. If rehearsal shows that the approved claim cannot be reproduced, stop and return to planning instead of changing the story during capture.
 
@@ -224,6 +243,7 @@ Keep lengthy contribution, operations, API, and troubleshooting material in dedi
 ### Message
 
 - [ ] The first screen explains the product and intended user.
+- [ ] The tagline is user-approved or established as canonical product language.
 - [ ] The tagline is concise and literal, or followed by a literal description.
 - [ ] The value proposition describes an outcome, not a list of implementation details.
 - [ ] Positioning states three to five distinct user outcomes when the product warrants it.
@@ -263,6 +283,7 @@ Keep lengthy contribution, operations, API, and troubleshooting material in dedi
 - [ ] Missing media appears as a reviewable stub with a concrete claim and shot specification, not a broken placeholder.
 - [ ] Capture started only after the user approved the stubs.
 - [ ] Approved stubs were replaced with verified assets rather than left in the final README.
+- [ ] A designed visual, when included, starts from an approved communication brief, presents multiple comparable directions before refinement, preserves any real product evidence, and retains an editable `.pen` source.
 - [ ] Icons, emoji, and bold text match the product tone and remain accessible.
 - [ ] Badges are current and useful.
 - [ ] Support, issue reporting, and license information are accurate when included.

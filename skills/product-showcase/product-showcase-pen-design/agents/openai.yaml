@@ -1,0 +1,4 @@
+interface:
+  display_name: "Product Showcase Pen Design"
+  short_description: "Design README visuals in editable Pen files"
+  default_prompt: "Use $product-showcase-pen-design to design this README visual in pen.dev and return the verified export."
