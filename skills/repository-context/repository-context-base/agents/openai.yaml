@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repository Context Base"
+  short_description: "Shared placement model for repository context"
+  default_prompt: "Use $repository-context-base to decide where repository work context belongs and how long it should live."

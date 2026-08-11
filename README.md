@@ -88,7 +88,7 @@ skills or validation configuration.
 | `app-reference` | backend, frontend (application-specific architecture and framework recommendations) |
 | `jira-cli` | jira-cli |
 | `showcase-capture` | plan, terminal, browser, screen, cleanshot-annotate, figma-annotate, pen-annotate (plan app/tool demo media; capture each shot on its appropriate surface; route planned annotations to a concrete editor workflow) |
-| `product-showcase` | readme (create or improve the product front door: value, proof, first success, and routes to deeper documentation) |
+| `repository-context` | base, readme, pen-design, codebase (place repository work context and group tentative wiki notes by work; maintain the product README and living Architecture Guide; design editable documentation visuals) |
 | `codebase-structure` | codebase-structure, codebase-structure-review, codebase-structure-refactor, base (design a target structure; review ownership and boundaries without changing code; safely migrate an implementation; share the reviewability and boundary model) |
 | `refactoring-tools` | refactoring-tools-planner (inspect a repository and create an evidence-based, implementation-ready refactor plan without changing production code) |
 | `3d-print` | 3d-print, 3d-print-eufymake-cli (model a small printable object as parametric OpenSCAD; slice it from the CLI to trace a print warning back to the geometry that causes it) |
@@ -162,8 +162,11 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - ai-council → ai-council-codex-cli, ai-council-fugu-cli
 - ai-council-fugu-cli → ai-council-codex-cli
 
-**product-showcase**
-- readme → **showcase-capture-plan** (when useful README media is missing and the user wants it produced)
+**repository-context**
+- base → llm-wiki-capture `(ext)` and llm-wiki-distill `(ext)` when tentative work knowledge is written or closed
+- readme → base, pen-design (for an approved composed visual), **showcase-capture-plan** (when useful README media is missing and the user wants it produced), documentation-writer `(ext)`, writing-clearly-and-concisely `(ext)`
+- pen-design → base, **showcase-capture-plan** (when real product evidence must be acquired), **showcase-pen-annotate** (when the job is only to annotate or frame one capture)
+- codebase → base, readme (when the main README needs substantial revision), pen-design (for an approved diagram), **lang-reference-\<language\>** when a matching installed skill exists
 
 **codebase-structure**
 - codebase-structure → base, codebase-structure-review, **app-reference-\<kind\>**, **lang-reference-\<language\>** when matching installed skills exist

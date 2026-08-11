@@ -1,24 +1,38 @@
 ---
-name: product-showcase-pen-design
+name: repository-context-pen-design
 description: >-
-  Designs editable visuals for a product README in a local pen.dev `.pen` file
-  through Pencil MCP tools, from visual-concept agreement through multiple
-  comparable directions, selection, refinement, and verified export. Use for
-  hero images, workflow illustrations, architecture or relationship diagrams,
-  comparison panels, conceptual overviews, and other composed README graphics.
+  Designs editable visuals for repository-owned product and developer
+  documentation in a local pen.dev `.pen` file through Pencil MCP tools, from
+  visual-concept agreement through multiple comparable directions, selection,
+  refinement, and verified export. Use for hero images, workflow illustrations,
+  architecture or relationship diagrams, comparison panels, and conceptual
+  overviews in READMEs, documentation sites, Architecture Guides, and related
+  explanatory material.
 ---
 
-# Design product README visuals in pen.dev
+# Design repository documentation visuals in pen.dev
 
-Translate an approved communication brief into an editable visual. The calling README workflow owns what the visual must communicate; this skill owns how to express that message visually and how to explore, select, refine, and export the design.
+Translate an approved communication brief into an editable visual. The calling
+documentation workflow owns the audience, message, claim, document placement,
+and integration into the final document. This skill owns how to express that
+message visually and how to explore, select, refine, and export the design.
 
-Do not use this skill to discover the README's audience, message, claim, or placement. Return to the calling workflow when those decisions are unresolved. Use `showcase-capture-plan` and its routed capture skill to acquire real product evidence. Use `showcase-pen-annotate` instead when the job is only to annotate or frame one captured still.
+Apply `repository-context-base` to keep the visual tied to current, shared
+repository documentation. If the base skill is unavailable, stop before
+creating or changing the canonical `.pen` source. Do not use this skill to
+discover a document's audience, message, claim, or placement. Return to the
+calling workflow when those decisions are unresolved. Use
+`showcase-capture-plan` and its routed capture skill when a visual needs real
+product evidence from visible output.
+Use `showcase-pen-annotate`
+instead when the job is only to annotate or frame one captured still.
 
 ## Establish the design contract
 
 Require a communication brief containing:
 
-- the audience, purpose, core message, and README placement;
+- the target document, audience, purpose, core message, and placement within
+  that document;
 - the visual type, such as hero, workflow, relationship diagram, comparison, or conceptual overview;
 - any factual claim and the real evidence that must remain visible;
 - approved source assets and their repository paths;
@@ -26,7 +40,11 @@ Require a communication brief containing:
 - target dimensions or aspect ratio, export format, and output directory;
 - visual constraints, repository or product identity, privacy constraints, and draft alt text.
 
-Distinguish editorial illustration from product evidence. Do not invent product behavior, reconstruct an interface, alter real output, or use decorative treatment to imply an unsupported capability. If required evidence is missing or unsuitable, return to capture or to the README workflow instead of designing around the gap.
+Distinguish editorial illustration from product or implementation evidence. Do
+not invent product behavior, reconstruct an interface, alter real output, or
+use decorative treatment to imply an unsupported capability. If required
+evidence is missing or unsuitable, return to capture or to the calling
+documentation workflow instead of designing around the gap.
 
 ## Agree on the visual concept
 
@@ -38,7 +56,9 @@ Inspect the approved assets and translate the communication brief into a concise
 - the intended tone, hierarchy, and accessibility approach;
 - which design dimensions should vary across candidate directions.
 
-Present the concept in words and ask the user to approve or revise it. Stop before drawing. Approval of the README, communication brief, or request to create a visual does not by itself approve the visual concept.
+Present the concept in words and ask the user to approve or revise it. Stop
+before drawing. Approval of the document, communication brief, or request to
+create a visual does not by itself approve the visual concept.
 
 ## Prepare the Pen workspace
 
@@ -60,9 +80,9 @@ Build two to four materially distinct directions from the same approved concept.
 
 Keep the directions in one `.pen` file as separately named frames:
 
-- `product-showcase/<asset-name>/candidate-<number>` for each direction;
-- `product-showcase/<asset-name>/source/<name>` for imported evidence or assets;
-- `product-showcase/<asset-name>/final` for the selected, refined result.
+- `repository-context/<document-slug>/<asset-name>/candidate-<number>` for each direction;
+- `repository-context/<document-slug>/<asset-name>/source/<name>` for imported evidence or assets;
+- `repository-context/<document-slug>/<asset-name>/final` for the selected, refined result.
 
 Place new root frames with `FindEmptySpace`, set `clip: true`, and keep `placeholder: true` while constructing them. Use small, reviewable `batch_design` operations and preserve returned node IDs. Remove the placeholder state only when a frame is complete.
 
@@ -99,4 +119,5 @@ After approval, use `export_nodes` with the exact final frame ID, requested form
 - the final frame ID, export path, dimensions, format, and scale;
 - the checks performed and any unresolved limitation.
 
-Return these details to the calling README workflow so it can replace the review stub, finalize alt text, and verify the rendered placement.
+Return these details to the calling documentation workflow so it can replace
+the review stub, finalize alt text, and verify the rendered placement.

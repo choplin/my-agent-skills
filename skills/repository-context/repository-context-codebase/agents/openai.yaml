@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repository Context Codebase"
+  short_description: "Maintain a durable codebase Architecture Guide"
+  default_prompt: "Use $repository-context-codebase to create, refresh, or review this repository's Architecture Guide."

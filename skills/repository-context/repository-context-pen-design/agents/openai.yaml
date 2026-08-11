@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repository Context Pen Design"
+  short_description: "Design documentation visuals in editable Pen files"
+  default_prompt: "Use $repository-context-pen-design to design this documentation visual in pen.dev and return the verified export."

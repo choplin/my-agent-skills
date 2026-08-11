@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repository Context README"
+  short_description: "Create a clear, evidence-based product README"
+  default_prompt: "Use $repository-context-readme to create or improve this product README."

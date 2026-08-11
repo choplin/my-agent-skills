@@ -1,5 +1,5 @@
 ---
-name: product-showcase-readme
+name: repository-context-readme
 description: >-
   Writes or revises the main product README so prospective users understand
   the value of the software and reach a first successful outcome. Applies
@@ -15,6 +15,12 @@ metadata:
 Treat the README as the product's front door, not as an exhaustive manual. Its default job is to help readers understand the product, decide to try it, and reach a first successful outcome. Include deeper guidance only when the repository needs the README to serve that role.
 
 Design the document so a front-to-back reading naturally moves through `Orient → Motivate → Activate → Deepen`, stopping at the agreed scope. Readers may also enter midway, so make each section locally understandable.
+
+Apply `repository-context-base` before deciding what belongs in the README or
+another repository document. The README is current, shared user documentation;
+tentative reasoning and active work state do not become part of it merely
+because they informed the draft. If the base skill is unavailable, stop before
+changing the canonical README rather than reconstructing its placement model.
 
 ## Inspect before writing
 
@@ -112,7 +118,7 @@ When a new visual is justified:
 
 1. Define the communication brief: audience, purpose, core message, README placement, visual type, dimensions or aspect ratio, approved source assets, accessibility requirements, and any claim or evidence that must remain visible. Prefer real product output or screenshots when the visual represents behavior.
 2. Put a clearly labeled visual-design review stub at the intended README location using `references/readme-patterns.md`. Ask the user to approve or revise what the visual must communicate. Stop while those communication choices remain open.
-3. After approval, load `product-showcase-pen-design` and pass it the complete brief, source paths, repository identity or visual constraints, draft alt text, and intended export path. Follow its visual-concept agreement, multiple-direction comparison, selection, refinement, and verified-export workflow.
+3. After approval, load `repository-context-pen-design` and pass it the complete brief, source paths, repository identity or visual constraints, draft alt text, and intended export path. Follow its visual-concept agreement, multiple-direction comparison, selection, refinement, and verified-export workflow.
 4. Replace the stub with the approved export and meaningful alt text. Verify the rendered README placement, image path, dimensions, represented product state, and absence of private, synthetic, or misleading content. Preserve and report the `.pen` source path, candidate frame names, and selected final frame.
 
 If the visual requires a captured product still, complete the approved capture workflow first and pass the clean capture as source evidence. If the task only annotates or frames that still, route it to `showcase-pen-annotate` instead. If the task is draft-only, leave the review stub in place and do not start Pen/Pencil MCP work.

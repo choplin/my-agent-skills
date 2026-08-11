@@ -173,7 +173,7 @@ For a designed visual, use this variant:
 > **Alt text:** <draft alt text>
 ```
 
-Agree on what the visual must communicate, then load `product-showcase-pen-design`. That skill owns visual-concept agreement, two to four comparable directions in one editable `.pen` file, user selection, refinement, final approval, verification, and export. Keep real screenshots and output unchanged as separate source layers.
+Agree on what the visual must communicate, then load `repository-context-pen-design`. That skill owns visual-concept agreement, two to four comparable directions in one editable `.pen` file, user selection, refinement, final approval, verification, and export. Keep real screenshots and output unchanged as separate source layers.
 
 Get explicit user approval for the stubs before loading a surface capture skill. After approval, preserve the approved claim and evidence requirements in the capture plan, capture the real product path, and replace the stubs with the final assets. If rehearsal shows that the approved claim cannot be reproduced, stop and return to planning instead of changing the story during capture.
 

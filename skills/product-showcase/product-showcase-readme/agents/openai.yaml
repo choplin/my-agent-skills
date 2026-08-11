@@ -1,4 +1,0 @@
-interface:
-  display_name: "Product README"
-  short_description: "Create a clear, evidence-based product README"
-  default_prompt: "Use $product-showcase-readme to create or improve this product README."
