@@ -1,11 +1,11 @@
 ---
 name: discuss-toolkit-dig
 description: >-
-  Explores what the user actually means through guided questioning, holding a
-  map of the whole discussion while asking questions that clarify, broaden,
-  test, or converge their thinking. Applies when a request is ambiguous, when
-  the intent behind it is unclear, when an idea should be widened before being
-  judged, or when the user asks to think something through.
+  Clarifies or broadens the user's existing thinking about a bounded subject
+  through guided conversation. Applies when their intended meaning,
+  priorities, boundaries, or desired direction remain uncertain, or when they
+  ask to explore or think through a subject. Maintains a provisional discussion
+  map and ends with a shared understanding in the current conversation.
 metadata:
   description-role: trigger
 ---

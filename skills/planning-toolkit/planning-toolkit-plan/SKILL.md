@@ -1,13 +1,12 @@
 ---
 name: planning-toolkit-plan
 description: >-
-  Turns an established direction into a finite outcome and autonomous-ready
-  delivery work. Cuts scope against the caller's scope policy, persists the
-  durable decisions, and after explicit approval creates or updates the
-  Project, Milestones, Issues, and dependencies in the tracker. Applies when a
-  PRD, design notes, or rough actions already exist but the outcome boundary,
-  deferred roadmap, blocking research, milestones, and atomic issues still
-  need shaping.
+  Turns an established product or design direction into one finite delivery
+  outcome and autonomous-ready work. Applies when a PRD, Design Note, or rough
+  actions already establish the direction but the delivery boundary and work
+  structure remain open. Cuts scope against a declared policy, persists the
+  decisions, and after approval creates or updates tracker milestones, issues,
+  and dependencies.
 metadata:
   description-role: trigger
 ---

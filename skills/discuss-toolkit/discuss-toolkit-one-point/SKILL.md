@@ -1,11 +1,10 @@
 ---
 name: discuss-toolkit-one-point
 description: >-
-  Handles a complex discussion one point at a time: summarizes every open
-  point as a short labeled list, then presents and resolves one of them in
-  detail before opening the next. Applies whenever two or more discussion
-  points are about to be presented at once, and when the user asks to take
-  things one at a time or to stop listing everything.
+  Controls the pacing of a discussion with multiple known open points. Applies
+  when two or more points are about to be presented, or when the user asks to
+  proceed one at a time. Shows the whole set as a compact labeled list, then
+  resolves or parks exactly one point before opening the next.
 metadata:
   description-role: trigger
 ---

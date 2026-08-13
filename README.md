@@ -73,7 +73,7 @@ skills or validation configuration.
 |-------|--------|
 | `code-review-session` | import-ai, import-pr, import-ci, run-checks, resolve, reply-pr, report, base (the record of one code review: a review.md list of items fed by ingestion sources — AI review / PR / CI / local checks / direct — and worked to resolution) |
 | `artifact-review-toolkit` | quick, adversarial (how a work artifact is reviewed: a one-off review redirected to the host's reviewer, or a lens-selected adversarial pass with independent reviewers; called by code-review-session and orchestration-toolkit) |
-| `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, finalize (shape a fuzzy idea into a footing: PRD / decisions / actions) |
+| `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, finalize (develop an unformed project concept into a durable footing: PRD / decisions / actions) |
 | `design-note` | design-note (write down a problem and the approach taken to it as one durable llm-wiki note — lighter than a PRD, shallower than a design doc) |
 | `exec-plan` | exec-plan, exec-plan-base (ad-hoc autonomous run with no tracker issue behind it; decision log + parking lot) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
@@ -94,6 +94,26 @@ skills or validation configuration.
 | `3d-print` | 3d-print, 3d-print-eufymake-cli (model a small printable object as parametric OpenSCAD; slice it from the CLI to trace a print warning back to the geometry that causes it) |
 
 > MoonBit skills are **not** vendored here — install them straight from upstream: `skills add moonbitlang/skills`.
+
+## From discussion to delivery
+
+These skills are distinguished by the transformation each one performs, not by
+how vague or detailed the initial request sounds:
+
+| Starting point | Skill | Result |
+|----------------|-------|--------|
+| The user has thoughts about a bounded subject, but their meaning, priorities, boundaries, or desired direction are not yet shared clearly | `discuss-toolkit-dig` | A shared understanding in the current conversation |
+| An identifiable plan, design, decision, idea, or direction needs pressure-testing | `discuss-toolkit-grill-me` | A candidate whose critical assumptions and weaknesses have been examined |
+| A discussion already has multiple known open points | `discuss-toolkit-one-point` | One navigable sequence in which each point is resolved or parked before the next |
+| A project concept is still unformed and needs its founding problem, possibilities, and decisions developed | `inception` | A durable project footing: a long-lived PRD, recorded decisions, and first actions |
+| A conversation or investigation has established the problem and chosen approach | `design-note` | One durable note preserving the approach and its reasoning |
+| A product or design direction is established, but its finite delivery boundary and work structure are not | `planning-toolkit-plan` | A scoped outcome, milestones, issues, and dependencies ready for execution |
+
+`discuss-toolkit-one-point` is orthogonal to the subject of the discussion: it
+can control the pacing while another discussion skill owns the thinking work.
+Full `inception` is intentionally persistent and multi-phase; ordinary bounded
+discussion remains in the current conversation unless its result is later
+captured or planned.
 
 ## Skill dependencies
 

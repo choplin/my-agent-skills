@@ -1,11 +1,11 @@
 ---
 name: inception
 description: >-
-  Shapes an unformed project concept through structured dialogue — framing,
-  divergence, structuring, deepening, and convergence over a thinking graph.
-  Ends with a durable footing: the purpose, the resolved foundational
-  questions, the decisions with their rejected alternatives, and the first
-  actions.
+  Runs a full, persistent process that turns an unformed project concept into
+  a durable founding footing. Develops the problem, purpose, users,
+  possibilities, foundational decisions, rejected alternatives, and first
+  actions across facilitated phases maintained in a thinking graph, then
+  produces a long-lived PRD.
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
 metadata:
   description-role: documentation

@@ -1,10 +1,11 @@
 ---
 name: discuss-toolkit-grill-me
 description: >-
-  Interviews the user relentlessly to stress-test a plan, design, decision, or
-  idea until both sides share the same understanding. Challenges assumptions
-  and looks for holes rather than clarifying intent, and needs an identifiable
-  thing to challenge before it starts.
+  Stress-tests an identifiable plan, design, decision, idea, or proposed
+  direction through one-question-at-a-time interviewing. Challenges its
+  assumptions, consequences, and failure modes, gives a recommended answer for
+  each decision, and stops when the candidate is robust enough to act on or its
+  critical weaknesses are exposed.
 metadata:
   description-role: documentation
 ---

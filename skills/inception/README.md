@@ -1,6 +1,6 @@
 # inception
 
-Skills for the **start of a project** — think a fuzzy idea into a solid footing through a phase-driven, dialogic facilitation. The session grows a single thinking graph that is projected into a PRD, a decision record, action items, and open questions.
+Skills for the **founding of a project** — develop an unformed concept into a solid footing through phase-driven, dialogic facilitation. The session grows a single thinking graph that is projected into a PRD, a decision record, action items, and open questions.
 
 > Scope: inception shapes the founding concept. It does **not** track project progress or execute the actions — once actions are concrete and the footing is finalized, selected actions become Linear Issues, and execution starts from the tracker via `linear-start`.
 
@@ -55,7 +55,7 @@ finalize <graph.json>
 - **Elicit via dig.** All drawing-out of the user's thinking goes through `discuss-toolkit-dig`; never fill gaps with the AI's assumptions.
 - **A full session starts only when asked.** `inception` is heavy, so the agent never opens one on its own judgment: an explicit user request starts it directly, while an inferred need or a handoff from another skill must first state the cost and get a go-ahead (offering plain conversation instead).
 - **Finalize is the one-way exit.** A session ends at `inception-finalize`: the working artifacts stay transient in `.agents/`, and only the consolidated PRD is confirmed into the llm-wiki knowledge base (via `llm-wiki-base`, no directory scheme of its own). Concrete actions leave for Linear (or are handed off as-is); the live open-questions queue is a snapshot and is discarded. After finalize the wiki PRD is the source of truth — reopen by starting a fresh session or editing the note, not by re-rendering the retired graph.
-- **Relationship to neighbors.** Earlier than the execution skills (which begin once the work unit is defined and groomed); broader than `discuss-toolkit-dig` (which clarifies one intent without lasting artifacts). Shares its durable store with the `llm-wiki` family (finalize writes a `prd`-tagged note into the same knowledge base).
+- **Relationship to neighbors.** Inception owns the persistent, multi-phase development of a project's founding concept; `discuss-toolkit-dig` owns bounded conversational elicitation and creates no lasting artifact. Execution skills begin once the work unit is defined and groomed. Inception shares its durable store with the `llm-wiki` family (finalize writes a `prd`-tagged note into the same knowledge base).
 
 ## Installation
 

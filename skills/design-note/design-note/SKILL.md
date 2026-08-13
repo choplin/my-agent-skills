@@ -1,13 +1,11 @@
 ---
 name: design-note
 description: >-
-  Writes what to build as a Design Note — a short durable note recording the
-  problem and the approach taken to it, shallower on how than a design doc.
-  Draws out what is still missing through discussion, then writes one note
-  into the llm-wiki knowledge base tagged design-note, with no working files
-  left behind. Applies when a conversation or investigation has settled what
-  should be built and it needs capturing: background, problem, target, goals,
-  non-goals, and the approach with its reasoning.
+  Captures an established problem and chosen approach as one durable Design
+  Note after a conversation or investigation has settled what should be built.
+  Elicits only material gaps, then records the background, target users, goals,
+  boundaries, approach, alternatives, and reasoning in the llm-wiki knowledge
+  base, at a level shallower than implementation design.
 allowed-tools: Read, Write, Edit, Glob, AskUserQuestion, Bash
 metadata:
   description-role: trigger
