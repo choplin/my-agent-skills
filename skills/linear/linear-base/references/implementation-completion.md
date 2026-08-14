@@ -32,9 +32,9 @@ Progress, In Review, and Done.
 4. Review feedback returns the Issue to In Progress. If it materially changes
    the prospective commit, implement the correction, rerun relevant checks,
    present the result again, and return the Issue to In Review.
-5. Once approved, return the Issue to In Progress while performing the
-   agent-owned commit and integration work. A PR opened during that work moves
-   it back to In Review; verified integration permits Done.
+5. Once approved, keep the Issue In Review while performing the agent-owned
+   commit and integration work. Approval ends the human review wait but does
+   not move the Issue backward; verified integration permits Done.
 6. Skip this gate only when the user explicitly asks to commit this Linear work
    without review.
 
@@ -44,9 +44,11 @@ Progress, In Review, and Done.
    commits.
 2. Verify that every Issue-related change is committed and no staged, unstaged,
    or untracked Issue-related change remains. The completion note cites those
-   commits. A failed cleanliness check leaves the Issue In Progress.
+   commits. A failed cleanliness check leaves an approved Issue In Review (or
+   an explicitly unreviewed Issue In Progress).
 3. Determine status from observable integration evidence:
-   - Work branch, no PR, not integrated → In Progress.
+   - Approved work branch, no PR, not integrated → In Review.
+   - Review explicitly skipped; work branch not integrated → In Progress.
    - PR open against the target branch → In Review.
    - PR merged → Done.
    - Cherry-pick or another explicit integration visible in the target branch's

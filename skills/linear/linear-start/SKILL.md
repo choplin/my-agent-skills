@@ -165,17 +165,19 @@ rather than re-picking one.** Route by the artifact found at step 6:
 
 Whichever way it goes, remember the later lifecycle transitions owned by
 `linear-base`. For an `impl` Issue completed on a work branch, a commit alone
-leaves it **In Progress**. Keep it there while no PR or verified integration
-exists; move it to **In Review** when a PR is opened; move it to **Done** only
-after the PR is merged or a cherry-pick or other explicit integration into the
-target branch is verified. Only an Issue committed directly to the target
-branch, or integrated without review, may go straight from **In Progress** to
-**Done**. Treat an intentionally unintegrated deliverable as Done only after the
-user explicitly accepts that exception. When the issue reaches **Done**,
-continue with step 8. If a committed work branch has neither a PR nor verified
-integration, report that the Issue remains **In Progress** and offer the user
-the applicable next action; do not silently turn the missing integration into a
-no-review completion path.
+does not complete it. Once the pre-commit review gate has been presented, keep
+it **In Review** through approval, commit, and integration; move it to **Done**
+only after the PR is merged or a cherry-pick or other explicit integration into
+the target branch is verified. If the user explicitly skipped the review gate,
+a work branch with no verified integration remains **In Progress**, while an
+Issue committed directly to the target branch or otherwise integrated may go
+straight from **In Progress** to **Done**. Treat an intentionally unintegrated
+deliverable as Done only after the user explicitly accepts that exception. When
+the issue reaches **Done**, continue with step 8. If a committed work branch has
+neither a PR nor verified integration, report that the Issue remains **In
+Review** after approval (or **In Progress** when review was explicitly skipped)
+and offer the applicable next action; do not silently turn the missing
+integration into a no-review completion path.
 
 For every `impl` repository change, apply `linear-base`'s pre-commit human review
 gate. Pass both the selected Issue's full record and this gate as explicit
@@ -203,9 +205,9 @@ execution hand-off. The focus points say what the user should inspect or decide,
 not merely "review the diff." This Linear-specific gate overrides an execution
 mode's default commit cadence. Move the Issue to **In Review** when presenting
 the result. Review feedback returns it to **In Progress**; changes must be
-re-verified and presented for review again. Approval returns it to **In
-Progress** while the agent commits and integrates the change, with later status
-determined by the integration evidence above.
+re-verified and presented for review again. Approval keeps it **In Review**
+while the agent commits and integrates the change; verified integration moves
+it to **Done**.
 
 ### 8. After Done — suggest follow-up actions and show context
 

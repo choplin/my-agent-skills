@@ -140,9 +140,9 @@ Transitions (who/when):
   `impl` Issue, both presenting the uncommitted change for human review and
   opening a PR trigger this transition.
 - **In Review → Done**: the deliverable is accepted and completed. For an
-  `impl` Issue, verify that the PR was merged or that the change was otherwise
-  integrated into the target branch; approval alone is insufficient. Review
-  feedback or approval that returns work to the agent moves it to In Progress.
+  `impl` Issue, only verified target-branch integration permits Done. Feedback
+  requiring changes moves it to In Progress; approval keeps it In Review
+  through integration.
   If Done is reached with **no final-deliverable review step**, leave the
   completion note at this transition instead.
 - **In Progress → (session boundary, stays In Progress)**: not a status change, but a checkpoint. When work on an issue **spans sessions** and this session ends before the issue finishes, **leave a handoff note** (see below) so a fresh session can resume it.
@@ -157,19 +157,18 @@ target-branch integration completes the Issue.
 - Present the verified, uncommitted change and move to **In Review**. Feedback
   returns it to **In Progress**; material changes require review again. Only an
   explicit request skips review.
-- Approval returns the Issue to **In Progress** while the agent commits and
-  integrates, unless that immediately establishes a later state below.
+- Approval keeps the Issue **In Review** through commit and integration.
 - A clean, committed work branch with no PR and no verified integration stays
-  **In Progress**.
+  **In Review** after approval, or **In Progress** if review was skipped.
 - An open PR against the target branch moves it to **In Review**.
 - A merged PR, verified cherry-pick, other verified integration, or direct
   commit on the target branch permits **Done**.
 - An intentionally unintegrated deliverable permits **Done** only after explicit
   user acceptance.
 
-If agent-owned work pauses, keep **In Progress** and leave a handoff note. Once
-the gate is presented, keep **In Review** while awaiting the user. A PR is
-optional; integration is not without the exception above.
+Before review, paused agent-owned work stays **In Progress** with a handoff
+note. Once review starts, keep **In Review** through approval and integration.
+A PR is optional; integration is not without the exception above.
 
 ### Worktree cleanup after Done
 
