@@ -29,9 +29,10 @@ Progress, In Review, and Done.
 3. Move the Issue to In Review and wait for explicit approval before invoking
    `git-helpers-commit`. Silence is not approval, and requesting implementation
    earlier is not approval of the resulting change.
-4. Review feedback returns the Issue to In Progress. If it materially changes
-   the prospective commit, implement the correction, rerun relevant checks,
-   present the result again, and return the Issue to In Review.
+4. Keep the Issue In Review while addressing feedback. If feedback materially
+   changes the prospective commit, implement the correction, rerun relevant
+   checks, and present the result again without changing status. Return it to
+   In Progress only when the user explicitly sends it back.
 5. Once approved, keep the Issue In Review while performing the agent-owned
    commit and integration work. Approval ends the human review wait but does
    not move the Issue backward; verified integration permits Done.

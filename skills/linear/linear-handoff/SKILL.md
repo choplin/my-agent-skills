@@ -25,9 +25,9 @@ It builds on the `linear-base` skill for all status/label/issue semantics and ow
   explicitly skipped. A pending integration after review is not a handoff
   status transition.
 - **Awaiting pre-commit review:** this is **In Review**, not a handoff. The
-  review request already identifies the pending user response. Feedback that
-  requires changes returns it to In Progress; approval keeps it In Review
-  through commit and integration.
+  review request already identifies the pending user response. Feedback,
+  corrections, approval, commit, and integration keep it In Review unless the
+  user explicitly sends it back to In Progress.
 - **Finished, not paused** → this is a *completion* note, not a handoff. Leave it per `linear-base` at the In Review / Done transition instead.
 - **No issue yet** → a discussion worth carrying across sessions belongs in an issue. If the work spanning sessions is not yet a Linear issue, that is itself the thing to fix: create the issue first (via `linear-base`), then hand it off. There is no local-file fallback — the issue is the anchor.
 

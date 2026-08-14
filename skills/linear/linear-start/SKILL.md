@@ -204,10 +204,10 @@ presenting the brief if any of this context was not preserved through the
 execution hand-off. The focus points say what the user should inspect or decide,
 not merely "review the diff." This Linear-specific gate overrides an execution
 mode's default commit cadence. Move the Issue to **In Review** when presenting
-the result. Review feedback returns it to **In Progress**; changes must be
-re-verified and presented for review again. Approval keeps it **In Review**
-while the agent commits and integrates the change; verified integration moves
-it to **Done**.
+the result. Keep it there while addressing feedback, re-verifying changes,
+presenting them again, committing, and integrating. Return it to **In Progress**
+only when the user explicitly sends it back; verified integration moves it to
+**Done**.
 
 ### 8. After Done — suggest follow-up actions and show context
 

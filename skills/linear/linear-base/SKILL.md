@@ -139,10 +139,10 @@ Transitions (who/when):
 - **In Progress → In Review**: the deliverable is submitted for review. For an
   `impl` Issue, both presenting the uncommitted change for human review and
   opening a PR trigger this transition.
-- **In Review → Done**: the deliverable is accepted and completed. For an
-  `impl` Issue, only verified target-branch integration permits Done. Feedback
-  requiring changes moves it to In Progress; approval keeps it In Review
-  through integration.
+- **In Review → Done**: the deliverable is accepted and completed. An `impl`
+  Issue stays In Review through feedback, corrections, approval, commit, and
+  integration. Only verified integration permits Done; only explicit user
+  instruction returns it to In Progress.
   If Done is reached with **no final-deliverable review step**, leave the
   completion note at this transition instead.
 - **In Progress → (session boundary, stays In Progress)**: not a status change, but a checkpoint. When work on an issue **spans sessions** and this session ends before the issue finishes, **leave a handoff note** (see below) so a fresh session can resume it.
@@ -154,8 +154,9 @@ For an `impl` Issue, apply both gates in
 `references/implementation-completion.md`: user review precedes the commit;
 target-branch integration completes the Issue.
 
-- Present the verified, uncommitted change and move to **In Review**. Feedback
-  returns it to **In Progress**; material changes require review again. Only an
+- Present the verified, uncommitted change and move to **In Review**. Keep it
+  there while addressing feedback and re-presenting material changes. Return
+  it to **In Progress** only when the user explicitly sends it back. Only an
   explicit request skips review.
 - Approval keeps the Issue **In Review** through commit and integration.
 - A clean, committed work branch with no PR and no verified integration stays
