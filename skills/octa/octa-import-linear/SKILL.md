@@ -30,6 +30,27 @@ Only **non-terminal** Linear Issues are imported: status types `backlog`,
 archive, because octa cannot reproduce its comment history, authorship, or
 timestamps faithfully.
 
+## Report octa gaps instead of working around them
+
+octa is under active development and this import is dogfooding it. When octa
+cannot represent or accept something the Linear record carries, do not force
+the import through: no substitute field, no encoding the content into the body
+or a comment, no dropping the part that does not fit.
+
+Skip the affected record whole — a half-imported Issue is worse than an absent
+one, and leaving no footer means a later run retries it once octa can take it.
+Leave its Linear record untouched. If the gap blocks the run as a whole (a
+required command or field does not exist at all), stop before writing anything.
+
+Collect these as **feedback for octa**, separate from the ordinary import
+report: what the Linear record needed, which octa command or field was tried,
+the exact failure or missing capability, and how many records it affects.
+
+This applies to capability gaps, not to the deliberate model differences in the
+mapping below. A dropped `Repo` label, an unused Cycle, and comment history
+left in Linear are decisions of this migration; they are not octa defects and
+do not belong in the feedback.
+
 ## Provenance and re-run safety
 
 Every octa record this skill creates ends its body with one footer line:
@@ -76,7 +97,9 @@ partial runs are expected and the footer check makes a later run additive.
 For each selected Issue read the description, labels, priority, Project,
 Milestone, parent, `blockedBy`/`blocks`/`relatedTo`, comments, and attachment
 links. Read the owning Projects too. Resolve the mapping below and report what
-will be dropped **before** the first write.
+will be dropped **before** the first write. Anything the mapping cannot place
+is an octa gap, not a detail to improvise around: hold it for the feedback
+report and leave the affected records out of the run.
 
 ### 5. Create Projects and Milestones
 
@@ -159,6 +182,10 @@ skipped as already imported, failures with their reason, data deliberately
 dropped, and what still remains under `R` in Linear. Point to `octa-overview`
 for the resulting picture and `octa-groom` for bodies that do not yet meet the
 Todo standard.
+
+Close with the octa feedback report as its own section, even when it is empty.
+It is the point of dogfooding the import, and it is the only place a capability
+gap survives the run.
 
 ## Mapping
 
