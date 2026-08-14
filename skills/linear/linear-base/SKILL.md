@@ -148,29 +148,13 @@ Transitions (who/when):
 - **In Progress → (session boundary, stays In Progress)**: not a status change, but a checkpoint. When work on an issue **spans sessions** and this session ends before the issue finishes, **leave a handoff note** (see below) so a fresh session can resume it.
 - **any → Canceled**: dropped or superseded. Use Canceled, never Done, for work that wasn't actually completed.
 
-### Implementation review and completion gates
+### Implementation completion procedure
 
-For an `impl` Issue, apply both gates in
-`references/implementation-completion.md`: user review precedes the commit;
-target-branch integration completes the Issue.
-
-- Present the verified, uncommitted change and move to **In Review**. Keep it
-  there while addressing feedback and re-presenting material changes. Return
-  it to **In Progress** only when the user explicitly sends it back. Only an
-  explicit request skips review.
-- After approval, commit is nonterminal: continue through integration and
-  completion unless the user explicitly requests **commit only**.
-- An approved, unintegrated work branch stays **In Review**; skipped review
-  stays **In Progress**.
-- An open PR against the target branch moves it to **In Review**.
-- A merged PR, verified cherry-pick, other verified integration, or direct
-  commit on the target branch permits **Done**.
-- An intentionally unintegrated deliverable permits **Done** only after explicit
-  user acceptance.
-
-Before review, paused work stays **In Progress** with a handoff note. Once
-review starts, keep **In Review** through integration. A PR is optional;
-integration is not without the exception above.
+For every `impl` Issue, read and apply
+`references/implementation-completion.md` from pre-commit review through its
+terminal outcome. It is the single source of truth for the review brief,
+feedback cycle, commit-only exception, commit handoff, integration evidence,
+and final status. Caller skills must invoke that procedure, not restate it.
 
 ### Worktree cleanup after Done
 

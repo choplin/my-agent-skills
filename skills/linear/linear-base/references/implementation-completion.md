@@ -33,13 +33,15 @@ Progress, In Review, and Done.
    changes the prospective commit, implement the correction, rerun relevant
    checks, and present the result again without changing status. Return it to
    In Progress only when the user explicitly sends it back.
-5. Once approved, keep the Issue In Review and invoke `git-helpers-commit` as a
-   nested operation, not the end of the Linear workflow. After it returns,
-   automatically continue through the established integration path, verify the
-   target branch, move the Issue to Done, complete its note, and run the
-   `linear-start` post-Done flow. Select the integration path from repository
-   conventions and existing Git/PR artifacts; do not stop merely to offer it as
-   a next action.
+5. Once approved, keep the Issue In Review, stage exactly the reviewed Issue
+   scope, and invoke `git-helpers-commit` as a nested operation. After it
+   returns, automatically continue through the established integration path,
+   verify the target branch, move the Issue to Done, complete its note, and
+   apply `worktree-cleanup.md`. Select the path from repository conventions and
+   existing Git/PR artifacts; do not stop merely to offer it as a next action.
+   Continue until Done or a genuine external, permission, safety, or materially
+   ambiguous integration gate blocks progress, then return that exact outcome
+   to the caller for its post-completion or blocked flow.
 6. Stop after the commit only when the user explicitly limits the request to
    **commit only** (for example, "commit only", "do not merge", or "do not
    update Linear"). A plain approval or ordinary "commit" request is not that

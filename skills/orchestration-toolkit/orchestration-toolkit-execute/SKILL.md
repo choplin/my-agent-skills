@@ -124,7 +124,8 @@ durable state, and a second copy on disk only goes stale.
 
 Work the Progress list top to bottom.
 
-- Implement in this session. Commit frequently through `git-helpers-commit`.
+- Implement and verify without committing; the `linear-base` completion
+  procedure owns the reviewed commit.
 - Apply the decision split to every call that arises.
 - When a step is blocked only by a parked decision, skip it and continue.
 - Update the record at meaningful boundaries and before the session ends by
@@ -171,24 +172,20 @@ Bring the Parking Lot back in one pass: for each entry, the decision, why it was
 parked, what it blocks, the options, and your leaning. Decide them with the user,
 move each resolution into the Decision Log, then finish the work that was blocked.
 
-When nothing remains open, post the completion note required by `linear-base`
-with:
+When nothing remains open, assemble these Issue-specific inputs for
+`linear-base`'s completion procedure:
 
 - the acceptance table — each criterion mapped to observable evidence;
-- the commits produced;
+- the prospective commit scope;
 - autonomous decisions and their rationale;
 - adversarial findings, or the recorded reason none were sought;
 - residual risks and verification gaps.
 
-Apply `linear-base`'s implementation completion gate after committing. The
-`git-helpers-commit` call is nested: resume this run when it returns and, unless
-the user explicitly requested commit only, automatically follow the established
-integration path, verify the target branch, move the Issue to Done, finish its
-completion note, and perform the required cleanup and follow-up. A plain
-approval or ordinary commit request is not commit-only. If explicitly limited,
-keep the Issue In Review after an approved commit (or In Progress when review
-was skipped) and report the remaining integration. A PR is optional; verified
-integration is not unless the user accepts an unintegrated exception.
+Read and apply `linear-base`'s
+`references/implementation-completion.md` from pre-commit review through its
+terminal outcome. That procedure owns commit continuation, integration, Linear
+status, and cleanup; do not reproduce those branches here. Return the outcome
+to the caller after the procedure finishes or reaches an explicit stop.
 
 ## When NOT to use
 

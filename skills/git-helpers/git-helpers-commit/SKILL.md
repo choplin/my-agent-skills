@@ -196,3 +196,8 @@ Confirm that the recorded message is exact, the commit contains the intended
 scope, and remaining working-tree changes are reported accurately. If commit
 creation failed, stop and report the failure rather than presenting the draft
 message as committed.
+
+When invoked inside a broader workflow, return control to that workflow after
+verification. An ordinary commit request does not cancel the caller's remaining
+steps; end the broader workflow here only when the user explicitly requested
+commit-only behavior.

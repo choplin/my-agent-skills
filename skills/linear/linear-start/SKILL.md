@@ -163,50 +163,13 @@ rather than re-picking one.** Route by the artifact found at step 6:
 | Active host-native `/goal` | Continue the existing goal through the host |
 | None | Apply the Starting table above, but frame the remaining work (from step 6) as the task, not the whole issue |
 
-Whichever way it goes, remember the later lifecycle transitions owned by
-`linear-base`. For an `impl` Issue completed on a work branch, a commit alone
-does not complete it. Treat `git-helpers-commit` as a nested operation and
-resume this flow when it returns, including when the commit request arrives in
-a later user turn. Unless the user explicitly says **commit only** (for example,
-"do not merge" or "do not update Linear"), automatically continue through the
-established integration path, verify the target branch, move the Issue to
-**Done**, leave or finish the completion note, and run step 8. A plain approval
-or ordinary "commit" request does not limit the workflow to committing. If the
-user did explicitly limit it, verify the commit, keep the Issue **In Review**
-(or **In Progress** when review was skipped), and report that integration and
-completion remain. Never mark an unintegrated deliverable Done without the
-explicit exception allowed by `linear-base`.
-
-For every `impl` repository change, apply `linear-base`'s pre-commit human review
-gate. Pass both the selected Issue's full record and this gate as explicit
-constraints to whichever execution mode receives the Issue: finish
-implementation and verification uncommitted, then present a **self-contained
-review brief** and wait for the user's approval before invoking
-`git-helpers-commit`; after it returns, resume this Linear flow as required
-above. The brief must let someone review the result without
-having to recover the earlier selection exchange or open Linear first. Include:
-
-- **Reference** — Issue identifier, title, and URL; Project or parent Issue when
-  it materially explains the scope. Linear references belong in this internal
-  review conversation, even though they must not enter commits, branches, files,
-  or PR text.
-- **Background / problem** — the user-visible or engineering problem that made
-  the work necessary, including the relevant prior behavior.
-- **Goal and acceptance** — the intended outcome and the Issue's checkable done
-  conditions; name important constraints or exclusions when they shape review.
-- **Changes**, **verification**, **risks / open points**, and concrete **review
-  focus** — as required by `linear-base`'s implementation review gate.
-
-Do not collapse background and goal into a generic one-line "purpose" when the
-Issue contains enough detail to state them separately. Re-read the Issue before
-presenting the brief if any of this context was not preserved through the
-execution hand-off. The focus points say what the user should inspect or decide,
-not merely "review the diff." This Linear-specific gate overrides an execution
-mode's default commit cadence. Move the Issue to **In Review** when presenting
-the result. Keep it there while addressing feedback, re-verifying changes,
-presenting them again, committing, and integrating. Return it to **In Progress**
-only when the user explicitly sends it back; verified integration moves it to
-**Done**.
+For every `impl` repository change, pass the selected Issue's full record to the
+execution mode and require it to read and apply `linear-base`'s
+`references/implementation-completion.md` from pre-commit review through a
+terminal outcome. That procedure owns the review brief, status transitions,
+commit handoff, integration, completion note, and cleanup; do not reproduce
+them here. When it returns **Done**, continue with step 8. Otherwise report the
+exact unresolved gate or explicit commit-only outcome it returned.
 
 ### 8. After Done — suggest follow-up actions and show context
 
@@ -216,16 +179,9 @@ Project context when it has one, and what to pick up next. This may land in a
 later session or turn than the one that started the issue; run it whenever the
 completion this flow set in motion reaches Done.
 
-**8a. Clean up local Git artifacts.** Follow `linear-base`'s **Worktree cleanup
-after Done** procedure. Resolve and safety-check the exact worktree and local
-work branch, then remove both automatically without asking for another
-instruction. If this Issue committed directly on the target branch, there is
-nothing to remove. If a safety check fails, retain the artifacts and report the
-failed check instead of forcing cleanup.
+**8a. Report Project status when applicable.** If the completed issue belongs to a Project, tally that Project's issues with **Repo label = R** and present the compact per-Project block exactly as the `linear` overview skill does (its step 2–3 — separate `In Progress` and `In Review`, then `Todo` / `Backlog`, optional `(Done N)`, `canceled` excluded). Close with a one-line read of the shape (e.g. "one In Review, three Todo ready"). If it has **No Project**, state that it was a standalone issue and skip the Project tally; do not invent or require a Project.
 
-**8b. Report Project status when applicable.** If the completed issue belongs to a Project, tally that Project's issues with **Repo label = R** and present the compact per-Project block exactly as the `linear` overview skill does (its step 2–3 — separate `In Progress` and `In Review`, then `Todo` / `Backlog`, optional `(Done N)`, `canceled` excluded). Close with a one-line read of the shape (e.g. "one In Review, three Todo ready"). If it has **No Project**, state that it was a standalone issue and skip the Project tally; do not invent or require a Project.
-
-**8c. Suggest the next related task(s).** Propose the issue(s) to pick up next, **related to the one just completed** — one or several. Search issues with **Repo label = R** and rank by relatedness first, then fall back to the repo's ready work:
+**8b. Suggest the next related task(s).** Propose the issue(s) to pick up next, **related to the one just completed** — one or several. Search issues with **Repo label = R** and rank by relatedness first, then fall back to the repo's ready work:
 
 1. **Related to the completed issue, first** — issues that share its **Milestone**, are linked to it by a **Linear relation** (parent, sub-issue, or blocking/blocked — a blocked issue the completed one just unblocked is a strong candidate), or share a **Type/topic label**. Prefer these, ordered by readiness (Todo above Backlog) then priority.
 2. **Fallback — the repo's ready work** — if nothing is related, or to round out the list, offer the top open issues by priority exactly as step 2's Section 2 orders them (Todo above Backlog, Urgent → None), including standalone issues.
