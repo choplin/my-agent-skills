@@ -1,0 +1,4 @@
+interface:
+  display_name: "Groom Octa Backlog"
+  short_description: "Turn octa backlog items into ready work"
+  default_prompt: "Use $octa-groom to groom this repository backlog into ready issues."

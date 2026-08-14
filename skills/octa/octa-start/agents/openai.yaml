@@ -1,0 +1,4 @@
+interface:
+  display_name: "Start Octa Work"
+  short_description: "Start or resume one octa issue safely"
+  default_prompt: "Use $octa-start to pick up or resume an issue in this repository."

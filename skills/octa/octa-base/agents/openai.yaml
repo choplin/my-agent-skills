@@ -1,0 +1,4 @@
+interface:
+  display_name: "Octa Operating Conventions"
+  short_description: "Run repository work through the octa lifecycle"
+  default_prompt: "Use $octa-base to structure and manage this repository work in octa."

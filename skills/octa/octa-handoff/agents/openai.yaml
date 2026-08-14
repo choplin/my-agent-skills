@@ -1,0 +1,4 @@
+interface:
+  display_name: "Hand Off Octa Work"
+  short_description: "Record resumable context on an octa issue"
+  default_prompt: "Use $octa-handoff to record this unfinished issue for the next session."

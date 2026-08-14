@@ -77,6 +77,7 @@ skills or validation configuration.
 | `design-note` | design-note (write down a problem and the approach taken to it as one durable llm-wiki note — lighter than a PRD, shallower than a design doc) |
 | `exec-plan` | exec-plan, exec-plan-base (ad-hoc autonomous run with no tracker issue behind it; decision log + parking lot) |
 | `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
+| `octa` | octa-base, octa-overview, octa-start, octa-groom, octa-handoff (local octa lifecycle; finite Projects, self-complete Issues, atomic leases, review/integration gates, and cross-session handoff) |
 | `planning-toolkit` | plan, resolve, mvp, base (turn an established direction into a finite outcome and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; `mvp` is a scope policy, not a phase — the smallest-build-that-teaches standard the cut is judged against) |
 | `orchestration-toolkit` | execute, orchestrate (carry groomed Linear work to completion: one Issue inline, or a whole Project through delegated graph execution, mandatory global adversarial review, and final human approval) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
@@ -161,6 +162,12 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **linear**
 - linear-start → linear, **orchestration-toolkit-execute**, **orchestration-toolkit-orchestrate**, **exec-plan**, wtm-worktree `(ext)`
 - linear-groom → linear
+
+**octa**
+- octa-overview → octa-base
+- octa-start → octa-base, octa-handoff, **git-helpers-commit**, wtm-worktree `(ext)`
+- octa-groom → octa-base
+- octa-handoff → octa-base
 
 **planning-toolkit**
 - plan → base, **discuss-toolkit-dig**, **linear-base**, llm-wiki-base `(ext)`, llm-wiki retrieval skills `(ext)`

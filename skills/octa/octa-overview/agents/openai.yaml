@@ -1,0 +1,4 @@
+interface:
+  display_name: "Octa Work Overview"
+  short_description: "Survey active octa projects and open issues"
+  default_prompt: "Use $octa-overview to summarize the current repository work in octa."
