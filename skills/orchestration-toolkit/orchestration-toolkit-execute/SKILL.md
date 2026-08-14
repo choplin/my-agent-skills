@@ -180,13 +180,15 @@ with:
 - adversarial findings, or the recorded reason none were sought;
 - residual risks and verification gaps.
 
-Apply `linear-base`'s implementation completion gate after committing. If the
-commits exist only on a work branch, keep the Issue In Progress while no PR or
-verified integration exists; move it to In Review when an authorized PR is
-opened. Move it to Done only after verifying integration into the target branch,
-or directly when the commits were made on that target branch. A PR is optional;
-verified integration is not unless the user explicitly accepts an unintegrated
-deliverable as an exception.
+Apply `linear-base`'s implementation completion gate after committing. The
+`git-helpers-commit` call is nested: resume this run when it returns and, unless
+the user explicitly requested commit only, automatically follow the established
+integration path, verify the target branch, move the Issue to Done, finish its
+completion note, and perform the required cleanup and follow-up. A plain
+approval or ordinary commit request is not commit-only. If explicitly limited,
+keep the Issue In Review after an approved commit (or In Progress when review
+was skipped) and report the remaining integration. A PR is optional; verified
+integration is not unless the user accepts an unintegrated exception.
 
 ## When NOT to use
 

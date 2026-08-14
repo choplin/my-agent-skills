@@ -165,26 +165,25 @@ rather than re-picking one.** Route by the artifact found at step 6:
 
 Whichever way it goes, remember the later lifecycle transitions owned by
 `linear-base`. For an `impl` Issue completed on a work branch, a commit alone
-does not complete it. Once the pre-commit review gate has been presented, keep
-it **In Review** through approval, commit, and integration; move it to **Done**
-only after the PR is merged or a cherry-pick or other explicit integration into
-the target branch is verified. If the user explicitly skipped the review gate,
-a work branch with no verified integration remains **In Progress**, while an
-Issue committed directly to the target branch or otherwise integrated may go
-straight from **In Progress** to **Done**. Treat an intentionally unintegrated
-deliverable as Done only after the user explicitly accepts that exception. When
-the issue reaches **Done**, continue with step 8. If a committed work branch has
-neither a PR nor verified integration, report that the Issue remains **In
-Review** after approval (or **In Progress** when review was explicitly skipped)
-and offer the applicable next action; do not silently turn the missing
-integration into a no-review completion path.
+does not complete it. Treat `git-helpers-commit` as a nested operation and
+resume this flow when it returns, including when the commit request arrives in
+a later user turn. Unless the user explicitly says **commit only** (for example,
+"do not merge" or "do not update Linear"), automatically continue through the
+established integration path, verify the target branch, move the Issue to
+**Done**, leave or finish the completion note, and run step 8. A plain approval
+or ordinary "commit" request does not limit the workflow to committing. If the
+user did explicitly limit it, verify the commit, keep the Issue **In Review**
+(or **In Progress** when review was skipped), and report that integration and
+completion remain. Never mark an unintegrated deliverable Done without the
+explicit exception allowed by `linear-base`.
 
 For every `impl` repository change, apply `linear-base`'s pre-commit human review
 gate. Pass both the selected Issue's full record and this gate as explicit
 constraints to whichever execution mode receives the Issue: finish
 implementation and verification uncommitted, then present a **self-contained
 review brief** and wait for the user's approval before invoking
-`git-helpers-commit`. The brief must let someone review the result without
+`git-helpers-commit`; after it returns, resume this Linear flow as required
+above. The brief must let someone review the result without
 having to recover the earlier selection exchange or open Linear first. Include:
 
 - **Reference** — Issue identifier, title, and URL; Project or parent Issue when

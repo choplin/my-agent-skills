@@ -33,10 +33,20 @@ Progress, In Review, and Done.
    changes the prospective commit, implement the correction, rerun relevant
    checks, and present the result again without changing status. Return it to
    In Progress only when the user explicitly sends it back.
-5. Once approved, keep the Issue In Review while performing the agent-owned
-   commit and integration work. Approval ends the human review wait but does
-   not move the Issue backward; verified integration permits Done.
-6. Skip this gate only when the user explicitly asks to commit this Linear work
+5. Once approved, keep the Issue In Review and invoke `git-helpers-commit` as a
+   nested operation, not the end of the Linear workflow. After it returns,
+   automatically continue through the established integration path, verify the
+   target branch, move the Issue to Done, complete its note, and run the
+   `linear-start` post-Done flow. Select the integration path from repository
+   conventions and existing Git/PR artifacts; do not stop merely to offer it as
+   a next action.
+6. Stop after the commit only when the user explicitly limits the request to
+   **commit only** (for example, "commit only", "do not merge", or "do not
+   update Linear"). A plain approval or ordinary "commit" request is not that
+   limitation, even in a later user turn; it authorizes resuming this workflow
+   after `git-helpers-commit`. If explicitly limited, verify the commit, keep
+   the Issue In Review, and report that integration and completion remain.
+7. Skip the review gate only when the user explicitly asks to commit this work
    without review.
 
 ## Commit and integration evidence

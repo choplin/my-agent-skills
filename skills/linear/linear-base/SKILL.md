@@ -158,18 +158,19 @@ target-branch integration completes the Issue.
   there while addressing feedback and re-presenting material changes. Return
   it to **In Progress** only when the user explicitly sends it back. Only an
   explicit request skips review.
-- Approval keeps the Issue **In Review** through commit and integration.
-- A clean, committed work branch with no PR and no verified integration stays
-  **In Review** after approval, or **In Progress** if review was skipped.
+- After approval, commit is nonterminal: continue through integration and
+  completion unless the user explicitly requests **commit only**.
+- An approved, unintegrated work branch stays **In Review**; skipped review
+  stays **In Progress**.
 - An open PR against the target branch moves it to **In Review**.
 - A merged PR, verified cherry-pick, other verified integration, or direct
   commit on the target branch permits **Done**.
 - An intentionally unintegrated deliverable permits **Done** only after explicit
   user acceptance.
 
-Before review, paused agent-owned work stays **In Progress** with a handoff
-note. Once review starts, keep **In Review** through approval and integration.
-A PR is optional; integration is not without the exception above.
+Before review, paused work stays **In Progress** with a handoff note. Once
+review starts, keep **In Review** through integration. A PR is optional;
+integration is not without the exception above.
 
 ### Worktree cleanup after Done
 
