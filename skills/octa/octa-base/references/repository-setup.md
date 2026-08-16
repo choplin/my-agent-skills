@@ -10,23 +10,43 @@ Inspect existing states:
 octa config state list --json
 ```
 
-octa initially seeds compatibility states `open` (`unstarted`), `in_progress`
-(`started`), and `closed` (`completed`). Reuse them as Todo, In Progress, and
-Done. Create only the missing lifecycle distinctions:
+A repository with no configured states is seeded with the full lifecycle, and
+new Issues start in Backlog:
+
+| State | Status type | Notes |
+|---|---|---|
+| Backlog | `backlog` | starting state |
+| Todo | `unstarted` | |
+| In Progress | `started` | |
+| In Review | `started` | |
+| Done | `completed` | terminal |
+| Canceled | `canceled` | terminal |
+
+Seeding runs only for a repository that has no states at all, so a repository
+whose states were customized keeps exactly the ones it has. Bring it back to the
+set above rather than stacking near-duplicate states on top:
 
 ```sh
-octa config state create Backlog --type backlog
+octa config state set <old> --name <new>        # renaming moves its Issues too
+octa config state delete <old> --move-to <new>  # --move-to is required while Issues remain
 octa config state create "In Review" --type started
-octa config state create Canceled --type canceled --terminal
+octa config state set-default Backlog
 ```
 
-Do not add duplicate Todo/In Progress/Done states merely to obtain friendlier
-names: current octa does not rename or remove the compatibility states, and
-duplicates make state selection ambiguous. In an already-configured repository,
-resolve by type and configured order; names may differ. If multiple states of a
-single-valued type (`backlog`, `unstarted`, `completed`, or `canceled`) already
-exist, show the ambiguity instead of guessing. Two `started` states are
-intentional: the earlier one is work and the later one is review.
+Rename where the target name is free, and delete with `--move-to` where it
+collides with a state the repository already has.
+
+Two `started` states are intentional: In Progress is work and In Review is
+review, and only their names say which is which. States carry no ordinal;
+`config state list` derives its order from `status_type` and then name, so there
+is nothing to reorder and order never carries meaning.
+
+Backlog is the starting state — the one new Issues enter without an explicit
+`--state`. A repository has at most one, enforced by the schema. Move it with
+`octa config state set-default <name>`; setting it clears the flag everywhere
+else. If a repository has no starting state, `issue create` fails with the
+command that fixes it; report a missing or duplicated state instead of guessing
+a substitute.
 
 ## Type labels
 
@@ -54,7 +74,7 @@ The returned three-word ID is a non-secret coordination handle. Capture it and
 pass it to protected commands:
 
     LEASE=$(octa issue lock <number>)
-    octa issue set-state <number> in_progress --lease "$LEASE"
+    octa issue set-state <number> "In Progress" --lease "$LEASE"
     octa issue unlock <number> --lease "$LEASE"
 
 The CLI returns the lease ID only at acquisition. It may appear in tool output

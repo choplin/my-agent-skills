@@ -17,8 +17,9 @@ work record; Git is implementation reality.
 
 ### 1. List candidates
 
-Resolve workflow states with `octa config state list --json`, then fetch Issue
-candidate context in one read:
+Confirm the repository's states with `octa config state list --json` — report
+any of the six that is missing rather than substituting another one — then fetch
+Issue candidate context in one read:
 
 ```graphql
 {
@@ -37,16 +38,15 @@ candidate context in one read:
 ```
 
 Run it with `octa query`, inspect the response `errors`, and paginate when more
-than 100 Issues exist. Use the configured state mapping to exclude terminal and
-review-state Issues, then present two sections across every Project and No
-Project:
+than 100 Issues exist. Exclude terminal Issues and In Review Issues, then
+present two sections across every Project and No Project:
 
-1. **In flight** — working-state Issues first. These are resume candidates.
+1. **In flight** — In Progress Issues first. These are resume candidates.
 2. **Open** — Todo and Backlog, ordered by priority, with Todo above Backlog at
    equal priority.
 
-Exclude review-state Issues: they await a response or integration rather than a
-new execution session. If the user explicitly identifies a review-state Issue
+Exclude In Review Issues: they await a response or integration rather than a
+new execution session. If the user explicitly identifies an In Review Issue
 to continue feedback, commit, or integration work, accept it as a completion
 continuation rather than presenting it as a normal candidate; acquire or
 recover its lease through step 3 and resume the implementation completion
@@ -85,7 +85,7 @@ For an unleased Issue, capture the one-time lease ID:
     LEASE=$(octa issue lock <number>)
 
 If acquisition races and fails, re-read the Issue and report that it is now
-leased. On a new start, move the Issue to the configured working state using
+leased. On a new start, move the Issue to In Progress using
 `--lease "$LEASE"`. A resume already in that state needs no transition.
 
 The lease ID is a non-secret coordination handle and may appear in tool output

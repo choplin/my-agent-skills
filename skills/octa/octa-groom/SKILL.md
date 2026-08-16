@@ -21,7 +21,7 @@ Run `octa project list --active --json` in the current repository.
 
 ### 2. Survey the queue
 
-Resolve the Backlog status type, then query the selected Project by numeric ID:
+Query the selected Project's Backlog Issues by numeric ID:
 
 ```graphql
 query GroomQueue($projectId: Int!) {
@@ -70,8 +70,8 @@ For each pick:
    Pass the same lease to label mutations.
 7. Update the Issue body, relations, priority, Project/Milestone, and labels
    with the same lease.
-8. Move it to the configured `unstarted` state with the lease only after the
-   fresh-agent self-completeness check passes. Otherwise leave it Backlog and
+8. Move it to Todo with the lease only after the fresh-agent
+   self-completeness check passes. Otherwise leave it Backlog and
    comment with the missing decision/input; comments need no lease.
 9. Release the lease normally whether the Issue reached Todo or remained
    Backlog. Never record the lease ID in durable artifacts or use force

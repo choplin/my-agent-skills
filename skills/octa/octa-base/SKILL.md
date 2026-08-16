@@ -53,9 +53,10 @@ only; this skill owns the lifecycle policy built on them.
 ## Required repository setup
 
 Read [repository-setup.md](references/repository-setup.md) before first use in a
-repository. Resolve workflow states by their `status_type`, not by assuming
-names. With two `started` states, the earlier configured state is working and
-the later is review.
+repository. Every repository uses the same six states — Backlog, Todo, In
+Progress, In Review, Done, and Canceled — so name them directly. States carry
+no ordering; nothing about a state is derived from where it appears in
+`config state list`.
 
 ## Todo authoring standard
 
@@ -106,16 +107,20 @@ may be Linear-specific; advertising an unroutable Type would strand work.
 
 ## Lifecycle
 
-| Status type | Conventional state | Meaning |
+| State | Status type | Meaning |
 |---|---|---|
-| `backlog` | Backlog | Captured, not groomed. |
-| `unstarted` | Todo (`open` in a fresh repo) | Groomed and executable. |
-| first `started` | In Progress (`in_progress` in a fresh repo) | Actively owned and being worked. |
-| later `started` | In Review | Awaiting human review or integration. |
-| `completed` | Done (`closed` in a fresh repo) | Accepted and integrated/shipped when applicable. |
-| `canceled` | Canceled | Dropped or superseded. |
+| Backlog | `backlog` | Captured, not groomed. |
+| Todo | `unstarted` | Groomed and executable. |
+| In Progress | `started` | Actively owned and being worked. |
+| In Review | `started` | Awaiting human review or integration. |
+| Done | `completed` | Accepted and integrated/shipped when applicable. |
+| Canceled | `canceled` | Dropped or superseded. |
 
-Use `octa config state list --json` to resolve actual names. Apply transitions:
+`status_type` is the coarse classification used by filters such as
+`issue list --status-type`; it does not identify a state. In Progress and In
+Review both carry `started`, so only the name distinguishes them. If a
+repository is missing one of these six states, report that instead of
+substituting another one. Apply transitions:
 
 - Capture into Backlog.
 - Groom Backlog to Todo only after the authoring gate passes.

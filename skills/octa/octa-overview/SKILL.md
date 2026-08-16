@@ -11,8 +11,9 @@ or transition a record.
 ## Flow
 
 1. Confirm `octa` is available and run inside the target Git repository.
-2. Read `octa config state list --json` to resolve the Backlog, Todo, working,
-   review, Done, and Canceled state names by type and configured order.
+2. Read `octa config state list --json` and report any of the six states —
+   Backlog, Todo, In Progress, In Review, Done, Canceled — that the repository
+   is missing, rather than substituting another one for it.
 3. Read `octa project list --json` (all Projects, including terminal) for
    tallies. Then use the repository-overview GraphQL document from
    `octa-base/references/cli-contract.md` to select Issues with their Project
@@ -23,8 +24,8 @@ or transition a record.
    Issues assigned to a completed/canceled Project; show them under that
    Project and flag the inconsistent context. Never infer terminal state merely
    because a Project was absent from an active-only query.
-5. Group by working, review, Todo, and Backlog. Keep the two `started` states
-   separate by exact configured state name.
+5. Group by In Progress, In Review, Todo, and Backlog. Keep the two
+   `started` states separate by name; never tell them apart by listing order.
 
 Within each block, count every Issue and show:
 
@@ -39,7 +40,8 @@ purpose clause only when the title is unclear. Read `octa issue show <n> --json`
 for displayed Todo Issues when blocker status materially affects pickability.
 Say how many items were omitted beyond each limit.
 
-Order blocks by activity: working before review, then Todo, then Backlog.
+Order blocks by activity: In Progress before In Review, then Todo, then
+Backlog.
 Project-unassigned work remains visible.
 
 Use a compact form:

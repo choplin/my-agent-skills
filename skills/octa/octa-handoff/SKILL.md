@@ -6,7 +6,7 @@ description: Records a self-complete handoff comment on an unfinished octa Issue
 # Hand off unfinished octa work
 
 Apply `octa-base`. A handoff is a comment, not a completion or status change.
-The Issue remains in the working `started` state.
+The Issue remains In Progress.
 
 Do not use this flow after implementation review has started. Feedback,
 corrections, approval, commit, and integration keep that Issue in the review
@@ -24,7 +24,7 @@ Resolve the current Issue in this order:
 1. worktree note created by `octa-start`, containing repository identity and
    `#number`;
 2. the Issue explicitly selected in this session;
-3. current repository Issues in the working state for which this live session
+3. current repository Issues in In Progress for which this live session
    retains a lease ID.
 
 If the result is not exactly one, ask the user. Never guess.

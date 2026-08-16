@@ -30,7 +30,7 @@ pass it to every protected Issue mutation and Issue–PR link change.
    Re-read the Issue before writing the brief if its context was not retained
    through execution. Do not reduce background and goal to a generic one-line
    purpose when the Issue contains enough detail to distinguish them.
-3. Move the Issue to the configured review state with the lease and wait for
+3. Move the Issue to In Review with the lease and wait for
    explicit approval before invoking `git-helpers-commit`. Silence is not
    approval, and requesting implementation earlier is not approval of the
    resulting change.

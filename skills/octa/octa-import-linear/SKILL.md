@@ -191,10 +191,10 @@ gap survives the run.
 
 | Linear | octa |
 |---|---|
-| status type `backlog` | configured `backlog` state |
-| status type `unstarted` | configured `unstarted` state |
-| status type `started`, working (first) | first `started` state |
-| status type `started`, review (later) | later `started` state |
+| status type `backlog` | Backlog |
+| status type `unstarted` | Todo |
+| status type `started`, working | In Progress |
+| status type `started`, review | In Review |
 | status type `completed` / `canceled` | not imported |
 | non-terminal Project | Project |
 | terminal Project | not created; Issue left Project-unassigned |
