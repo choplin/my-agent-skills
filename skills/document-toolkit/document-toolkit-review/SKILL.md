@@ -19,6 +19,10 @@ those are what is tedious to restate every time. Do not expand this into a rubri
 Working values (candor, no flattery, honest critical assessment) already live in
 the global instructions and apply here — don't restate them.
 
+Use `document-toolkit-quality` instead when the document needs a systematic
+sweep against writing standards — independent per-lens reviewers and findings
+applied in dependency order. This skill is the one-pass option.
+
 ## Pick two things, then do the work
 
 **Axis 1 — Stance:**

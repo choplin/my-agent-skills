@@ -84,7 +84,7 @@ skills or validation configuration.
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), discuss-toolkit-grill-me (candidate robustness), one-point (discussion pacing) |
 | `git-helpers` | commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten, squash-merge |
-| `document-toolkit` | review, fact-check, distill, trim (review or revise one document, verify its claims, rework a whole set: consolidate / refresh / split / retire, or strip content the set no longer needs) |
+| `document-toolkit` | standards, quality, review, fact-check, distill, trim (the writing standards as reusable lenses; a lens-driven review that applies findings in dependency order; review or revise one document, verify its claims, rework a whole set: consolidate / refresh / split / retire, or strip content the set no longer needs) |
 | `lang-reference` | go, java, python, rust, scala, sql, typescript |
 | `app-reference` | backend, frontend (application-specific architecture and framework recommendations) |
 | `jira-cli` | jira-cli |
