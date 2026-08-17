@@ -109,7 +109,7 @@ default.
 transitions, preambles announcing what the section will say, closing paragraphs
 restating it. There is no policy split to find, so drop it. Rewriting text that
 *does* carry information into fewer words is a different job and belongs to
-`document-toolkit-review`.
+`document-writing-review`.
 
 ## Ask for the policy
 
@@ -154,7 +154,7 @@ rg -n '<filename>#' <repo-root>      # inbound anchor links from outside
 ```
 
 Repairing a seam is not a licence to rewrite. If a section needs real rewriting
-to survive its cut, that is `document-toolkit-review`'s work — say so in the
+to survive its cut, that is `document-writing-review`'s work — say so in the
 report.
 
 ## Report

@@ -1,5 +1,5 @@
 ---
-name: document-toolkit-standards
+name: document-writing-standards
 description: >-
   The technical-writing standards behind document quality, defined as reusable
   review lenses: plain expression, paragraph structure, terminology discipline,
@@ -23,8 +23,10 @@ The catalog has two consumers:
 - **While writing.** Read the layers relevant to what is being drafted and
   follow them. A document written to these standards does not need the review
   workflow to reach a decent baseline.
-- **While reviewing.** `document-toolkit-quality` selects lenses from this
-  catalog, hands each to an independent agent, and applies the results.
+- **While reviewing.** The review lanes — `document-writing-review`, `-prose`,
+  `-audit`, `-apply` — select lenses from this catalog through
+  `document-writing-base`, hand each to an independent agent, and apply the
+  results.
 
 The standards target one objective: **a reader should spend their attention on
 the subject, not on parsing the text.** Every lens either removes something
@@ -115,8 +117,8 @@ criteria to `artifact-review-toolkit-adversarial`.
 
 ## Finding schema
 
-Every lens returns findings in this shape. `document-toolkit-quality` consumes
-it, and its `apply` preset accepts it as input, so the fields are a contract
+Every lens returns findings in this shape. `document-writing-base` produces it,
+and `document-writing-apply` accepts it as input, so the fields are a contract
 rather than a display format.
 
 ```yaml

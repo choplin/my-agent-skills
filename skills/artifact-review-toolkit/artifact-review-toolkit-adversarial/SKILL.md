@@ -46,7 +46,7 @@ Do not:
 Use `ai-council-adversarial-panel` instead when the object is a contested
 question that benefits from cross-critique and revised positions. Use
 `artifact-review-toolkit-quick` when an ordinary code review of a change is
-enough and no acceptance claim needs falsifying. Use `document-toolkit-review`
+enough and no acceptance claim needs falsifying. Use `document-writing-review`
 when the object is prose to be critiqued or revised as writing.
 
 Findings returned here are not persisted. When they must be tracked and driven

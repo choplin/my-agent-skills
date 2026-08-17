@@ -1,33 +1,47 @@
 ---
-name: document-toolkit-quality
+name: document-writing-base
 description: >-
-  Raises a document to a sound technical-writing baseline in one pass, by
-  running independent per-lens reviewers over it and applying their findings in
-  dependency order. Targets how the document reads and holds together — plain
-  expression, paragraph structure, defined terms, resolvable references,
-  internal logic — not whether its subject matter is correct. Applies when
-  prose is hard to follow, argues loosely, or reads as machine-written, and
-  when a draft needs to be brought to a publishable standard.
+  The shared review machinery behind the document-writing lanes: the lane
+  contract, blind per-lens detection, conflict resolution between lenses,
+  layer-ordered application, the single verification pass, and the report
+  format that separates structural changes. Applied by document-writing-review,
+  -prose, -audit, and -apply, each of which supplies only its lane values.
+user-invocable: false
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, AskUserQuestion
 metadata:
-  description-role: trigger
+  description-role: documentation
 ---
 
-# Document Quality
+# Document Writing Base
 
-Inspect a document through the lenses defined in `document-toolkit-standards`,
-each by an independent reviewer, then apply the findings in layer order and
-return the revised document with a record of what changed.
+Inspect a document through the lenses defined in `document-writing-standards`,
+each by an independent reviewer, then apply the findings in layer order.
+
+A calling lane supplies four values and nothing else. Everything below is the
+same for every lane.
 
 Read the lens definitions for the selected lenses from
-`document-toolkit-standards` before constructing any reviewer brief. Do not
+`document-writing-standards` before constructing any reviewer brief. Do not
 paraphrase a lens from memory.
+
+## Lane contract
+
+```yaml
+lenses: <lens IDs, or a layer selection>
+deliverable: revised-document | findings
+reviewers: per-lens | per-packing-group | single
+verify: true | false
+```
+
+Where the request names an axis explicitly — a lens subset, findings-only, a
+reviewer budget — it overrides the lane's value for that axis and leaves the
+rest.
 
 ## Responsibility boundary
 
 Own:
 
-- resolving the preset and the lens set for this document;
+- resolving the lens set for this document from the lane and the language;
 - running blind, independent per-lens reviews;
 - normalizing findings and resolving conflicts between them;
 - applying findings in layer order;
@@ -45,60 +59,35 @@ Do not:
   `document-toolkit-distill`;
 - loop until no findings remain.
 
-Use `document-toolkit-review` instead when a single free-form critique or
-revision is wanted and a lens sweep is more machinery than the task needs.
+## 1. Resolve the target and the lens set
 
-## Presets
-
-| Preset | Lenses | Deliverable | Reviewers | Verify |
-|---|---|---|---|---|
-| **`standard`** (default) | all layers except `rhythm` | revised document | one per packing group (~5) | yes |
-| **`prose`** | `prose.*` and the language layer | revised document | 1–2 | yes |
-| **`audit`** | all layers except `rhythm` | findings only | one per lens (~18) | no |
-| **`apply`** | none — findings are supplied | revised document | 0 | yes |
-
-Take the preset from the request. Where none is stated, use `standard`. When
-the request names an axis explicitly — a lens set, findings-only, a reviewer
-budget — that overrides the preset's value for that axis and leaves the rest.
+Confirm the document is a concrete file or supplied text. Determine its
+language, and its purpose if `structure.genre-purity` is selected.
 
 Exactly one language layer is included, chosen by reading the document:
 `ja.notation` and `ja.diction` for Japanese, `en.mechanics` and `en.diction` for
 English. For any other language, run the neutral layers alone and report that no
-language layer was available. `rhythm.cognitive-pacing` is added only on an
-explicit request, and only for writing meant to be read continuously.
+language layer was available.
 
-`audit` spends the most because its output is read by a person: independence
-matters more than cost when nothing is applied automatically. `standard` spends
-less on detection because consistent application matters more than exhaustive
-detection when the result is a revised document.
-
-`audit` → human selection → `apply` is the lane for keeping control of what
-gets changed.
-
-## Workflow
-
-### 1. Resolve the target and the preset
-
-Confirm the document is a concrete file or supplied text. Determine its
-language, and its purpose if `structure.genre-purity` is selected. Resolve the
-preset and produce the lens list.
+`rhythm.cognitive-pacing` is added only on an explicit request, and only for
+writing meant to be read continuously.
 
 Where the document is very short, or the request names one narrow concern,
-prefer `prose` or an explicit lens subset over `standard`. Running eighteen
-lenses over three paragraphs is waste, not thoroughness.
+reduce the lens set rather than running the full lane. Running eighteen lenses
+over three paragraphs is waste, not thoroughness.
 
-For `apply`, skip to step 4.
+A lane with `deliverable: revised-document` and no detection phase skips to
+step 4.
 
-### 2. Detect
+## 2. Detect
 
-Run one reviewer per packing group, or per lens where the preset says so. Run
-them in parallel.
+Run one reviewer per lens or per packing group, as the lane specifies. Run them
+in parallel.
 
 Give each reviewer only:
 
 - the document;
-- the lens definitions it is assigned, quoted from
-  `document-toolkit-standards`;
+- the lens definitions it is assigned, quoted from `document-writing-standards`;
 - the entries for those lenses from the example file matching the document's
   language, where one exists;
 - the finding schema;
@@ -118,7 +107,7 @@ counting it as covered.
 Require every finding to carry an `anchor` quoted exactly from the document,
 long enough to locate uniquely.
 
-### 3. Normalize and resolve conflicts
+## 3. Normalize and resolve conflicts
 
 Merge findings into one list. Deduplicate by anchor and cause, keeping which
 lenses raised each.
@@ -139,10 +128,12 @@ Conflicts between lenses are resolved by rule, not by vote:
 Drop findings that restate the lens rather than locating a defect, and findings
 whose anchor cannot be found in the document.
 
-### 4. Apply by phase
+For `deliverable: findings`, stop here and report.
 
-Apply in layer order, never bottom-up. Within a phase, findings are
-independent and may be applied together.
+## 4. Apply by phase
+
+Apply in layer order, never bottom-up. Within a phase, findings are independent
+and may be applied together.
 
 1. `logic.*`
 2. `terminology.*`, `reference.*`
@@ -161,13 +152,10 @@ Constraints on application:
   the finding as stale and report it unapplied.
 - **Record `content_impact` for every applied finding.**
 
-For `apply`, the findings come from the caller. Before applying, verify that
-each anchor still exists in the current document. Report every finding whose
-anchor is gone as stale and unapplied rather than guessing a new location.
+## 5. Verify once
 
-### 5. Verify once
-
-Re-run only the lenses that application most often breaks:
+Where the lane sets `verify: true`, re-run only the lenses that application most
+often breaks:
 
 - `structure.signposting` — connectives lost when paragraphs merged or split
 - `reference.antecedent` — referents removed by deletion
@@ -179,12 +167,12 @@ fully independent, so a fix for one can reopen another; an unbounded loop has no
 convergence guarantee and no predictable cost. Report anything still open as
 unresolved.
 
-### 6. Report
+## 6. Report
 
-Return the revised document, then:
+Return the revised document where the lane produces one, then:
 
 ```yaml
-preset:
+lane:
 lenses_run: []
 lenses_unexamined: []
 
@@ -226,6 +214,5 @@ coverage.
       1–3 fix on the same passage.
 - [ ] No applied fix changed what the document asserts.
 - [ ] Every structural change appears individually in `structural_changes`.
-- [ ] Verification ran exactly once, and remaining findings are reported as
+- [ ] Verification ran at most once, and remaining findings are reported as
       unresolved rather than iterated on.
-- [ ] For `apply`, every stale anchor is reported rather than relocated by guess.
