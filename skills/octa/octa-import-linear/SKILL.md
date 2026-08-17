@@ -2,9 +2,9 @@
 name: octa-import-linear
 description: >-
   Imports the unfinished Linear Issues carrying the current repository's Repo
-  label into octa, carrying Project, Milestone, state, Type, priority,
-  relations, and execution context, skipping what a previous run already
-  imported. Use when moving a repository's work from Linear to octa.
+  label into octa, carrying Project, Milestone, state, Type, relations, and
+  execution context, skipping what a previous run already imported. Use when
+  moving a repository's work from Linear to octa.
 metadata:
   description-role: trigger
 ---
@@ -47,9 +47,9 @@ report: what the Linear record needed, which octa command or field was tried,
 the exact failure or missing capability, and how many records it affects.
 
 This applies to capability gaps, not to the deliberate model differences in the
-mapping below. A dropped `Repo` label, an unused Cycle, and comment history
-left in Linear are decisions of this migration; they are not octa defects and
-do not belong in the feedback.
+mapping below. A dropped `Repo` label, a dropped priority, an unused Cycle, and
+comment history left in Linear are decisions of this migration; they are not
+octa defects and do not belong in the feedback.
 
 ## Provenance and re-run safety
 
@@ -74,8 +74,8 @@ ever exported into a repository file, as `linear-base` requires.
 Confirm `octa` is available and the working directory is the target Git
 repository. Resolve states with `octa config state list --json` and inspect the
 `Type` label group. If the lifecycle states or Type labels are missing, run
-`octa-base`'s `references/repository-setup.md` first; do not import into a
-half-configured repository.
+`octa-base`'s `references/workflow-configuration.md` first; do not import into
+a half-configured store.
 
 Confirm a Linear MCP server is wired. If either side is unavailable, stop and
 report which one.
@@ -94,9 +94,9 @@ partial runs are expected and the footer check makes a later run additive.
 
 ### 4. Read the whole selection first
 
-For each selected Issue read the description, labels, priority, Project,
-Milestone, parent, `blockedBy`/`blocks`/`relatedTo`, comments, and attachment
-links. Read the owning Projects too. Resolve the mapping below and report what
+For each selected Issue read the description, labels, Project, Milestone,
+parent, `blockedBy`/`blocks`/`relatedTo`, comments, and attachment links. Read
+the owning Projects too. Resolve the mapping below and report what
 will be dropped **before** the first write. Anything the mapping cannot place
 is an octa gap, not a detail to improvise around: hold it for the feedback
 report and leave the affected records out of the run.
@@ -104,9 +104,9 @@ report and leave the affected records out of the run.
 ### 5. Create Projects and Milestones
 
 A non-terminal Linear Project that owns a selected Issue becomes an octa
-Project with the same name, its description plus the footer, and its priority
-and state mapped by status type. Create a Milestone only when the Linear
-Project actually has one, preserving its order.
+Project with the same name, its description plus the footer, and a non-terminal
+state: create it with `octa project create` and leave `--terminal` off. Create a
+Milestone only when the Linear Project actually has one, preserving its order.
 
 A terminal Linear Project that still owns a selected Issue is not recreated:
 leave the octa Issue Project-unassigned and report it, so the user can decide
@@ -123,8 +123,8 @@ identifier to octa number map in session context for the relation pass.
    --json`, into the mapped state directly when `issue create --help` shows
    `--state` accepts it; otherwise create it and set the state in step 3.
 3. Acquire `LEASE=$(octa issue lock <number>)` and apply the protected
-   mutations with it: the single Type label, priority, Project, Milestone, and
-   the state when it was not set at creation.
+   mutations with it: the single Type label, Project, Milestone, and the state
+   when it was not set at creation.
 4. Release with `octa issue unlock <number> --lease "$LEASE"` before moving to
    the next Issue. This skill never leaves a lease held, including on failure —
    an imported In Progress Issue must be claimable by whichever session resumes
@@ -196,13 +196,13 @@ gap survives the run.
 | status type `started`, working | In Progress |
 | status type `started`, review | In Review |
 | status type `completed` / `canceled` | not imported |
-| non-terminal Project | Project |
+| non-terminal Project | Project, left non-terminal |
 | terminal Project | not created; Issue left Project-unassigned |
 | Milestone | Milestone |
 | `Type` label | same `Type` member |
 | `Repo` label | dropped — octa scopes records by repository |
-| other Issue labels (e.g. `deep`) | dropped and reported, unless the repository already defines the same label |
-| priority `0`–`4` | same values |
+| other Issue labels (e.g. `deep`) | dropped and reported, unless octa already defines the same label |
+| priority | dropped — octa stores none; report it with the other dropped data |
 | parent / sub-issue | parent / sub-issue |
 | `blockedBy` | blocker relation |
 | `relatedTo` | related relation |

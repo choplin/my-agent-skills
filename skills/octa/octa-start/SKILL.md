@@ -17,8 +17,8 @@ work record; Git is implementation reality.
 
 ### 1. List candidates
 
-Confirm the repository's states with `octa config state list --json` — report
-any of the six that is missing rather than substituting another one — then fetch
+Confirm the configured states with `octa config state list --json` — report any
+of the six that is missing rather than substituting another one — then fetch
 Issue candidate context in one read:
 
 ```graphql
@@ -27,12 +27,12 @@ Issue candidate context in one read:
     number
     title
     state
-    statusType
-    priority
+    isTerminal
+    updatedAt
     leased
     project { id name }
     labels { name }
-    blockedBy { number state statusType }
+    blockedBy { number state isTerminal }
   }
 }
 ```
@@ -41,9 +41,11 @@ Run it with `octa query`, inspect the response `errors`, and paginate when more
 than 100 Issues exist. Exclude terminal Issues and In Review Issues, then
 present two sections across every Project and No Project:
 
-1. **In flight** — In Progress Issues first. These are resume candidates.
-2. **Open** — Todo and Backlog, ordered by priority, with Todo above Backlog at
-   equal priority.
+1. **In flight** — In Progress Issues first, most recently updated first. These
+   are resume candidates.
+2. **Open** — Todo above Backlog, each ordered by Issue number, oldest first.
+   octa records no priority; unblocked work and Milestone placement are the
+   only ranking signals, so surface them rather than inventing an order.
 
 Exclude In Review Issues: they await a response or integration rather than a
 new execution session. If the user explicitly identifies an In Review Issue
@@ -52,7 +54,7 @@ continuation rather than presenting it as a normal candidate; acquire or
 recover its lease through step 3 and resume the implementation completion
 procedure.
 
-Show `#number`, title, state, priority, Type, and Project. Type is the matching
+Show `#number`, title, state, Type, and Project. Type is the matching
 `impl`, `design`, or `research` label; show an Issue as untyped rather than
 inferring from its title. Let the user choose; do not require a Project
 selection first.
@@ -175,7 +177,7 @@ Todo/Backlog Issues in this order:
 1. newly unblocked Issues;
 2. same Milestone;
 3. explicit related or parent/sub-issues;
-4. highest-priority ready repository work.
+4. other unblocked Todo work in the repository, oldest first.
 
 Let the user choose or stop. If they choose, loop back to confirmation before
 claiming the next Issue.

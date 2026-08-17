@@ -33,15 +33,15 @@ task list.
 
 | Primitive | Treatment |
 |---|---|
-| Repository | The Git common directory is the scope. Worktrees of one repository share octa data. Do not add Repo labels. |
-| Project | A finite outcome that can complete, never a permanent repository bucket. Project state and `status_type` describe the outcome lifecycle. |
+| Repository | The Git common directory is the scope of Issues, Projects, PRs, and Wiki pages. Worktrees of one repository share octa data. Do not add Repo labels. |
+| Project | A finite outcome that can complete, never a permanent repository bucket. A Project carries a free-form state name plus a terminal flag that decides whether it is still active. |
 | Milestone | An ordered phase within a Project. Add only when the outcome has distinct stages. |
 | Issue | One atomic deliverable: one coherent code change, one decision, or one research result. It may exist without a Project. |
 | Parent/sub-issue | Use only for a small effort containing a few atomic deliverables. Do not use hierarchy for execution order. |
 | Relations | Use `blocked by` for required order and `related` for non-ordering context. |
 | Pull Request | A local branch-associated discussion record. Git remains authoritative for commits, diffs, and forge integration. PR use is optional; integration evidence is not. |
-| Label | Repository-defined opaque classification. Use the `Type` single-select group described below; do not build repo identity into labels. |
-| Priority | `1` Urgent, `2` High, `3` Medium, `4` Low, `0` None. |
+| Label | Opaque classification defined once for the whole octa store, not per repository. Use the `Type` single-select group described below; do not build repo identity into labels. |
+| Ordering | octa stores no priority and no state ordinal. Rank work by resolved blockers, Project and Milestone placement, and Issue number as creation order. |
 | Lease | Non-expiring coordination handle that atomically claims an Issue for one active session. It is not a security credential or a status. |
 
 ## CLI contract
@@ -50,13 +50,14 @@ Read [cli-contract.md](references/cli-contract.md) before using Issue leases,
 GraphQL queries, or Issue list state selectors. It records product mechanics
 only; this skill owns the lifecycle policy built on them.
 
-## Required repository setup
+## Required workflow configuration
 
-Read [repository-setup.md](references/repository-setup.md) before first use in a
-repository. Every repository uses the same six states — Backlog, Todo, In
-Progress, In Review, Done, and Canceled — so name them directly. States carry
-no ordering; nothing about a state is derived from where it appears in
-`config state list`.
+Read [workflow-configuration.md](references/workflow-configuration.md) before
+first lifecycle use. States and labels are configured once for the whole octa
+store and govern every repository in it, so the six states — Backlog, Todo, In
+Progress, In Review, Done, and Canceled — are the same everywhere and are named
+directly. States carry no ordering; nothing about a state is derived from where
+it appears in `config state list`.
 
 ## Todo authoring standard
 
@@ -92,7 +93,8 @@ Canceled after recording what superseded it. Never mark unperformed work Done.
 
 ## Type labels
 
-Create an Issue label group `Type` with single selection and these labels:
+One Issue label group `Type` with single selection governs the whole store and
+holds these labels:
 
 - `impl` — repository change intended for commit or integration.
 - `design` — a decision or ADR.
@@ -107,20 +109,22 @@ may be Linear-specific; advertising an unroutable Type would strand work.
 
 ## Lifecycle
 
-| State | Status type | Meaning |
+| State | Flags | Meaning |
 |---|---|---|
-| Backlog | `backlog` | Captured, not groomed. |
-| Todo | `unstarted` | Groomed and executable. |
-| In Progress | `started` | Actively owned and being worked. |
-| In Review | `started` | Awaiting human review or integration. |
-| Done | `completed` | Accepted and integrated/shipped when applicable. |
-| Canceled | `canceled` | Dropped or superseded. |
+| Backlog | starting | Captured, not groomed. New Issues enter here. |
+| Todo | — | Groomed and executable. |
+| In Progress | — | Actively owned and being worked. |
+| In Review | — | Awaiting human review or integration. |
+| Done | terminal | Accepted and integrated/shipped when applicable. |
+| Canceled | terminal | Dropped or superseded. |
 
-`status_type` is the coarse classification used by filters such as
-`issue list --status-type`; it does not identify a state. In Progress and In
-Review both carry `started`, so only the name distinguishes them. If a
-repository is missing one of these six states, report that instead of
-substituting another one. Apply transitions:
+A state carries exactly two classifications, `is_starting` and `is_terminal`,
+and octa models no gradation between them. `issue list` selects by
+`--open`/`--closed`/`--all` on the terminal flag or by `--state <name>` on the
+exact name; the four are mutually exclusive and nothing else distinguishes
+Backlog from Todo or In Progress from In Review. If the store is missing one of
+these six states, report that instead of substituting another one. Apply
+transitions:
 
 - Capture into Backlog.
 - Groom Backlog to Todo only after the authoring gate passes.
@@ -190,13 +194,13 @@ Use exact help as the source of truth. Common operations are:
 octa project list --active --json
 octa project show <project> --json
 octa issue list --all --json
-octa issue list --status-type backlog --project <project> --json
+octa issue list --state Backlog --project <project> --json
 octa issue list --unblocked --json
 octa issue show <number> --json
 octa issue create --title <title> --body <body> --state <state> --json
 octa issue comment <number> --body <text>
 LEASE=$(octa issue lock <number>)
-octa issue set <number> --body <body> --priority <0-4> --project <project> --lease "$LEASE"
+octa issue set <number> --body <body> --project <project> --lease "$LEASE"
 octa issue add <number> --label <label> --lease "$LEASE"
 octa issue add <number> --blocker <blocker-number> --lease "$LEASE"
 octa issue set-state <number> <state> --lease "$LEASE"
@@ -204,4 +208,7 @@ octa issue unlock <number> --lease "$LEASE"
 ```
 
 Never scrape human-readable tables when JSON is available. Inspect before
-mutating, and keep updates scoped to the current repository.
+mutating, and keep record updates scoped to the current repository. `octa
+config` is the exception: it edits the store-wide configuration and rejects
+`--repo` and `--all-repos`, so a rename or deletion there reaches every
+repository's Issues.

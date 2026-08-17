@@ -14,20 +14,24 @@ its workflow skills.
 `--closed` returns terminal Issues, and `--all` returns both.
 `--state <name>` matches one configured state name exactly.
 
-`--open`, `--closed`, `--all`, and `--state` are mutually exclusive.
-Do not use the legacy forms `--state all` or `--state open` to express
-terminal filtering.
+`--open`, `--closed`, `--all`, and `--state` are mutually exclusive. The
+terminal flag is the only classification a state carries besides the starting
+flag, so a coarser selector than these four does not exist.
 
     octa issue list --open --json
     octa issue list --closed --json
     octa issue list --all --json
     octa issue list --state "In Progress" --json
 
+`--label`, `--project`, `--milestone`, `--related-to`, and `--unblocked`
+narrow the result further and require one repository.
+
 ## Read-only GraphQL query
 
 `octa query` reads a GraphQL document from stdin or `--file` and accepts
 variables as a JSON object. Use it when one read needs selected fields across
-related entities.
+related entities. `octa query --schema` prints the versioned public schema;
+read it instead of guessing at fields.
 
     octa query --variables '{"number": 12}' <<'GRAPHQL'
     query IssueContext($number: Int!) {
@@ -35,11 +39,11 @@ related entities.
         number
         title
         state
-        statusType
+        isTerminal
         leased
-        project { id name state statusType }
-        labels { name }
-        blockedBy { number state statusType }
+        project { id name state isTerminal }
+        labels { name group }
+        blockedBy { number state isTerminal }
         pullRequests { number branch state }
       }
     }
@@ -58,38 +62,43 @@ their Project relation:
         id
         name
         state
-        statusType
-        priority
+        isTerminal
       }
       issues(limit: 100) {
         number
         title
         state
-        statusType
-        priority
+        isTerminal
+        updatedAt
         leased
         project { id name }
         labels { name }
-        blockedBy { number state statusType }
+        blockedBy { number state isTerminal }
       }
     }
     GRAPHQL
 
+`issues` and `projects` accept a filter: `IssueFilter` takes `state`,
+`isTerminal`, `label`, and `projectId`; `ProjectFilter` takes `isTerminal` and
+`label`. Neither the objects nor the filters carry a priority or a status
+category.
+
 List fields default to 50 and accept at most 100 records. Use pagination rather
-than assuming one response contains a larger repository. The schema is
-read-only; use existing CLI commands for mutations.
+than assuming one response contains a larger repository. Query depth is limited
+to 8 and complexity to 500. The schema is read-only; use existing CLI commands
+for mutations.
 
 ## Issue leases
 
 `issue lock <number>` atomically acquires a non-expiring lease and prints a
-human-readable three-word lease ID such as `amber-otter-lantern`. It is a
-non-secret coordination handle, not a security credential. Retain it in the
-live session for later protected commands:
+readable three-word lease ID such as `amber-otter-lantern`. It coordinates
+local ownership and is not a security boundary. Retain it in the live session
+for later protected commands:
 
     LEASE=$(octa issue lock 12)
 
-`issue list` and `issue show` expose only `leased`, never the lease ID.
-When `leased` is true and the current live session does not retain the
+`issue list`, `issue show`, and GraphQL expose only `leased`, never the lease
+ID. When `leased` is true and the current live session does not retain the
 lease ID, stop and report the contention. Do not infer an owner and do not
 force-release it.
 
@@ -112,7 +121,7 @@ The lease ID is not required for:
 
 Use the lease ID on every protected mutation and release it normally:
 
-    octa issue set 12 --priority 2 --lease "$LEASE"
+    octa issue add 12 --label impl --lease "$LEASE"
     octa issue set-state 12 "In Progress" --lease "$LEASE"
     octa issue unlock 12 --lease "$LEASE"
 
