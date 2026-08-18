@@ -6,6 +6,8 @@ description: >-
   claims it, prepares or recovers a workspace, reconstructs prior work, and
   carries it through the octa review and completion lifecycle. Use when picking
   up repository work managed in octa.
+metadata:
+  description-role: documentation
 ---
 
 # Start or resume octa work

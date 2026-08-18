@@ -1,6 +1,8 @@
 ---
 name: octa-groom
 description: Works through one active octa Project's Backlog oldest first, interactively turning rough items into self-complete Todo Issues, splitting oversized work and recording dependencies when needed. Use when preparing octa work for context-free execution.
+metadata:
+  description-role: documentation
 ---
 
 # Groom an octa Backlog

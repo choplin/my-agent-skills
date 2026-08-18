@@ -5,6 +5,9 @@ description: >-
   finite Projects and atomic Issues. Use when structuring or managing octa work
   from capture and grooming through ownership, review, integration, handoff,
   and completion.
+user-invocable: false
+metadata:
+  description-role: trigger
 ---
 
 # Octa operating conventions
