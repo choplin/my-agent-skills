@@ -30,8 +30,8 @@ pass it to every protected Issue mutation and Issue–PR link change.
    Re-read the Issue before writing the brief if its context was not retained
    through execution. Do not reduce background and goal to a generic one-line
    purpose when the Issue contains enough detail to distinguish them.
-3. Move the Issue to In Review with the lease and wait for
-   explicit approval before invoking `git-helpers-commit`. Silence is not
+3. Move the Issue to In Review with `issue set --as "In Review"` and the lease,
+   then wait for explicit approval before invoking `git-helpers-commit`. Silence is not
    approval, and requesting implementation earlier is not approval of the
    resulting change.
 4. Keep the Issue in review while addressing feedback. If feedback materially
@@ -41,8 +41,8 @@ pass it to every protected Issue mutation and Issue–PR link change.
 5. Once approved, keep the Issue in review, stage exactly the reviewed Issue
    scope, and invoke `git-helpers-commit` as a nested operation. After it
    returns, automatically continue through the established integration path,
-   verify the target branch, post or finish the completion comment, move the
-   Issue to Done, release the lease normally, and apply
+   verify the target branch, post or finish the completion comment, close the
+   Issue to Done with `issue close`, release the lease normally, and apply
    `worktree-cleanup.md`. Select the integration path from repository
    conventions and existing Git, octa PR, and forge PR artifacts; do not stop
    merely to offer it as a next action. Continue until Done or a genuine
@@ -77,7 +77,7 @@ pass it to every protected Issue mutation and Issue–PR link change.
 5. Record target branch and evidence in the Issue completion comment. Keep octa
    numbers out of Git artifacts.
 
-## Nonterminal stops and lease release
+## Stops before Done and lease release
 
 When the procedure stops before Done because of an explicit commit-only limit
 or a genuine gate, keep the lifecycle state required above. Keep the lease only

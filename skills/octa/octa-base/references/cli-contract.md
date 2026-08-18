@@ -8,20 +8,56 @@ This file records product mechanics. Lifecycle states, Issue authoring,
 ownership duration, review gates, and handoff policy remain in `octa-base` and
 its workflow skills.
 
+## State types
+
+A configured state carries exactly one classification: its `type`, one of
+`open`, `in progress`, or `closed`. An Issue is closed when its state's type is
+`closed`; that is derived from the type, not a separate stored flag. Why an
+Issue closed is a reason carried by the state name, which is why a store can
+hold two `closed` states without the axis gaining a fourth value.
+
+A type that holds any state has exactly one default, the state a transition
+verb resolves to when given no explicit target. `config state list --json`
+returns each state's `name`, `type`, and `is_default`.
+
+## Issue transitions
+
+Each verb moves the Issue to its own type's default state:
+
+| Command | Moves to |
+|---|---|
+| `issue open` (alias `create`) | the `open` default |
+| `issue start` | the `in progress` default |
+| `issue close` | the `closed` default |
+| `issue reopen` | the `open` default |
+
+`--as <state>` reaches another state of that verb's own type and rejects any
+other type. `issue start` takes no `--as`. `issue set --as <state>` is the only
+unconstrained move and reaches any configured state of any type.
+
+    octa issue open --title <title> --json          # into the open default
+    octa issue open --title <title> --as Todo --json
+    octa issue start 12 --lease "$LEASE"
+    octa issue set 12 --as "In Review" --lease "$LEASE"
+    octa issue close 12 --lease "$LEASE"
+    octa issue close 12 --as Canceled --lease "$LEASE"
+
 ## Issue list selectors
 
-`issue list` with no selector and `--open` return non-terminal Issues.
-`--closed` returns terminal Issues, and `--all` returns both.
-`--state <name>` matches one configured state name exactly.
+`issue list` with no selector returns Issues outside the `closed` type.
+`--state <names>` matches configured state names and `--state-type <types>`
+matches state types, both comma-separated and matching any listed value.
+`--all` applies no filter.
 
-`--open`, `--closed`, `--all`, and `--state` are mutually exclusive. The
-terminal flag is the only classification a state carries besides the starting
-flag, so a coarser selector than these four does not exist.
+The three selectors are mutually exclusive, because a state name already fixes
+its type. States are global configuration, so `--state` and `--state-type` also
+work under `--all-repos`.
 
-    octa issue list --open --json
-    octa issue list --closed --json
+    octa issue list --json
+    octa issue list --state-type "in progress" --json
+    octa issue list --state-type "open,in progress" --json
+    octa issue list --state "In Progress,In Review" --json
     octa issue list --all --json
-    octa issue list --state "In Progress" --json
 
 `--label`, `--project`, `--milestone`, `--related-to`, and `--unblocked`
 narrow the result further and require one repository.
@@ -39,11 +75,11 @@ read it instead of guessing at fields.
         number
         title
         state
-        isTerminal
+        stateType
         leased
-        project { id name state isTerminal }
+        project { id name state isClosed }
         labels { name group }
-        blockedBy { number state isTerminal }
+        blockedBy { number state stateType }
         pullRequests { number branch state }
       }
     }
@@ -53,8 +89,8 @@ The response is a GraphQL JSON envelope. Inspect `errors` even when the
 process exits successfully; read `data` only when the requested operation
 succeeded. `extensions.dbAccesses` reports executed database queries.
 
-For a repository overview, one document can select Projects and Issues with
-their Project relation:
+For a repository overview, one document can select Projects and the unfinished
+Issues with their Project relation:
 
     octa query <<'GRAPHQL'
     {
@@ -62,31 +98,40 @@ their Project relation:
         id
         name
         state
-        isTerminal
+        isClosed
       }
-      issues(limit: 100) {
+      issues(filter: { stateType: ["open", "in progress"] }, limit: 100) {
         number
         title
         state
-        isTerminal
+        stateType
         updatedAt
         leased
         project { id name }
         labels { name }
-        blockedBy { number state isTerminal }
+        blockedBy { number state stateType }
       }
     }
     GRAPHQL
 
-`issues` and `projects` accept a filter: `IssueFilter` takes `state`,
-`isTerminal`, `label`, and `projectId`; `ProjectFilter` takes `isTerminal` and
-`label`. Neither the objects nor the filters carry a priority or a status
-category.
+`IssueFilter` takes `state`, `stateType`, `label`, and `projectId`; `state` and
+`stateType` each accept one value or a list and match an Issue carrying any
+listed value. `ProjectFilter` takes `isClosed` and `label`. `Project.isClosed`
+is a separate axis from Issue state types and is unrelated to them. Neither the
+objects nor the filters carry a priority or a status category.
 
 List fields default to 50 and accept at most 100 records. Use pagination rather
 than assuming one response contains a larger repository. Query depth is limited
 to 8 and complexity to 500. The schema is read-only; use existing CLI commands
 for mutations.
+
+## Project tallies
+
+`project list --json` includes every Project, closed ones included; `--active`
+filters to Projects that are not closed. Each Project carries a `tally` with
+`open`, `closed`, and `total`. That `open` counts every Issue outside the
+`closed` type, so it merges the `open` and `in progress` types; derive the
+three-way split from the Issues themselves rather than from the tally.
 
 ## Issue leases
 
@@ -108,7 +153,7 @@ durable project artifacts.
 
 The matching `--lease` is required for:
 
-- `issue set-state`, `set`, `unset`, `add`, and `remove`;
+- `issue start`, `close`, `reopen`, `set`, `unset`, `add`, and `remove`;
 - normal `issue unlock`;
 - Issue–PR link changes through `pr create --issue`, `pr add`, and
   `pr remove`.
@@ -122,7 +167,7 @@ The lease ID is not required for:
 Use the lease ID on every protected mutation and release it normally:
 
     octa issue add 12 --label impl --lease "$LEASE"
-    octa issue set-state 12 "In Progress" --lease "$LEASE"
+    octa issue start 12 --lease "$LEASE"
     octa issue unlock 12 --lease "$LEASE"
 
 If the lease ID is irretrievably lost, `issue unlock 12 --force` is an

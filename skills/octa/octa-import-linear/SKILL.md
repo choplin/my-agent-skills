@@ -25,7 +25,7 @@ raises it afterwards.
 
 ## Scope
 
-Only **non-terminal** Linear Issues are imported: status types `backlog`,
+Only **unfinished** Linear Issues are imported: status types `backlog`,
 `unstarted`, and `started`. Completed and canceled work stays in Linear as the
 archive, because octa cannot reproduce its comment history, authorship, or
 timestamps faithfully.
@@ -103,14 +103,14 @@ report and leave the affected records out of the run.
 
 ### 5. Create Projects and Milestones
 
-A non-terminal Linear Project that owns a selected Issue becomes an octa
-Project with the same name, its description plus the footer, and a non-terminal
-state: create it with `octa project create` and leave `--terminal` off. Create a
-Milestone only when the Linear Project actually has one, preserving its order.
+An active Linear Project that owns a selected Issue becomes an octa Project
+with the same name, its description plus the footer, and an open state: create
+it with `octa project create` and leave `--closed` off. Create a Milestone only
+when the Linear Project actually has one, preserving its order.
 
-A terminal Linear Project that still owns a selected Issue is not recreated:
-leave the octa Issue Project-unassigned and report it, so the user can decide
-where the leftover work belongs.
+A completed or canceled Linear Project that still owns a selected Issue is not
+recreated: leave the octa Issue Project-unassigned and report it, so the user
+can decide where the leftover work belongs.
 
 ### 6. Create Issues
 
@@ -119,12 +119,15 @@ identifier to octa number map in session context for the relation pass.
 
 1. Body: the Linear description verbatim, a blank line, then the footer. When
    the description is empty, the footer alone is the body.
-2. Create with `octa issue create --title <title> --body <body> --state <state>
-   --json`, into the mapped state directly when `issue create --help` shows
-   `--state` accepts it; otherwise create it and set the state in step 3.
+2. Create with `octa issue open --title <title> --body <body> --json`. It
+   resolves to the `open` default, Backlog. `--as` reaches another `open` state,
+   so a Todo target can be set at creation with `--as Todo`; In Progress and In
+   Review are a different type and are set in step 3.
 3. Acquire `LEASE=$(octa issue lock <number>)` and apply the protected
    mutations with it: the single Type label, Project, Milestone, and the state
-   when it was not set at creation.
+   when it was not set at creation. `octa issue set <number> --as <state>` is
+   the move that reaches any type, so use it for In Progress and In Review
+   rather than `issue start`, which cannot pick between the two.
 4. Release with `octa issue unlock <number> --lease "$LEASE"` before moving to
    the next Issue. This skill never leaves a lease held, including on failure —
    an imported In Progress Issue must be claimable by whichever session resumes
@@ -196,8 +199,8 @@ gap survives the run.
 | status type `started`, working | In Progress |
 | status type `started`, review | In Review |
 | status type `completed` / `canceled` | not imported |
-| non-terminal Project | Project, left non-terminal |
-| terminal Project | not created; Issue left Project-unassigned |
+| active Project | Project, left open |
+| completed or canceled Project | not created; Issue left Project-unassigned |
 | Milestone | Milestone |
 | `Type` label | same `Type` member |
 | `Repo` label | dropped — octa scopes records by repository |

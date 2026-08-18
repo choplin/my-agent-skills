@@ -16,8 +16,9 @@ Run `octa project list --active --json` in the current repository.
 
 - none: report that no active Project exists and stop;
 - one: select it silently;
-- several: show their names, state, and open/closed tally, then ask the user
-  which Project to groom.
+- several: show their names, state, and the `open`/`closed`/`total` tally, then
+  ask the user which Project to groom. That tally's `open` merges the `open` and
+  `in progress` types; do not present it as unstarted work.
 
 ### 2. Survey the queue
 
@@ -30,7 +31,7 @@ query GroomQueue($projectId: Int!) {
     title
     leased
     labels { name }
-    blockedBy { number state isTerminal }
+    blockedBy { number state stateType }
   }
 }
 ```
@@ -52,12 +53,17 @@ comments. Skip blocked items and state what they await.
 Auto-pick the first groomable item in that order. The user may redirect or
 stop.
 
+Groom interactively, in this session, with the user. What, why, and acceptance
+often exist only in the user's head, so a body drafted purely from repository
+evidence is a guess wearing the shape of a work order.
+
 For each pick:
 
 1. Read the full Issue and relevant repository evidence.
 2. Draft a self-complete body with What & why, Where, Inputs, Acceptance, and
-   Constraints. Ask only for decisions that cannot be discovered or safely
-   inferred; confirm choices that materially change scope.
+   Constraints, then propose it and confirm. Ask the user for whatever the
+   repository cannot supply, and never fill a missing what/why/acceptance with
+   an inference.
 3. Decide its true size. Keep one atomic deliverable, promote a small effort to
    parent plus sub-issues, or create a finite Project for a distinct outcome.
 4. Inspect `leased`. If another session holds a lease, skip the Issue. Otherwise
@@ -71,9 +77,11 @@ For each pick:
    single-selection. Pass the same lease to label mutations.
 7. Update the Issue body, relations, Project/Milestone, and labels with the
    same lease.
-8. Move it to Todo with the lease only after the fresh-agent
-   self-completeness check passes. Otherwise leave it Backlog and
-   comment with the missing decision/input; comments need no lease.
+8. Move it to Todo with `octa issue set <number> --as Todo --lease "$LEASE"`
+   only after the fresh-agent self-completeness check passes. Backlog and Todo
+   are both the `open` type, so `issue set --as` is the move that reaches it.
+   Otherwise leave it Backlog and comment with the missing decision/input;
+   comments need no lease.
 9. Release the lease normally whether the Issue reached Todo or remained
    Backlog. Never record the lease ID in durable artifacts or use force
    recovery as routine groom cleanup.

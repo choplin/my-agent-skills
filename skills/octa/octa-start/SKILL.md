@@ -23,23 +23,24 @@ Issue candidate context in one read:
 
 ```graphql
 {
-  issues(limit: 100) {
+  issues(filter: { stateType: ["open", "in progress"] }, limit: 100) {
     number
     title
     state
-    isTerminal
+    stateType
     updatedAt
     leased
     project { id name }
     labels { name }
-    blockedBy { number state isTerminal }
+    blockedBy { number state stateType }
   }
 }
 ```
 
-Run it with `octa query`, inspect the response `errors`, and paginate when more
-than 100 Issues exist. Exclude terminal Issues and In Review Issues, then
-present two sections across every Project and No Project:
+The filter already excludes the `closed` type. Run it with `octa query`, inspect
+the response `errors`, and paginate with `offset` when more than 100 Issues
+exist. Exclude In Review Issues, then present two sections across every Project
+and No Project:
 
 1. **In flight** — In Progress Issues first, most recently updated first. These
    are resume candidates.
@@ -68,7 +69,7 @@ For a Backlog selection, apply the `octa-base` self-completeness gate. Groom it
 in place before execution or route to `octa-groom`; never treat rough capture as
 an implementation specification.
 
-If any non-terminal blocker remains, report it and do not start.
+If any blocker outside the `closed` type remains, report it and do not start.
 
 ### 3. Claim ownership
 
@@ -87,8 +88,9 @@ For an unleased Issue, capture the one-time lease ID:
     LEASE=$(octa issue lock <number>)
 
 If acquisition races and fails, re-read the Issue and report that it is now
-leased. On a new start, move the Issue to In Progress using
-`--lease "$LEASE"`. A resume already in that state needs no transition.
+leased. On a new start, move the Issue to In Progress with
+`octa issue start <number> --lease "$LEASE"`, which resolves to the
+`in progress` default. A resume already in that state needs no transition.
 
 The lease ID is a non-secret coordination handle and may appear in tool output
 and command arguments. Never put it in an Issue comment, worktree note,
@@ -100,7 +102,9 @@ Choose autonomously from the deliverable:
 
 - `impl` or another repository change: use an isolated worktree when the
   installed `wtm-worktree` skill is available; otherwise use the current
-  workspace and say so.
+  workspace and say so. Do not improvise one with a bare `git worktree add`:
+  it leaves nowhere to record the Issue reference, and the current-workspace
+  path already handles that case.
 - design/research without repository changes: use the current workspace.
 
 For a new worktree, use a descriptive branch name with no octa number. Put the
@@ -124,7 +128,13 @@ Before touching files, read:
 - the newest Handoff note, then earlier Issue comments;
 - Git status, commits against the target branch, staged/unstaged changes;
 - linked octa PR records and their comments;
-- any execution artifacts explicitly named by the Issue.
+- the in-flight execution artifact left by whichever mode was running:
+  - `orchestration-toolkit-execute` — its run record, kept as checkpoint
+    comments on this Issue; there is no local file;
+  - `exec-plan` — a plan file under `.agents/exec-plans/`;
+  - host-native `/goal` — active goal state, when the host exposes it to this
+    session; there is no repository artifact to search;
+  - none of these — the work ran in-session with no execution skill.
 
 Also confirm that the current live session still retains the lease ID. If the
 Issue is leased but the ID is unavailable, stop instead of guessing or
@@ -135,16 +145,37 @@ scratch or contradict recorded decisions.
 
 ### 6. Execute
 
-For one atomic Issue, work in the current session. Preserve the Issue's What
-and Acceptance; decide implementation details without rewriting requirements.
-Keep durable checkpoints as Issue comments when the run crosses meaningful
-boundaries or must pause. Route Project-sized dependency graphs back to
-grooming/planning instead of widening one Issue.
+Preserve the Issue's What and Acceptance; decide implementation details without
+rewriting requirements. Keep durable checkpoints as Issue comments when the run
+crosses meaningful boundaries or must pause.
+
+**Starting.** The Issue is the work unit, so the destination follows from what
+it asks for. Do not run a mode questionnaire:
+
+| The selected Issue | Hand off to |
+|---|---|
+| Entails repository changes toward a commit (normally `impl`) | `orchestration-toolkit-execute` |
+| Produces a non-repository deliverable — analysis, design, research (normally `design`/`research`) | Ordinary in-session work; record the deliverable on the Issue |
+| Is a trivial, self-evident change | Implement it directly; for a repository change, satisfy `octa-base`'s implementation completion gate before closing it |
+
+State the choice in one line and proceed. If dependencies on sibling Issues
+surface while working, that is the signal to stop and route the Project-sized
+dependency graph back to grooming/planning instead of widening this run.
+
+**Resuming.** The execution mode has usually already been chosen — continue it
+rather than re-picking one. Route by the artifact found at step 5:
+
+| Artifact found at step 5 | Hand off to |
+|---|---|
+| Checkpoint comments from `orchestration-toolkit-execute` | `orchestration-toolkit-execute` (continue the existing run record; do not open a new one) |
+| Plan file under `.agents/exec-plans/` | `exec-plan` (drive the existing plan; do not write a new one) |
+| Active host-native `/goal` | Continue the existing goal through the host |
+| None | Apply the Starting table above, but frame the remaining work from step 5 as the task, not the whole Issue |
 
 For an `impl` change, implement and verify without committing, pass the selected
 Issue's full record and retained lease into the execution flow, then read and
 apply `octa-base`'s `references/implementation-completion.md` from pre-commit
-review through its terminal outcome. That procedure owns the review brief,
+review through its closing outcome. That procedure owns the review brief,
 status transitions, feedback cycle, commit handoff, integration, completion
 comment, lease release, and cleanup; do not reproduce those branches here.
 Comments and reads need no lease, but every protected Issue mutation and
@@ -153,12 +184,12 @@ Issue–PR link change does. When the procedure returns Done, continue with step
 it returned.
 
 Design/research work records its result and acceptance evidence in the Issue.
-Move it to Done with the retained lease after acceptance, then release the
-lease normally.
+Close it to Done with `octa issue close <number> --lease "$LEASE"` after
+acceptance, then release the lease normally.
 
 ### 7. Finish or pause
 
-For design/research completion, post the required completion comment, move to
+For design/research completion, post the required completion comment, close to
 Done with the lease, release it normally, and apply the safe worktree cleanup
 procedure when relevant. `impl` completion is already owned by the centralized
 procedure in step 6.

@@ -11,9 +11,16 @@ The Issue remains In Progress.
 Do not use this flow after implementation review has started. Feedback,
 corrections, approval, commit, and integration keep that Issue in the review
 state unless the user explicitly sends it back to working; continue through
-`octa-base`'s `references/implementation-completion.md` instead. A nonterminal
-review or integration wait may release its lease for a later explicit resume,
-but it is not an In Progress handoff.
+`octa-base`'s `references/implementation-completion.md` instead. A review or
+integration wait that has not closed the Issue may release its lease for a later
+explicit resume, but it is not an In Progress handoff.
+
+Two more cases route elsewhere:
+
+- **Finished, not paused** — the work is complete, so it takes `octa-base`'s
+  completion comment at the review or Done transition, not a handoff.
+- **No Issue yet** — cross-session work belongs in an Issue. Create it first,
+  then hand it off. There is no local-file fallback; the Issue is the anchor.
 
 ## Flow
 

@@ -34,7 +34,7 @@ task list.
 | Primitive | Treatment |
 |---|---|
 | Repository | The Git common directory is the scope of Issues, Projects, PRs, and Wiki pages. Worktrees of one repository share octa data. Do not add Repo labels. |
-| Project | A finite outcome that can complete, never a permanent repository bucket. A Project carries a free-form state name plus a terminal flag that decides whether it is still active. |
+| Project | A finite outcome that can complete, never a permanent repository bucket. A Project carries a free-form state name plus a closed flag that decides whether it is still active. The flag is a Project axis and is unrelated to Issue state types. |
 | Milestone | An ordered phase within a Project. Add only when the outcome has distinct stages. |
 | Issue | One atomic deliverable: one coherent code change, one decision, or one research result. It may exist without a Project. |
 | Parent/sub-issue | Use only for a small effort containing a few atomic deliverables. Do not use hierarchy for execution order. |
@@ -56,8 +56,9 @@ Read [workflow-configuration.md](references/workflow-configuration.md) before
 first lifecycle use. States and labels are configured once for the whole octa
 store and govern every repository in it, so the six states — Backlog, Todo, In
 Progress, In Review, Done, and Canceled — are the same everywhere and are named
-directly. States carry no ordering; nothing about a state is derived from where
-it appears in `config state list`.
+directly. octa's own seed is a smaller set, so a fresh store is brought to these
+six by that reference before lifecycle use. States carry no ordering; nothing
+about a state is derived from where it appears in `config state list`.
 
 ## Todo authoring standard
 
@@ -87,56 +88,86 @@ Decide grouping and order independently:
 - When B needs A's completed outcome, add A as B's blocker. Hierarchy alone
   never implies order.
 
-If grooming reveals a Project-sized outcome, create the Project and constituent
-Issues. Reuse the original as one constituent when useful; otherwise mark it
-Canceled after recording what superseded it. Never mark unperformed work Done.
+How a split is applied differs by which grouping it lands in, because
+parent/sub-issue is mutable while an Issue cannot become a Project:
+
+- **Small multi-deliverable effort: promote, keep the Issue.** The original
+  becomes the parent and the atomic deliverables become its sub-issues. Its
+  number, history, and body survive.
+- **Project-sized outcome: rebuild.** Create the Project and its constituent
+  Issues, moving the original's content into the Project. Reuse the original as
+  one constituent when something already references its number; otherwise mark
+  it Canceled after recording what superseded it. Never mark unperformed work
+  Done.
 
 ## Type labels
 
 One Issue label group `Type` with single selection governs the whole store and
-holds these labels:
+holds these labels. Type carries two things at once: the atomic-deliverable unit
+and which model executes the Issue.
 
-- `impl` — repository change intended for commit or integration.
-- `design` — a decision or ADR.
-- `research` — findings or an investigation result.
+- `impl` — repository change intended for commit or integration. Convergent and
+  groomable to self-completeness, so it executes on the cheap model.
+- `design` — a decision or ADR. Divergent and judgement-heavy, so it executes on
+  the expensive model.
+- `research` — findings or an investigation result. Exploratory, so it executes
+  on the expensive model.
 
 Every Todo Issue has exactly one of these three Types. A documentation change committed to a
 repository is `impl`; an independent findings document is `research`.
 
-Do not create `Type/orchestration` until an installed execution workflow has an
-octa-backed control-record contract. Current planning and orchestration skills
-may be Linear-specific; advertising an unroutable Type would strand work.
+The executor picks the Issues matching its capability: a cheap-model session
+takes `impl`, an expensive-model session takes `design` and `research`. Add a
+fourth Type only when a recurring deliverable is a genuinely different artifact
+from code-change, decision, and document — never to describe a variation of one.
+
+**Exception — `deep` override (defer until observed):** some `impl` changes need
+deep judgement. Rather than a new Type, mark those with a single ungrouped
+`deep` label that overrides the executor choice back to the expensive model.
+This is an exception patch, not a primary axis; introduce it only once real
+usage shows how often `impl` Issues need it.
+
+Do not create `Type/orchestration` until `orchestration-toolkit-orchestrate`
+has an octa-backed control-record contract. That Type marks a control record
+only that skill creates and drives, so advertising it before the contract exists
+would strand the work on an unroutable label.
 
 ## Lifecycle
 
-| State | Flags | Meaning |
+| State | Type | Meaning |
 |---|---|---|
-| Backlog | starting | Captured, not groomed. New Issues enter here. |
-| Todo | — | Groomed and executable. |
-| In Progress | — | Actively owned and being worked. |
-| In Review | — | Awaiting human review or integration. |
-| Done | terminal | Accepted and integrated/shipped when applicable. |
-| Canceled | terminal | Dropped or superseded. |
+| Backlog | open (default) | Captured, not groomed. New Issues enter here. |
+| Todo | open | Groomed and executable. |
+| In Progress | in progress (default) | Actively owned and being worked. |
+| In Review | in progress | Awaiting human review or integration. |
+| Done | closed (default) | Accepted and integrated/shipped when applicable. |
+| Canceled | closed | Dropped or superseded. |
 
-A state carries exactly two classifications, `is_starting` and `is_terminal`,
-and octa models no gradation between them. `issue list` selects by
-`--open`/`--closed`/`--all` on the terminal flag or by `--state <name>` on the
-exact name; the four are mutually exclusive and nothing else distinguishes
-Backlog from Todo or In Progress from In Review. If the store is missing one of
-these six states, report that instead of substituting another one. Apply
-transitions:
+A state carries exactly one classification, its `type`, and octa models no
+gradation within a type. The type is the coarse axis every read and every
+transition verb works on; only the state name distinguishes Backlog from Todo,
+In Progress from In Review, or Done from Canceled. `issue list` selects by
+`--state-type` on the type, by `--state <names>` on exact names, or by `--all`;
+the three are mutually exclusive, and no selector at all hides the `closed`
+type. If the store is missing one of these six states, report that instead of
+substituting another one. Apply transitions:
 
-- Capture into Backlog.
-- Groom Backlog to Todo only after the authoring gate passes.
+- Capture into Backlog with `issue open`, which resolves to the `open` default.
+- Groom Backlog to Todo only after the authoring gate passes, using
+  `issue set --as Todo`.
 - On start, acquire the Issue lease and move Todo/Backlog to In Progress with
-  that lease ID.
-- Move In Progress to In Review when presenting an implementation for human
-  review or when an integration PR is open.
+  `issue start` and that lease ID.
+- Move In Progress to In Review with `issue set --as "In Review"` when
+  presenting an implementation for human review or when an integration PR is
+  open. `issue start` has no `--as`, so In Review is reached through the
+  unconstrained move.
 - Keep an `impl` Issue In Review through feedback, corrections, approval,
   commit, and integration. Return it to In Progress only when the user
   explicitly sends it back.
-- Move to Done only when the deliverable is accepted and an implementation is
-  integrated, unless the user explicitly accepts an unintegrated exception.
+- Move to Done with `issue close` only when the deliverable is accepted and an
+  implementation is integrated, unless the user explicitly accepts an
+  unintegrated exception. Drop or supersede work with
+  `issue close --as Canceled`.
 - Keep unfinished cross-session work In Progress and use `octa-handoff`.
 - Release the lease after Done or Canceled. Do not force-release a lease merely
   because its holder is unknown.
@@ -145,7 +176,7 @@ transitions:
 
 For every `impl` Issue, read and apply
 [implementation-completion.md](references/implementation-completion.md) from
-pre-commit review through its terminal outcome. It is the single source of
+pre-commit review through its closing outcome. It is the single source of
 truth for the review brief, feedback cycle, commit-only exception, nested
 commit handoff, integration evidence, lease release, final status, and cleanup.
 Caller skills must invoke that procedure, not restate it.
@@ -172,6 +203,10 @@ imminently; otherwise release it after posting the handoff so another session
 can claim the Issue. Never put the lease ID in an Issue, worktree note, Git
 artifact, or user-facing report. Use `octa-handoff` for the full flow.
 
+A handoff records a pause, so finished work takes the completion comment
+instead. If cross-session work has no Issue yet, create one first; the Issue is
+the anchor and there is no local-file handoff fallback.
+
 ### Cleanup
 
 After Done, read [worktree-cleanup.md](references/worktree-cleanup.md). Remove an
@@ -195,15 +230,18 @@ octa project list --active --json
 octa project show <project> --json
 octa issue list --all --json
 octa issue list --state Backlog --project <project> --json
+octa issue list --state-type "open,in progress" --json
 octa issue list --unblocked --json
 octa issue show <number> --json
-octa issue create --title <title> --body <body> --state <state> --json
+octa issue open --title <title> --body <body> --json
 octa issue comment <number> --body <text>
 LEASE=$(octa issue lock <number>)
 octa issue set <number> --body <body> --project <project> --lease "$LEASE"
 octa issue add <number> --label <label> --lease "$LEASE"
 octa issue add <number> --blocker <blocker-number> --lease "$LEASE"
-octa issue set-state <number> <state> --lease "$LEASE"
+octa issue set <number> --as Todo --lease "$LEASE"
+octa issue start <number> --lease "$LEASE"
+octa issue close <number> --lease "$LEASE"
 octa issue unlock <number> --lease "$LEASE"
 ```
 

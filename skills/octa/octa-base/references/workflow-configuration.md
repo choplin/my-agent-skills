@@ -14,44 +14,81 @@ Inspect existing states:
 octa config state list --json
 ```
 
-A store with no configured states is seeded with the full lifecycle, and new
-Issues start in Backlog:
+Each row carries `name`, `type`, and `is_default`. The type is `open`,
+`in progress`, or `closed`, and it is the only classification a state has.
 
-| State | Flags | Notes |
-|---|---|---|
-| Backlog | starting | new Issues enter here |
-| Todo | — | |
-| In Progress | — | |
-| In Review | — | |
-| Done | terminal | |
-| Canceled | terminal | |
+### The lifecycle this convention configures
 
-Seeding runs only when no state is configured at all, so a customized store
-keeps exactly the states it has. Bring it back to the set above rather than
-stacking near-duplicate states on top:
+octa's own seed is one state per type plus a second way work ends. This
+operating convention splits capture from grooming and execution from review, so
+it configures six states across the same three types:
+
+| State | Type | Default | Notes |
+|---|---|---|---|
+| Backlog | open | yes | new Issues enter here |
+| Todo | open | | |
+| In Progress | in progress | yes | |
+| In Review | in progress | | |
+| Done | closed | yes | |
+| Canceled | closed | | |
+
+Two `in progress` states are intentional: In Progress is work and In Review is
+review, and only their names say which is which. Two `closed` states are
+intentional for the same reason: Done and Canceled are both closed, and the
+name carries why.
+
+### Bringing a store to it
+
+A store with no configured states is seeded with `open`, `in progress`,
+`closed`, and `not planned`, one default per type. Seeding runs only when no
+state is configured at all, so a customized store keeps exactly the states it
+has. Rename the seeded states into the set above rather than stacking
+near-duplicates beside them:
 
 ```sh
-octa config state set <old> --name <new>        # renaming moves its Issues too
-octa config state delete <old> --move-to <new>  # --move-to is required while Issues remain
-octa config state create "In Review"
-octa config state set-default Backlog
+octa config state set "open" --name Backlog          # renaming moves its Issues too
+octa config state set "in progress" --name "In Progress"
+octa config state set "closed" --name Done
+octa config state set "not planned" --name Canceled
+octa config state create Todo --type open
+octa config state create "In Review" --type "in progress"
 ```
 
-Rename where the target name is free, and delete with `--move-to` where it
-collides with a state the store already has. `config state create` takes
-`--starting` and `--terminal`, which are mutually exclusive; `config state set`
-changes `--name` or `--terminal`.
+Renaming carries each type's existing default with it, so Backlog, In Progress,
+and Done end up as the defaults without a further command.
 
-Two non-terminal working states are intentional: In Progress is work and In
-Review is review, and only their names say which is which. States carry no
-ordinal; `config state list` derives its order from the two flags and then
+For a store that already holds other states, rename where the target name is
+free and delete with `--move-to` where it collides with a state the store
+already has:
+
+```sh
+octa config state delete <old> --move-to <new>  # --move-to is required while Issues remain
+```
+
+The schema refuses to delete a state that still holds Issues without
+`--move-to`, and deleting a state never deletes Issues.
+
+### Types and their defaults
+
+`config state create <name>` takes `--type open|in progress|closed` (default
+`open`) and `--default`. `config state set <name>` changes `--name` or
+`--type`, and `--default` makes the state its own type's default. The default
+needs no type argument anywhere, since a state already carries exactly one
+type.
+
+The first state of an empty type becomes that type's default whether or not
+`--default` was passed, and the command says so. A type's default cannot be
+deleted or retyped while another state of that type remains — move the default
+first. The `open` and `closed` types must stay populated, since every Issue has
+to be able to start and to end. The `in progress` type may be emptied, and then
+`issue start` reports that it has nowhere to go.
+
+States carry no ordinal. `config state list` derives its order from type
+(`open`, then `in progress`, then `closed`), then the type's default, then
 name, so there is nothing to reorder and order never carries meaning.
 
-Backlog is the starting state — the one new Issues enter without an explicit
-`--state`. The store has at most one, enforced by the schema. Move it with
-`octa config state set-default <name>`; setting it clears the flag everywhere
-else. With no starting state, `issue create` fails with the command that fixes
-it; report a missing or duplicated state instead of guessing a substitute.
+If the store is missing one of the six states above, report that instead of
+substituting another one.
 
 ## Type labels
 
@@ -83,7 +120,7 @@ The returned three-word ID coordinates local ownership and is not a security
 boundary. Capture it and pass it to protected commands:
 
     LEASE=$(octa issue lock <number>)
-    octa issue set-state <number> "In Progress" --lease "$LEASE"
+    octa issue start <number> --lease "$LEASE"
     octa issue unlock <number> --lease "$LEASE"
 
 The CLI returns the lease ID only at acquisition. It may appear in tool output
