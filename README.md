@@ -86,6 +86,7 @@ skills or validation configuration.
 | `git-helpers` | commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten, squash-merge |
 | `document-writing` | standards, base, review, prose, audit, apply (the writing standards as 21 reusable lenses; four review lanes over shared machinery: full sweep, sentences only, findings only, or apply findings a person selected) |
 | `document-toolkit` | fact-check, distill, trim (verify a document's claims, rework a whole set: consolidate / refresh / split / retire, or strip content the set no longer needs) |
+| `document-reader` | review, base, newcomer, skeptical-peer, implementer, decision-maker, domain-expert, revise (judge a finished document from the reader's side: dispatch one isolated agent per reader persona, report stumbles, objections and takeaways as findings only, then work those findings in with the author) |
 | `lang-reference` | go, java, python, rust, scala, sql, typescript |
 | `app-reference` | backend, frontend (application-specific architecture and framework recommendations) |
 | `jira-cli` | jira-cli |

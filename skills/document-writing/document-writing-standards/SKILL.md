@@ -111,9 +111,12 @@ explicitly.
 
 These lenses judge the document as a document. Whether what it says about its
 subject is **true or well-founded** is outside every lens here. A document can
-pass the whole catalog and still be wrong. Route subject-matter verification to
-`document-toolkit-fact-check`, and claim falsification against acceptance
-criteria to `artifact-review-toolkit-adversarial`.
+pass the whole catalog and still be wrong. Whether it **lands on the reader it
+was written for** is outside them too: a document can be clear, consistent, and
+correct, and still leave its audience unconvinced or unable to act. Route
+subject-matter verification to `document-toolkit-fact-check`, reader effect to
+`document-reader-review`, and claim falsification against acceptance criteria to
+`artifact-review-toolkit-adversarial`.
 
 ## Finding schema
 

@@ -4,6 +4,7 @@ Skills for operating on documents as objects: verifying what one claims, and
 keeping a whole set of them high-signal.
 
 How a document reads and whether it holds together is `document-writing`.
+Whether it works on the reader it was written for is `document-reader`.
 
 ## Skills
 
@@ -25,8 +26,17 @@ corrects what has become wrong, while `trim` leaves every document in place and
 removes content that is still correct but no longer needed — a call `trim` puts
 to the set's owner rather than making itself.
 
-None of the three judges the writing. A document can pass `fact-check` and still
-be unreadable; that is `document-writing-review`'s work.
+None of the three judges the writing, and none judges the effect on a reader. A
+document can pass `fact-check` and still be unreadable — that is
+`document-writing-review`'s work — and it can be accurate and readable and still
+leave its audience unconvinced, which is `document-reader-review`'s.
+
+`fact-check` and `document-reader-review` both look at what the document says,
+and split on what makes a finding survive. `fact-check` reports a claim as
+INCORRECT only if it is false, and works through the claims systematically. A
+reader review reports a claim as doubted whether or not it is true, and only
+where a reader happened to doubt it — a correct document nobody believes is a
+defect it catches and `fact-check` cannot.
 
 ## Installation
 

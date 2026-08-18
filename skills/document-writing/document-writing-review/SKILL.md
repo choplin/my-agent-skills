@@ -53,9 +53,11 @@ Where the caller wants maximum detection instead, that is
 
 ## What this lane does not decide
 
-It does not judge whether the document is right about its subject. A document
-can leave this lane clean and still be wrong; route that to
-`document-toolkit-fact-check`.
+It does not judge whether the document is right about its subject, or whether it
+works on the reader it was written for. A document can leave this lane clean and
+still be wrong, and it can be clean and correct and still fail to convince
+anyone. Route subject-matter verification to `document-toolkit-fact-check`, and
+whether readers follow, believe, and can act on it to `document-reader-review`.
 
 It applies `structure.document-shape` findings, which rename headings, reorder
 sections, and convert between prose and lists. These override choices the writer

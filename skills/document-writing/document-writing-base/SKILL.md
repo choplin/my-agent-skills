@@ -54,6 +54,8 @@ Do not:
   `document-toolkit-fact-check`;
 - falsify a completion or acceptance claim — that is
   `artifact-review-toolkit-adversarial`;
+- judge whether the document convinces its readers or leaves them stuck — that
+  is `document-reader-review`;
 - decide what the document should say, add content, or fill gaps in it;
 - reorganize a document set, or decide which documents should exist — that is
   `document-toolkit-distill`;

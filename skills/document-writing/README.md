@@ -4,7 +4,8 @@ Skills for the writing itself: the standards a technical document is held to,
 and the lanes that inspect a document against them.
 
 Distinct from `document-toolkit`, which operates on documents as objects —
-verifying their claims, reworking a set, stripping what a set no longer needs.
+verifying their claims, reworking a set, stripping what a set no longer needs —
+and from `document-reader`, which judges a document from the reader's side.
 These skills judge how a document reads and whether it holds together.
 
 ## Skills
