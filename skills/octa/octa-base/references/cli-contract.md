@@ -10,15 +10,23 @@ its workflow skills.
 
 ## State types
 
-A configured state carries exactly one classification: its `type`, one of
-`open`, `in progress`, or `closed`. An Issue is closed when its state's type is
-`closed`; that is derived from the type, not a separate stored flag. Why an
-Issue closed is a reason carried by the state name, which is why a store can
-hold two `closed` states without the axis gaining a fourth value.
+A configured state carries exactly one classification: its `type`. For an Issue
+that is one of `open`, `in progress`, or `closed`. An Issue is closed when its
+state's type is `closed`; that is derived from the type, not a separate stored
+flag. Why an Issue closed is a reason carried by the state name, which is why a
+store can hold two `closed` states without the axis gaining a fourth value.
 
 A type that holds any state has exactly one default, the state a transition
-verb resolves to when given no explicit target. `config state list --json`
+verb resolves to when given no explicit target. `config issue state list --json`
 returns each state's `name`, `type`, and `is_default`.
+
+Projects carry their own states, configured separately under
+`config project state`, over a two-value axis of `open` and `closed`. There is
+no `in progress` type for Projects: nothing resolves to it, and whether work is
+under way inside a Project is already readable from its Issue tally. `Planned`
+and `In Progress` are expressible as names of `open` states. Everything else —
+defaults per type, the rename and delete rules, `--move-to` — matches the
+Issue side.
 
 ## Issue transitions
 
@@ -41,6 +49,28 @@ unconstrained move and reaches any configured state of any type.
     octa issue set 12 --as "In Review" --lease "$LEASE"
     octa issue close 12 --lease "$LEASE"
     octa issue close 12 --as Canceled --lease "$LEASE"
+
+## Project transitions
+
+A Project moves the same way an Issue does, over the two-value axis:
+
+| Command | Moves to |
+|---|---|
+| `project create` | the `open` default |
+| `project close` | the `closed` default |
+| `project reopen` | the `open` default |
+
+`--as <state>` reaches another state of that verb's own type. `project set --as
+<state>` is the unconstrained move and reaches any configured Project state.
+There is no `project set-state`, and no `--closed` flag: whether a Project is
+closed follows from its state's type.
+
+    octa project create --name <name> --json
+    octa project create --name <name> --as Planned --json
+    octa project set <project> --as Planned
+    octa project close <project>
+    octa project close <project> --as "not planned"
+    octa project reopen <project>
 
 ## Issue list selectors
 
@@ -77,7 +107,7 @@ read it instead of guessing at fields.
         state
         stateType
         leased
-        project { id name state isClosed }
+        project { id name state stateType }
         labels { name group }
         blockedBy { number state stateType }
         pullRequests { number branch state }
@@ -98,7 +128,7 @@ Issues with their Project relation:
         id
         name
         state
-        isClosed
+        stateType
       }
       issues(filter: { stateType: ["open", "in progress"] }, limit: 100) {
         number
@@ -116,9 +146,11 @@ Issues with their Project relation:
 
 `IssueFilter` takes `state`, `stateType`, `label`, and `projectId`; `state` and
 `stateType` each accept one value or a list and match an Issue carrying any
-listed value. `ProjectFilter` takes `isClosed` and `label`. `Project.isClosed`
-is a separate axis from Issue state types and is unrelated to them. Neither the
-objects nor the filters carry a priority or a status category.
+listed value. `ProjectFilter` takes `state`, `stateType`, and `label`, with
+`state` and `stateType` accepting one value or a list the same way. Project
+state types are a separate axis from Issue state types and are unrelated to
+them, even where they share the names `open` and `closed`. Neither the objects
+nor the filters carry a priority or a status category.
 
 List fields default to 50 and accept at most 100 records. Use pagination rather
 than assuming one response contains a larger repository. Query depth is limited
@@ -128,7 +160,8 @@ for mutations.
 ## Project tallies
 
 `project list --json` includes every Project, closed ones included; `--active`
-filters to Projects that are not closed. Each Project carries a `tally` with
+filters to Projects whose state type is not `closed`. Each row carries `state`
+and `state_type`. Each Project carries a `tally` with
 `open`, `closed`, and `total`. That `open` counts every Issue outside the
 `closed` type, so it merges the `open` and `in progress` types; derive the
 three-way split from the Issues themselves rather than from the tally.

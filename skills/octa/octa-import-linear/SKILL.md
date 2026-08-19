@@ -72,10 +72,10 @@ ever exported into a repository file, as `linear-base` requires.
 ### 1. Confirm both sides
 
 Confirm `octa` is available and the working directory is the target Git
-repository. Resolve states with `octa config state list --json` and inspect the
-`Type` label group. If the lifecycle states or Type labels are missing, run
-`octa-base`'s `references/workflow-configuration.md` first; do not import into
-a half-configured store.
+repository. Resolve states with `octa config issue state list --json` and
+inspect the `Type` label group. If the lifecycle states or Type labels are
+missing, run `octa-base`'s `references/workflow-configuration.md` first; do not
+import into a half-configured store.
 
 Confirm a Linear MCP server is wired. If either side is unavailable, stop and
 report which one.
@@ -105,8 +105,9 @@ report and leave the affected records out of the run.
 
 An active Linear Project that owns a selected Issue becomes an octa Project
 with the same name, its description plus the footer, and an open state: create
-it with `octa project create` and leave `--closed` off. Create a Milestone only
-when the Linear Project actually has one, preserving its order.
+it with `octa project create`, which resolves the `open` default on its own.
+Create a Milestone only when the Linear Project actually has one, preserving
+its order.
 
 A completed or canceled Linear Project that still owns a selected Issue is not
 recreated: leave the octa Issue Project-unassigned and report it, so the user

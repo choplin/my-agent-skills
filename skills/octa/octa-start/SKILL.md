@@ -19,9 +19,9 @@ work record; Git is implementation reality.
 
 ### 1. List candidates
 
-Confirm the configured states with `octa config state list --json` — report any
-of the six that is missing rather than substituting another one — then fetch
-Issue candidate context in one read:
+Confirm the configured states with `octa config issue state list --json` —
+report any of the six that is missing rather than substituting another one —
+then fetch Issue candidate context in one read:
 
 ```graphql
 {

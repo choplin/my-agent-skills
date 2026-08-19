@@ -37,7 +37,7 @@ task list.
 | Primitive | Treatment |
 |---|---|
 | Repository | The Git common directory is the scope of Issues, Projects, PRs, and Wiki pages. Worktrees of one repository share octa data. Do not add Repo labels. |
-| Project | A finite outcome that can complete, never a permanent repository bucket. A Project carries a free-form state name plus a closed flag that decides whether it is still active. The flag is a Project axis and is unrelated to Issue state types. |
+| Project | A finite outcome that can complete, never a permanent repository bucket. A Project carries a configured state whose `type` — `open` or `closed` — decides whether it is still active. Project states are configured separately from Issue states and their axis is unrelated to Issue state types. |
 | Milestone | An ordered phase within a Project. Add only when the outcome has distinct stages. |
 | Issue | One atomic deliverable: one coherent code change, one decision, or one research result. It may exist without a Project. |
 | Parent/sub-issue | Use only for a small effort containing a few atomic deliverables. Do not use hierarchy for execution order. |
@@ -57,11 +57,13 @@ only; this skill owns the lifecycle policy built on them.
 
 Read [workflow-configuration.md](references/workflow-configuration.md) before
 first lifecycle use. States and labels are configured once for the whole octa
-store and govern every repository in it, so the six states — Backlog, Todo, In
-Progress, In Review, Done, and Canceled — are the same everywhere and are named
-directly. octa's own seed is a smaller set, so a fresh store is brought to these
-six by that reference before lifecycle use. States carry no ordering; nothing
-about a state is derived from where it appears in `config state list`.
+store and govern every repository in it, so the six Issue states — Backlog,
+Todo, In Progress, In Review, Done, and Canceled — are the same everywhere and
+are named directly. octa's own seed is a smaller set, so a fresh store is
+brought to these six by that reference before lifecycle use. This convention
+prescribes no particular Project state set; the seeded one is left as it is.
+States carry no ordering; nothing about a state is derived from where it appears
+in `config issue state list`.
 
 ## Todo authoring standard
 

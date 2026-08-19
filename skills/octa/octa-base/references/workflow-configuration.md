@@ -6,16 +6,19 @@ repository in it; `octa config` rejects `--repo` and `--all-repos`. A rename or
 deletion here moves or retires Issues in every repository, so inspect before
 changing anything.
 
-## States
+## Issue states
 
 Inspect existing states:
 
 ```sh
-octa config state list --json
+octa config issue state list --json
 ```
 
 Each row carries `name`, `type`, and `is_default`. The type is `open`,
 `in progress`, or `closed`, and it is the only classification a state has.
+
+Projects carry their own states under `octa config project state`, over a
+two-value type axis. They are a separate configuration; see below.
 
 ### The lifecycle this convention configures
 
@@ -46,12 +49,12 @@ has. Rename the seeded states into the set above rather than stacking
 near-duplicates beside them:
 
 ```sh
-octa config state set "open" --name Backlog          # renaming moves its Issues too
-octa config state set "in progress" --name "In Progress"
-octa config state set "closed" --name Done
-octa config state set "not planned" --name Canceled
-octa config state create Todo --type open
-octa config state create "In Review" --type "in progress"
+octa config issue state set "open" --name Backlog          # renaming moves its Issues too
+octa config issue state set "in progress" --name "In Progress"
+octa config issue state set "closed" --name Done
+octa config issue state set "not planned" --name Canceled
+octa config issue state create Todo --type open
+octa config issue state create "In Review" --type "in progress"
 ```
 
 Renaming carries each type's existing default with it, so Backlog, In Progress,
@@ -62,7 +65,7 @@ free and delete with `--move-to` where it collides with a state the store
 already has:
 
 ```sh
-octa config state delete <old> --move-to <new>  # --move-to is required while Issues remain
+octa config issue state delete <old> --move-to <new>  # --move-to is required while Issues remain
 ```
 
 The schema refuses to delete a state that still holds Issues without
@@ -70,8 +73,8 @@ The schema refuses to delete a state that still holds Issues without
 
 ### Types and their defaults
 
-`config state create <name>` takes `--type open|in progress|closed` (default
-`open`) and `--default`. `config state set <name>` changes `--name` or
+`config issue state create <name>` takes `--type open|in progress|closed` (default
+`open`) and `--default`. `config issue state set <name>` changes `--name` or
 `--type`, and `--default` makes the state its own type's default. The default
 needs no type argument anywhere, since a state already carries exactly one
 type.
@@ -83,25 +86,57 @@ first. The `open` and `closed` types must stay populated, since every Issue has
 to be able to start and to end. The `in progress` type may be emptied, and then
 `issue start` reports that it has nowhere to go.
 
-States carry no ordinal. `config state list` derives its order from type
+States carry no ordinal. `config issue state list` derives its order from type
 (`open`, then `in progress`, then `closed`), then the type's default, then
 name, so there is nothing to reorder and order never carries meaning.
 
 If the store is missing one of the six states above, report that instead of
 substituting another one.
 
+## Project states
+
+Projects carry a configured state the same way Issues do, under a separate
+command tree and a narrower type axis:
+
+```sh
+octa config project state list --json
+```
+
+The type is `open` or `closed`, and there is no `in progress`. A Project is an
+outcome that is either still open or finished with, and whether work is under
+way inside it is already readable from its Issue tally. Name a Project state
+`Planned` or `In Progress` when that distinction matters; both are `open`.
+
+A store with no configured Project states is seeded with `open`, `closed`, and
+`not planned`, one default per type. The verbs, defaults, and delete rules match
+the Issue side:
+
+```sh
+octa config project state create Planned --type open
+octa config project state set Planned --default
+octa config project state delete Planned --move-to open
+```
+
+Both types must stay populated, since every Project has to be able to start and
+to end.
+
+This operating convention prescribes no particular Project state set. Unlike the
+Issue lifecycle, nothing here depends on specific Project state names, so leave
+the seeded set alone unless a repository needs more.
+
 ## Type labels
 
 Inspect first, then create missing Issue definitions:
 
 ```sh
-octa config label-group create Type --target issue --selection single
-octa config label create impl --target issue --group Type
-octa config label create design --target issue --group Type
-octa config label create research --target issue --group Type
+octa config issue label-group create Type --selection single
+octa config issue label create impl --group Type
+octa config issue label create design --group Type
+octa config issue label create research --group Type
 ```
 
-Labels are store-wide and require `--target issue` or `--target project`. Do
+Labels are store-wide, and the record they classify is part of the command
+name: `octa config issue label ...` and `octa config project label ...`. Do
 not create Repo labels: octa scopes records by the Git repository identity. Do
 not reserve any taxonomy beyond this operating convention in product code.
 

@@ -16,7 +16,7 @@ or transition a record.
 
 Confirm `octa` is available and run inside the target Git repository.
 
-Read `octa config state list --json`. Each row carries `name`, `type`, and
+Read `octa config issue state list --json`. Each row carries `name`, `type`, and
 `is_default`. Report any of the six states — Backlog, Todo, In Progress, In
 Review, Done, Canceled — that the store is missing, rather than substituting
 another one for it. Keep the returned name-to-type mapping: it is what turns a
@@ -26,7 +26,7 @@ something to assume.
 ### 2. Read the Projects
 
 Read `octa project list --json`, which returns every Project including closed
-ones. Keep each Project's `name`, `state`, `is_closed`, and `tally`.
+ones. Keep each Project's `name`, `state`, `state_type`, and `tally`.
 
 The tally's `open` counts every Issue outside the `closed` type, so it merges
 the `open` and `in progress` types and cannot supply the three-way split. Take
@@ -62,8 +62,8 @@ Inspect the response `errors` before consuming `data`, and paginate with
 Partition every returned Issue into its Project or **No Project**. Use the
 complete Project result from step 2 to classify the attached Project. Do not
 hide Issues assigned to a closed Project; show them under that Project and flag
-the inconsistent context. Never infer that a Project is closed merely because it
-was absent from an active-only query.
+the inconsistent context. A Project is closed when its `state_type` is
+`closed`; never infer it from absence in an active-only query.
 
 Derive each block's `open` and `in progress` counts from the Issues themselves,
 using the state-to-type mapping from step 1. Take `closed` from the Project's
