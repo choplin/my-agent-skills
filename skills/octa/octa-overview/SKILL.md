@@ -1,6 +1,6 @@
 ---
 name: octa-overview
-description: Gives a read-only snapshot of the current Git repository's octa work as a Markdown section per Project plus Project-unassigned Issues, with open, in progress, and closed counts and a table of the unfinished Issues by most recent update. Use when deciding what is active or next without changing tracker state.
+description: Gives a read-only snapshot of the current Git repository's octa work as a Markdown section per Project plus Project-unassigned Issues, with open, in progress, and closed counts and a list of the unfinished Issues by most recent update. Use when deciding what is active or next without changing tracker state.
 metadata:
   description-role: documentation
 ---
@@ -86,8 +86,9 @@ substitute a repository-wide number for it.
 ## Report
 
 Write Markdown. Project is the top axis, so each Project is its own `##`
-section and the Issues inside it are a table. Do not emit one indented
-plain-text block for the whole report.
+section and the Issues inside it are a list. Do not write the report as prose,
+and do not use tables: the pipes and header rows are overhead the reader does
+not need. Structure comes from the list, one line per Issue.
 
 Order the sections by activity: a Project with `in progress` work outranks one
 sitting entirely in `open`. Keep the **No Project** section last, and keep it
@@ -96,17 +97,21 @@ even when its only content is a zero row.
 For each section:
 
 1. A counts line: `**open** N · **in progress** N · **closed** N (total N)`.
-2. One table of that block's `open` and `in progress` Issues, most recently
-   updated first, up to **10 rows**. Both types share one table so the ordering
-   is a single activity axis; the State column keeps the six states apart.
-3. When rows were omitted, a line saying how many.
+2. One list of that block's `open` and `in progress` Issues, most recently
+   updated first, up to **10 items**. Both types share one list so the
+   ordering is a single activity axis; the State field keeps the six states
+   apart.
+3. When items were omitted, a line saying how many.
 
-Columns are `#`, Title, State, Updated, and Notes. Put `#number` and the title
-verbatim; add a short purpose clause only when the title is unclear.
+Each item is one line, fields in a fixed order separated by ` · ` (middle dot):
+`#number` and the title verbatim first, then State, then the Updated date, then
+Notes only when it is non-empty. Add a short purpose clause after the title
+only when the title is unclear. Keeping the field order and separator constant
+is what lets the reader scan the list as columns without a table.
 
 Updated is the `updatedAt` date. Order on the full timestamp, and when every
 displayed date in a block is the same day, show the time too — otherwise the
-column asserts a recency ranking the reader cannot see. A block whose Issues
+list asserts a recency ranking the reader cannot see. A block whose Issues
 were all touched in one bulk import has no meaningful recency order at all; say
 so rather than presenting the order as activity.
 
@@ -114,7 +119,7 @@ Notes carries what changes pickability and nothing else: the Type label
 (`impl`, `design`, `research`) when it is set, `leased` when the Issue is
 claimed, and `blocked by #N` for each blocker outside the `closed` type. Cap the
 blockers at three and append `+N more`, so one heavily blocked Issue does not
-crowd out the rest of the table. Read `octa issue show <n> --json` for a
+crowd out the rest of the list. Read `octa issue show <n> --json` for a
 displayed Issue only when blocker status materially affects whether it can be
 picked up.
 
@@ -123,12 +128,10 @@ picked up.
 
 **open** 6 · **in progress** 2 · **closed** 11 (total 19)
 
-| # | Title | State | Updated | Notes |
-|---|---|---|---|---|
-| 12 | Replace the cache path | In Progress | 2026-08-17 | impl, leased |
-| 18 | Add cache diagnostics | In Review | 2026-08-16 | impl |
-| 14 | Remove the compatibility layer | Todo | 2026-08-15 | impl, blocked by #12 |
-| 21 | Decide the invalidation contract | Backlog | 2026-08-11 | design |
+- #12 Replace the cache path · In Progress · 2026-08-17 · impl, leased
+- #18 Add cache diagnostics · In Review · 2026-08-16 · impl
+- #14 Remove the compatibility layer · Todo · 2026-08-15 · impl, blocked by #12
+- #21 Decide the invalidation contract · Backlog · 2026-08-11 · design
 
 4 more open Issues not shown.
 
@@ -136,9 +139,7 @@ picked up.
 
 **open** 1 · **in progress** 0 · **closed** 3 (total 4)
 
-| # | Title | State | Updated | Notes |
-|---|---|---|---|---|
-| 30 | Refresh the contributor guide | Backlog | 2026-08-09 | — |
+- #30 Refresh the contributor guide · Backlog · 2026-08-09
 ```
 
 If neither a Project nor a Project-unassigned unfinished Issue exists, say that
