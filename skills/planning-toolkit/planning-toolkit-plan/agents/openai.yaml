@@ -1,4 +1,4 @@
 interface:
   display_name: "Plan a Finite Outcome"
   short_description: "Shape a direction into autonomous-ready delivery work"
-  default_prompt: "Use $planning-toolkit-plan to define the outcome boundary and prepare autonomous-ready work in Linear."
+  default_prompt: "Use $planning-toolkit-plan to define the outcome boundary and prepare autonomous-ready tracker work."

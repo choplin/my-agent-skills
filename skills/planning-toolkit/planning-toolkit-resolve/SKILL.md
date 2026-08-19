@@ -49,16 +49,18 @@ a normal reconcile phase.
   `references/delivery-model.md`. It owns the contract, the scope policy shape,
   classifications, authority, readiness state machine, persistence boundary,
   issue contract, and handoff payload used below.
-- Apply `linear-base` for Project resolution, Issue lifecycle, Type/Repo labels,
-  self-completeness, dependencies, completion notes, and grouping.
-- Apply the installed llm-wiki skills for retrieval and durable writes. Use
-  `llm-wiki-base` for setup, scope, links, and note-model rules.
+- Apply `workflow-adapter-tracker` for Project and Issue reads, mutations,
+  relations, comments, and lifecycle transitions. Keep self-completeness,
+  grouping, readiness, and completion-note content in this Planning model.
+- Apply the installed llm-wiki skills for retrieval and
+  `workflow-adapter-markdown` for durable writes.
 - Use `discuss-toolkit-dig` only when a human-owned decision lacks enough shared
   meaning to choose. Do not reopen already explicit criteria.
 
-If Linear is unavailable, the resolution lane cannot be driven or certified
-READY. If llm-wiki or `zk` is unavailable, stop before resolving an item whose
-acceptance requires a durable finding or decision record.
+If the selected tracker provider is unavailable, the resolution lane cannot be
+driven or certified READY. If the Markdown adapter is unavailable, stop before
+resolving an item whose acceptance requires a durable finding or decision
+record.
 
 Read [references/resolution-records.md](references/resolution-records.md) before
 executing an issue, asking for a human decision, or reporting readiness.
@@ -77,9 +79,9 @@ If the Outcome Contract or resolution issues are too incomplete to identify what
 must be learned or decided, return to `planning-toolkit-plan` rather than
 improvising a new plan.
 
-Build a live resolution graph from Linear. Do not create a separate local state
-file. Linear statuses, relations, descriptions, and completion notes make the
-workflow resumable.
+Build a live resolution graph through `workflow-adapter-tracker`. Do not create
+a separate local state file. Tracker lifecycle states, relations, descriptions,
+and completion notes make the workflow resumable.
 
 ### 2. Audit the lane before execution
 
@@ -117,7 +119,7 @@ Before work, move the issue to In Progress. On completion:
 
 1. verify its Acceptance;
 2. write the durable finding or decision to llm-wiki;
-3. leave the required Linear completion note with the actual result and any
+3. leave the required tracker completion note with the actual result and any
    deviation from the planned approach;
 4. move it through In Review when a real review exists, otherwise to Done;
 5. enqueue every affected implementation issue for impact application.
@@ -200,7 +202,7 @@ explicit completed Inputs under the base Issue execution contract:
 - add newly necessary work only when it remains inside the confirmed scope;
 - repair milestones and `blocked by` relations.
 
-Follow `linear-base` grouping rules when splitting or rebuilding. Keep completed
+Follow the base grouping rules when splitting or rebuilding. Keep completed
 blocker relations when useful for provenance; their completed state no longer
 blocks execution.
 
@@ -214,7 +216,7 @@ After the resolution graph is empty, verify:
 
 - every genuine pre-implementation research/design blocker is Done or explicitly
   canceled with rationale;
-- every finding and decision has a durable llm-wiki record and Linear completion
+- every finding and decision has a durable llm-wiki record and tracker completion
   note;
 - no implementation issue consumes an unresolved or implicit input;
 - affected issues reflect the chosen decisions rather than provisional options;
@@ -241,14 +243,14 @@ Report:
 - implementation issues updated, split, added, or canceled;
 - any scope or milestone effect;
 - first unblocked Todo implementation work;
-- llm-wiki and Linear records updated.
+- llm-wiki and tracker records updated.
 
 For READY, report that execution may start and name the first unblocked work. Do
 not pick an execution skill for the user, and do not implement in this session.
 
 ## Resume behavior
 
-On re-entry, rebuild the graph from Linear and llm-wiki:
+On re-entry, rebuild the graph from the tracker and llm-wiki:
 
 - skip Done issues after verifying their completion records;
 - resume In Progress issues from their description and handoff note;
@@ -276,7 +278,7 @@ Never repeat research merely because the chat context was cleared.
 - [ ] Every blocking research question has sufficient durable evidence.
 - [ ] Every blocking design issue has one binding decision from the assigned
       authority.
-- [ ] Findings and decisions are recorded in both llm-wiki and Linear at the
+- [ ] Findings and decisions are recorded in both llm-wiki and the tracker at the
       appropriate level of detail.
 - [ ] Every affected implementation issue consumes explicit completed Inputs.
 - [ ] Obsolete or incorrectly sized work is canceled, updated, or split.

@@ -31,7 +31,7 @@ This skill owns:
   caller supplies none;
 - Scope Disposition, Unknown Class, and Decision Authority vocabularies;
 - the three readiness states and their legal transitions;
-- what belongs durably in llm-wiki versus operationally in Linear;
+- what belongs durably in llm-wiki versus operationally in the tracker;
 - the meanings of Project, Milestone, Issue, and dependency relations;
 - the issue execution contract used across phases;
 - the minimum handoff payload between Planning, Resolution, and Execution.
@@ -41,15 +41,15 @@ This skill does not:
 - conduct dialogue or cut scope;
 - supply a scope policy of its own beyond the default;
 - execute research or settle a decision;
-- groom or mutate Linear by itself;
+- groom or mutate tracker records by itself;
 - write llm-wiki notes by itself;
 - choose agents, commits, branches, PRs, or review cadence;
 - define implementation progress or completion states, which belong to the
   execution skills.
 
-Apply `linear-base` for generic Linear mechanics and the installed llm-wiki
-skills for knowledge-base mechanics. The model here adds planning semantics; it
-does not duplicate those skills.
+Use `workflow-adapter-tracker` for tracker operations and
+`workflow-adapter-markdown` for durable Markdown writes. The model here adds
+planning semantics; it does not duplicate provider mechanics.
 
 ## Delegation
 

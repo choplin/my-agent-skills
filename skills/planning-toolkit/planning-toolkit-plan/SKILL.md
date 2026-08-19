@@ -30,7 +30,7 @@ Own:
 - arranging those unknowns before implementation work;
 - defining outcome-oriented milestones and atomic deliverables;
 - persisting durable knowledge to llm-wiki;
-- proposing, then creating or updating, the corresponding Linear structure.
+- proposing, then creating or updating, the corresponding tracker structure.
 
 Do not:
 
@@ -38,7 +38,7 @@ Do not:
 - execute research or settle design decisions planned for later resolution;
 - implement code, choose agents, branches, commits, or PR topology;
 - insert routine human-review gates into the dependency graph;
-- create executable Linear issues for speculative future work.
+- create executable tracker Issues for speculative future work.
 
 If the concept itself is still unformed, use `inception`. If a request is unclear
 rather than conceptually open, use `discuss-toolkit-dig`.
@@ -47,17 +47,16 @@ rather than conceptually open, use `discuss-toolkit-dig`.
 
 - Load `planning-toolkit-base` first and apply its
   `references/delivery-model.md`. It owns the Outcome Contract, the Scope Policy
-  shape, classifications, readiness, persistence boundary, Linear mapping, issue
+  shape, classifications, readiness, persistence boundary, tracker mapping, Issue
   contract, and handoff payload used below.
 - Use `discuss-toolkit-dig` for the outcome-defining dialogue. Ask only questions
   that can change the scope cut, unknown classification, or delivery structure.
-- Use the installed llm-wiki skills to retrieve and persist durable knowledge.
-  Apply `llm-wiki-base` for setup, scope, and note-model rules. If llm-wiki or
-  `zk` is unavailable, stop before pretending the durable record exists and ask
-  where the user wants it persisted.
-- Use `linear-base` for Linear model, labels, issue lifecycle, and repository
-  resolution. If Linear is unavailable, finish a concrete proposal but report
-  that registration remains incomplete.
+- Use the installed llm-wiki skills to retrieve durable knowledge and
+  `workflow-adapter-markdown` to persist completed Markdown. If that path is
+  unavailable, stop before pretending the durable record exists.
+- Use `workflow-adapter-tracker` for Project, Milestone, Issue, relation, and
+  lifecycle operations. If its selected provider is unavailable, finish a
+  concrete proposal but report that registration remains incomplete.
 
 Read [references/output-contract.md](references/output-contract.md) before
 drafting the proposal or writing either system.
@@ -67,9 +66,9 @@ drafting the proposal or writing either system.
 ### 1. Establish the planning surface
 
 Retrieve the relevant PRD, design notes, decision records, and prior scope notes
-from llm-wiki. Read the selected Linear Project and rough actions when they
-already exist. Inspect the repository only where current implementation facts
-materially constrain the plan.
+from llm-wiki. When a tracker Project or rough actions already exist, read them
+through `workflow-adapter-tracker`. Inspect the repository only where current
+implementation facts materially constrain the plan.
 
 Build a source map:
 
@@ -116,7 +115,7 @@ substitute a different standard, and do not weaken the policy's lenses because a
 capability looks obviously useful.
 
 Keep Deferred items in llm-wiki with their exclusion rationale and whatever the
-policy says would promote them. Do not turn them into executable Linear issues.
+policy says would promote them. Do not turn them into executable tracker Issues.
 If a later phase is already a committed finite outcome, propose a separate future
 Project rather than mixing it into this one.
 
@@ -205,27 +204,30 @@ Present one proposal containing:
 - unknown register and readiness;
 - milestones, issues, and dependency graph;
 - planned llm-wiki changes;
-- planned Linear Project, Milestones, Issues, statuses, and relations;
+- planned tracker Project, Milestones, Issues, lifecycle states, and relations;
 - contradictions, assumptions, and remaining human choices.
 
-Get explicit user approval before creating or mutating Linear or committing the
-scope cut to llm-wiki. Incorporate corrections into the proposal first.
+Get explicit user approval before creating or mutating tracker records or
+committing the scope cut to llm-wiki. Incorporate corrections into the proposal
+first.
 
 ### 9. Persist knowledge and executable work
 
 After approval:
 
-1. Persist the scope policy, Outcome Contract, scope cut, Deferred rationale,
-   and decisions under the base durable-ownership rules. Update an existing
-   authoritative note when one clearly owns the subject; otherwise create a
-   linked planning note. Do not duplicate complete PRD or design content.
-2. Create or update one finite Linear Project for the outcome, following the
-   base Linear mapping and `linear-base` mechanics.
-3. Create Milestones only when the outcome has distinct observable stages.
-4. Create issues with Type and Repo labels, status, milestone, and `blocked by`
-   relations. Do not create Deferred roadmap issues.
-5. Re-read the resulting Project and compare it to the approved proposal. Repair
-   omissions or mismatched dependencies before declaring completion.
+1. Send the completed scope policy, Outcome Contract, scope cut, Deferred
+   rationale, and decisions to `workflow-adapter-markdown`. Request an update
+   when one authoritative note clearly owns the subject; otherwise request a
+   linked planning-note create. Do not duplicate complete PRD or design content.
+2. Send `workflow-adapter-tracker` the approved operations for one finite
+   Project and its complete description.
+3. Include Milestone creates only when the outcome has distinct observable
+   stages.
+4. Include Issue creates or updates with work type, lifecycle intent,
+   placement, and `blocked by` relations. Do not create Deferred roadmap Issues.
+5. Re-read the resulting Project through the adapter and compare it to the
+   approved proposal. Repair omissions or mismatched dependencies before
+   declaring completion.
 
 ### 10. Hand off
 
@@ -234,7 +236,7 @@ Report:
 - the final readiness state;
 - the first unblocked work;
 - every unresolved blocker and who may settle it;
-- the llm-wiki note and Linear Project updated;
+- the llm-wiki note and tracker Project updated;
 - the appropriate next route.
 
 For READY_AFTER_RESOLUTION, hand off to `planning-toolkit-resolve`. For READY,
@@ -272,6 +274,6 @@ an execution skill for the user, and do not implement in this session.
 - [ ] Milestones are observable increments rather than technical layers.
 - [ ] Issues are atomic, verifiable, and sized for one focused session.
 - [ ] The readiness state matches what may actually start.
-- [ ] llm-wiki and Linear match the user-approved proposal.
+- [ ] llm-wiki and the tracker match the user-approved proposal.
 - [ ] A context-free executor can identify the next work and every blocker
       without relying on this conversation.

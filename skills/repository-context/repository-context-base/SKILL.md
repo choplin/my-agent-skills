@@ -3,7 +3,7 @@ name: repository-context-base
 description: >-
   The shared placement and lifecycle model for context produced while working
   in a repository: canonical user and developer documentation, AGENTS.md,
-  CHANGELOG.md, self-contained Linear work records, work-tagged tentative
+  CHANGELOG.md, self-contained tracker records, work-tagged tentative
   llm-wiki notes, and durable local knowledge. Applies whenever
   repository-context workflows decide which file or store should own
   information or distill working context when work closes.
@@ -54,7 +54,7 @@ explanation when useful.
 | `AGENTS.md` | Stable instructions agents must follow while working in the repository | Keep actionable rules, constraints, required checks, and prohibitions here. Do not use it as the codebase explanation. |
 | `CHANGELOG.md` | User-visible release outcomes | Maintain it as a near-default repository document. Follow the repository's existing changelog convention; otherwise use Keep a Changelog categories and record final outcomes rather than work narration. |
 | ADR | The context, alternatives, and outcome of a design decision whose history has clear shared value | Do not introduce ADRs from the start by default. Add one only when preserving the decision itself is clearly worth its maintenance cost, and follow the repository's chosen ADR location and format. |
-| Linear | All context a fresh executor needs to carry one finite work item from open to close, plus its progress and completion record | Keep the work self-contained even when this duplicates canonical context elsewhere. The duplication serves execution; it does not replace current repository documentation. |
+| Work tracker | All context a fresh executor needs to carry one finite work item from open to close, plus its progress and completion record | Keep the work self-contained even when this duplicates canonical context elsewhere. The duplication serves execution; it does not replace current repository documentation. |
 | Tentative llm-wiki | Discussion, hypotheses, investigation paths, interim findings, and provisional conclusions from one sequence of work | Group the sequence with a temporary work tag and distill it when that work closes. |
 | Durable llm-wiki | Long-lived knowledge useful to the user or their agents but not valuable enough to share with product users or repository developers | Keep local research and history here only after the shared-value decision below. |
 
@@ -68,15 +68,17 @@ Tag every tentative llm-wiki note from the same finite sequence of work with the
 same `work-<stable-identifier>` tag so `llm-wiki-distill` can select the cohort
 later.
 
-- When the work has a Linear Issue, derive the stable identifier from its
-  lowercase Issue identifier: `ENG-123` becomes `work-eng-123`.
+- When the work has a tracker Issue, derive the stable identifier from its
+  provider and complete locator: Linear `ENG-123` becomes
+  `work-linear-eng-123`; octa repository `acme` Issue `12` becomes
+  `work-octa-acme-12`.
 - Without an Issue, choose a concise stable slug for the work:
   `work-repository-context-design`.
 
 The work tag is a temporary cohort selector, not a maturity state or a reserved
 llm-wiki axis. Keep ordinary topic tags and wikilinks according to the installed
-llm-wiki skills. Delegate note creation to `llm-wiki-capture` and reworking to
-`llm-wiki-distill`; do not reproduce their mechanics here.
+llm-wiki skills. Delegate note creation to `workflow-adapter-markdown` and
+reworking to `llm-wiki-distill`; do not reproduce their mechanics here.
 
 ## Distill at work completion
 
@@ -106,5 +108,6 @@ The sequence is fully distilled when no note retains its work tag.
 - `repository-context-pen-design` owns editable visual design after a calling
   documentation workflow fixes the audience, message, evidence, and placement.
 
-If a required sibling or llm-wiki operation skill is unavailable, stop before
-changing its canonical artifact rather than reconstructing its workflow here.
+If a required sibling, workflow adapter, or llm-wiki operation skill is
+unavailable, stop before changing its canonical artifact rather than
+reconstructing its workflow here.

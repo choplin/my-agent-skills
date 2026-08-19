@@ -1,7 +1,7 @@
 ---
 name: orchestration-toolkit-execute
 description: >-
-  Executes one groomed Linear Issue inline, with no delegation and no graph:
+  Executes one groomed tracker Issue inline, with no delegation and no graph:
   recovers the Issue's durable knowledge, prepares its worktree, implements and
   commits in this session, decides reversible calls autonomously while parking
   one-way doors, keeps checkpoint comments, runs risk-based adversarial review,
@@ -15,7 +15,7 @@ metadata:
 # Execute one Issue
 
 One groomed Issue, one coherent change, driven through implementation and
-verification in this session. It reaches Done only when `linear-base`'s
+verification in this session. It reaches Done only when the selected provider's
 integration gate passes; otherwise it remains In Progress or In Review.
 
 The Issue already says **what** to build; this skill decides **how** and does it.
@@ -24,20 +24,24 @@ scheduling. That lightness is the point: `orchestration-toolkit-orchestrate`
 exists for work that genuinely needs delegation, and paying its control-plane cost
 for a single node buys nothing.
 
-Apply `linear-base` for Linear mechanics, installed llm-wiki skills for durable
-knowledge, `wtm-worktree` for worktree operations, and `git-helpers-commit` for
-every commit.
+Apply `workflow-adapter-tracker` for Issue reads, comments, and transitions;
+installed llm-wiki skills for durable knowledge; `wtm-worktree` for worktree
+operations; and `git-helpers-commit` for every commit. The calling provider
+start skill supplies its implementation-completion procedure and any protected
+mutation handle, such as an octa lease. If neither was supplied, return to
+`linear-start` or `octa-start` before execution rather than guessing a provider
+lifecycle.
 
 ## Invariants
 
 - One Issue produces one coherent, independently reviewable change on one branch.
-- Linear owns executable state and the running record; llm-wiki owns durable
+- The tracker owns executable state and the running record; llm-wiki owns durable
   design and decision rationale; the repository owns implementation reality.
 - The Issue's acceptance is the target. Reject speculative features, future-only
   flexibility, and abstractions without a present second use.
 - Never silently resolve a one-way-door decision with a plausible default.
-- Keep Linear identifiers and URLs out of branches, commits, repository files, and
-  PR text, as required by `linear-base`.
+- Keep tracker identifiers and URLs out of branches, commits, repository files,
+  and PR text.
 - Do not rewrite the Issue's requirements. Re-grooming is a separate operation.
 
 ## The decision split
@@ -64,8 +68,8 @@ Read the Issue in full: description, acceptance, comments, labels, relations, an
 status. Then confirm it is actually executable:
 
 - its acceptance is observable — a human could confirm it from outside the code;
-- it is self-complete under `linear-base` (no unstated dependency on another
-  Issue's outcome);
+- it is self-complete: its description contains the context, inputs,
+  acceptance, and constraints a fresh executor needs;
 - any `blocked by` relation is Done.
 
 If a blocker is open, stop and say so. If the Issue belongs to a Project with
@@ -82,20 +86,20 @@ research, and decision records the Issue depends on. Search from the Issue's own
 terminology rather than loading the whole wiki, and follow only the links needed
 to interpret scope, constraints, or acceptance.
 
-Note any contradiction between the Issue, the wiki, and the repository. Linear is
-authoritative for current execution state, llm-wiki for durable rationale, and the
-repository for actual behavior. A material contradiction is a Parking Lot entry,
-not something to resolve by preference.
+Note any contradiction between the Issue, the wiki, and the repository. The
+tracker is authoritative for current execution state, llm-wiki for durable
+rationale, and the repository for actual behavior. A material contradiction is
+a Parking Lot entry, not something to resolve by preference.
 
 ### 3. Prepare the workspace
 
 Recover or create the Issue's worktree through `wtm-worktree`, based on the
 repository's normal target branch. Name the branch after the deliverable, never
-after the Linear identifier, and record the Issue in the worktree note.
+after the tracker identifier, and record the Issue in the worktree note.
 
 ### 4. Open the run record
 
-Post one comment on the Issue before driving:
+Use `workflow-adapter-tracker` to post one comment on the Issue before driving:
 
 ```markdown
 ## Run — <timestamp>
@@ -124,22 +128,22 @@ durable state, and a second copy on disk only goes stale.
 
 Work the Progress list top to bottom.
 
-- Implement and verify without committing; the `linear-base` completion
+- Implement and verify without committing; the caller-supplied completion
   procedure owns the reviewed commit.
 - Apply the decision split to every call that arises.
 - When a step is blocked only by a parked decision, skip it and continue.
 - Update the record at meaningful boundaries and before the session ends by
   posting a fresh checkpoint comment — one current snapshot of Progress, Decision
   Log, and Parking Lot, not an event log. Do not copy diffs or test output into
-  Linear; git holds those. The record carries the judgment git cannot.
+  the tracker; git holds those. The record carries the judgment git cannot.
 
 If the Parking Lot fills faster than Progress — most steps need a parked decision
 — the Issue was not groomed enough to execute. Stop, post what you found, and
-route to `linear-groom` (the requirements need settling) or `inception` (the
-concept itself is unformed).
+route to the selected provider's groom skill when the requirements need
+settling, or to `inception` when the concept itself is unformed.
 
-If the run must pause mid-Issue, use `linear-handoff` so a different session can
-resume from the Issue alone.
+If the run must pause mid-Issue, use the selected provider's handoff skill so a
+different session can resume from the Issue alone.
 
 ### 6. Verify
 
@@ -172,8 +176,8 @@ Bring the Parking Lot back in one pass: for each entry, the decision, why it was
 parked, what it blocks, the options, and your leaning. Decide them with the user,
 move each resolution into the Decision Log, then finish the work that was blocked.
 
-When nothing remains open, assemble these Issue-specific inputs for
-`linear-base`'s completion procedure:
+When nothing remains open, assemble these Issue-specific inputs for the
+caller-supplied implementation-completion procedure:
 
 - the acceptance table — each criterion mapped to observable evidence;
 - the prospective commit scope;
@@ -181,17 +185,17 @@ When nothing remains open, assemble these Issue-specific inputs for
 - adversarial findings, or the recorded reason none were sought;
 - residual risks and verification gaps.
 
-Read and apply `linear-base`'s
-`references/implementation-completion.md` from pre-commit review through its
-terminal outcome. That procedure owns commit continuation, integration, Linear
-status, and cleanup; do not reproduce those branches here. Return the outcome
-to the caller after the procedure finishes or reaches an explicit stop.
+Apply that procedure from pre-commit review through its terminal outcome. It
+owns commit continuation, integration, tracker status, and cleanup; do not
+reproduce those branches here. Route its requested Issue operations through
+`workflow-adapter-tracker`, preserving any supplied mutation handle. Return the
+outcome to the caller after the procedure finishes or reaches an explicit stop.
 
 ## When NOT to use
 
 - Several Issues with dependencies between them → `orchestration-toolkit-orchestrate`.
 - No Issue behind the work — an ad-hoc task to run autonomously → `exec-plan`.
-- The Issue's requirements are not settled → `linear-groom`.
+- The Issue's requirements are not settled → the selected provider's groom skill.
 - The concept itself is unformed → `inception`.
 - A trivial change with self-evident completion → just do it and note it on the Issue.
 

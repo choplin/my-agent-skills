@@ -13,7 +13,7 @@ they exchange.
 5. Decision Authority
 6. Readiness state machine
 7. Durable ownership
-8. Linear mapping
+8. Tracker mapping
 9. Issue execution contract
 10. Handoff contracts
 11. Cross-phase invariants
@@ -81,7 +81,7 @@ Assign exactly one disposition to each candidate capability:
 
 | Disposition | Meaning | Operational treatment |
 |---|---|---|
-| **In Scope** | Clears the active Scope Policy's inclusion test. | May become executable Linear work. |
+| **In Scope** | Clears the active Scope Policy's inclusion test. | May become executable tracker work. |
 | **Deferred** | Potentially valuable but not required by the inclusion test, and safely addable later. | Preserve in llm-wiki with exclusion rationale; do not create executable issues. |
 | **Rejected** | Inconsistent, duplicated, obsolete, or unjustified. | Preserve rationale only when it prevents re-litigation. |
 
@@ -112,7 +112,7 @@ shape is:
 research → design → affected implementation
 ```
 
-Represent ordering with Linear `blocked by`, not hierarchy.
+Represent ordering with the tracker's `blocked by` relation, not hierarchy.
 
 ## 5. Decision Authority
 
@@ -163,7 +163,7 @@ Do not mark READY merely because unknowns have issues. Do not mark
 READY_AFTER_RESOLUTION unless the resolution issues themselves are executable
 without hidden context.
 
-The readiness value and a proportional blocker summary live in the Linear
+The readiness value and a proportional blocker summary live in the tracker
 Project description. Detailed rationale lives in llm-wiki and issue records.
 
 ## 7. Durable ownership
@@ -177,26 +177,26 @@ Project description. Detailed rationale lives in llm-wiki and issue records.
 - planning invalidation evidence;
 - links among relevant PRD, design, research, and decision notes.
 
-### Linear owns current executable state
+### The tracker owns current executable state
 
 - the finite Project and its readiness summary;
 - observable delivery Milestones;
 - atomic research, design, and implementation Issues;
-- Type/Repo labels, statuses, priorities, and `blocked by` relations;
+- work type, lifecycle state, placement, and `blocked by` relations;
 - issue-local Inputs, Acceptance, Constraints, completion notes, and handoffs;
 - the next unblocked work.
 
 Keep knowledge and execution consistent without copying entire notes between
-systems. Linear may use internal issue identifiers and links. Do not write those
+systems. The tracker may use internal Issue identifiers and links. Do not write those
 identifiers or URLs into llm-wiki.
 
-Apply `llm-wiki-base` for scope, frontmatter, slug links, setup, and write
-mechanics. Apply `linear-base` for generic lifecycle, labels, grouping,
-completion notes, and repository resolution.
+Use `workflow-adapter-markdown` for durable Markdown writes and
+`workflow-adapter-tracker` for Project, Milestone, Issue, relation, and
+transition operations. Provider mechanics stay behind those adapters.
 
-## 8. Linear mapping
+## 8. Tracker mapping
 
-| Planning concept | Linear primitive | Rule |
+| Planning concept | Tracker primitive | Rule |
 |---|---|---|
 | Finite outcome | **Project** | One completable outcome, not a permanent repo bucket. |
 | Observable delivery stage | **Milestone** | Use only when distinct stages earn structure; never solely as a review gate. |
@@ -355,7 +355,7 @@ unblocked implementation work in Todo.
 Required when readiness is READY_AFTER_RESOLUTION:
 
 - confirmed Outcome Contract, Scope Policy, and Scope Disposition in llm-wiki;
-- Linear Project with readiness summary;
+- tracker Project with readiness summary;
 - unknown register;
 - self-complete Todo research/design issues;
 - provisional affected implementation issues in Backlog;

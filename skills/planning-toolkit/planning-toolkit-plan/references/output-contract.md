@@ -58,7 +58,7 @@ Readiness: READY / READY_AFTER_RESOLUTION / BLOCKED
 - Notes to create:
 - Notes to update:
 
-### Linear
+### Tracker
 
 - Project:
 - Milestones:
@@ -131,8 +131,9 @@ Scope policy: <policy name, or "default (outcome necessity)">
 Add a policy tag alongside `planning` when the active policy names one, so the
 record can be found by the standard it was cut against.
 
-Use llm-wiki's template and write verbs; do not hand-author incompatible
-frontmatter. Link source PRD/design/decision notes using slug-form wikilinks.
+Pass the completed Markdown and requested tags to
+`workflow-adapter-markdown`; do not hand-author incompatible frontmatter. Link
+source PRD/design/decision notes using slug-form wikilinks.
 
 Use the Project, Milestone, Issue, and readiness formats in
 `planning-toolkit-base`'s `references/delivery-model.md`. Those are shared

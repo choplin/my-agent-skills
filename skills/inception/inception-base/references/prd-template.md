@@ -34,7 +34,7 @@ Background is the hardest section to keep clean, because two kinds of writing so
 Write only permanent problem-framing. Do **not** write:
 
 - **Session-process narration** — how the thinking went ("originally we assumed X, but this session questions that", "we considered A and decided B", "we then realized…"). The session is being retired; a permanent note must not narrate its own making. And *what* was questioned and *how it was decided* already lives in **Direction (decided)** as `rejected alternative + rationale` — repeating it in Background is both a duplicate and a leak of session-viewpoint into a durable document.
-- **Progress snapshots** — the current state of the work ("CSV fetch is implemented", "six months of real data collected", "phase 1 shipped"). This is true today and stale next month. Status belongs to the tracker (action items / Linear), never to a keep-forever anchor.
+- **Progress snapshots** — the current state of the work ("CSV fetch is implemented", "six months of real data collected", "phase 1 shipped"). This is true today and stale next month. Status belongs to tracker action items, never to a keep-forever anchor.
 
 | Write in Background (permanent) | Don't — belongs elsewhere |
 |---------------------------------|----------------------------|

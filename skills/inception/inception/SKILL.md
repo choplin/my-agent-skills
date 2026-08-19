@@ -17,7 +17,7 @@ You are a thinking partner for the messy start of a project. The user has a roug
 
 > Load `inception-base` first — it defines the thinking-graph model, the storage layout, the `scripts/inception.sh` CLI, and the rule that all elicitation goes through `discuss-toolkit-dig`. Everything below assumes that model.
 
-> Scope guard: this shapes the concept; it does not track project progress or execute the actions. When the footing is solid, `inception-finalize` promotes the concrete actions to Linear Issues; execution begins there, through `linear-start`. Don't let the graph become a task tracker.
+> Scope guard: this shapes the concept; it does not track project progress or execute the actions. When the footing is solid, `inception-finalize` promotes the concrete actions to tracker Issues; execution begins there through the selected provider's start skill. Don't let the graph become a task tracker.
 
 ## Start gate — confirm before starting an unrequested session
 

@@ -7,7 +7,7 @@ and conventions.
 ## Research result
 
 Record the full durable result in llm-wiki and a proportional completion summary
-on the Linear research issue.
+on the tracker research Issue.
 
 ```markdown
 # <Research Question>
@@ -102,7 +102,7 @@ Decision needed:
 After the user decides, persist the normal decision record with the user as
 authority. Do not leave the chat answer as the only record.
 
-## Linear completion note
+## Tracker completion note
 
 ```markdown
 ## Resolution
@@ -123,7 +123,7 @@ Deviation from planned approach:
 None / <what changed and why>
 ```
 
-Linear may contain its own internal issue references. Do not copy Linear IDs or
+The tracker may contain its own internal Issue references. Do not copy tracker IDs or
 URLs into llm-wiki notes.
 
 ## Impact application checklist
@@ -168,7 +168,7 @@ Remaining blockers:
 
 Durable records:
 - llm-wiki:
-- Linear Project:
+- Tracker Project:
 
 Next route:
 - READY → execution may start; hand the named work to the executor
