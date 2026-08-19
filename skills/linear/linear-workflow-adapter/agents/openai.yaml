@@ -1,0 +1,4 @@
+interface:
+  display_name: "Linear Workflow Adapter"
+  short_description: "Write caller-owned work records to Linear"
+  default_prompt: "Use $linear-workflow-adapter to apply these work-record operations in Linear."

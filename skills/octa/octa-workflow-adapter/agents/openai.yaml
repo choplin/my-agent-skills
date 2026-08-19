@@ -1,0 +1,4 @@
+interface:
+  display_name: "octa Workflow Adapter"
+  short_description: "Write caller-owned work records through octa"
+  default_prompt: "Use $octa-workflow-adapter to apply these work-record operations through octa."

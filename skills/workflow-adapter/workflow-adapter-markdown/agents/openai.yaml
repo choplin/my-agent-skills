@@ -1,0 +1,4 @@
+interface:
+  display_name: "Markdown Workflow Adapter"
+  short_description: "Write completed Markdown to llm-wiki"
+  default_prompt: "Use $workflow-adapter-markdown to write this completed Markdown."

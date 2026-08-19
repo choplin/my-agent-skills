@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tracker Workflow Adapter"
+  short_description: "Route completed work-record operations"
+  default_prompt: "Use $workflow-adapter-tracker to apply these work-record operations."

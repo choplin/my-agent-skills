@@ -67,6 +67,17 @@ created again and never re-synced — report it as skipped and leave it alone.
 The footer is the only Linear reference octa carries. Strip it if a body is
 ever exported into a repository file, as `linear-base` requires.
 
+The completed repository migration is marked by an empty file shared by all
+worktrees:
+
+```sh
+git_common_dir=$(git rev-parse --path-format=absolute --git-common-dir)
+marker="$git_common_dir/octa-imported-from-linear"
+```
+
+If the marker already exists, report that this repository uses octa and stop.
+Do not use individual import footers as the repository-level completion signal.
+
 ## Flow
 
 ### 1. Confirm both sides
@@ -179,13 +190,27 @@ Only after the octa Issue exists and its migration comment is posted:
 If octa creation or the migration comment failed for an Issue, leave its Linear
 record untouched so the next run retries it.
 
-### 10. Report
+### 10. Mark the repository migrated
+
+List unfinished Linear Issues carrying `R` again. Only when none remain and
+this run has no failed or skipped-gap records, create the marker:
+
+```sh
+touch "$marker"
+```
+
+Do not create it after a narrowed or partial run while unfinished Issues remain.
+If creating the marker fails, report the migration as unmarked; tracker routing
+will continue to select Linear. The marker belongs inside the Git common
+directory, is shared by its worktrees, and is never committed.
+
+### 11. Report
 
 Report imported counts by state, the Projects and Milestones created, records
 skipped as already imported, failures with their reason, data deliberately
-dropped, and what still remains under `R` in Linear. Point to `octa-overview`
-for the resulting picture and `octa-groom` for bodies that do not yet meet the
-Todo standard.
+dropped, what still remains under `R` in Linear, and whether the migration
+marker was created. Point to `octa-overview` for the resulting picture and
+`octa-groom` for bodies that do not yet meet the Todo standard.
 
 Close with the octa feedback report as its own section, even when it is empty.
 It is the point of dogfooding the import, and it is the only place a capability
@@ -217,5 +242,6 @@ gap survives the run.
 ## Retiring this skill
 
 When no repository still tracks work in Linear, delete this skill directory and
-its row in the group README. The footers may stay as provenance or be removed
+its row in the group README. Remove the routing check at the same time; the
+markers may then be deleted. The footers may stay as provenance or be removed
 from the octa bodies; nothing else in the octa group depends on them.
