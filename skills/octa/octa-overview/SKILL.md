@@ -1,6 +1,6 @@
 ---
 name: octa-overview
-description: Gives a read-only snapshot of the current Git repository's octa work as a Markdown section per Project plus Project-unassigned Issues, with open, in progress, and closed counts and a list of the unfinished Issues by most recent update. Use when deciding what is active or next without changing tracker state.
+description: Gives a read-only snapshot of the current Git repository's octa work as a Markdown section per active Project plus Project-unassigned Issues, with open, in progress, and closed counts and a list of the unfinished Issues by most recent update. Use when deciding what is active or next without changing tracker state.
 metadata:
   description-role: documentation
 ---
@@ -62,10 +62,13 @@ to another command.
 
 ### 2. Partition and count
 
-Partition every `unfinished` Issue into its Project or **No Project**, matching
-on `project.id` against the `projects` result. Do not hide Issues assigned to a
-closed Project; show them under that Project and flag the inconsistent context.
-A Project is closed when its `stateType` is `closed`.
+Discard Projects whose `stateType` is `closed` before building the report.
+Never render a section for a closed Project, including when it has unfinished
+Issues. Do not move those Issues into **No Project**; they remain assigned to
+the closed Project and are outside this overview of current work.
+
+Partition the remaining `unfinished` Issues into their active Project or
+**No Project**, matching on `project.id` against the `projects` result.
 
 Count each block from the same response: `open` and `in progress` from the
 `unfinished` Issues by `stateType`, and `closed` from the `closed` Issues,
@@ -73,17 +76,18 @@ grouped by `project.id`, with the null-Project ones forming the **No Project**
 count. If `closed` was too large to paginate through, omit the closed count and
 say it was not counted; do not substitute a repository-wide number for it.
 
-A Project's `summary` is the purpose line. A Project with no Issue in any of
-the three counts is still a Project; report it with its zero row.
+An active Project's `summary` is the purpose line. An active Project with no
+Issue in any of the three counts is still current work; report it with its zero
+row.
 
 ## Report
 
-Write Markdown. Project is the top axis, so each Project is its own `##`
-section and the Issues inside it are a list. Do not write the report as prose,
-and do not use tables: the pipes and header rows are overhead the reader does
-not need. Do not split a Project into per-state subsections either — the extra
-headings stretch the block down the screen without adding a distinction the
-state note already carries.
+Write Markdown. Active Project is the top axis, so each active Project is its
+own `##` section and the Issues inside it are a list. Do not write the report
+as prose, and do not use tables: the pipes and header rows are overhead the
+reader does not need. Do not split a Project into per-state subsections either
+— the extra headings stretch the block down the screen without adding a
+distinction the state note already carries.
 
 Order the sections by activity: a Project with `in progress` work outranks one
 sitting entirely in `open`. Keep the **No Project** section last, and keep it
@@ -196,9 +200,9 @@ Swap the cache path for the new resolver
 ────────────────────
 ```
 
-If neither a Project nor a Project-unassigned unfinished Issue exists, say that
-no current work was found in this repository rather than printing empty
-sections.
+If neither an active Project nor a Project-unassigned unfinished Issue exists,
+say that no current work was found in this repository rather than printing
+empty sections. Closed Projects do not prevent this empty result.
 
 Close with a short evidence-based interpretation: what is changing, what is
 ready next, and any blocker or concentration of risk. Write it as a plain
