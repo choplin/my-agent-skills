@@ -50,7 +50,9 @@ explanation when useful.
 |---|---|---|
 | Root `README.md` | The product's user-facing entrance: what it is, why it matters, and the shortest path to first success | Keep it focused and route readers to the documentation site for detail. Apply `repository-context-readme` for creation or substantial revision. |
 | Documentation site source | Detailed user documentation after first success | Introduce it when the README can no longer carry the detail clearly. Keep its source in the same repository by default, follow the site's established layout, and avoid prescribing a directory name here. |
+| Developer documentation (`docs/` by default) | The context repository developers need to understand, implement, verify, and safely change the product | Keep it distinct from product-user documentation. Give it one overview that establishes the mental model, then link to independently useful detail rather than turning the overview into an exhaustive reference. Follow an existing developer-documentation location when the repository has one. |
 | `docs/architecture.md` | The current codebase structure, concepts, ownership, relationships, design philosophy, and the reasons the present architecture takes its shape | Keep it explanatory rather than imperative. Apply `repository-context-codebase`; follow an existing architecture entry point when the repository already has one. |
+| `docs/decision-log.md` | A chronological index of design decisions: what was decided or changed, when, and what current document owns the resulting rule | Keep entries concise and link to the canonical current design document and relevant tracker or change when useful. Use it to reveal how the design accumulated, not as the source of current design truth or as a general work diary. Follow an existing decision-log location and format when present. |
 | `AGENTS.md` | Stable instructions agents must follow while working in the repository | Keep actionable rules, constraints, required checks, and prohibitions here. Do not use it as the codebase explanation. |
 | `CHANGELOG.md` | User-visible release outcomes | Maintain it as a near-default repository document. Follow the repository's existing changelog convention; otherwise use Keep a Changelog categories and record final outcomes rather than work narration. |
 | ADR | The context, alternatives, and outcome of a design decision whose history has clear shared value | Do not introduce ADRs from the start by default. Add one only when preserving the decision itself is clearly worth its maintenance cost, and follow the repository's chosen ADR location and format. |
@@ -61,6 +63,11 @@ explanation when useful.
 Other files and document types are outside this default set. Honor them when an
 existing repository convention uses them, but do not introduce them from this
 base.
+
+Within canonical repository documentation, give each settled claim one
+authoritative home. Other documents may summarize it at the depth their readers
+need, but should link to that home instead of reproducing its full detail. This
+does not prohibit deliberate execution-context duplication in a work tracker.
 
 ## Tentative work tags
 

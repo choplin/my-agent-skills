@@ -95,7 +95,8 @@ Add a focused section only when it materially changes the mental model:
 - API details already owned by generated reference or source-level docs;
 - tentative hypotheses, unresolved discussion, and session narration;
 - open work, milestones, migration progress, and future architecture;
-- a chronological record of decisions or alternatives no longer binding;
+- a chronological record of decisions or alternatives no longer binding; put
+  that sequence in the repository's decision log when it has continuing value;
 - low-level call graphs or diagrams whose upkeep follows code churn;
 - claims copied from stale docs without checking the implementation.
 
@@ -112,9 +113,11 @@ Attach current rationale to the choice it explains. For example:
 > entry points share the same use cases.
 
 The first half is a boundary; the second makes the boundary predictable. Keep
-the rationale only while that reason remains true and relevant. Put detailed
-history in the repository only when local conventions require it or future
-contributors need the history itself, rather than the current constraint.
+the rationale only while that reason remains true and relevant. Keep the
+current rule and rationale in their canonical design document. When the order
+of decisions has continuing value, record a concise chronological entry in the
+decision log and link back to that canonical document; do not make the log a
+second explanation of the current design.
 
 Use stable anchors such as `internal/orders`, `OrderRepository`, or a manifest
 name. Avoid line coordinates, commit-pinned links, and lists of every participant
@@ -132,9 +135,23 @@ exists, start with one `docs/architecture.md`. A useful default reading order is
 5. representative flows;
 6. guidance for common changes.
 
+Treat the entry point and other top-level developer documents as a compressed
+mental model. Each should cover one coherent unit at the depth needed to hold
+its shape, relationships, and governing principles in mind. Precise contracts,
+procedures, edge cases, canonical forms, worked examples, and detailed defenses
+of alternatives belong in focused design documents when they serve
+implementation, verification, or evaluation more than initial comprehension.
+
 Split only when readers can enter through one overview and the extracted topic
-is independently coherent. A typical split retains `docs/architecture/README.md`
-as the entry point and moves concepts, boundaries, or flows into adjacent files.
+is independently coherent. Split detail by design topic rather than by the
+source document it came from: one overview may link to several topics, and one
+topic may support several overview documents. A typical split retains
+`docs/architecture/README.md` as the entry point and moves focused detail into
+`docs/design/` or the repository's established equivalent.
+
+Give each settled claim one canonical home. An overview may summarize a
+detailed rule at the depth needed for the mental model, then link to its precise
+form and rationale instead of restating them.
 
 Diagrams are optional. Use one when it makes a relationship, ownership model,
 or multi-step flow materially easier to understand than prose. Keep its source
