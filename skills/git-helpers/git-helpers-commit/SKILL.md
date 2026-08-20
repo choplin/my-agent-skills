@@ -13,24 +13,15 @@ metadata:
 # Create Review-Friendly Git Commits
 
 Describe one coherent change at the level a future reader needs: a concise
-outcome in the subject, plus the non-obvious motivation and solution in the
-body. Treat repository and user instructions as authoritative; use this
-workflow to apply them consistently.
+outcome in the subject, plus only the non-obvious motivation, approach, or
+consequences in the body. Repository and user instructions take precedence.
 
-## 1. Establish the operation and authority
+## 1. Confirm the operation and scope
 
-Determine whether the task is:
-
-- drafting a message only;
-- creating a commit from the index;
-- amending an existing commit; or
-- composing the final message for a squash or rebase.
-
-Do not stage, unstage, split, amend, squash, or otherwise rewrite history unless
-the user has authorized that operation. Authorization to create a normal commit
-does not imply authorization to amend or squash.
-
-## 2. Inspect the exact commit scope
+Distinguish drafting a message, creating a normal commit, amending, and writing
+the final message for a squash or rebase. Do not stage, unstage, split, amend,
+squash, or rewrite history without authorization for that specific operation;
+authorization for a normal commit does not authorize a history rewrite.
 
 For a normal commit, inspect at least:
 
@@ -40,149 +31,70 @@ git diff --cached --stat
 git diff --cached
 ```
 
-Use the staged diff as the sole description scope. Consult unstaged and
-untracked changes only to detect omissions or accidental scope; do not describe
-them as committed work.
+The staged diff is the sole description scope. Use unstaged and untracked
+changes only to detect omissions or accidental scope. Stop if the staged scope
+is empty. If it contains independent concerns that cannot be truthfully
+summarized as one outcome, explain the split and ask how to proceed.
 
-For an amend, also inspect the current commit message and the effective change
-against its first parent. For a squash or rebase, inspect the complete commit
-range and the final combined diff against the base. Treat intermediate commit
-subjects as evidence, not as text to copy into the final body.
+For an amend, squash, or rebase, read
+`references/history-rewrites.md` before inspecting the effective change or
+writing the message.
 
-If the scope is empty, stop. If it contains independent concerns that cannot be
-truthfully summarized as one outcome, explain the split and ask the user how to
-proceed; do not conceal the mismatch with a vague subject.
-
-## 3. Resolve the repository convention
+## 2. Match the repository convention
 
 Apply conventions in this order:
 
 1. explicit repository or user instructions;
 2. global agent instructions;
-3. stable patterns in recent commit history;
+3. stable patterns in recent commit history; and
 4. Conventional Commits as the fallback.
 
-Inspect recent history for established scope names, domain vocabulary, and
-message granularity. Do not let inconsistent history override an explicit rule.
+Inspect enough recent history to identify established scopes, vocabulary, and
+message granularity. When no more specific rule exists, use an imperative
+`type(scope): description` subject with `feat`, `fix`, `refactor`, `build`,
+`docs`, `test`, or `chore`; omit the scope when none covers the whole change.
 
-When no more specific rule exists, use:
+## 3. Write only what future readers need
 
-```text
-type(scope): imperative description
-```
+Before drafting, identify the outcome and any non-obvious motivation, approach,
+or consequence supported by the diff, repository context, or user intent. Ask
+when a necessary motivation is unknown; do not invent it.
 
-Use `feat`, `fix`, `refactor`, `build`, `docs`, `test`, or `chore`. Omit the
-scope when the change is not limited to one clear area.
+The subject describes the central outcome, not edited files or work performed.
+It covers only the final state, does not join independent outcomes, and marks
+breaking changes when the repository requires it.
 
-## 4. Model the change before writing
-
-State these facts privately before drafting:
-
-- **Outcome:** what the repository gains or changes.
-- **Motivation:** why the change is necessary now.
-- **Approach:** how the final implementation solves the problem.
-- **Consequences:** important behavior, compatibility, migration, security,
-  performance, constraints, or deliberate exclusions.
-
-Use only facts supported by the diff, repository context, or the user's stated
-intent. If a load-bearing motivation cannot be established, ask rather than
-inventing it.
-
-## 5. Write the subject
-
-Summarize the central outcome, not the edited files or the work performed.
-
-Prefer:
-
-```text
-feat(git-helpers): add consistent commit message guidance
-```
-
-Avoid:
-
-```text
-docs(git-helpers): update SKILL.md and README
-```
-
-Keep the subject concise and:
-
-- use the repository-required grammatical mood;
-- describe only the final state, never intermediate work;
-- avoid joining independent outcomes with `and`;
-- use a scope only when one name accurately covers the whole change; and
-- mark breaking changes according to the repository's Conventional Commit
-  policy when applicable.
-
-## 6. Decide whether the body carries useful information
-
-Write a body when any of these is true:
-
-- the motivation is not obvious from the subject and diff;
-- multiple files or layers implement one coordinated design;
-- the change embodies a design decision or meaningful trade-off;
-- behavior, compatibility, migration, security, or performance changes;
-- a constraint or deliberate non-goal would otherwise be lost;
-- a small diff has a non-obvious reason; or
-- a squash combines several implementation steps into one final outcome.
-
-Allow a one-line message only when the subject fully explains a genuinely
-trivial change, such as a typo, semantics-preserving wording edit, or mechanical
-formatting. Judge semantic weight, not line or file count.
-
-Structure a typical body as:
+Add a body only when the subject and diff do not preserve an important reason,
+design decision, coordinated approach, behavioral consequence, constraint, or
+non-goal. A one-line message is sufficient for a genuinely trivial change.
+When a body is useful, normally write:
 
 ```text
 <Why the change was necessary.>
 
-<How the final solution addresses it, including important constraints or
-consequences.>
+<How the final solution addresses it and any important consequence.>
 ```
 
-Use bullets only for several independently reviewable consequences. Do not pad
-the body with file lists, diff narration, a work diary, abandoned intermediate
-approaches, conversational context, or claims that were not verified.
+Do not pad it with file lists, diff narration, a work diary, abandoned
+approaches, conversational context, or unverified claims.
 
-## 7. Satisfy pre-commit checks
+## 4. Check and execute
 
-For an executed create, amend, squash, or rebase commit, run the
-repository-required relevant tests and checks before committing. If a required
-check cannot run, report the gap and do not imply that it passed. Drafting a
-message alone does not require running checks.
+Drafting a message alone requires no test run. Before an executed commit or
+rewrite, run the repository-required relevant checks. Report any check that
+cannot run; do not imply it passed.
 
-Treat verification as a commit precondition, not routine body content. Mention
-it in the message only when the verification method or limitation is important
-to understanding the change or a repository rule requires it.
+Show the message when the user requested a draft or when missing context, mixed
+scope, or a rewrite decision requires input. Otherwise, after authorization and
+checks, execute without another confirmation and without changing the staged
+scope.
 
-## 8. Execute without changing the agreed scope
+Use one `git commit -m` argument per paragraph. If the message contains bullets,
+backticks, `$`, quotes, or other shell-sensitive content, read
+`references/message-transport.md` before executing. Never encode newlines as
+literal `\n` or `\n\n` in a commit-message argument or file.
 
-Show the proposed message when the user requested a draft or when missing
-context, mixed scope, or history rewriting requires a decision. Otherwise, once
-the user has authorized the commit and the scope is coherent, create it without
-adding an unnecessary confirmation step.
-
-Pass the commit message so the shell never has to interpret newline escapes.
-
-Default to one `-m` per paragraph. Git joins multiple `-m` values with a blank
-line, which is the correct way to structure subject and body:
-
-```bash
-git commit -m "feat(scope): summarize the outcome" \
-  -m "Why the change was necessary." \
-  -m "How the final solution addresses it."
-```
-
-Use a message file (`git commit -F path`) only when the body needs bullets,
-backticks, `$`, quotes, or other content that is awkward to quote safely in
-shell arguments. Write the file with real newlines; do not encode them as
-escape sequences.
-
-Never put literal `\n` or `\n\n` inside a `-m` argument, a heredoc, or a
-message file in place of an actual newline. Never rely on a single `-m` plus
-escaped newlines, or on `echo -e` / similar, to assemble a multi-paragraph
-message. Never stage additional files merely to make the message more
-complete.
-
-## 9. Verify the recorded result
+## 5. Verify the recorded result
 
 After committing, inspect:
 
@@ -192,12 +104,10 @@ git show --stat --oneline HEAD
 git status --short
 ```
 
-Confirm that the recorded message is exact, the commit contains the intended
-scope, and remaining working-tree changes are reported accurately. If commit
-creation failed, stop and report the failure rather than presenting the draft
-message as committed.
+Confirm that the message is exact, the commit contains the intended scope, and
+remaining changes are reported accurately. If creation failed, report the
+failure rather than presenting a draft as committed.
 
-When invoked inside a broader workflow, return control to that workflow after
-verification. An ordinary commit request does not cancel the caller's remaining
-steps; end the broader workflow here only when the user explicitly requested
-commit-only behavior.
+When called from a broader workflow, return control after verification; a
+commit request does not cancel the caller's remaining steps unless the user
+requested commit-only behavior.
