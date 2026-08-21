@@ -43,6 +43,7 @@ Also check for multiple templates in `.github/PULL_REQUEST_TEMPLATE/` directory.
 - You MUST use it as the structure for the PR body
 - Fill in every section of the template — do NOT skip, remove, or reorder any sections
 - If a section is not applicable, write "N/A" instead of omitting it
+- In the first section that describes the PR, begin with a standalone `This PR <what>.` sentence, then explain the background and motivation in a new paragraph
 
 **If no template is found:**
 - Use the default format described in the "Default PR Body Format" section below
@@ -69,7 +70,9 @@ Use this format only when no PR template exists in the repository:
 
 ```
 ## Summary
-<1-3 bullet points describing the changes>
+This PR <states what the PR does in one sentence>.
+
+<Explain the background and why the change is needed.>
 
 ## Test Plan
 <How to verify the changes>

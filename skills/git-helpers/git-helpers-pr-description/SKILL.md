@@ -13,7 +13,7 @@ metadata:
 
 # Writing a Review-Friendly PR Description
 
-The goal is not to list what changed — `git diff` already does that. The goal is to give a reviewer the **shortest path to a confident review**: why this PR exists, what approach was chosen, and where in the code each piece of that approach lives.
+The goal is not to list what changed — `git diff` already does that. The goal is to give a reviewer the **shortest path to a confident review**: what this PR does, why it exists, what approach was chosen, and where in the code each piece of that approach lives.
 
 ## Language
 
@@ -30,7 +30,7 @@ Use this skill for PRs that are *non-trivial* to review. Heuristics — any one 
 - Encodes a **design choice with viable alternatives** that a reviewer would reasonably ask about
 - Has a **non-obvious motivation** (incident, compliance, perf regression, deprecation)
 
-For small, single-concern PRs (typo fix, dependency bump, one-line bugfix, isolated test), a Summary of 1–3 bullets is enough — **do not invoke this skill**.
+For small, single-concern PRs (typo fix, dependency bump, one-line bugfix, isolated test), a brief Summary with the same **what first, then why** opening is enough — **do not invoke this skill**.
 
 If unsure, ask the user. Do not pad a small PR into a long description.
 
@@ -55,27 +55,31 @@ Also read, if present:
 
 If a commit references an incident, ticket, or ADR, **open it** and capture the motivation in your own words. Do not just link and hope.
 
-### 2. Build the three load-bearing answers
+### 2. Build the four load-bearing answers
 
 Before drafting, write one or two sentences for each of these. If you cannot, you do not yet understand the PR well enough to describe it.
 
 | Question | What the reviewer needs |
 |----------|-------------------------|
+| **What** does this PR do? | A one-sentence statement of the outcome or behavior introduced by this PR. |
 | **Why** does this PR exist? | The problem, the trigger, the constraint. Not "to add X" — *why* X is needed now. |
 | **How** was it solved (the design)? | The approach, the key decisions, what was rejected and why. |
 | **Where** does each design choice live in the diff? | The mapping from idea → file/module. This is the part reviewers cannot recover from `git diff`. |
 
-These three become the spine of the description.
+These four become the spine of the description.
 
 ### 3. Description structure
 
 When no template applies (template handling — §4), use this structure. Drop sections that genuinely have nothing to say; do not pad.
 
 ```markdown
-## Why
+## Summary
 
-<1–3 short paragraphs. State the problem and the trigger. Link issue/incident/spec if any.
-If there is a deadline, constraint, or external driver, name it.>
+This PR <states what the PR does in one sentence>.
+
+<In 1–3 short paragraphs, state the background, problem, and trigger. Link
+issue/incident/spec if any. If there is a deadline, constraint, or external
+driver, name it.>
 
 ## Approach
 
@@ -124,7 +128,7 @@ If the repository has a PR template (`.github/pull_request_template.md` or varia
 
 - **Use the template's section layout as-is.** Do not delete, reorder, or rename its sections.
 - Fill each section with content shaped by §2 and the guidance in §3. Examples:
-  - Template's "Summary" section → write the **Why + one-sentence Approach**, not a bullet list of changed files.
+  - Template's first descriptive section (often "Summary", "Overview", or "Why") → begin with a standalone `This PR <what>.` sentence, then write the **background/Why** in a new paragraph. Include a one-sentence Approach afterward if the template has no better home for it.
   - Template's "Changes" / "What changed" → write the **design → code mapping** from §3, not a regurgitation of the diff.
   - Template's "Test Plan" / "How to verify" → write the **Verification** content from §3.
 - If a template section has no relevant content, write `N/A` and keep it.
@@ -140,7 +144,8 @@ If the repository has a PR template (`.github/pull_request_template.md` or varia
 
 Re-read the draft from a reviewer's perspective who has never seen the branch. Verify:
 
-- [ ] Reading **only the Why** tells the reviewer whether they should care about this PR.
+- [ ] The first descriptive section opens with a standalone sentence beginning `This PR` that tells the reviewer what the PR does.
+- [ ] The next paragraph gives the background and tells the reviewer why they should care about this PR.
 - [ ] Reading **only the Approach** lets them predict what the diff broadly looks like.
 - [ ] The **design → code map** lets them open the right file first.
 - [ ] No section restates `git diff` (file lists, hunk counts, "renamed X to Y in 12 places") without adding meaning.
@@ -152,7 +157,7 @@ Re-read the draft from a reviewer's perspective who has never seen the branch. V
 
 - **Commit log dump.** Reviewers can read `git log`. Copy-pasting commit subjects as the description adds nothing.
 - **File-by-file walkthrough as the whole description.** A code map is useful *after* the design is explained, not in place of it.
-- **"This PR adds X" with no Why.** "Adds Redis-backed sessions" is a title, not a description.
+- **"This PR adds X" with no Why.** The required opening sentence establishes what; it does not replace the following background and motivation.
 - **Vague approach.** "Refactored auth for clarity" — refactored *how*, and what does clarity mean here?
 - **Hidden trade-offs.** If you chose A over B, say so. Reviewers will ask anyway; pre-empt it.
 - **Padding small PRs.** A 5-line bugfix does not need a Design section. Use the §1 heuristics — when in doubt, stay short.
