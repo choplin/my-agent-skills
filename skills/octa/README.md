@@ -7,6 +7,7 @@ solo lifecycle used by the Linear skill group.
 |---|---|
 | `octa-base` | Operating model, setup, authoring standard, lifecycle, review, completion, and CLI contract |
 | `octa-overview` | Read-only snapshot of active Projects and Project-unassigned work |
+| `octa-capture-feedback` | Capture one reported concern or improvement idea as a Backlog Issue |
 | `octa-start` | Pick up or resume one Issue, claim its lease, recover its workspace, and carry it into execution |
 | `octa-groom` | Turn one Project's Backlog into self-complete Todo work |
 | `octa-handoff` | Record resumable context on unfinished In Progress work |

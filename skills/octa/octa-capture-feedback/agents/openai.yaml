@@ -1,0 +1,4 @@
+interface:
+  display_name: "Capture Octa Feedback"
+  short_description: "Capture one concern as an octa issue"
+  default_prompt: "Use $octa-capture-feedback to capture this concern as one octa Issue."

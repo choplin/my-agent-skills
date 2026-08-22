@@ -27,10 +27,11 @@ task list.
 | Work | Skill |
 |---|---|
 | Survey current work | `octa-overview` |
+| Capture one reported concern or improvement idea | `octa-capture-feedback` |
 | Pick up or resume one Issue | `octa-start` |
 | Turn Backlog into ready Todo work | `octa-groom` |
 | Pause unfinished work for another session | `octa-handoff` |
-| Create, comment, transition, or close one record | Follow this skill directly |
+| Create other records, comment, transition, or close one record | Follow this skill directly |
 
 ## Model
 
