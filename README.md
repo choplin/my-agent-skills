@@ -201,7 +201,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **repository-context**
 - base → **workflow-adapter-markdown** and the selected Markdown provider's distillation operation when tentative work knowledge is written or closed
-- readme → base, pen-design (for an approved composed visual), **showcase-capture-plan** (when useful README media is missing and the user wants it produced), documentation-writer `(ext)`, writing-clearly-and-concisely `(ext)`
+- readme → base, pen-design (for an approved composed visual), **showcase-capture-plan** (when useful README media is missing and the user wants it produced), documentation-writer `(ext)`, **document-writing-standards**
 - pen-design → base, **showcase-capture-plan** (when real product evidence must be acquired), **showcase-pen-annotate** (when the job is only to annotate or frame one capture)
 - codebase → base, readme (when the main README needs substantial revision), pen-design (for an approved diagram), **lang-reference-\<language\>** when a matching installed skill exists
 
@@ -212,3 +212,6 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 
 **app-reference**
 - backend → **lang-reference-rust** when Rust is selected
+
+**obsidian**
+- obsidian-import-pdf → pdf `(ext)`

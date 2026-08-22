@@ -21,6 +21,9 @@ be installed into that vault, not globally.
 `obsidian-capture` reads pages through WebFetch, falling back to the browser
 tools and, for X/Twitter, to the bundled `scripts/fetch_x.py`.
 
+`obsidian-import-pdf` also requires an installed `pdf` skill for extraction and
+OCR guidance.
+
 ## Installation
 
 Install these skills through the repository's `skills add` workflow documented

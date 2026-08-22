@@ -115,7 +115,8 @@ direnv exec "$VAULT" pdfinfo "<source>"
 nix develop "$VAULT" --command pdfinfo "<source>"
 ```
 
-Use the **`anthropic-skills:pdf`** skill's techniques, run through that wrapper.
+Apply the installed `pdf` skill's extraction and OCR techniques, running every
+tool through that wrapper.
 
 Primary path — the poppler CLI:
 ```bash
@@ -275,7 +276,7 @@ the Captures link was added.
   `/obsidian-capture <url>` for web articles. Create nothing.
 - **Download/curl failed:** report and stop; create nothing.
 - **Local file missing:** report and stop.
-- **Scanned PDF (no extractable text):** OCR via the `anthropic-skills:pdf`
+- **Scanned PDF (no extractable text):** OCR via the installed `pdf` skill's
   approach before summarizing; if OCR is unavailable, still save the original and
   note in the summary that text could not be extracted.
 - **Duplicate filename:** report the existing file; do not overwrite (neither the

@@ -38,10 +38,10 @@ Preserve repository-specific conventions and unrelated user edits. For a revisio
 
 ## Load the companion writing skills
 
-Before setting the reading contract or drafting, load and apply the installed `documentation-writer` and `writing-clearly-and-concisely` skills. They are required companions to this skill, not optional references.
+Before setting the reading contract or drafting, load and apply the installed `documentation-writer` and `document-writing-standards` skills. They are required companions to this skill, not optional references.
 
 - Use `documentation-writer` while setting the reading contract and information architecture. Apply it to define the audience, reader goal, coverage boundary, and exclusions; separate tutorial-like activation from how-to, reference, and explanation material; and decide which deeper material belongs in the README or in dedicated documentation. Adapt its workflow to the agreed README funnel rather than treating the whole README as one Diátaxis document type.
-- Use `writing-clearly-and-concisely` while drafting and again as a final copyedit. In `Orient` and `Motivate`, apply it to make the prose simple, direct, and engaging without becoming rhetorical or promotional. In `Activate` and `Deepen`, apply it to preserve accuracy, logical connections, and sufficient explanation without excess. Keep the README technical in tone throughout.
+- Use `document-writing-standards` while drafting and again as a final copyedit. In `Orient` and `Motivate`, apply it to make the prose simple, direct, and engaging without becoming rhetorical or promotional. In `Activate` and `Deepen`, apply it to preserve accuracy, logical connections, and sufficient explanation without excess. Keep the README technical in tone throughout.
 
 ## Set the reading contract
 
