@@ -123,6 +123,11 @@ matches, use it. With several, ask. With none, inspect current branch, status,
 commits, octa PR records, and Issue comments; recover plausible existing work
 before creating a replacement workspace.
 
+After selecting or recovering an isolated worktree, apply `octa-base`'s
+`references/terminal-pane-cwd.md`. Do this before execution so terminal actions
+based on the reported pane directory open in the Issue worktree. Retain the
+safe return directory only in live session context for later cleanup.
+
 ### 5. Reconstruct a resume
 
 Before touching files, read:

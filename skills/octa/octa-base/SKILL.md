@@ -214,6 +214,14 @@ After Done, read [worktree-cleanup.md](references/worktree-cleanup.md). Remove a
 isolated worktree and local work branch only after verifying integration,
 cleanliness, and identity.
 
+### Terminal pane directory
+
+Read [terminal-pane-cwd.md](references/terminal-pane-cwd.md) after selecting an
+isolated worktree. Synchronize the terminal's reported pane directory to the
+Issue worktree and restore it safely before that worktree is removed. This is
+terminal navigation metadata, not a change to the agent process's working
+directory.
+
 ## Octa references stay local
 
 Issue numbers are repository-local coordination references. Keep them in octa

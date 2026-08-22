@@ -19,6 +19,8 @@ pass it to every protected Issue mutation and Issue–PR link change.
    - **Goal and acceptance** — the intended outcome and the Issue's checkable
      done conditions; include important constraints or exclusions when they
      shape the review.
+   - **Workspace** — absolute worktree path and work branch, or state that the
+     change was made directly in the current workspace.
    - **Changes** — what changed, grouped by behavior rather than file list.
    - **Verification** — checks run and their results; identify anything not run.
    - **Review focus** — the concrete points the user should inspect or decide.
