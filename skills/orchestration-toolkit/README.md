@@ -5,8 +5,8 @@ implementation, verification, review, and integration.
 
 Grooming is the entry condition. Once the Issue holds a settled work unit, the
 question is no longer *what to build* but *how to carry it out*. The toolkit
-keeps its run record on the Issue, durable design context in llm-wiki, and
-implementation evidence in Git.
+keeps its run record on the Issue, design context in a durable Markdown store,
+and implementation evidence in Git.
 
 Work that is not yet groomed belongs in the selected provider's groom skill; an
 unformed concept belongs in `inception`; an ad-hoc task with no tracker Issue

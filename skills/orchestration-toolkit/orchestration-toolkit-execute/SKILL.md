@@ -23,7 +23,7 @@ Everything runs inline — no executor subagents, no dependency graph, no wave
 scheduling. A single node does not need a project control plane.
 
 Apply `workflow-adapter-tracker` for Issue reads, comments, and transitions;
-installed llm-wiki skills for durable knowledge; `wtm-worktree` for worktree
+`workflow-adapter-markdown` for durable knowledge; `wtm-worktree` for worktree
 operations; and `git-helpers-commit` for every commit. The calling provider
 start skill supplies its implementation-completion procedure and any protected
 mutation handle. If neither was supplied, return to that provider's start skill
@@ -32,8 +32,9 @@ before execution rather than guessing lifecycle state.
 ## Invariants
 
 - One Issue produces one coherent, independently reviewable change on one branch.
-- The tracker owns executable state and the running record; llm-wiki owns durable
-  design and decision rationale; the repository owns implementation reality.
+- The tracker owns executable state and the running record; the selected
+  Markdown provider owns durable design and decision rationale; the repository
+  owns implementation reality.
 - The Issue's acceptance is the target. Reject speculative features, future-only
   flexibility, and abstractions without a present second use.
 - Never silently resolve a one-way-door decision with a plausible default.
@@ -80,15 +81,16 @@ workspace are already prepared; do not redo them.
 
 ### 2. Recover the knowledge surface
 
-Use `llm-wiki-overview` or `llm-wiki-retrieve` to find the PRDs, designs,
-research, and decision records the Issue depends on. Search from the Issue's own
-terminology rather than loading the whole wiki, and follow only the links needed
-to interpret scope, constraints, or acceptance.
+Use `workflow-adapter-markdown` to find and read the PRDs, designs, research,
+and decision records the Issue depends on. Search from the Issue's own
+terminology rather than loading the whole store, and follow only the links
+needed to interpret scope, constraints, or acceptance.
 
-Note any contradiction between the Issue, the wiki, and the repository. The
-tracker is authoritative for current execution state, llm-wiki for durable
-rationale, and the repository for actual behavior. A material contradiction is
-a Parking Lot entry, not something to resolve by preference.
+Note any contradiction between the Issue, durable knowledge, and the
+repository. The tracker is authoritative for current execution state, the
+Markdown provider for durable rationale, and the repository for actual
+behavior. A material contradiction is a Parking Lot entry, not something to
+resolve by preference.
 
 ### 3. Prepare the workspace
 
@@ -109,7 +111,7 @@ Use `workflow-adapter-tracker` to post one comment on the Issue before driving:
 
 ### Knowledge inputs
 
-<llm-wiki notes and repository facts this run depends on>
+<durable notes and repository facts this run depends on>
 
 ### Progress
 

@@ -57,7 +57,7 @@ Detail and per-phase methods live in `inception-base/references/phases.md`. Each
 
 Phases loop — deepening spawns new divergence. Follow the conversation, not a fixed order; just keep the phase explicit and the transitions user-approved.
 
-Once converge confirms the footing is done-enough, propose the **terminal exit, `inception-finalize`** (確定). It is not another phase in the loop — it moves the result out of the transient graph: one consolidated PRD persisted to the llm-wiki knowledge base, concrete actions handed to a tracker, the graph retired. Do the externalizing there, not inside converge; finalize is one-way, so only propose it when the user has confirmed the footing.
+Once converge confirms the footing is done-enough, propose the **terminal exit, `inception-finalize`** (確定). It is not another phase in the loop — it moves the result out of the transient graph: one consolidated PRD persisted through `workflow-adapter-markdown`, concrete actions handed to a tracker, the graph retired. Do the externalizing there, not inside converge; finalize is one-way, so only propose it when the user has confirmed the footing.
 
 ## The loop you run, every turn
 

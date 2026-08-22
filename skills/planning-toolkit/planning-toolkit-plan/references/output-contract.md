@@ -53,7 +53,7 @@ Readiness: READY / READY_AFTER_RESOLUTION / BLOCKED
 
 ## Durable Writes
 
-### llm-wiki
+### Durable Markdown
 
 - Notes to create:
 - Notes to update:
@@ -70,17 +70,12 @@ Readiness: READY / READY_AFTER_RESOLUTION / BLOCKED
 - ...
 ```
 
-## llm-wiki planning record
+## Durable planning record
 
 Prefer updating an authoritative existing note. When no note clearly owns the
 outcome, create one linked note under the current repository scope:
 
 ```markdown
----
-<frontmatter created by llm-wiki's template>
-tags: [planning]
----
-
 # Outcome Contract
 
 Scope policy: <policy name, or "default (outcome necessity)">
@@ -132,8 +127,9 @@ Add a policy tag alongside `planning` when the active policy names one, so the
 record can be found by the standard it was cut against.
 
 Pass the completed Markdown and requested tags to
-`workflow-adapter-markdown`; do not hand-author incompatible frontmatter. Link
-source PRD/design/decision notes using slug-form wikilinks.
+`workflow-adapter-markdown`; request the `planning` tag separately rather than
+embedding storage metadata in the body. Link source PRD/design/decision notes
+using provider-supported note locators.
 
 Use the Project, Milestone, Issue, and readiness formats in
 `planning-toolkit-base`'s `references/delivery-model.md`. Those are shared

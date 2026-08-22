@@ -16,12 +16,15 @@ an existing locator or repository context when available, and any provider
 coordination handle already held by the caller. Do not decide scope, split
 work, add acceptance criteria, or promote lifecycle state.
 
-Honor an explicit provider or an existing locator first. Otherwise select the
-installed tracker provider for the repository. Delegate unchanged operations
-to that provider's workflow adapter; this catalog currently ships
-`octa-workflow-adapter`. Reject unsupported provider requests or locators
-instead of translating them into another provider's records, and never switch
-providers after a readiness or write failure.
+Honor an explicit provider or an existing locator first. Otherwise select a
+provider from repository instructions and installed tracker adapters. If more
+than one remains plausible and the choice would create durable state in
+different places, ask one focused destination question.
+
+Delegate the operation unchanged to the selected provider adapter. Reject an
+unsupported provider request or locator instead of translating it into another
+provider's records, and never switch providers after a readiness or write
+failure.
 
 Return the provider's durable locators and any unapplied operation; for reads,
 return the requested records.

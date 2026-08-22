@@ -1,13 +1,13 @@
 # Resolution Records
 
 Use these formats for durable findings, decisions, downstream application, and
-the final readiness report. Preserve the owning system's existing frontmatter
-and conventions.
+the final readiness report. Supply complete caller-owned Markdown and let
+`workflow-adapter-markdown` preserve provider metadata and conventions.
 
 ## Research result
 
-Record the full durable result in llm-wiki and a proportional completion summary
-on the tracker research Issue.
+Record the full durable result through `workflow-adapter-markdown` and a
+proportional completion summary on the tracker research Issue.
 
 ```markdown
 # <Research Question>
@@ -114,7 +114,7 @@ Evidence / rationale:
 <proportional summary>
 
 Durable record:
-<llm-wiki note title or slug>
+<durable note locator>
 
 Downstream impact:
 - <issue>: <update required or applied>
@@ -123,8 +123,8 @@ Deviation from planned approach:
 None / <what changed and why>
 ```
 
-The tracker may contain its own internal Issue references. Do not copy tracker IDs or
-URLs into llm-wiki notes.
+The tracker may contain its own internal Issue references. Do not copy tracker
+IDs or URLs into durable Markdown notes.
 
 ## Impact application checklist
 
@@ -167,7 +167,7 @@ Remaining blockers:
 - None / <blocker, owner, and next action>
 
 Durable records:
-- llm-wiki:
+- Durable Markdown:
 - Tracker Project:
 
 Next route:

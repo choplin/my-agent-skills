@@ -82,7 +82,7 @@ Assign exactly one disposition to each candidate capability:
 | Disposition | Meaning | Operational treatment |
 |---|---|---|
 | **In Scope** | Clears the active Scope Policy's inclusion test. | May become executable tracker work. |
-| **Deferred** | Potentially valuable but not required by the inclusion test, and safely addable later. | Preserve in llm-wiki with exclusion rationale; do not create executable issues. |
+| **Deferred** | Potentially valuable but not required by the inclusion test, and safely addable later. | Preserve in durable Markdown with exclusion rationale; do not create executable issues. |
 | **Rejected** | Inconsistent, duplicated, obsolete, or unjustified. | Preserve rationale only when it prevents re-litigation. |
 
 Deferred is not a shadow backlog. Promote a Deferred capability only through a
@@ -164,11 +164,12 @@ READY_AFTER_RESOLUTION unless the resolution issues themselves are executable
 without hidden context.
 
 The readiness value and a proportional blocker summary live in the tracker
-Project description. Detailed rationale lives in llm-wiki and issue records.
+Project description. Detailed rationale lives in durable Markdown and issue
+records.
 
 ## 7. Durable ownership
 
-### llm-wiki owns durable knowledge
+### Durable Markdown owns long-lived knowledge
 
 - the confirmed Outcome Contract and the Scope Policy in force;
 - Scope Disposition and rationale for In Scope, Deferred, and Rejected;
@@ -187,10 +188,10 @@ Project description. Detailed rationale lives in llm-wiki and issue records.
 - the next unblocked work.
 
 Keep knowledge and execution consistent without copying entire notes between
-systems. The tracker may use internal Issue identifiers and links. Do not write those
-identifiers or URLs into llm-wiki.
+systems. The tracker may use internal Issue identifiers and links. Do not write
+those identifiers or URLs into durable notes.
 
-Use `workflow-adapter-markdown` for durable Markdown writes and
+Use `workflow-adapter-markdown` for durable Markdown access and
 `workflow-adapter-tracker` for Project, Milestone, Issue, relation, and
 transition operations. Provider mechanics stay behind those adapters.
 
@@ -354,7 +355,8 @@ unblocked implementation work in Todo.
 
 Required when readiness is READY_AFTER_RESOLUTION:
 
-- confirmed Outcome Contract, Scope Policy, and Scope Disposition in llm-wiki;
+- confirmed Outcome Contract, Scope Policy, and Scope Disposition in durable
+  Markdown;
 - tracker Project with readiness summary;
 - unknown register;
 - self-complete Todo research/design issues;
@@ -419,6 +421,6 @@ Next route:
 - Do not let a phase cross its authority boundary to keep work moving.
 - Do not treat issue closure as outcome propagation; apply results downstream.
 - Keep milestones observable but separate reviewability from review gating.
-- Keep the Project, llm-wiki, and issue graph mutually consistent.
+- Keep the Project, durable Markdown, and issue graph mutually consistent.
 - Return to Planning when the confirmed Outcome Contract is materially
   invalidated.

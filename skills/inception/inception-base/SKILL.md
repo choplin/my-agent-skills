@@ -39,7 +39,7 @@ Everything the user thinks lands in **one thinking graph** (`graph.json`). The P
 
 `.agents/inception/` holds transient working notes.
 
-Everything under `.agents/inception/` is transient. The **durable** output is written only at the end, by `inception-finalize`: one consolidated PRD persisted to the llm-wiki knowledge base. After that, the wiki PRD is authoritative and the graph here is a spent working note (see the phase model's terminal exit below).
+Everything under `.agents/inception/` is transient. The **durable** output is written only at the end, by `inception-finalize`: one consolidated PRD persisted through `workflow-adapter-markdown`. After that, the durable PRD is authoritative and the graph here is a spent working note (see the phase model's terminal exit below).
 
 ## Language: plain, clear English
 
@@ -117,4 +117,4 @@ Phases are not strictly linear — deepening often spawns new divergence. Loop a
 
 ### Terminal exit: 確定 Finalize — `inception-finalize`
 
-After converge confirms the footing is done-enough, the session leaves the graph. **Finalize is not a sixth phase** — the five phases shape thinking inside the transient graph; finalize moves the result out to durable memory (one consolidated PRD in the llm-wiki knowledge base), hands concrete actions to a tracker, and retires the graph. It is one-way: reopening means a fresh session or editing the wiki note, not re-rendering the old graph.
+After converge confirms the footing is done-enough, the session leaves the graph. **Finalize is not a sixth phase** — the five phases shape thinking inside the transient graph; finalize moves the result out to durable memory (one consolidated PRD through `workflow-adapter-markdown`), hands concrete actions to a tracker, and retires the graph. It is one-way: reopening means a fresh session or editing the durable note, not re-rendering the old graph.

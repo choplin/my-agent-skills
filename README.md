@@ -74,10 +74,11 @@ skills or validation configuration.
 | `code-review-session` | import-ai, import-pr, import-ci, run-checks, resolve, reply-pr, report, base (the record of one code review: a review.md list of items fed by ingestion sources — AI review / PR / CI / local checks / direct — and worked to resolution) |
 | `artifact-review-toolkit` | quick, adversarial (how a work artifact is reviewed: a one-off review redirected to the host's reviewer, or a lens-selected adversarial pass with independent reviewers; called by code-review-session and orchestration-toolkit) |
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, finalize (develop an unformed project concept into a durable footing: PRD / decisions / actions) |
-| `design-note` | design-note (write down a problem and the approach taken to it as one durable llm-wiki note — lighter than a PRD, shallower than a design doc) |
+| `design-note` | design-note (write down a problem and the approach taken to it as one durable Markdown note — lighter than a PRD, shallower than a design doc) |
 | `exec-plan` | exec-plan, exec-plan-base (ad-hoc autonomous run with no tracker issue behind it; decision log + parking lot) |
 | `octa` | octa-base, octa-overview, octa-capture-feedback, octa-start, octa-groom, octa-handoff, octa-workflow-adapter (local tracker lifecycle; feedback capture, finite Projects, self-complete Issues, atomic leases, review/integration gates, and cross-session handoff) |
-| `workflow-adapter` | tracker, markdown (provider-neutral write boundaries for tracker work records and durable Markdown) |
+| `workflow-adapter` | tracker, markdown (provider-neutral access boundaries for tracker work records and durable Markdown) |
+| `workflow-adapter-llm-wiki` | workflow-adapter-llm-wiki (llm-wiki provider implementation of the durable Markdown adapter contract) |
 | `planning-toolkit` | plan, resolve, mvp, base (turn an established direction into a finite outcome and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; `mvp` is a scope policy, not a phase — the smallest-build-that-teaches standard the cut is judged against) |
 | `orchestration-toolkit` | execute (carry one groomed tracker Issue inline through implementation, risk-based adversarial review, and the integration gate) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
@@ -132,17 +133,18 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - `discuss-toolkit-dig` ← discuss-toolkit-grill-me, inception (+framing/deepen), design-note, exec-plan, code-review-session-resolve
 - `octa-base` ← octa lifecycle skills, octa-workflow-adapter
 - `workflow-adapter-tracker` ← inception-finalize, planning-toolkit, orchestration-toolkit-execute
+- `workflow-adapter-markdown` ← design-note, inception-finalize, planning-toolkit, orchestration-toolkit-execute, repository-context-base
 - `artifact-review-toolkit` (quick, adversarial) ← code-review-session (import-ai), orchestration-toolkit-execute
 
 **inception**
 - inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**
-- inception-finalize → llm-wiki-base `(ext)`, **workflow-adapter-tracker**, the selected provider's start skill
+- inception-finalize → **workflow-adapter-markdown**, **workflow-adapter-tracker**, the selected tracker provider's start skill
 - inception-framing → **discuss-toolkit-dig**
 - inception-deepen → **discuss-toolkit-dig**
 - inception-converge → finalize
 
 **design-note**
-- design-note → llm-wiki-base `(ext)`, **discuss-toolkit-dig**, **planning-toolkit-plan**
+- design-note → **workflow-adapter-markdown**, **discuss-toolkit-dig**, **planning-toolkit-plan**
 
 **exec-plan**
 - exec-plan → base, **discuss-toolkit-dig**
@@ -172,17 +174,20 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - octa-workflow-adapter → octa-base
 
 **planning-toolkit**
-- plan → base, **discuss-toolkit-dig**, **workflow-adapter-tracker**, **workflow-adapter-markdown**, llm-wiki retrieval skills `(ext)`
-- resolve → base, **discuss-toolkit-dig**, **workflow-adapter-tracker**, **workflow-adapter-markdown**, llm-wiki retrieval skills `(ext)`
+- plan → base, **discuss-toolkit-dig**, **workflow-adapter-tracker**, **workflow-adapter-markdown**
+- resolve → base, **discuss-toolkit-dig**, **workflow-adapter-tracker**, **workflow-adapter-markdown**
 - mvp → base, plan (a scope policy; it declares the standard and delegates the workflow)
 - base → **workflow-adapter-tracker**, **workflow-adapter-markdown**
 
 **orchestration-toolkit**
-- execute → **artifact-review-toolkit-adversarial**, **workflow-adapter-tracker**, the selected provider's start/groom/handoff skills, **git-helpers-commit**, llm-wiki-overview `(ext)`, llm-wiki-retrieve `(ext)`, wtm-worktree `(ext)`
+- execute → **artifact-review-toolkit-adversarial**, **workflow-adapter-tracker**, **workflow-adapter-markdown**, the selected tracker provider's start/groom/handoff skills, **git-helpers-commit**, wtm-worktree `(ext)`
 
 **workflow-adapter**
-- tracker → octa-workflow-adapter
-- octa-workflow-adapter → **octa-base**
+- tracker → one selected tracker provider adapter
+- markdown → one selected durable Markdown provider adapter
+
+**workflow-adapter-llm-wiki**
+- workflow-adapter-llm-wiki → **workflow-adapter-markdown**, llm-wiki-base `(ext)`, llm-wiki-capture `(ext)`, llm-wiki-retrieve `(ext)`
 
 **skill-quality**
 - skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review
@@ -195,7 +200,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - ai-council-fugu-cli → ai-council-codex-cli
 
 **repository-context**
-- base → llm-wiki-capture `(ext)` and llm-wiki-distill `(ext)` when tentative work knowledge is written or closed
+- base → **workflow-adapter-markdown** and the selected Markdown provider's distillation operation when tentative work knowledge is written or closed
 - readme → base, pen-design (for an approved composed visual), **showcase-capture-plan** (when useful README media is missing and the user wants it produced), documentation-writer `(ext)`, writing-clearly-and-concisely `(ext)`
 - pen-design → base, **showcase-capture-plan** (when real product evidence must be acquired), **showcase-pen-annotate** (when the job is only to annotate or frame one capture)
 - codebase → base, readme (when the main README needs substantial revision), pen-design (for an approved diagram), **lang-reference-\<language\>** when a matching installed skill exists

@@ -31,7 +31,7 @@ This skill owns:
   caller supplies none;
 - Scope Disposition, Unknown Class, and Decision Authority vocabularies;
 - the three readiness states and their legal transitions;
-- what belongs durably in llm-wiki versus operationally in the tracker;
+- what belongs in durable Markdown versus operationally in the tracker;
 - the meanings of Project, Milestone, Issue, and dependency relations;
 - the issue execution contract used across phases;
 - the minimum handoff payload between Planning, Resolution, and Execution.
@@ -42,13 +42,13 @@ This skill does not:
 - supply a scope policy of its own beyond the default;
 - execute research or settle a decision;
 - groom or mutate tracker records by itself;
-- write llm-wiki notes by itself;
+- write durable Markdown notes by itself;
 - choose agents, commits, branches, PRs, or review cadence;
 - define implementation progress or completion states, which belong to the
   execution skills.
 
 Use `workflow-adapter-tracker` for tracker operations and
-`workflow-adapter-markdown` for durable Markdown writes. The model here adds
+`workflow-adapter-markdown` for durable Markdown access. The model here adds
 planning semantics; it does not duplicate provider mechanics.
 
 ## Delegation

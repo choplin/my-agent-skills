@@ -3,8 +3,8 @@ name: repository-context-base
 description: >-
   The shared placement and lifecycle model for context produced while working
   in a repository: canonical user and developer documentation, AGENTS.md,
-  CHANGELOG.md, self-contained tracker records, work-tagged tentative
-  llm-wiki notes, and durable local knowledge. Applies whenever
+  CHANGELOG.md, self-contained tracker records, work-tagged tentative knowledge
+  notes, and durable local knowledge. Applies whenever
   repository-context workflows decide which file or store should own
   information or distill working context when work closes.
 ---
@@ -57,8 +57,8 @@ explanation when useful.
 | `CHANGELOG.md` | User-visible release outcomes | Maintain it as a near-default repository document. Follow the repository's existing changelog convention; otherwise use Keep a Changelog categories and record final outcomes rather than work narration. |
 | ADR | The context, alternatives, and outcome of a design decision whose history has clear shared value | Do not introduce ADRs from the start by default. Add one only when preserving the decision itself is clearly worth its maintenance cost, and follow the repository's chosen ADR location and format. |
 | Work tracker | All context a fresh executor needs to carry one finite work item from open to close, plus its progress and completion record | Keep the work self-contained even when this duplicates canonical context elsewhere. The duplication serves execution; it does not replace current repository documentation. |
-| Tentative llm-wiki | Discussion, hypotheses, investigation paths, interim findings, and provisional conclusions from one sequence of work | Group the sequence with a temporary work tag and distill it when that work closes. |
-| Durable llm-wiki | Long-lived knowledge useful to the user or their agents but not valuable enough to share with product users or repository developers | Keep local research and history here only after the shared-value decision below. |
+| Tentative durable knowledge | Discussion, hypotheses, investigation paths, interim findings, and provisional conclusions from one sequence of work | Group the sequence with a temporary work tag and distill it when that work closes. |
+| Durable local knowledge | Long-lived knowledge useful to the user or their agents but not valuable enough to share with product users or repository developers | Keep local research and history here only after the shared-value decision below. |
 
 Other files and document types are outside this default set. Honor them when an
 existing repository convention uses them, but do not introduce them from this
@@ -71,20 +71,19 @@ does not prohibit deliberate execution-context duplication in a work tracker.
 
 ## Tentative work tags
 
-Tag every tentative llm-wiki note from the same finite sequence of work with the
-same `work-<stable-identifier>` tag so `llm-wiki-distill` can select the cohort
-later.
+Tag every tentative durable note from the same finite sequence of work with the
+same `work-<stable-identifier>` tag so the selected provider's distillation
+operation can identify the cohort later.
 
-- When the work has a tracker Issue, derive the stable identifier from its
-  provider and complete locator: octa repository `acme` Issue `12` becomes
-  `work-octa-acme-12`.
+- When the work has a tracker Issue, normalize its provider and complete locator
+  into `work-<provider>-<locator>`.
 - Without an Issue, choose a concise stable slug for the work:
   `work-repository-context-design`.
 
 The work tag is a temporary cohort selector, not a maturity state or a reserved
-llm-wiki axis. Keep ordinary topic tags and wikilinks according to the installed
-llm-wiki skills. Delegate note creation to `workflow-adapter-markdown` and
-reworking to `llm-wiki-distill`; do not reproduce their mechanics here.
+provider axis. Keep ordinary topic metadata and links according to the selected
+provider. Delegate note access to `workflow-adapter-markdown` and reworking to
+the provider's distillation operation; do not reproduce their mechanics here.
 
 ## Distill at work completion
 
@@ -94,7 +93,7 @@ this order:
 1. **Shared value** — if product users or repository developers should know it,
    put the verified result in the appropriate repository destination above.
 2. **Local long-term value** — if it lacks shared value but will help the user
-   or their agents later, distill it into durable llm-wiki knowledge.
+   or their agents later, distill it into durable local knowledge.
 3. **No continuing value** — do not retain it merely because it was captured.
 
 Shared value includes user guidance and limitations, user-visible changes,
@@ -114,6 +113,6 @@ The sequence is fully distilled when no note retains its work tag.
 - `repository-context-pen-design` owns editable visual design after a calling
   documentation workflow fixes the audience, message, evidence, and placement.
 
-If a required sibling, workflow adapter, or llm-wiki operation skill is
-unavailable, stop before changing its canonical artifact rather than
-reconstructing its workflow here.
+If a required sibling, workflow adapter, or provider operation is unavailable,
+stop before changing its canonical artifact rather than reconstructing its
+workflow here.

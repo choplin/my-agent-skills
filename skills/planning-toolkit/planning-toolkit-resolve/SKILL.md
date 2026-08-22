@@ -52,8 +52,7 @@ a normal reconcile phase.
 - Apply `workflow-adapter-tracker` for Project and Issue reads, mutations,
   relations, comments, and lifecycle transitions. Keep self-completeness,
   grouping, readiness, and completion-note content in this Planning model.
-- Apply the installed llm-wiki skills for retrieval and
-  `workflow-adapter-markdown` for durable writes.
+- Apply `workflow-adapter-markdown` for durable Markdown retrieval and writes.
 - Use `discuss-toolkit-dig` only when a human-owned decision lacks enough shared
   meaning to choose. Do not reopen already explicit criteria.
 
@@ -69,9 +68,10 @@ executing an issue, asking for a human decision, or reporting readiness.
 
 ### 1. Load and verify the resolution contract
 
-Resolve the finite Project and retrieve its planning record from llm-wiki. Load
-every field in the base Planning → Resolution handoff, including the scope policy
-in force, plus completion notes on already-finished blockers.
+Resolve the finite Project and retrieve its planning record through
+`workflow-adapter-markdown`. Load every field in the base Planning → Resolution
+handoff, including the scope policy in force, plus completion notes on
+already-finished blockers.
 
 Require `READY_AFTER_RESOLUTION` or equivalent explicit pre-implementation
 blockers. If the Project is already READY, report that Resolution is unnecessary.
@@ -118,7 +118,7 @@ required by this portable skill.
 Before work, move the issue to In Progress. On completion:
 
 1. verify its Acceptance;
-2. write the durable finding or decision to llm-wiki;
+2. write the durable finding or decision through `workflow-adapter-markdown`;
 3. leave the required tracker completion note with the actual result and any
    deviation from the planned approach;
 4. move it through In Review when a real review exists, otherwise to Done;
@@ -184,8 +184,8 @@ Apply locally when the result only changes:
 - an implementation capability that remains inside the agreed scope.
 
 When invalidated, return to `planning-toolkit-plan`, set readiness to BLOCKED,
-record the invalidating evidence in llm-wiki and the Project, and do not keep
-resolving work derived from the old contract.
+record the invalidating evidence in durable Markdown and the Project, and do
+not keep resolving work derived from the old contract.
 
 ### 7. Apply every outcome downstream
 
@@ -216,7 +216,7 @@ After the resolution graph is empty, verify:
 
 - every genuine pre-implementation research/design blocker is Done or explicitly
   canceled with rationale;
-- every finding and decision has a durable llm-wiki record and tracker completion
+- every finding and decision has a durable Markdown record and tracker completion
   note;
 - no implementation issue consumes an unresolved or implicit input;
 - affected issues reflect the chosen decisions rather than provisional options;
@@ -243,14 +243,14 @@ Report:
 - implementation issues updated, split, added, or canceled;
 - any scope or milestone effect;
 - first unblocked Todo implementation work;
-- llm-wiki and tracker records updated.
+- durable Markdown and tracker records updated.
 
 For READY, report that execution may start and name the first unblocked work. Do
 not pick an execution skill for the user, and do not implement in this session.
 
 ## Resume behavior
 
-On re-entry, rebuild the graph from the tracker and llm-wiki:
+On re-entry, rebuild the graph from the tracker and durable Markdown store:
 
 - skip Done issues after verifying their completion records;
 - resume In Progress issues from their description and handoff note;
@@ -278,8 +278,8 @@ Never repeat research merely because the chat context was cleared.
 - [ ] Every blocking research question has sufficient durable evidence.
 - [ ] Every blocking design issue has one binding decision from the assigned
       authority.
-- [ ] Findings and decisions are recorded in both llm-wiki and the tracker at the
-      appropriate level of detail.
+- [ ] Findings and decisions are recorded in both durable Markdown and the
+      tracker at the appropriate level of detail.
 - [ ] Every affected implementation issue consumes explicit completed Inputs.
 - [ ] Obsolete or incorrectly sized work is canceled, updated, or split.
 - [ ] No Deferred capability entered the implementation lane.

@@ -29,7 +29,7 @@ Own:
 - identifying the few unknowns that must be resolved before implementation;
 - arranging those unknowns before implementation work;
 - defining outcome-oriented milestones and atomic deliverables;
-- persisting durable knowledge to llm-wiki;
+- persisting durable knowledge through the Markdown adapter;
 - proposing, then creating or updating, the corresponding tracker structure.
 
 Do not:
@@ -51,9 +51,9 @@ rather than conceptually open, use `discuss-toolkit-dig`.
   contract, and handoff payload used below.
 - Use `discuss-toolkit-dig` for the outcome-defining dialogue. Ask only questions
   that can change the scope cut, unknown classification, or delivery structure.
-- Use the installed llm-wiki skills to retrieve durable knowledge and
-  `workflow-adapter-markdown` to persist completed Markdown. If that path is
-  unavailable, stop before pretending the durable record exists.
+- Use `workflow-adapter-markdown` to find, read, and persist durable knowledge.
+  If no Markdown provider is available, stop before pretending the durable
+  record exists.
 - Use `workflow-adapter-tracker` for Project, Milestone, Issue, relation, and
   lifecycle operations. If its selected provider is unavailable, finish a
   concrete proposal but report that registration remains incomplete.
@@ -66,9 +66,10 @@ drafting the proposal or writing either system.
 ### 1. Establish the planning surface
 
 Retrieve the relevant PRD, design notes, decision records, and prior scope notes
-from llm-wiki. When a tracker Project or rough actions already exist, read them
-through `workflow-adapter-tracker`. Inspect the repository only where current
-implementation facts materially constrain the plan.
+through `workflow-adapter-markdown`. When a tracker Project or rough actions
+already exist, read them through `workflow-adapter-tracker`. Inspect the
+repository only where current implementation facts materially constrain the
+plan.
 
 Build a source map:
 
@@ -114,8 +115,9 @@ Argue every inclusion against the active policy's **challenge lenses**. Do not
 substitute a different standard, and do not weaken the policy's lenses because a
 capability looks obviously useful.
 
-Keep Deferred items in llm-wiki with their exclusion rationale and whatever the
-policy says would promote them. Do not turn them into executable tracker Issues.
+Keep Deferred items in durable Markdown with their exclusion rationale and
+whatever the policy says would promote them. Do not turn them into executable
+tracker Issues.
 If a later phase is already a committed finite outcome, propose a separate future
 Project rather than mixing it into this one.
 
@@ -203,13 +205,13 @@ Present one proposal containing:
 - In Scope / Deferred / Rejected scope table;
 - unknown register and readiness;
 - milestones, issues, and dependency graph;
-- planned llm-wiki changes;
+- planned durable Markdown changes;
 - planned tracker Project, Milestones, Issues, lifecycle states, and relations;
 - contradictions, assumptions, and remaining human choices.
 
 Get explicit user approval before creating or mutating tracker records or
-committing the scope cut to llm-wiki. Incorporate corrections into the proposal
-first.
+committing the scope cut to the durable Markdown store. Incorporate corrections
+into the proposal first.
 
 ### 9. Persist knowledge and executable work
 
@@ -236,7 +238,7 @@ Report:
 - the final readiness state;
 - the first unblocked work;
 - every unresolved blocker and who may settle it;
-- the llm-wiki note and tracker Project updated;
+- the durable planning note and tracker Project updated;
 - the appropriate next route.
 
 For READY_AFTER_RESOLUTION, hand off to `planning-toolkit-resolve`. For READY,
@@ -274,6 +276,6 @@ an execution skill for the user, and do not implement in this session.
 - [ ] Milestones are observable increments rather than technical layers.
 - [ ] Issues are atomic, verifiable, and sized for one focused session.
 - [ ] The readiness state matches what may actually start.
-- [ ] llm-wiki and the tracker match the user-approved proposal.
+- [ ] Durable Markdown and tracker records match the user-approved proposal.
 - [ ] A context-free executor can identify the next work and every blocker
       without relying on this conversation.
