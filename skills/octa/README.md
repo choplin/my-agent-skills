@@ -1,7 +1,6 @@
 # octa
 
-Skills for running repository work through the local octa CLI with the same
-solo lifecycle used by the Linear skill group.
+Skills for running repository work through the local octa CLI.
 
 | Skill | Description |
 |---|---|
@@ -11,7 +10,7 @@ solo lifecycle used by the Linear skill group.
 | `octa-start` | Pick up or resume one Issue, claim its lease, recover its workspace, and carry it into execution |
 | `octa-groom` | Turn one Project's Backlog into self-complete Todo work |
 | `octa-handoff` | Record resumable context on unfinished In Progress work |
-| `octa-import-linear` | Migration-only: import a repository's unfinished Linear work into octa. Delete once the migration is finished |
+| `octa-workflow-adapter` | Apply caller-owned work-record operations through the octa CLI |
 
 Install the whole group because the workflow skills depend on
 `octa-base`. The `octa` CLI must be installed separately. These skills keep

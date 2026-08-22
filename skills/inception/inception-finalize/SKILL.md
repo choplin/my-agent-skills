@@ -53,9 +53,9 @@ Locate the session under `.agents/inception/<topic-slug>/` (Glob if the slug is 
    - **Write the persisted note in Japanese.** The source PRD (CLI output) is plain English by `inception-base`'s rule — that rule governs the *thinking* artifacts. The wiki note is read only by its owner, so translate the full content (headings and body) into plain, clear Japanese when persisting. Keep the same discipline: short sentences, concrete nouns, no rhetorical flourish; technical terms, proper nouns (product, service, company names), and code identifiers stay in their original form. Translate faithfully — do not add, drop, or reinterpret content while translating.
 3. **Hand off the actions.** Present the `Action` nodes and let the user choose how to carry them out — do not decide for them:
    - **Tracker Project + Issues** — delegate the approved operations to `workflow-adapter-tracker`. A finalized inception footing is a **finite outcome/goal**, so **create a Project for this footing first, then register the promoted actions as Issues under that Project** (never as loose issues with no Project). Use the PRD's title/purpose for the Project name and description. This writes to an external system, so **show the proposed Project and its Issues, and get explicit approval before creating anything**. Issue promotion stays per-action — some actions are still too coarse to be Issues; only promote the ones the user picks — but every promoted Issue goes under the Project.
-   - **Execute one now** — for an action the user wants to start immediately, promote
-     it to an Issue as above, then use `linear-start` or `octa-start` according
-     to the provider returned by the adapter. Do not start implementing from
+   - **Execute one now** — for an action the user wants to start immediately,
+     promote it to an Issue as above, then use the start skill for the provider
+     returned by `workflow-adapter-tracker`. Do not start implementing from
      inside finalize.
    - Or hand the list off as-is. Actions do not stay in the PRD; the PRD records direction, not the to-do list.
 4. **Retire the transient layer.** State plainly: the live open-questions queue is a point-in-time snapshot and is **not** persisted; the wiki PRD is now the authoritative footing and the `.agents/inception/` graph is a spent working note. Leave the `.agents/` files in place; delete them only if the user asks.

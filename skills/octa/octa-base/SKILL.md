@@ -133,11 +133,6 @@ deep judgement. Rather than a new Type, mark those with a single ungrouped
 This is an exception patch, not a primary axis; introduce it only once real
 usage shows how often `impl` Issues need it.
 
-Do not create `Type/orchestration` until `orchestration-toolkit-orchestrate`
-has an octa-backed control-record contract. That Type marks a control record
-only that skill creates and drives, so advertising it before the contract exists
-would strand the work on an unroutable label.
-
 ## Lifecycle
 
 | State | Type | Meaning |

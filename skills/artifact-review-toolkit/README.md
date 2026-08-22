@@ -71,8 +71,8 @@ decide what happens next — the caller does.
 
 - A code review whose findings must be tracked: `code-review-session-import-ai`
   records them as items.
-- An orchestrated project: `orchestration-toolkit-orchestrate` routes findings
-  back into its work graph.
+- A tracker execution: the calling execution workflow routes findings back to
+  its Issue record.
 
 ## Deferred by design
 

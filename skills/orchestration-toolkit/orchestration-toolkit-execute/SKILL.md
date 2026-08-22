@@ -20,17 +20,14 @@ integration gate passes; otherwise it remains In Progress or In Review.
 
 The Issue already says **what** to build; this skill decides **how** and does it.
 Everything runs inline — no executor subagents, no dependency graph, no wave
-scheduling. That lightness is the point: `orchestration-toolkit-orchestrate`
-exists for work that genuinely needs delegation, and paying its control-plane cost
-for a single node buys nothing.
+scheduling. A single node does not need a project control plane.
 
 Apply `workflow-adapter-tracker` for Issue reads, comments, and transitions;
 installed llm-wiki skills for durable knowledge; `wtm-worktree` for worktree
 operations; and `git-helpers-commit` for every commit. The calling provider
 start skill supplies its implementation-completion procedure and any protected
-mutation handle, such as an octa lease. If neither was supplied, return to
-`linear-start` or `octa-start` before execution rather than guessing a provider
-lifecycle.
+mutation handle. If neither was supplied, return to that provider's start skill
+before execution rather than guessing lifecycle state.
 
 ## Invariants
 
@@ -72,12 +69,14 @@ status. Then confirm it is actually executable:
   acceptance, and constraints a fresh executor needs;
 - any `blocked by` relation is Done.
 
-If a blocker is open, stop and say so. If the Issue belongs to a Project with
-other ready Issues that depend on each other, this is the wrong skill — hand off
-to `orchestration-toolkit-orchestrate`.
+If a blocker is open, stop and say so. If the requested outcome spans several
+dependent Issues, this is the wrong skill — return to the selected provider's
+groom skill or `planning-toolkit-plan` to expose an executable next Issue rather
+than widening this run.
 
 Move the Issue to In Progress if it is not already. When entered from
-`linear-start`, the status and workspace are already prepared; do not redo them.
+the selected provider's start skill, the status, coordination handle, and
+workspace are already prepared; do not redo them.
 
 ### 2. Recover the knowledge surface
 
@@ -193,7 +192,8 @@ outcome to the caller after the procedure finishes or reaches an explicit stop.
 
 ## When NOT to use
 
-- Several Issues with dependencies between them → `orchestration-toolkit-orchestrate`.
+- Several Issues with dependencies between them → the selected provider's groom
+  skill or `planning-toolkit-plan` to identify the next executable Issue.
 - No Issue behind the work — an ad-hoc task to run autonomously → `exec-plan`.
 - The Issue's requirements are not settled → the selected provider's groom skill.
 - The concept itself is unformed → `inception`.

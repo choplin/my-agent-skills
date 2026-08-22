@@ -76,10 +76,10 @@ skills or validation configuration.
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, finalize (develop an unformed project concept into a durable footing: PRD / decisions / actions) |
 | `design-note` | design-note (write down a problem and the approach taken to it as one durable llm-wiki note — lighter than a PRD, shallower than a design doc) |
 | `exec-plan` | exec-plan, exec-plan-base (ad-hoc autonomous run with no tracker issue behind it; decision log + parking lot) |
-| `linear` | linear, linear-base, linear-groom, linear-start, linear-handoff (Linear issue lifecycle; start picks an issue — new or In Progress — → worktree → execution; handoff records a cross-session pickup note) |
-| `octa` | octa-base, octa-overview, octa-capture-feedback, octa-start, octa-groom, octa-handoff, octa-import-linear (local octa lifecycle; feedback capture, finite Projects, self-complete Issues, atomic leases, review/integration gates, and cross-session handoff; `import-linear` is a migration-only skill, deleted once no repository tracks work in Linear) |
+| `octa` | octa-base, octa-overview, octa-capture-feedback, octa-start, octa-groom, octa-handoff, octa-workflow-adapter (local tracker lifecycle; feedback capture, finite Projects, self-complete Issues, atomic leases, review/integration gates, and cross-session handoff) |
+| `workflow-adapter` | tracker, markdown (provider-neutral write boundaries for tracker work records and durable Markdown) |
 | `planning-toolkit` | plan, resolve, mvp, base (turn an established direction into a finite outcome and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; `mvp` is a scope policy, not a phase — the smallest-build-that-teaches standard the cut is judged against) |
-| `orchestration-toolkit` | execute, orchestrate (carry groomed Linear work to completion: one Issue inline, or a whole Project through delegated graph execution, mandatory global adversarial review, and final human approval) |
+| `orchestration-toolkit` | execute (carry one groomed tracker Issue inline through implementation, risk-based adversarial review, and the integration gate) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), discuss-toolkit-grill-me (candidate robustness), one-point (discussion pacing) |
@@ -130,12 +130,13 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **Cross-group hubs** (one skill that many groups delegate to):
 
 - `discuss-toolkit-dig` ← discuss-toolkit-grill-me, inception (+framing/deepen), design-note, exec-plan, code-review-session-resolve
-- `linear-base` ← orchestration-toolkit (execute, orchestrate), planning-toolkit, inception-finalize
-- `artifact-review-toolkit` (quick, adversarial) ← code-review-session (import-ai), orchestration-toolkit (execute, orchestrate)
+- `octa-base` ← octa lifecycle skills, octa-workflow-adapter
+- `workflow-adapter-tracker` ← inception-finalize, planning-toolkit, orchestration-toolkit-execute
+- `artifact-review-toolkit` (quick, adversarial) ← code-review-session (import-ai), orchestration-toolkit-execute
 
 **inception**
 - inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**
-- inception-finalize → llm-wiki-base `(ext)`, **linear-base**, **linear-start**
+- inception-finalize → llm-wiki-base `(ext)`, **workflow-adapter-tracker**, the selected provider's start skill
 - inception-framing → **discuss-toolkit-dig**
 - inception-deepen → **discuss-toolkit-dig**
 - inception-converge → finalize
@@ -162,27 +163,26 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - explain-pr → diff-explainer `(ext; explainer-studio)`
 - squash-merge → commit
 
-**linear**
-- linear-start → linear, **orchestration-toolkit-execute**, **orchestration-toolkit-orchestrate**, **exec-plan**, wtm-worktree `(ext)`
-- linear-groom → linear
-
 **octa**
 - octa-overview → octa-base
 - octa-capture-feedback → octa-base
 - octa-start → octa-base, octa-handoff, **git-helpers-commit**, wtm-worktree `(ext)`
 - octa-groom → octa-base
 - octa-handoff → octa-base
-- octa-import-linear → octa-base, **linear-base**
+- octa-workflow-adapter → octa-base
 
 **planning-toolkit**
-- plan → base, **discuss-toolkit-dig**, **linear-base**, llm-wiki-base `(ext)`, llm-wiki retrieval skills `(ext)`
-- resolve → base, **discuss-toolkit-dig**, **linear-base**, llm-wiki-base `(ext)`, llm-wiki retrieval skills `(ext)`
+- plan → base, **discuss-toolkit-dig**, **workflow-adapter-tracker**, **workflow-adapter-markdown**, llm-wiki retrieval skills `(ext)`
+- resolve → base, **discuss-toolkit-dig**, **workflow-adapter-tracker**, **workflow-adapter-markdown**, llm-wiki retrieval skills `(ext)`
 - mvp → base, plan (a scope policy; it declares the standard and delegates the workflow)
-- base → **linear-base**, llm-wiki-base `(ext)`
+- base → **workflow-adapter-tracker**, **workflow-adapter-markdown**
 
 **orchestration-toolkit**
-- execute → **artifact-review-toolkit-adversarial**, **linear-base**, **linear-handoff**, **git-helpers-commit**, llm-wiki-overview `(ext)`, llm-wiki-retrieve `(ext)`, wtm-worktree `(ext)`
-- orchestrate → **artifact-review-toolkit-adversarial**, **linear-base**, **git-helpers-commit**, llm-wiki-overview `(ext)`, llm-wiki-retrieve `(ext)`, wtm-worktree `(ext)`
+- execute → **artifact-review-toolkit-adversarial**, **workflow-adapter-tracker**, the selected provider's start/groom/handoff skills, **git-helpers-commit**, llm-wiki-overview `(ext)`, llm-wiki-retrieve `(ext)`, wtm-worktree `(ext)`
+
+**workflow-adapter**
+- tracker → octa-workflow-adapter
+- octa-workflow-adapter → **octa-base**
 
 **skill-quality**
 - skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review

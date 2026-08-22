@@ -76,8 +76,7 @@ same `work-<stable-identifier>` tag so `llm-wiki-distill` can select the cohort
 later.
 
 - When the work has a tracker Issue, derive the stable identifier from its
-  provider and complete locator: Linear `ENG-123` becomes
-  `work-linear-eng-123`; octa repository `acme` Issue `12` becomes
+  provider and complete locator: octa repository `acme` Issue `12` becomes
   `work-octa-acme-12`.
 - Without an Issue, choose a concise stable slug for the work:
   `work-repository-context-design`.

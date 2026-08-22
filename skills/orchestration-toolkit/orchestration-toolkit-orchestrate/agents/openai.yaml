@@ -1,4 +1,0 @@
-interface:
-  display_name: "Orchestrate Project"
-  short_description: "Drive a Linear Project with delegated agents"
-  default_prompt: "Use $orchestration-toolkit-orchestrate to execute this Linear Project through its dependency graph."
