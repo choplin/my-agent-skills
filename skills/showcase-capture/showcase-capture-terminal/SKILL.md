@@ -33,17 +33,39 @@ Always retain the `.tape` or `.cast` as the source artifact through handoff and 
 - Use a disposable directory, stable fixtures, and commands that are safe to run repeatedly.
 - Fixtures may be artificial, but exercise the real product path. Use real initialization, indexing, commands, search, selection, and previews against representative seeded data; never substitute stub output or prewritten logs.
 - Set a clean prompt and a readable fixed terminal size. Record the shell, font family and size, theme, width, and height with the capture recipe; use the same values for every shot in one deliverable.
-- Hide unrelated panes, tabs, notifications, hostnames, paths, tokens, and personal/project-sensitive data.
+- Hide unrelated panes, tabs, notifications, hostnames, paths, tokens, and personal/project-sensitive data. Retain the minimum sidebar, title, pane border, or other chrome needed to identify a host product, and verify the resulting layout at the final dimensions.
 - Pre-run slow setup and place the terminal at the exact reset point. Never fake command output; use real representative output.
 
 Record and fix every visible environment input that applies:
 
-- shell, `PS1`, prompt hooks such as Bash `PROMPT_COMMAND`, and the working directory shown in the prompt;
+- shell, `PS1`, prompt hooks such as Bash `PROMPT_COMMAND`, the locale, and the working directory shown in the prompt;
 - `PAGER`, `FZF_DEFAULT_OPTS`, `XDG_DATA_HOME`, and `XDG_CONFIG_HOME`;
 - terminal width and height, font family and size, theme, and renderer;
 - TUI-specific layout and colors, including fzf layout and color options.
 
-Use isolated XDG directories when the demonstrated tool reads mutable user state. Disable a pager or alternate screen explicitly, for example with `PAGER=cat`, when the previous result must remain visible for the next action. Do not clear between related operations by default; retain the prior result and add spacing before the next prompt when that continuity explains the exploration.
+### Preflight a color TUI
+
+Before recording a color TUI, inspect `TERM`, `NO_COLOR`, `COLORTERM`, and the effective locale individually; never print the full environment because it may contain credentials. For a POSIX shell, this preflight exposes only those values and whether `NO_COLOR` exists:
+
+```sh
+printf 'TERM=%s\nCOLORTERM=%s\nNO_COLOR=%s\n' \
+  "$TERM" "$COLORTERM" "${NO_COLOR+set}"
+locale charmap
+```
+
+Fail the preflight when `TERM=dumb`, `NO_COLOR` is set, or the locale is not UTF-8. For a VHS take, rebuild the child environment with `TERM=xterm-256color`, `COLORTERM=truecolor`, a UTF-8 locale, and no `NO_COLOR`, then rerun the preflight through the same shell path that VHS will execute, including any wrapper. When other inherited variables can alter the demonstrated tool and its required environment is known, start from `env -i` and add only the reviewed allowlist needed by the capture and demonstrated program.
+
+Set a styled prompt in the interactive shell that actually renders it. A non-interactive wrapper may discard an inherited `PS1`. Wrap ANSI escapes in the shell's non-printing delimiters to exclude them from the visible prompt width; for Bash, for example:
+
+```bash
+PS1='\[\e[1;38;2;166;227;161m\]❯\[\e[0m\] '
+```
+
+Verify the prompt color, cursor position, and input-cell alignment in a rendered rehearsal frame.
+
+Use isolated XDG directories only after confirming that the demonstrated tool's config, state, sockets, and plugin registry all follow them consistently. If any component remains outside the isolated directories, preserve the working XDG environment and use a tool-specific config flag or another narrow override for the mutable state that needs isolation.
+
+Disable a pager or alternate screen explicitly, for example with `PAGER=cat`, when the previous result must remain visible for the next action. Do not clear between related operations by default; retain the prior result and add spacing before the next prompt when that continuity explains the exploration.
 
 Assign color to information roles rather than decoration. Make the command start, query match, current selection, result count, and available actions distinguishable when those states appear in the story.
 
@@ -110,6 +132,14 @@ Parse the tape string and the command passed to the shell as two distinct quotin
 
 Quote every output path and use paths relative to the directory where VHS runs. VHS tape syntax can parse an unquoted absolute path such as `/tmp/demo.mp4` as commands instead of one path, and VHS 0.11.0 on macOS may log an unquoted relative `Screenshot` without preserving the PNG. Run from the intended output directory rather than relying on an absolute destination.
 
+### Control visible state around `Hide` and `Show`
+
+VHS `Hide` stops recording frames while typed commands, output, scrollback, and visible terminal state continue to change. Before `Show`, redraw the intended final screen or run hidden control work through a separate path outside the captured pane. Inspect the first frame after every `Show` and the final frame of the take for leaked commands, responses, or stale state.
+
+### Rehearse injected keys
+
+Confirm in rehearsal that each injected key reaches the target application and invokes the intended binding. When the keybinding itself is the proof point, switch to `showcase-capture-screen` if the terminal-aware path cannot inject it faithfully. When the keybinding is only explanatory, use brief on-screen copy to name it and invoke another supported entry point that reaches the same product behavior and produces the recorded state.
+
 ## Capture a text session with asciinema
 
 Fix the real terminal to the planned columns and rows before recording, use a clean shell, and record locally:
@@ -129,7 +159,7 @@ Capture only the terminal window or rendered terminal frame and follow the plan'
 1. Start from the planned prompt and frame.
 2. Type commands deliberately; avoid backspaces, accidental history, and dead time.
 3. Pause briefly on the meaningful result so it can be read in a still or video frame.
-4. Stop after the outcome; do not continue into cleanup or unrelated exploration.
+4. When cleanup, automatic close, or layout restoration is part of the planned proof, exit the feature and hold the restored state long enough to verify it. Otherwise stop after the outcome without continuing into unrelated exploration.
 
 Use the take as a lightweight acceptance test. If a real command cannot produce the documented or planned demonstration, stop and report the command, expected behavior, and observed behavior. Do not alter the fixture or edit the capture to hide the discrepancy.
 
@@ -154,7 +184,9 @@ wc -c demo.mp4
 
 Use the real artifact path and compare the reported values with the capture plan. When `ffprobe` is unavailable on an OS-capture fallback, use that platform's metadata inspector and report the missing automated check.
 
-Confirm that text is readable, the command/result pair fits in frame, no secrets or notifications appear, and the artifact matches the planned shot. Replay the whole video or cast once to catch truncation, timing gaps, cursor noise, font or cell-width errors, and secret-bearing intermediate frames.
+Treat machine-readable metadata and successful decoding as file-integrity checks. Verify TUI rendering by extracting or capturing a representative frame for every proof-bearing state named in the plan, such as the initial explanation, the main TUI result, and the restored layout after exit. Also inspect the first frame after `Show` whenever hidden activity occurs. At the intended viewing size, check ANSI color, Unicode and Nerd Font glyphs, border and cell alignment, prompt color and cursor position, host-product identity, leaked hidden commands or responses, final layout restoration, and exposed secrets or personal paths.
+
+Replay the whole video or cast once to catch truncation, timing gaps, cursor noise, font or cell-width errors, and secret-bearing intermediate frames that the representative frames do not cover. Confirm that text is readable, the command/result pair fits in frame, and the artifact matches the planned shot.
 
 Limit processing during capture to operations that preserve the represented state: crop, resize, padding, color-profile normalization, metadata removal, and export in the planned format. Do not add callouts, blur sensitive data, composite multiple images, or otherwise change represented terminal state. Re-take rather than crop away essential context or hide a mistake with misleading edits.
 

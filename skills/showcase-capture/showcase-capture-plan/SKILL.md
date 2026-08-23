@@ -36,11 +36,13 @@ Use this order unless the intended audience needs another structure:
 2. Demonstrate: show the few actions that make the outcome credible.
 3. Land: show the result, saved state, or next useful action.
 
-Prefer one idea per shot. For every claim, state the evidence that must be visible: especially show the meaningful state before an action and the state after it. Hold consequential intermediate states long enough to read; cut setup, waiting, repeated navigation, and other transitions that do not establish the claim.
+Prefer one idea per shot. For every claim, state the evidence that must be visible: especially show the meaningful state before an action and the state after it. When cleanup, automatic close, or layout restoration is part of the benefit, treat the state after exit as evidence and include it in the shot list. Hold consequential intermediate states long enough to read; cut setup, waiting, repeated navigation, and other transitions that do not establish the claim.
 
-Target 30–40 seconds for a browser demo by default. Preserve explanatory states; shorten the result by removing dead time and duplicate coverage, not by rushing the proof.
+Target 30–40 seconds for a browser demo by default. For a single-feature README GIF, use 6–8 seconds as a planning heuristic when the proof remains readable. Shorten on-screen copy, type explanatory text faster than demonstrated commands, and remove dead time before dropping evidence or rushing a meaningful state.
 
-Preserve visual continuity when one result motivates the next action. Do not insert a reset or clear merely to make every beat look pristine; use one only when it improves comprehension or establishes the required reset point.
+Preserve visual continuity when one result motivates the next action. Do not insert a reset or clear merely to make every beat look pristine; use one only when it improves comprehension or establishes the required reset point. Treat the minimum sidebar, title, pane border, or other chrome needed to identify the host product as part of the shot. Rehearse the composition at the final dimensions when that context reduces the space available to the demonstrated feature.
+
+Decide whether an input gesture is itself part of the proof. If the claim is that a shortcut or gesture works, the capture must show that real input reaching the product. If the gesture only explains how users normally reach the feature, concise on-screen copy may name it while another supported entry point reaches the same product behavior and produces the visible state.
 
 ## Produce the plan
 
@@ -49,7 +51,7 @@ Use the templates in `references/capture-plan-template.md`. Create a concise pla
 - **Video**: target duration; a beat-by-beat script with on-screen action, spoken/narration copy when applicable, expected state, evidence shown, hold/transition timing, and capture surface.
 - **Stills**: a shot list with the exact scene, visible proof point, framing/crop, target dimensions or aspect ratio, output format, any intended annotation or composition, capture surface, and selected annotation tool when needed.
 - **Capture routing**: assign each shot to `showcase-capture-terminal`, `showcase-capture-browser`, or `showcase-capture-screen`.
-- **Readiness**: fixture provenance, the real execution path, visible environment, viewport/window size, operation-specific completion signals, required reset point, continuity requirements, privacy checks, and the fixed final artifact name.
+- **Readiness**: fixture provenance, the real execution path, whether the input gesture is evidence, identity-bearing product chrome, viewport/window size, visible environment, operation-specific completion signals, required reset point, continuity and lifecycle requirements, proof-bearing review states, privacy checks, and the fixed final artifact name.
 - **Reproduction bundle**: the capture source, representative fixture, setup helper, fixed display settings, and final output names that must remain available for a future re-take.
 
 For a mixed deliverable, share the same narrative but do not merely extract random frames from video: specify composed stills separately.
