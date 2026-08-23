@@ -38,8 +38,8 @@ Direct feedback typed in the session is a fifth source; it needs no ingestion
 skill — `code-review-session-resolve` records it as an item and resolves it.
 
 The session performs no review of its own. `code-review-session-import-ai`
-delegates that to the **`artifact-review-toolkit`** family
-(`artifact-review-toolkit-quick` or `artifact-review-toolkit-adversarial`).
+delegates that to **`quick-code-review`** for an ordinary code review or
+**`artifact-review`** for independent multi-Lens coverage.
 
 Delegation form (resolve the path **relative to this skill's installed
 directory**): `` `code-review-session-base` skill (`references/<file>`) ``.
@@ -86,6 +86,6 @@ without polluting review state. See `references/review-state.md`.
 
 - **New source**: add an ingestion skill plus a `sources/{source}.json` ledger.
   `code-review-session-resolve` is unchanged — it resolves items regardless of source.
-- **Different reviewer**: `code-review-session-import-ai` calls a reviewer from
-  `artifact-review-toolkit` (or one the caller names); it does not hard-code one and
-  contains no review procedure of its own.
+- **Different reviewer**: `code-review-session-import-ai` calls
+  `quick-code-review`, `artifact-review`, or one the caller names; it contains no
+  review procedure of its own.

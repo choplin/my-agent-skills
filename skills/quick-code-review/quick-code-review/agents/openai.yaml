@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quick Code Review"
+  short_description: "Find material defects in one code change"
+  default_prompt: "Use $quick-code-review to review my current code changes."

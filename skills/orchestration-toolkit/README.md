@@ -26,9 +26,8 @@ executable Issue; this group does not currently provide Project-wide graph
 execution.
 
 Independent review is not performed here. The executor calls
-[`artifact-review-toolkit-adversarial`](../artifact-review-toolkit/README.md)
-when its risk criteria require a separate pass, then owns the disposition of
-the resulting findings.
+[`artifact-review`](../artifact-review/README.md) when its risk criteria require
+a separate pass, then owns the disposition of the resulting findings.
 
 ## Installation
 

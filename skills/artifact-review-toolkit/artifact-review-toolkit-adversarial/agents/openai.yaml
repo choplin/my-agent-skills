@@ -1,4 +1,0 @@
-interface:
-  display_name: "Adversarial Review"
-  short_description: "Stress-test artifacts with predefined lenses"
-  default_prompt: "Use $artifact-review-toolkit-adversarial to adversarially review this artifact."

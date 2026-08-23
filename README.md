@@ -72,7 +72,9 @@ skills or validation configuration.
 | Group | Skills |
 |-------|--------|
 | `code-review-session` | import-ai, import-pr, import-ci, run-checks, resolve, reply-pr, report, base (the record of one code review: a review.md list of items fed by ingestion sources — AI review / PR / CI / local checks / direct — and worked to resolution) |
-| `artifact-review-toolkit` | quick, adversarial (how a work artifact is reviewed: a one-off review redirected to the host's reviewer, or a lens-selected adversarial pass with independent reviewers; called by code-review-session and orchestration-toolkit) |
+| `quick-code-review` | quick-code-review (one-pass review of a code change for functional, security, performance, and maintainability defects) |
+| `artifact-review` | artifact-review (risk-selected review of a finished artifact through independent Lens passes with explicit coverage and residual risk) |
+| `review-lenses` | review-lenses (shared finding policy, selection index, and individual Lens definitions used by both review procedures) |
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, finalize (develop an unformed project concept into a durable footing: PRD / decisions / actions) |
 | `design-note` | design-note (write down a problem and the approach taken to it as one durable Markdown note — lighter than a PRD, shallower than a design doc) |
 | `exec-plan` | exec-plan, exec-plan-base (ad-hoc autonomous run with no tracker issue behind it; decision log + parking lot) |
@@ -134,7 +136,9 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - `octa-base` ← octa lifecycle skills, octa-workflow-adapter
 - `workflow-adapter-tracker` ← inception-finalize, planning-toolkit, orchestration-toolkit-execute
 - `workflow-adapter-markdown` ← design-note, inception-finalize, planning-toolkit, orchestration-toolkit-execute, repository-context-base
-- `artifact-review-toolkit` (quick, adversarial) ← code-review-session (import-ai), orchestration-toolkit-execute
+- `quick-code-review` ← code-review-session-import-ai
+- `artifact-review` ← code-review-session-import-ai, orchestration-toolkit-execute
+- `review-lenses` ← quick-code-review, artifact-review
 
 **inception**
 - inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**
@@ -150,15 +154,18 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - exec-plan → base, **discuss-toolkit-dig**
 
 **code-review-session**
-- import-ai → base, **artifact-review-toolkit-quick**, **artifact-review-toolkit-adversarial**
+- import-ai → base, **quick-code-review**, **artifact-review**
 - import-pr → base
 - import-ci → base
 - run-checks → base
 - resolve → base, **discuss-toolkit-dig**
 - report → base
 
-**artifact-review-toolkit**
-- quick → code-review `(ext; host-provided)`
+**quick-code-review**
+- quick-code-review → **review-lenses**
+
+**artifact-review**
+- artifact-review → **review-lenses**
 
 **git-helpers**
 - draft-pr → pr-description
@@ -180,7 +187,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - base → **workflow-adapter-tracker**, **workflow-adapter-markdown**
 
 **orchestration-toolkit**
-- execute → **artifact-review-toolkit-adversarial**, **workflow-adapter-tracker**, **workflow-adapter-markdown**, the selected tracker provider's start/groom/handoff skills, **git-helpers-commit**, wtm-worktree `(ext)`
+- execute → **artifact-review**, **workflow-adapter-tracker**, **workflow-adapter-markdown**, the selected tracker provider's start/groom/handoff skills, **git-helpers-commit**, wtm-worktree `(ext)`
 
 **workflow-adapter**
 - tracker → one selected tracker provider adapter

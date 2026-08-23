@@ -1,0 +1,4 @@
+interface:
+  display_name: "Artifact Review"
+  short_description: "Review artifacts through independent risk lenses"
+  default_prompt: "Use $artifact-review to rigorously review this finished artifact."

@@ -1,7 +1,7 @@
 ---
 title: "Loops and Oracles — Why the Execution and Quality Skills Are Shaped This Way"
 created: 2026-06-11
-updated: 2026-08-03
+updated: 2026-08-23
 ---
 
 # Loops and Oracles
@@ -100,9 +100,10 @@ that compensates for a specific generation's weakness.
   mechanical pass/fail signal (no oracle, no loop), proposes edits only from
   train traces, and accepts only what beats a held-out split. Where no
   mechanical signal exists, `skill-quality-review` is advisory and never a gate.
-- **`artifact-review-toolkit`** — the adversarial pass uses fresh independent
-  reviewers against predefined lenses, and reports coverage gaps rather than
-  implying completeness. This is generator/evaluator separation made explicit.
+- **`artifact-review`** — the rigorous pass uses fresh independent reviewers
+  against risk-selected definitions from `review-lenses`, and reports coverage
+  gaps rather than implying completeness. This is generator/evaluator separation
+  made explicit.
 - **`orchestration-toolkit`** — delegated execution ends at a global adversarial
   review and a final human approval gate, because delegation multiplies (b)-class
   error faster than it multiplies output.
@@ -124,6 +125,9 @@ that compensates for a specific generation's weakness.
 
 ## History
 
+- **2026-08-23** — Updated the review mapping to the focused
+  `artifact-review` skill and its shared `review-lenses` dependency after the
+  former toolkit split.
 - **2026-08-03** — Rewritten from a dated research record into a standing
   statement of design principles. The review of the `dev-workflow` plugin, its
   improvement roadmap, and the assessments of individual articles were dropped

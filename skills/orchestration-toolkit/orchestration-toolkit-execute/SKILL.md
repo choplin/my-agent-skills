@@ -152,8 +152,8 @@ Check the result yourself first: every acceptance item satisfied with observable
 evidence, scope not exceeded, unrelated user changes preserved, no unjustified
 abstraction, required tests and repository checks run with their raw outcomes.
 
-Then decide whether an independent pass is warranted. Call
-`artifact-review-toolkit-adversarial` with `scope: node` when the change has any
+Then decide whether an independent pass is warranted. Call `artifact-review`
+with `scope: node` when the change has any
 of:
 
 - broad blast radius across modules or callers;

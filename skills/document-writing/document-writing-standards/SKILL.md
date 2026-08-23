@@ -115,8 +115,8 @@ pass the whole catalog and still be wrong. Whether it **lands on the reader it
 was written for** is outside them too: a document can be clear, consistent, and
 correct, and still leave its audience unconvinced or unable to act. Route
 subject-matter verification to `document-toolkit-fact-check`, reader effect to
-`document-reader-review`, and claim falsification against acceptance criteria to
-`artifact-review-toolkit-adversarial`.
+`document-reader-review`, and rigorous pre-acceptance artifact review to
+`artifact-review`.
 
 ## Finding schema
 

@@ -52,8 +52,8 @@ Do not:
 
 - judge whether the document's claims are true — that is
   `document-toolkit-fact-check`;
-- falsify a completion or acceptance claim — that is
-  `artifact-review-toolkit-adversarial`;
+- rigorously review a finished artifact before acceptance — that is
+  `artifact-review`;
 - judge whether the document convinces its readers or leaves them stuck — that
   is `document-reader-review`;
 - decide what the document should say, add content, or fill gaps in it;

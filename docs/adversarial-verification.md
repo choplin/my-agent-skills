@@ -1,7 +1,7 @@
 ---
 title: "Adversarial Verification — Design Principle"
 created: 2026-07-10
-updated: 2026-07-29
+updated: 2026-08-23
 ---
 
 # Adversarial Verification — Design Principle
@@ -92,11 +92,12 @@ Concrete, rename-prone names are confined here.
   stays in `dev-workflow`; autonomous work expected to surface parked decisions
   uses `exec-plan`. The routing boundary is the "don't run the loop on a signal
   you don't trust" caveat applied to loop engineering.
-- **`artifact-review-toolkit`** holds the review procedures themselves: a
-  lens-selected, independence-preserving adversarial pass over a concrete
-  artifact, and a lighter one-off review. **`code-review-session`** is the
+- **`artifact-review`** applies risk-selected Lenses through independent passes
+  over a concrete artifact. **`quick-code-review`** applies the four baseline
+  code concerns in one pass. **`review-lenses`** owns the finding policy and
+  Lens definitions shared by both. **`code-review-session`** is the
   ingestion/adjudication plumbing a verifier stage reuses to record and resolve
-  what a review returns.
+  what either review returns.
 - **Direction — autonomous skill-quality loops.** Applying the loop-time regime
   to skill documents themselves (a verifier that hardens its own checks against
   a skill-generator, or machine-checkable anchors driving iteration) is a wanted
@@ -117,4 +118,7 @@ Concrete, rename-prone names are confined here.
 
 ## History
 
+- **2026-08-23** — Replaced the former toolkit names with `quick-code-review`
+  and `artifact-review`, reflecting their distinct one-pass and independent
+  multi-Lens procedures, with `review-lenses` as their shared policy owner.
 - **2026-07-10** — Created. Earlier revisions are in git history.

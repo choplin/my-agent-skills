@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Lenses"
+  short_description: "Shared review lenses and finding policy"
+  default_prompt: "Use $review-lenses to load the review policy and requested Lens definitions."

@@ -19,7 +19,7 @@ feedback). It **ingests** findings — it does not resolve or fix them; that is
 
 Select this skill when the requested deliverable is a **persistent review record**.
 A one-off "review this diff and tell me what's wrong" wants findings in the
-conversation and no record: that is `artifact-review-toolkit-quick` on its own.
+conversation and no record: that is `quick-code-review` on its own.
 
 ## Who performs the review
 
@@ -27,8 +27,8 @@ This skill contains no review procedure. It calls one:
 
 | Reviewer | Use when |
 |----------|----------|
-| `artifact-review-toolkit-quick` (default) | An ordinary code review of the change |
-| `artifact-review-toolkit-adversarial` | The change needs falsification against explicit acceptance — broad blast radius, low reversibility, weak evidence |
+| `quick-code-review` (default) | One-pass functional, security, performance, and maintainability review of the change |
+| `artifact-review` | The change needs independent multi-Lens coverage — broad blast radius, low reversibility, weak evidence, or cross-artifact risk |
 | A reviewer named by the caller | The caller specifies one; honor it |
 
 The caller may also pass findings it already has, in which case this skill only
@@ -40,7 +40,7 @@ records them.
   `code-review-session-base` skill (`references/review-init-guide.md`)).
 - `scope` — the change to review (default: current branch diff).
 - `reviewer` — optional; which reviewer to invoke (default
-  `artifact-review-toolkit-quick`).
+  `quick-code-review`).
 - `findings` — optional; findings already produced, to record without reviewing.
 
 ## Process
