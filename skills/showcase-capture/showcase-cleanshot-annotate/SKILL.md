@@ -19,7 +19,9 @@ Require:
 
 - an existing PNG or JPEG clean source and the proof point that must remain visible;
 - a numbered edit brief naming every arrow, label, highlight, crop, background, or framing change;
-- the final path, dimensions or aspect ratio, and format.
+- the final path, dimensions or aspect ratio, format, and intended publication width or viewing size.
+
+When the brief calls for an arrow or highlight, pair it with concise label copy that explains what product information is displayed. A label that states only a relationship between marked objects does not explain the feature.
 
 Inspect the source before launch. If it contains a preventable secret, personal data, notification, wrong state, or other capture defect, return it to the originating capture skill. Do not prescribe blur or masking as a repair.
 
@@ -39,18 +41,20 @@ Present the human editor with:
 
 1. the numbered edit brief;
 2. the visual proof that must not be covered or changed;
-3. the exact final path and format;
-4. a request to save there and reply when editing is complete.
+3. the intended publication width or viewing size;
+4. the exact final path and format;
+5. a request to save there and reply when editing is complete.
 
 Pause at this handoff. Do not attempt pointer-level CleanShot editing by default, poll unrelated folders, or infer completion from the newest screenshot.
 
 ## Recover and verify
 
-After the user reports completion, resolve the exact final path and confirm that it exists. Inspect the final image at its intended viewing size and compare it with the clean source. Confirm:
+After the user reports completion, resolve the exact final path and confirm that it exists. Inspect the final image at its intended publication width or viewing size, not only at 100%, and compare it with the clean source. Confirm:
 
 - the proof point is unchanged, visible, and readable;
 - every requested edit appears and no unrequested edit appears;
-- annotations do not cover the state they explain;
+- annotations do not cover the state they explain, and every label remains readable at the intended size;
+- each arrow or highlight has label copy that explains the displayed product information;
 - dimensions, aspect ratio, and format match the brief;
 - no secret, personal data, misleading reconstruction, or generative fill appears.
 

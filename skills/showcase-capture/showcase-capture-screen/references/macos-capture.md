@@ -11,6 +11,19 @@ Use this procedure for native apps, OS-owned UI, browser chrome, and multi-windo
 
 Do not install CleanShot X or change its URL-scheme setting without approval. Before relying on a command, check the installed behavior: CleanShot parameters vary by version, while `screencapture` options vary by macOS release.
 
+## Isolate the take with Deskpad
+
+Use Deskpad when a dedicated virtual display would keep personal desktop state and unrelated windows out of the take. Deskpad supplies display space; it does not route an application or its later windows to that display. Treat application launch and display isolation as separate gates.
+
+1. Start Deskpad and fix its resolution and display scale to the capture plan.
+2. Start the target application from a process independent of any existing instance whose parent session or environment could trigger a nested-process guard. A different session name or an environment-preserving login shell such as `login -p` does not by itself establish independence. If the application rejects nesting, use an independent terminal or launcher; do not enable recursive execution solely for capture.
+3. Explicitly move the target window to the Deskpad display. Confirm that the whole window is there and that no target window remains on the main display.
+4. Rehearse every window, sheet, dialog, menu, or tooltip needed by the take. Confirm that each appears on Deskpad, then return to the planned reset point.
+5. Set the application window, font size, and UI scale so the proof point remains readable with enough surrounding context to show where it appears.
+6. Configure the acquisition tool for the Deskpad display or its exact planned region. Take a disposable rehearsal shot and inspect it for unrelated desktop content before producing the final artifact.
+
+Both gates must pass: the application must run in the intended state, and every visible surface used by the take must be isolated on Deskpad. Passing one does not imply the other.
+
 ## Drive CleanShot X
 
 CleanShot X exposes a URL scheme rather than a documented shell CLI. Launch a command with `open`:

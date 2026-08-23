@@ -19,8 +19,8 @@ Own visible-screen state preparation, acquisition, state-preserving crop/resize/
 
 - Put every required window at its planned size and position; close or hide everything else.
 - Disable or silence notifications, calendar popups, and messaging indicators. Check menus, dock/taskbar, wallpaper, account names, recent-file lists, and cursor position for sensitive or distracting material.
-- Choose the smallest region that still explains the shot. Use a fixed display scale and do one rehearsal before recording.
-- Start the application from a known reset point and use only representative, non-sensitive data. Seeded data may be artificial, but exercise the real application path rather than showing stub responses or prewritten activity.
+- Choose the smallest region that still explains the shot while preserving enough application context to locate the proof point. Before tightening the crop or enlarging the image in post-processing, adjust the application window and its font or UI scale so the proof point is readable at the planned output size. Use a fixed display scale and do one rehearsal before recording.
+- Start the application from a known reset point and use only representative, non-sensitive data. Seeded data may be artificial, but exercise the real application path rather than showing stub responses or prewritten activity. Choose values whose differences make the claimed behavior visually distinguishable; repeated or ambiguous values can conceal per-item state even when the application is correct.
 
 ## Capture the planned take
 
