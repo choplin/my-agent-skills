@@ -12,7 +12,7 @@
 
 ### Item {N}: {one-line summary}
 
-- **Source**: {ai | pr:comment/{id} | ci:job/{id} | direct}
+- **Source**: {ai:round/{id} | pr:comment/{id} | ci:job/{id} | check:{command} | direct}
 - **Status**: open | resolved | skipped | postponed
 - **Detail**: {the finding or feedback}
 - **Approach**: {optional — the proposed response; filled during resolve}

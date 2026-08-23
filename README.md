@@ -71,7 +71,7 @@ skills or validation configuration.
 
 | Group | Skills |
 |-------|--------|
-| `code-review-session` | import-ai, import-pr, import-ci, run-checks, resolve, reply-pr, report, base (the record of one code review: a review.md list of items fed by ingestion sources — AI review / PR / CI / local checks / direct — and worked to resolution) |
+| `code-review-session` | import-ai, import-pr, import-ci, run-checks, resolve, reply-pr, report, base (the record of one code review: review rounds plus a review.md list of items fed by AI / PR / CI / local checks / direct feedback and worked to resolution) |
 | `quick-code-review` | quick-code-review (one-pass review of a code change for functional, security, performance, and maintainability defects) |
 | `artifact-review` | artifact-review (risk-selected review of a finished artifact through independent Lens passes with explicit coverage and residual risk) |
 | `review-lenses` | review-lenses (shared finding policy, selection index, and individual Lens definitions used by both review procedures) |

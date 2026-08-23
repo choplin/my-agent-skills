@@ -10,7 +10,7 @@ Each item under `## Items` has these fields:
 | Field | Required | Meaning |
 |-------|----------|---------|
 | summary | ✓ | One-line description (the `### Item {N}:` heading) |
-| `Source` | ✓ | Where the item came from — a ref, not the data itself: `ai`, `pr:comment/{id}`, `ci:job/{id}`, `check:{command}`, or `direct` |
+| `Source` | ✓ | Where the item came from — a ref, not the data itself: `ai:round/{id}`, `pr:comment/{id}`, `ci:job/{id}`, `check:{command}`, or `direct` (`ai` is accepted for legacy items) |
 | `Status` | ✓ | `open`, `resolved`, `skipped`, or `postponed` |
 | `Detail` | ✓ | The finding or feedback text |
 | `Approach` | | The proposed response, recorded during resolve (free text) |
@@ -49,6 +49,9 @@ Source-specific data is **not** in `review.md`. Each external source keeps its o
 ledger at `{review_dir}/sources/{source}.json`, keyed so an item's `Source` ref
 resolves into it. Examples:
 
+- `sources/ai.json` — per AI review round: reviewer, mode, scope, revision and
+  content fingerprints, outcome, item associations, and available
+  location/severity/confidence metadata.
 - `sources/pr.json` — per PR comment: comment id, author, inline path/line, thread,
   `imported` and `replied` flags.
 - `sources/ci.json` — per CI result: run id, job/check name, conclusion, log ref.

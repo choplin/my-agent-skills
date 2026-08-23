@@ -51,6 +51,7 @@ directory**): `` `code-review-session-base` skill (`references/<file>`) ``.
 | Review template | `references/review-template.md` | Creating `review.md` |
 | Review-state model | `references/review-state.md` | Item fields/statuses, review phase, source convention |
 | Review init guide | `references/review-init-guide.md` | Resolving `review_dir` and creating `review.md` |
+| AI review rounds | `references/ai-review-rounds.md` | Recording AI runs and selecting full, incremental, or skipped review |
 
 ## Where the record lives (`review_dir`)
 
@@ -72,12 +73,15 @@ working state.
 resolution). It is the single source of truth for review state.
 
 **Source-specific data is kept separate**, in a per-source companion ledger under
-`{review_dir}/sources/{source}.json` (e.g. `sources/pr.json`, `sources/ci.json`,
-`sources/check.json`). A PR comment carries its own comment id, author, inline
-location, thread, and replied-flag; a CI result carries its run/job/log; a locally-run
+`{review_dir}/sources/{source}.json` (e.g. `sources/ai.json`, `sources/pr.json`,
+`sources/ci.json`, `sources/check.json`). An AI review carries its reviewer,
+target revisions/fingerprints, round mode, item associations, and finding
+metadata. A PR comment carries its own comment id, author, inline location,
+thread, and replied-flag; a CI result carries its run/job/log; a locally-run
 check carries its command and exit code — none of that belongs in the
 generic item. Each item references its source via a `Source` ref (e.g.
-`pr:comment/123`); the ledger, keyed by that ref, holds the source's own data.
+`ai:round/2`, `pr:comment/123`); the ledger, keyed by that ref, holds the
+source's own data.
 
 This keeps the item model small and lets each source bring arbitrary bookkeeping
 without polluting review state. See `references/review-state.md`.

@@ -3,7 +3,8 @@
 A portable, agent-agnostic **record** for one code review. A review is a shared list
 of items (`review.md`); operations either **add** items to it or **drive** items to
 resolution, and they run in any order — you move back and forth between adding and
-resolving.
+resolving. AI ingestion also records review rounds, so later runs can distinguish
+full review, incremental review, supplied findings, and an unchanged target.
 
 The record is the single source of truth for review state, so a review survives
 `/clear`, a crash, or a new session. It knows nothing about specs, plans, or any
@@ -19,7 +20,7 @@ and records what comes back.
 
 | Skill | Kind | Description |
 |-------|------|-------------|
-| `code-review-session-import-ai` | ingest | Record an AI code review's findings as items (the review itself is delegated to a selected reviewer) |
+| `code-review-session-import-ai` | ingest | Run or ingest an AI review, record its round/revisions, and add new findings as items |
 | `code-review-session-import-pr` | ingest | Import GitHub PR review comments as items (PR data kept in `sources/pr.json`) |
 | `code-review-session-import-ci` | ingest | Import failing CI checks as items (CI data kept in `sources/ci.json`) |
 | `code-review-session-run-checks` | ingest | Run the project's checks locally and record failures as items (`sources/check.json`) |
@@ -37,16 +38,17 @@ to a commit already pushed.
 
 ## The model
 
-- **Items** carry only generic state: a `Source` ref (`ai` / `pr:comment/{id}` /
-  `ci:job/{id}` / `check:{command}` / `direct`), a `Status` (`open` → `resolved` /
+- **Items** carry only generic state: a `Source` ref (`ai:round/{id}` /
+  `pr:comment/{id}` / `ci:job/{id}` / `check:{command}` / `direct`), a `Status`
+  (`open` → `resolved` /
   `skipped` / `postponed`), a detail, and optional `Approach` / `Resolution`.
   Statuses are minimal — the propose→approve→apply steps happen live, only the
   outcome is persisted.
 - **`postponed`** = a follow-up: acknowledged but needing a larger/design-level change
   beyond this review's scope. `code-review-session-report` surfaces these for downstream.
-- **Source-specific data** (comment ids, authors, CI runs, check commands, replied
-  flags) lives in per-source ledgers at `{review_dir}/sources/{source}.json`, never
-  mixed into items.
+- **Source-specific data** (AI review rounds and revisions, comment ids, authors,
+  CI runs, check commands, replied flags) lives in per-source ledgers at
+  `{review_dir}/sources/{source}.json`, never mixed into items.
 
 ## Where the record lives (`review_dir`)
 
@@ -59,6 +61,7 @@ to a commit already pushed.
 
 ```
 code-review-session-import-ai      # seed items from an AI review of the diff
+  ↕ repeat after changes           # incremental review from the prior recorded SHA
   ↕ (import-pr / import-ci / run-checks to add items at any point)
 code-review-session-resolve        # propose → approve/discuss → resolved/skipped/postponed
   ↓ LGTM
