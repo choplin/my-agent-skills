@@ -59,15 +59,42 @@ Default to covering `Orient`, `Motivate`, and `Activate`. Include `Deepen` when 
 
 Agree on the coverage boundary before drafting when it would materially change the README's length or structure. Treat an explicit user request or an established repository convention as agreement. Otherwise, propose the boundary and its rationale; if work can proceed safely without an answer, state the assumption.
 
-## Agree on the tagline
+## Choose the opening pattern
 
-Before drafting the README, determine whether the product tagline is already settled. Treat it as settled only when the user has supplied or approved it, or the repository identifies it as canonical product language. Do not silently invent, select, or preserve a tagline merely because one appears in the current README.
+Read `references/readme-patterns.md` in full, then choose one opening pattern
+after inspecting the product and repository tone:
 
-When the tagline is unsettled, finish enough repository inspection to ground the wording, then propose a small set of short, literal candidates. Explain the meaningful distinction between them, such as which audience, category, or outcome each emphasizes. Discuss the wording with the user and pause before drafting until they explicitly choose or revise a candidate. Record the agreed tagline as part of the reading contract.
+- **Description-led:** lead with one concise sentence that identifies the
+  product, primary user, and outcome. Use this when a separate tagline would
+  duplicate the description or the README should remain technically direct.
+- **Text hero:** present the product name and an explicit tagline as a compact
+  text treatment. Use this when a distinct product message improves identity
+  and orientation without requiring a visual asset.
+- **Visual hero:** combine the product identity with a hero image and supporting
+  text. Use this when the README serves as a product landing page and a logo,
+  screenshot, representative output, or composed visual materially improves
+  orientation or motivation.
+
+Treat the choice as part of the reading contract. Preserve a suitable
+repository convention, but do not wait for a canonical tagline or finished
+hero image to appear on its own: create what the selected pattern requires through
+the agreement and visual workflows below.
+
+For a text or visual hero, read `references/tagline.md` in full and follow its
+evidence, candidate, agreement, and placement workflow. Do not draft the hero
+until the tagline is settled.
+
+For a visual hero, also read `references/hero-image.md` in full and follow its
+brief, approval, production, and verification workflow.
+
+For a description-led opening, draft and verify the opening sentence as product
+description rather than manufacturing a separate slogan. Do not format a
+tagline or description as a blockquote; reserve blockquotes for quotations and
+callouts.
 
 ## Design the information architecture
 
-Read `references/readme-patterns.md` and select only the sections justified by the product. Adapt the order to the reader's decision journey; do not copy a maximal template.
+Use `references/readme-patterns.md` to select only the sections justified by the product. Adapt the order to the reader's decision journey; do not copy a maximal template.
 
 Assign every user-facing section one primary stage and order sections by stage:
 
@@ -81,8 +108,8 @@ Do not place optional concepts, configuration, alternatives, or contributor mate
 Lead with:
 
 - a precise product name;
-- the agreed short, literal tagline;
-- a one-sentence description when the tagline alone does not identify the product, audience, and outcome;
+- the selected description-led, text-hero, or visual-hero opening;
+- a one-sentence description when the hero or tagline alone does not identify the product, audience, and outcome;
 - a concrete proof point, such as a representative example, screenshot, output, or short workflow;
 - concise positioning near the top;
 - the shortest verified path to the primary outcome.
@@ -100,28 +127,12 @@ Badges are metadata, not a value proposition. Include only current, maintained b
 
 Treat screenshots and short videos as strong options for `Orient` and `Motivate`: they can help readers recognize the product, understand its workflow, and judge its value before investing in setup. Decide whether to use them, which medium fits, and how many are justified by the claims the README must prove. Do not add media to satisfy a quota.
 
-Inspect existing media first. Reuse it only when it proves the intended claim, represents the current product, and fits the planned reader journey. When suitable media is missing, use the `showcase-capture` skill family in this order:
-
-1. Load `showcase-capture-plan` and define the claim, medium, visible evidence, scene or sequence, framing or duration, README placement, privacy constraints, draft alt text, and capture surface.
-2. Put a clearly labeled review stub at the intended location in the README. Use the stub format in `references/readme-patterns.md`; do not create a broken image link or imply that the asset already exists.
-3. Ask the user to approve or revise the stubs. Stop before capture; approval of the README request alone does not authorize producing the planned media.
-4. After approval, follow the capture plan and load the routed surface skill: `showcase-capture-terminal`, `showcase-capture-browser`, or `showcase-capture-screen`. Use an annotation skill only when the approved plan requires annotation or composition.
-5. Replace each approved stub with the captured asset and meaningful alt text. Verify the rendered placement, asset path, represented product state, and absence of sensitive information.
-
-If the task is draft-only, include the review stubs in the draft and request approval without modifying the repository or starting capture.
-
-### Optionally design a README visual
-
-Separately decide whether a composed visual would materially improve the README. This may be a hero image, workflow illustration, architecture or relationship diagram, comparison panel, conceptual overview, or another graphic that communicates faster than prose. Do not add one as decoration or use it to imply behavior that has not been verified.
-
-When a new visual is justified:
-
-1. Define the communication brief: audience, purpose, core message, README placement, visual type, dimensions or aspect ratio, approved source assets, accessibility requirements, and any claim or evidence that must remain visible. Prefer real product output or screenshots when the visual represents behavior.
-2. Put a clearly labeled visual-design review stub at the intended README location using `references/readme-patterns.md`. Ask the user to approve or revise what the visual must communicate. Stop while those communication choices remain open.
-3. After approval, load `repository-context-pen-design` and pass it the complete brief, source paths, repository identity or visual constraints, draft alt text, and intended export path. Follow its visual-concept agreement, multiple-direction comparison, selection, refinement, and verified-export workflow.
-4. Replace the stub with the approved export and meaningful alt text. Verify the rendered README placement, image path, dimensions, represented product state, and absence of private, synthetic, or misleading content. Preserve and report the `.pen` source path, candidate frame names, and selected final frame.
-
-If the visual requires a captured product still, complete the approved capture workflow first and pass the clean capture as source evidence. If the task only annotates or frames that still, route it to `showcase-pen-annotate` instead. If the task is draft-only, leave the review stub in place and do not start Pen/Pencil MCP work.
+For non-hero visual proof, inspect existing media first and reuse it only when
+it proves the intended claim, represents the current product, and fits the
+reader journey. When suitable media is missing, use `showcase-capture-plan` to
+define and obtain approval for the asset before loading its routed capture
+skill. Approval of a README request alone does not authorize producing new
+media.
 
 ## Write and edit
 

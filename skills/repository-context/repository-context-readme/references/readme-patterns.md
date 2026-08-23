@@ -48,7 +48,7 @@ Section names may vary, but each section needs one primary job. Use this mapping
 
 | Stage | Typical sections or elements | Primary responsibility | Keep out |
 | --- | --- | --- | --- |
-| Orient | Name, tagline, literal description, audience | Establish identity and relevance immediately. | Setup detail, architecture, feature inventory |
+| Orient | Name, selected opening pattern, literal description, audience | Establish identity and relevance immediately. | Setup detail, architecture, feature inventory |
 | Motivate | Visual proof, representative output, positioning, use cases, conditional differentiation | Turn relevance into a concrete reason to try the product. | Unsupported claims, exhaustive feature lists, long comparisons |
 | Activate | Prerequisites, installation, Quickstart, expected result | Carry the reader through the shortest complete path to first success. | Optional variants, advanced configuration, unrelated concepts |
 | Deepen | Core concepts, common recipes, selected configuration, limitations, security, support, documentation links | Help successful users choose and complete their next action. | Exhaustive API or option reference, unrelated operations, duplicated documentation |
@@ -59,24 +59,73 @@ Before keeping a section, ask: “Does this help the primary reader reach the en
 
 ## Opening pattern
 
-Use this shape unless the repository or product calls for a smaller opening:
+Choose the smallest pattern that gives the product the right identity and makes
+its relevance immediately clear. The patterns are alternatives, not maturity
+levels and not a sequence to include together.
+
+### Description-led
+
+Use a description-led opening when technical clarity matters more than a
+separate product slogan, or when a tagline would merely repeat the literal
+description.
 
 ```markdown
 # Product name
 
-> Short, literal tagline.
+One concise sentence identifying the product, primary user, and outcome.
 
-One sentence identifying the product, primary user, and outcome when the
-tagline does not do all three.
-
-<visual proof or approved review stub when selected>
+<visual proof when it materially improves understanding>
 
 <positioning>
 ```
 
-Prefer a tagline that identifies the category or outcome over a clever but ambiguous slogan. If the tagline is memorable but not literal, follow it with the explanatory sentence.
+The opening sentence carries the orientation work; do not treat the absence of
+a separate tagline as missing content.
 
-Do not draft around an unsettled tagline. When the user has not supplied or approved one and the repository does not designate canonical wording, propose a few evidence-based candidates, explain what each emphasizes, and agree on the wording first.
+### Text hero
+
+Use a text hero when a distinct product message materially improves identity
+and orientation, but a visual asset is unnecessary. Keep the product name and
+tagline together as one deliberate treatment.
+
+```html
+<div align="center">
+  <h1>Product name</h1>
+  <p><strong>Short, distinctive tagline.</strong></p>
+</div>
+```
+
+Follow the hero with a literal description when the tagline alone does not
+identify the product, primary user, and outcome. Keep the HTML treatment small;
+return to ordinary Markdown for the body.
+
+### Visual hero
+
+Use a visual hero when a hero image materially improves identity, orientation,
+or motivation and the README needs to act as a product landing page.
+
+```html
+<p align="center">
+  <img src="path/to/hero.png" alt="Meaningful description of the product or evidence shown">
+</p>
+<h1 align="center">Product name</h1>
+<p align="center"><strong>Short, distinctive tagline.</strong></p>
+```
+
+Use existing media only when it is current and supports the intended message.
+When the hero image does not exist, follow the conditional hero-image workflow
+routed by the main skill instead of inventing an asset or silently falling back
+to another pattern.
+
+### Selection and tagline rules
+
+For a text or visual hero, create and agree on the tagline through the
+conditional tagline workflow routed by the main skill. A canonical tagline does
+not need to pre-exist.
+
+Do not use a blockquote to style a tagline or description. Blockquotes convey
+quoted or callout content and commonly render with muted text, which works
+against a tagline's purpose.
 
 ## Positioning and differentiation
 
@@ -147,35 +196,9 @@ Choose media by the claim it must prove:
 
 Do not add media only as decoration. Keep the positioning visible near the opening instead of letting a large image push all useful explanation far below it.
 
-When suitable media is missing, use `showcase-capture-plan` to design the asset before capture. Put a temporary review stub in the exact README position where the asset would appear:
-
-```markdown
-> **Planned visual — approval required**
-> **Claim:** <reader-facing claim this asset must prove>
-> **Asset:** <screenshot or video; proposed dimensions, format, or duration>
-> **Scene:** <exact product state or sequence and visible evidence>
-> **Capture:** <terminal, browser, or screen surface; framing and privacy constraints>
-> **Alt text:** <draft alt text>
-```
-
-Keep the stub concise but specific enough to review the claim, medium, content, and placement in context. Use one stub per proposed asset. Do not create broken links or imply that an unprovided asset exists.
-
-For a designed visual, use this variant:
-
-```markdown
-> **Planned visual design — approval required**
-> **Purpose:** <what this part of the README should communicate>
-> **Type:** <hero, workflow, relationship diagram, comparison, or other form>
-> **Asset:** <proposed dimensions or aspect ratio and export format>
-> **Content:** <real screenshots, output, logo, text, or other source material>
-> **Message:** <core reader-facing message and important constraints>
-> **Evidence:** <claim preserved by real product material, or "Editorial image; not product evidence">
-> **Alt text:** <draft alt text>
-```
-
-Agree on what the visual must communicate, then load `repository-context-pen-design`. That skill owns visual-concept agreement, two to four comparable directions in one editable `.pen` file, user selection, refinement, final approval, verification, and export. Keep real screenshots and output unchanged as separate source layers.
-
-Get explicit user approval for the stubs before loading a surface capture skill. After approval, preserve the approved claim and evidence requirements in the capture plan, capture the real product path, and replace the stubs with the final assets. If rehearsal shows that the approved claim cannot be reproduced, stop and return to planning instead of changing the story during capture.
+When suitable non-hero media is missing, follow the `showcase-capture-plan`
+workflow routed by the main skill. Do not create broken links, imply that an
+unprovided asset exists, or start capture before its plan is approved.
 
 ## Decoration
 
@@ -243,8 +266,11 @@ Keep lengthy contribution, operations, API, and troubleshooting material in dedi
 ### Message
 
 - [ ] The first screen explains the product and intended user.
-- [ ] The tagline is user-approved or established as canonical product language.
-- [ ] The tagline is concise and literal, or followed by a literal description.
+- [ ] The opening deliberately uses one appropriate pattern: description-led, text hero, or visual hero.
+- [ ] A description-led opening identifies the product, primary user, and outcome without manufacturing a redundant tagline.
+- [ ] A text or visual hero uses a user-approved or established tagline.
+- [ ] A hero tagline is concise and literal, or followed by a literal description.
+- [ ] Blockquotes are used for quotations or callouts, not to style a tagline or description.
 - [ ] The value proposition describes an outcome, not a list of implementation details.
 - [ ] Positioning states three to five distinct user outcomes when the product warrants it.
 - [ ] Each positioning item leads with a concise message; supporting detail does not bury it.
