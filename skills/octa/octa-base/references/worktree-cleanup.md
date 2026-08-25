@@ -9,9 +9,10 @@ Cleanup is automatic only after safety checks.
    - no staged, unstaged, or untracked Issue work needs preservation;
    - the work branch is not the target branch;
    - the worktree/branch identity belongs to this Issue.
-3. For an isolated worktree, apply the leaving procedure in
-   [terminal-pane-cwd.md](terminal-pane-cwd.md) and synchronize the terminal to
-   a safe existing directory before removal.
+3. For an isolated worktree under Codex or Claude Code, apply the leaving
+   procedure in [terminal-pane-cwd.md](terminal-pane-cwd.md). Under Claude Code,
+   do not wait for or verify the optional external pane hook. Under any other
+   host, skip this step.
 4. For an isolated worktree, use the installed `wtm-worktree` skill and remove
    it from outside that worktree. Delete the local work branch only after the
    checks pass.

@@ -214,13 +214,15 @@ After Done, read [worktree-cleanup.md](references/worktree-cleanup.md). Remove a
 isolated worktree and local work branch only after verifying integration,
 cleanliness, and identity.
 
-### Terminal pane directory
+### Worktree working directory
 
-Read [terminal-pane-cwd.md](references/terminal-pane-cwd.md) after selecting an
-isolated worktree. Synchronize the terminal's reported pane directory to the
-Issue worktree and restore it safely before that worktree is removed. This is
-terminal navigation metadata, not a change to the agent process's working
-directory.
+After selecting an isolated worktree under Codex or Claude Code, read and apply
+[terminal-pane-cwd.md](references/terminal-pane-cwd.md). Under any other host,
+skip it.
+
+Read [working-directory-model.md](references/working-directory-model.md) only
+when modifying or diagnosing these host procedures. Normal Issue execution does
+not need the directory and OSC 7 background it contains.
 
 ## Octa references stay local
 
