@@ -1,0 +1,4 @@
+interface:
+  display_name: "Worktree Create Adapter"
+  short_description: "Create one managed repository worktree"
+  default_prompt: "Use $workflow-adapter-worktree-create to create this managed repository worktree."

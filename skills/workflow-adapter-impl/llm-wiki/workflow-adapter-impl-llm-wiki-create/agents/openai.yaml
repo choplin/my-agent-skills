@@ -1,0 +1,4 @@
+interface:
+  display_name: "llm-wiki Markdown Create Implementation"
+  short_description: "Create markdown operations through llm-wiki"
+  default_prompt: "Use $workflow-adapter-impl-llm-wiki-create to apply this validated markdown create operation through llm-wiki."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "llm-wiki Markdown Resolve Implementation"
+  short_description: "Resolve markdown operations through llm-wiki"
+  default_prompt: "Use $workflow-adapter-impl-llm-wiki-resolve to apply this validated markdown resolve operation through llm-wiki."

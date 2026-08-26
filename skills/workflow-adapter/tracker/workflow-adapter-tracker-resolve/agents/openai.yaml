@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tracker Resolve Adapter"
+  short_description: "Resolve a tracker provider and repository"
+  default_prompt: "Use $workflow-adapter-tracker-resolve to resolve this tracker destination."

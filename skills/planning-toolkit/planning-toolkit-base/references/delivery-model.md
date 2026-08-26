@@ -191,9 +191,11 @@ Keep knowledge and execution consistent without copying entire notes between
 systems. The tracker may use internal Issue identifiers and links. Do not write
 those identifiers or URLs into durable notes.
 
-Use `workflow-adapter-markdown` for durable Markdown access and
-`workflow-adapter-tracker` for Project, Milestone, Issue, relation, and
-transition operations. Provider mechanics stay behind those adapters.
+Use `workflow-adapter-markdown-find`, `workflow-adapter-markdown-read`,
+`workflow-adapter-markdown-create`, or `workflow-adapter-markdown-update` for
+durable Markdown access and the matching `workflow-adapter-tracker-<operation>` skill for
+Project, Milestone, Issue, relation, and transition operations. Provider
+mechanics stay behind those adapters.
 
 ## 8. Tracker mapping
 

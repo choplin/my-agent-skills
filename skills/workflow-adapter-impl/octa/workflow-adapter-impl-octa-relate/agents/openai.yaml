@@ -1,0 +1,4 @@
+interface:
+  display_name: "octa Tracker Relate Implementation"
+  short_description: "Relate tracker operations through octa"
+  default_prompt: "Use $workflow-adapter-impl-octa-relate to apply this validated tracker relate operation through octa."

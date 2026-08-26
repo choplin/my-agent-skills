@@ -10,7 +10,9 @@ Shallower on *how* than a design doc, and narrower than a product PRD. It expect
 the direction to be settled already; shaping an unformed concept is a separate
 kind of session.
 
-Requires `workflow-adapter-markdown` and an installed durable Markdown provider.
+Requires `workflow-adapter-markdown-resolve`,
+`workflow-adapter-markdown-create`, and matching installed operation
+implementations for a durable Markdown provider.
 
 ## Installation
 

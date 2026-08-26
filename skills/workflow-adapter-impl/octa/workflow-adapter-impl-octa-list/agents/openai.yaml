@@ -1,0 +1,4 @@
+interface:
+  display_name: "octa Tracker List Implementation"
+  short_description: "List tracker operations through octa"
+  default_prompt: "Use $workflow-adapter-impl-octa-list to apply this validated tracker list operation through octa."

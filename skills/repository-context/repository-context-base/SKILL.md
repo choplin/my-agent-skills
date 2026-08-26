@@ -82,7 +82,9 @@ operation can identify the cohort later.
 
 The work tag is a temporary cohort selector, not a maturity state or a reserved
 provider axis. Keep ordinary topic metadata and links according to the selected
-provider. Delegate note access to `workflow-adapter-markdown` and reworking to
+provider. Delegate note access to `workflow-adapter-markdown-find`,
+`workflow-adapter-markdown-read`, `workflow-adapter-markdown-create`, or
+`workflow-adapter-markdown-update` as appropriate, and reworking to
 the provider's distillation operation; do not reproduce their mechanics here.
 
 ## Distill at work completion

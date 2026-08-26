@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tracker Relation Adapter"
+  short_description: "Change a tracker record relation"
+  default_prompt: "Use $workflow-adapter-tracker-relate to apply this tracker record relation change."

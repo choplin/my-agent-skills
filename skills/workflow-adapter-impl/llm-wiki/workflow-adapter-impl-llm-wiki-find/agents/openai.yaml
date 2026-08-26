@@ -1,0 +1,4 @@
+interface:
+  display_name: "llm-wiki Markdown Find Implementation"
+  short_description: "Find markdown operations through llm-wiki"
+  default_prompt: "Use $workflow-adapter-impl-llm-wiki-find to apply this validated markdown find operation through llm-wiki."

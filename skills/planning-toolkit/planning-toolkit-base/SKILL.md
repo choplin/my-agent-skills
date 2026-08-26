@@ -47,8 +47,10 @@ This skill does not:
 - define implementation progress or completion states, which belong to the
   execution skills.
 
-Use `workflow-adapter-tracker` for tracker operations and
-`workflow-adapter-markdown` for durable Markdown access. The model here adds
+Use the matching `workflow-adapter-tracker-<operation>` skill for tracker access.
+Use `workflow-adapter-markdown-find`, `workflow-adapter-markdown-read`,
+`workflow-adapter-markdown-create`, or `workflow-adapter-markdown-update` for
+durable Markdown access. The model here adds
 planning semantics; it does not duplicate provider mechanics.
 
 ## Delegation

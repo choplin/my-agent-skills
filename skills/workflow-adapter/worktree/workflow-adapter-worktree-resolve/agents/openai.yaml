@@ -1,0 +1,4 @@
+interface:
+  display_name: "Worktree Resolve Adapter"
+  short_description: "Resolve a worktree provider or locator"
+  default_prompt: "Use $workflow-adapter-worktree-resolve to resolve this repository worktree."

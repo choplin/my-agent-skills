@@ -103,7 +103,7 @@ metadata, repository file, commit, or user-facing report.
 Choose autonomously from the deliverable:
 
 - `impl` or another repository change: use an isolated worktree when the
-  installed `workflow-adapter-worktree` can resolve a provider; otherwise use
+  installed `workflow-adapter-worktree-resolve` can resolve a provider; otherwise use
   the current workspace and say so. Do not improvise one with a bare
   `git worktree add`: it bypasses the provider's association metadata, and the
   current-workspace path already handles that case.
@@ -119,7 +119,7 @@ octa:<repo>#<number> <title>
 The association metadata identifies the Issue only; it must not contain the
 lease ID.
 
-On resume, use `workflow-adapter-worktree` to list exact association-metadata
+On resume, use `workflow-adapter-worktree-list` to list exact association-metadata
 matches before creating anything. If exactly one matches, use it. With several,
 ask. With none, inspect current branch, status, commits, octa PR records, and
 Issue comments; recover plausible existing work before creating a replacement

@@ -1,0 +1,4 @@
+interface:
+  display_name: "wtm Worktree Create Implementation"
+  short_description: "Create worktree operations through wtm"
+  default_prompt: "Use $workflow-adapter-impl-wtm-create to apply this validated worktree create operation through wtm."

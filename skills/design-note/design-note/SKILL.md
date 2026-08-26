@@ -21,7 +21,7 @@ Most conversations that arrive here have already done the thinking — a discuss
 
 **One note in the selected durable Markdown store.** Nothing else — no file under `.agents/`, no working copy, no second step to make it durable.
 
-- **Location** — the current repository's durable Markdown scope, resolved by `workflow-adapter-markdown`.
+- **Location** — the current repository's durable Markdown scope, resolved by `workflow-adapter-markdown-resolve`.
 - **Title** — `Design Note - <concise title>`, written **in the same language as the body** (below), so the note does not read as two documents stitched together. What that title becomes as a filename, and how links resolve to it, belongs to the selected provider — not this skill.
 - **Tag** — `design-note`.
 - **Body language** — **the language the session is being conducted in.** The note is read by the person who wrote it, so match the conversation rather than translating out of it. Whatever the language, keep the discipline: short sentences, concrete nouns, no rhetorical flourish. Technical terms, proper nouns, and code identifiers stay in their original form.
@@ -68,7 +68,7 @@ A section that cannot be filled from what the user actually said reads `TODO` �
 ## Prerequisite — Markdown adapter installed
 
 This skill does not write to the knowledge base itself. Delegate the completed
-note to `workflow-adapter-markdown`. If the adapter cannot be loaded or its
+note to `workflow-adapter-markdown-create`. If the adapter cannot be loaded or its
 write fails, stop and tell the user; do not silently choose another location.
 
 ## How to run it
@@ -77,7 +77,7 @@ write fails, stop and tell the user; do not silently choose another location.
 2. **Draw out the gaps.** Delegate elicitation to `discuss-toolkit-dig` (subject: the problem and the approach to it). Keep it to the gaps. Two guardrails while eliciting:
    - **The approach needs its reasoning.** If the user names an approach without saying why it beats the alternatives, ask. The conclusion alone is what makes a note un-reusable six months later.
    - **The problem must survive the approach.** If the stated problem is only "the approach isn't in place yet", it is a solution in disguise — pull back and ask what actually breaks today.
-3. **Write the durable note.** Delegate a `create` operation to `workflow-adapter-markdown` with three things:
+3. **Write the durable note.** Delegate to `workflow-adapter-markdown-create` with three things:
 
    - the **body** — the sections above, in the session's language;
    - the **title** — `Design Note - <concise title>`, in the same language as the body;

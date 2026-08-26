@@ -1,0 +1,4 @@
+interface:
+  display_name: "octa Tracker Update Implementation"
+  short_description: "Update tracker operations through octa"
+  default_prompt: "Use $workflow-adapter-impl-octa-update to apply this validated tracker update operation through octa."

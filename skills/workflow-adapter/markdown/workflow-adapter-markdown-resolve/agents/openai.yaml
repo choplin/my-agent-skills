@@ -1,0 +1,4 @@
+interface:
+  display_name: "Markdown Resolve Adapter"
+  short_description: "Resolve a durable Markdown destination"
+  default_prompt: "Use $workflow-adapter-markdown-resolve to resolve this durable Markdown destination."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Markdown Find Adapter"
+  short_description: "Find durable Markdown documents"
+  default_prompt: "Use $workflow-adapter-markdown-find to find matching durable Markdown documents."

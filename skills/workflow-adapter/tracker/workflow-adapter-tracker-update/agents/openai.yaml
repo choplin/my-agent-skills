@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tracker Update Adapter"
+  short_description: "Update one tracker work record"
+  default_prompt: "Use $workflow-adapter-tracker-update to update this tracker work record."

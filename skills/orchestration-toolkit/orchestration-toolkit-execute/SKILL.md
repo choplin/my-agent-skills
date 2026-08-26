@@ -22,8 +22,10 @@ The Issue already says **what** to build; this skill decides **how** and does it
 Everything runs inline — no executor subagents, no dependency graph, no wave
 scheduling. A single node does not need a project control plane.
 
-Apply `workflow-adapter-tracker` for Issue reads, comments, and transitions;
-`workflow-adapter-markdown` for durable knowledge; `workflow-adapter-worktree`
+Apply `workflow-adapter-tracker-read`, `workflow-adapter-tracker-comment`, and
+`workflow-adapter-tracker-transition` for Issue operations;
+`workflow-adapter-markdown-find` and `workflow-adapter-markdown-read` for
+durable knowledge; the matching `workflow-adapter-worktree-<operation>` skill
 for worktree operations; and `git-helpers-commit` for every commit. The calling
 provider start skill supplies its implementation-completion procedure and any
 protected mutation handle. If neither was supplied, return to that provider's
@@ -81,7 +83,8 @@ workspace are already prepared; do not redo them.
 
 ### 2. Recover the knowledge surface
 
-Use `workflow-adapter-markdown` to find and read the PRDs, designs, research,
+Use `workflow-adapter-markdown-find` and `workflow-adapter-markdown-read` to
+find and read the PRDs, designs, research,
 and decision records the Issue depends on. Search from the Issue's own
 terminology rather than loading the whole store, and follow only the links
 needed to interpret scope, constraints, or acceptance.
@@ -94,14 +97,16 @@ resolve by preference.
 
 ### 3. Prepare the workspace
 
-Recover or create the Issue's worktree through `workflow-adapter-worktree`,
+Recover the Issue's worktree through `workflow-adapter-worktree-list` and
+`workflow-adapter-worktree-read`, or create it through
+`workflow-adapter-worktree-create`,
 based on the repository's normal target branch. Name the branch after the
 deliverable, never after the tracker identifier, and record the Issue as opaque
 association metadata on the worktree.
 
 ### 4. Open the run record
 
-Use `workflow-adapter-tracker` to post one comment on the Issue before driving:
+Use `workflow-adapter-tracker-comment` to post one comment on the Issue before driving:
 
 ```markdown
 ## Run — <timestamp>
@@ -189,8 +194,9 @@ caller-supplied implementation-completion procedure:
 
 Apply that procedure from pre-commit review through its terminal outcome. It
 owns commit continuation, integration, tracker status, and cleanup; do not
-reproduce those branches here. Route its requested Issue operations through
-`workflow-adapter-tracker`, preserving any supplied mutation handle. Return the
+reproduce those branches here. Route each requested Issue operation through the
+matching `workflow-adapter-tracker-<operation>` skill, preserving any supplied
+mutation handle. Return the
 outcome to the caller after the procedure finishes or reaches an explicit stop.
 
 ## When NOT to use

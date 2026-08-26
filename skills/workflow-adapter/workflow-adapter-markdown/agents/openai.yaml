@@ -1,4 +1,0 @@
-interface:
-  display_name: "Markdown Workflow Adapter"
-  short_description: "Access durable Markdown without provider coupling"
-  default_prompt: "Use $workflow-adapter-markdown to read or apply this durable Markdown operation."

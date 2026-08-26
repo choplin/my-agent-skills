@@ -1,0 +1,4 @@
+interface:
+  display_name: "Worktree List Adapter"
+  short_description: "List managed repository worktrees"
+  default_prompt: "Use $workflow-adapter-worktree-list to list these managed repository worktrees."

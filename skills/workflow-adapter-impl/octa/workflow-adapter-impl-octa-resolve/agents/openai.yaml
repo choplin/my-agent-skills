@@ -1,0 +1,4 @@
+interface:
+  display_name: "octa Tracker Resolve Implementation"
+  short_description: "Resolve tracker operations through octa"
+  default_prompt: "Use $workflow-adapter-impl-octa-resolve to apply this validated tracker resolve operation through octa."

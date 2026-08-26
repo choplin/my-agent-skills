@@ -1,0 +1,4 @@
+interface:
+  display_name: "wtm Worktree Remove Implementation"
+  short_description: "Remove worktree operations through wtm"
+  default_prompt: "Use $workflow-adapter-impl-wtm-remove to apply this validated worktree remove operation through wtm."

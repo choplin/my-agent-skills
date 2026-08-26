@@ -42,7 +42,7 @@ Any runtime or system tool beyond shell+jq (python3, node, `uv`, poppler,
 MinerU, …) must be:
 
 - **Declared in a `flake.nix`** bundled in the skill's own leaf directory
-  (`skills/<group>/<group>-<skill>/`), because the skills CLI distributes at the
+  (`skills/<group>/[<family>/]<namespaced-skill>/`), because the skills CLI distributes at the
   leaf level and **discards everything above it** — a group- or repo-level flake
   never reaches an installed skill. See skill-first-architecture.md § Naming and
   § Authoring conventions.
@@ -52,7 +52,7 @@ MinerU, …) must be:
 Bundle the full, reproducible set and **commit the lockfiles**:
 
 ```
-skills/<group>/<group>-<skill>/
+skills/<group>/[<family>/]<namespaced-skill>/
   SKILL.md
   flake.nix          # devShell providing the system deps
   flake.lock         # committed — also the signal that enables the nix path (§4)

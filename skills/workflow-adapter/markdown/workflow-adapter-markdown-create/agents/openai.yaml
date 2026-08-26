@@ -1,0 +1,4 @@
+interface:
+  display_name: "Markdown Create Adapter"
+  short_description: "Create one durable Markdown document"
+  default_prompt: "Use $workflow-adapter-markdown-create to create this durable Markdown document."

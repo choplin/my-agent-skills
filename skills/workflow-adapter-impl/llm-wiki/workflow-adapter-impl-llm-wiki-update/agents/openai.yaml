@@ -1,0 +1,4 @@
+interface:
+  display_name: "llm-wiki Markdown Update Implementation"
+  short_description: "Update markdown operations through llm-wiki"
+  default_prompt: "Use $workflow-adapter-impl-llm-wiki-update to apply this validated markdown update operation through llm-wiki."

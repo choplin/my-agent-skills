@@ -1,0 +1,4 @@
+interface:
+  display_name: "octa Tracker Comment Implementation"
+  short_description: "Comment tracker operations through octa"
+  default_prompt: "Use $workflow-adapter-impl-octa-comment to apply this validated tracker comment operation through octa."

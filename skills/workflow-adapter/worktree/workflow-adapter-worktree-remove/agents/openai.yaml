@@ -1,0 +1,4 @@
+interface:
+  display_name: "Worktree Remove Adapter"
+  short_description: "Remove one managed repository worktree"
+  default_prompt: "Use $workflow-adapter-worktree-remove to remove this managed repository worktree."

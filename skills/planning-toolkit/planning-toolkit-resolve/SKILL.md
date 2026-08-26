@@ -49,10 +49,14 @@ a normal reconcile phase.
   `references/delivery-model.md`. It owns the contract, the scope policy shape,
   classifications, authority, readiness state machine, persistence boundary,
   issue contract, and handoff payload used below.
-- Apply `workflow-adapter-tracker` for Project and Issue reads, mutations,
-  relations, comments, and lifecycle transitions. Keep self-completeness,
+- Apply `workflow-adapter-tracker-read`, `workflow-adapter-tracker-create`,
+  `workflow-adapter-tracker-update`, `workflow-adapter-tracker-comment`,
+  `workflow-adapter-tracker-relate`, or `workflow-adapter-tracker-transition`
+  for the corresponding Project and Issue operation. Keep self-completeness,
   grouping, readiness, and completion-note content in this Planning model.
-- Apply `workflow-adapter-markdown` for durable Markdown retrieval and writes.
+- Apply `workflow-adapter-markdown-find`, `workflow-adapter-markdown-read`,
+  `workflow-adapter-markdown-create`, or `workflow-adapter-markdown-update` for
+  the corresponding durable Markdown operation.
 - Use `discuss-toolkit-dig` only when a human-owned decision lacks enough shared
   meaning to choose. Do not reopen already explicit criteria.
 
@@ -69,7 +73,7 @@ executing an issue, asking for a human decision, or reporting readiness.
 ### 1. Load and verify the resolution contract
 
 Resolve the finite Project and retrieve its planning record through
-`workflow-adapter-markdown`. Load every field in the base Planning → Resolution
+`workflow-adapter-markdown-find` and `workflow-adapter-markdown-read`. Load every field in the base Planning → Resolution
 handoff, including the scope policy in force, plus completion notes on
 already-finished blockers.
 
@@ -79,7 +83,8 @@ If the Outcome Contract or resolution issues are too incomplete to identify what
 must be learned or decided, return to `planning-toolkit-plan` rather than
 improvising a new plan.
 
-Build a live resolution graph through `workflow-adapter-tracker`. Do not create
+Build a live resolution graph through `workflow-adapter-tracker-create` and
+`workflow-adapter-tracker-relate`. Do not create
 a separate local state file. Tracker lifecycle states, relations, descriptions,
 and completion notes make the workflow resumable.
 
@@ -118,7 +123,8 @@ required by this portable skill.
 Before work, move the issue to In Progress. On completion:
 
 1. verify its Acceptance;
-2. write the durable finding or decision through `workflow-adapter-markdown`;
+2. write the durable finding or decision through
+   `workflow-adapter-markdown-create` or `workflow-adapter-markdown-update`;
 3. leave the required tracker completion note with the actual result and any
    deviation from the planned approach;
 4. move it through In Review when a real review exists, otherwise to Done;

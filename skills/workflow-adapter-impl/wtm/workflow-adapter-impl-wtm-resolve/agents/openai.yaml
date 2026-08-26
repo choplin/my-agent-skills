@@ -1,0 +1,4 @@
+interface:
+  display_name: "wtm Worktree Resolve Implementation"
+  short_description: "Resolve worktree operations through wtm"
+  default_prompt: "Use $workflow-adapter-impl-wtm-resolve to apply this validated worktree resolve operation through wtm."

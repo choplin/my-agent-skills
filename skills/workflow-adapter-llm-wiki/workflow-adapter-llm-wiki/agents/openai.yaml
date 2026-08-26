@@ -1,4 +1,0 @@
-interface:
-  display_name: "llm-wiki Workflow Adapter"
-  short_description: "Persist durable Markdown through llm-wiki"
-  default_prompt: "Use $workflow-adapter-llm-wiki to apply this Markdown operation through llm-wiki."

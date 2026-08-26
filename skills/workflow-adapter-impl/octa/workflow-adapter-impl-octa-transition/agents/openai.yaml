@@ -1,0 +1,4 @@
+interface:
+  display_name: "octa Tracker Transition Implementation"
+  short_description: "Transition tracker operations through octa"
+  default_prompt: "Use $workflow-adapter-impl-octa-transition to apply this validated tracker transition operation through octa."

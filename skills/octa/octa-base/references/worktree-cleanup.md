@@ -3,7 +3,7 @@
 Cleanup is automatic only after safety checks.
 
 1. Resolve target branch and exact Issue worktree/branch from session context
-   or its association metadata through `workflow-adapter-worktree`.
+   or its association metadata through `workflow-adapter-worktree-read`.
 2. Verify:
    - completion evidence proves integration;
    - no staged, unstaged, or untracked Issue work needs preservation;
@@ -13,7 +13,7 @@ Cleanup is automatic only after safety checks.
    procedure in [terminal-pane-cwd.md](terminal-pane-cwd.md). Under Claude Code,
    do not wait for or verify the optional external pane hook. Under any other
    host, skip this step.
-4. For an isolated worktree, use `workflow-adapter-worktree` and remove it from
+4. For an isolated worktree, use `workflow-adapter-worktree-remove` and remove it from
    outside that worktree. Request `delete-if-merged` for the local work branch
    only after the checks pass; never request `force-delete` here.
 5. For a work branch in the current workspace, switch to the target branch and

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Validate skills in the repository's grouped skills/<group>/<skill> layout.
+# Validate skills recursively below each repository skills/<group> directory.
 #
 # Usage: validate-skills.sh [validator-flag...] [path...]
 #
@@ -54,10 +54,21 @@ list_skill_dirs() {
     return
   fi
 
-  printf '%s\n' "${paths[@]}" \
-    | sed "s|^${repo_root}/||" \
-    | awk -F/ '$1 == "skills" && NF >= 3 { print $1 "/" $2 "/" $3 }' \
-    | sort -u
+  local path candidate
+  for path in "${paths[@]}"; do
+    path="${path#"${repo_root}/"}"
+    [[ "$path" == skills/* ]] || continue
+
+    candidate="$path"
+    [[ -f "$candidate" ]] && candidate="${candidate%/*}"
+    while [[ "$candidate" == skills/* ]]; do
+      if [[ -f "$candidate/SKILL.md" ]]; then
+        printf '%s\n' "$candidate"
+        break
+      fi
+      candidate="${candidate%/*}"
+    done
+  done | sort -u
 }
 
 validation_exit=0
@@ -78,7 +89,7 @@ done < <(list_skill_dirs)
 if [[ "$skill_count" -eq 0 ]]; then
   # With paths given, matching no skill is a normal outcome — nothing to check.
   if [[ "${#paths[@]}" -eq 0 ]]; then
-    echo "no skills found under skills/<group>/<skill>/SKILL.md" >&2
+    echo "no skills found below skills/<group>/" >&2
     exit 1
   fi
   echo "no skills matched the given paths; nothing to validate"

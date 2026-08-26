@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tracker Read Adapter"
+  short_description: "Read one tracker work record"
+  default_prompt: "Use $workflow-adapter-tracker-read to read this tracker work record."

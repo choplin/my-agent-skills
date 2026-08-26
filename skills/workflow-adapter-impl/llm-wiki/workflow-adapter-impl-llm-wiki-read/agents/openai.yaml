@@ -1,0 +1,4 @@
+interface:
+  display_name: "llm-wiki Markdown Read Implementation"
+  short_description: "Read markdown operations through llm-wiki"
+  default_prompt: "Use $workflow-adapter-impl-llm-wiki-read to apply this validated markdown read operation through llm-wiki."

@@ -39,7 +39,7 @@ This skill is **explicit-invocation only** — never run it proactively.
 1. **Gather context**
    - `BRANCH=$(git rev-parse --abbrev-ref HEAD)`, `BASE` = arg or `main`.
    - Show `git log --oneline <base>..HEAD` so the user sees what will be squashed.
-   - Use `workflow-adapter-worktree` to list the repository worktrees and
+   - Use `workflow-adapter-worktree-list` to list the repository worktrees and
      identify the one whose branch is exactly `BASE`. Keep its absolute path as
      `BASE_WT`; an empty result means the base is checked out nowhere. If the
      adapter cannot resolve a provider, stop before changing history.
@@ -96,7 +96,7 @@ This skill is **explicit-invocation only** — never run it proactively.
    - If linked, **ask the user** whether to remove this worktree. If they decline, stop
      here after reporting the merge result.
    - If they approve, delegate an exact `remove` operation with branch
-     disposition `keep` to `workflow-adapter-worktree`. Branch deletion remains
+     disposition `keep` to `workflow-adapter-worktree-remove`. Branch deletion remains
      step 5 and must not be repeated by the adapter. If no provider resolves,
      leave the worktree in place and report the unapplied cleanup; do not bypass
      the adapter with bare `git worktree remove`.

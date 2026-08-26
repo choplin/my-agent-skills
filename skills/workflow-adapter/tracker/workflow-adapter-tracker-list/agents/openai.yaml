@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tracker List Adapter"
+  short_description: "List tracker work records"
+  default_prompt: "Use $workflow-adapter-tracker-list to list these tracker work records."

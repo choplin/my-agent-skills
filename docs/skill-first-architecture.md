@@ -28,7 +28,8 @@ One source of truth that can be distributed to any coding agent:
 repo/
   skills/                     # portable, agent-agnostic. Distributed via vercel CLI.
     <group>/                  #   organization + --list readability; discarded on install
-      <skill>/SKILL.md        #   catalog layout: skills/<group>/<skill>/SKILL.md
+      [<family>/]             #   optional organization for a larger group
+        <skill>/SKILL.md      #   leaf directory equals the skill name
       README.md               #   the group's inventory (every group has one)
   scripts/validate-skills.sh  # runs skill-validator over the skills a commit touches
   docs/                       # architecture, policy, and design principles
@@ -61,9 +62,10 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
   means must not reuse a skill's `name`. The skills CLI recreates the whole
   skill directory on every `skills add`, so whichever runs last silently wipes
   the other (observed live, 2026-07-04).
-- Directory layout keeps the group folder: `skills/<group>/<group>-<skill>/`
-  (the leaf equals `name`, so it stays spec-conformant; the `<group>/` folder is
-  for repo organization only and is discarded on install).
+- Directory layout keeps the group folder and may add one organizational
+  family/provider level: `skills/<group>/[<family>/]<namespaced-skill>/`. The
+  leaf equals `name`, so it stays spec-conformant; directories above the leaf
+  are discarded on install.
 - **Cross-skill references use the full prefixed name** — a tool-side `--prefix`
   cannot rewrite references inside skill bodies, so this is necessarily an
   author-side convention.

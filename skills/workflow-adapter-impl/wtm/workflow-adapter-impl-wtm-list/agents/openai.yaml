@@ -1,0 +1,4 @@
+interface:
+  display_name: "wtm Worktree List Implementation"
+  short_description: "List worktree operations through wtm"
+  default_prompt: "Use $workflow-adapter-impl-wtm-list to apply this validated worktree list operation through wtm."

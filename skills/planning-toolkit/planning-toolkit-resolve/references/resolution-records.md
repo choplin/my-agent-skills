@@ -2,11 +2,13 @@
 
 Use these formats for durable findings, decisions, downstream application, and
 the final readiness report. Supply complete caller-owned Markdown and let
-`workflow-adapter-markdown` preserve provider metadata and conventions.
+`workflow-adapter-markdown-create` and `workflow-adapter-markdown-update`
+preserve provider metadata and conventions.
 
 ## Research result
 
-Record the full durable result through `workflow-adapter-markdown` and a
+Record the full durable result through `workflow-adapter-markdown-create` or
+`workflow-adapter-markdown-update` and a
 proportional completion summary on the tracker research Issue.
 
 ```markdown

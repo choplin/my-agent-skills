@@ -11,7 +11,8 @@ Skills are the only primitive here — distributed to any coding agent via the [
 ```
 skills/                      # portable, agent-agnostic skills (the source of truth)
   <group>/                   #   organized by group (former plugin name)
-    <group>-<skill>/SKILL.md #   names are group-prefixed for namespacing
+    [<family>/]              #   optional organization inside a larger group
+      <namespaced-skill>/SKILL.md
 scripts/validate-skills.sh   # strict skill-validator check (used by lefthook and CI)
 docs/                        # architecture, policy, and design principles
 ```
@@ -29,7 +30,7 @@ skills add choplin/my-agent-skills --skill orchestration-toolkit-execute
 skills add ./skills --skill '*' -a claude-code codex -g -y           # this working tree
 ```
 
-**A group is the unit to install.** Skills within a group delegate to each other by name and the standard resolves no dependencies, so picking individual skills can leave a broken subset. Point the source at `skills/<group>` to keep the group intact.
+**A group is the unit to install.** Skills within a group delegate to each other by name and the standard resolves no dependencies, so picking individual skills can leave a broken subset. Point the source at `skills/<group>` to keep the group intact. A group may use one intermediate family/provider directory when that makes a large skill set navigable.
 
 Installs are **copies**, not links into this repository: a global install lands in `~/.agents/skills/<name>/` with the agent's directory symlinked to it. **Edits here take effect only after re-running the install.** To drop skills again, `skills remove <name...> -g`.
 
@@ -46,7 +47,7 @@ brew install skill-validator
 scripts/validate-skills.sh
 ```
 
-The validator checks every `skills/<group>/<skill>/SKILL.md`. The
+The validator recursively checks every skill below `skills/<group>/`. The
 `user-invocable` frontmatter and the `agents/` and `schema/` directories are
 explicitly allowed repository extensions; all other warnings fail the check.
 
@@ -78,10 +79,9 @@ skills or validation configuration.
 | `inception` | inception, inception-base, framing, diverge, structure, deepen, converge, finalize (develop an unformed project concept into a durable footing: PRD / decisions / actions) |
 | `design-note` | design-note (write down a problem and the approach taken to it as one durable Markdown note — lighter than a PRD, shallower than a design doc) |
 | `exec-plan` | exec-plan, exec-plan-base (ad-hoc autonomous run with no tracker issue behind it; decision log + parking lot) |
-| `octa` | octa-base, octa-overview, octa-capture-feedback, octa-start, octa-groom, octa-handoff, octa-workflow-adapter (local tracker lifecycle; feedback capture, finite Projects, self-complete Issues, atomic leases, review/integration gates, and cross-session handoff) |
-| `workflow-adapter` | tracker, markdown, worktree (provider-neutral access boundaries for tracker work records, durable Markdown, and repository worktrees) |
-| `workflow-adapter-llm-wiki` | workflow-adapter-llm-wiki (llm-wiki provider implementation of the durable Markdown adapter contract) |
-| `workflow-adapter-wtm` | workflow-adapter-wtm (wtm provider implementation of the worktree adapter contract) |
+| `octa` | octa-base, octa-overview, octa-capture-feedback, octa-start, octa-groom, octa-handoff (local tracker lifecycle; feedback capture, finite Projects, self-complete Issues, atomic leases, review/integration gates, and cross-session handoff) |
+| `workflow-adapter` | `markdown/` resolve/find/read/create/update; `tracker/` resolve/list/read/create/update/comment/relate/transition; `worktree/` resolve/list/read/create/remove (provider-neutral contracts) |
+| `workflow-adapter-impl` | `llm-wiki/`, `octa/`, `wtm/`, each split into matching operation-specific implementations |
 | `planning-toolkit` | plan, resolve, mvp, base (turn an established direction into a finite outcome and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; `mvp` is a scope policy, not a phase — the smallest-build-that-teaches standard the cut is judged against) |
 | `orchestration-toolkit` | execute (carry one groomed tracker Issue inline through implementation, risk-based adversarial review, and the integration gate) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
@@ -134,23 +134,24 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **Cross-group hubs** (one skill that many groups delegate to):
 
 - `discuss-toolkit-dig` ← discuss-toolkit-grill-me, inception (+framing/deepen), design-note, exec-plan, code-review-session-resolve
-- `octa-base` ← octa lifecycle skills, octa-workflow-adapter
-- `workflow-adapter-tracker` ← inception-finalize, planning-toolkit, orchestration-toolkit-execute
-- `workflow-adapter-markdown` ← design-note, inception-finalize, planning-toolkit, orchestration-toolkit-execute, repository-context-base
-- `workflow-adapter-worktree` ← octa-start, orchestration-toolkit-execute, git-helpers-squash-merge
+- `octa-base` ← octa lifecycle skills, workflow-adapter-impl-octa operation skills
+- `workflow-adapter-tracker-create` ← inception-finalize, planning-toolkit
+- `workflow-adapter-markdown-create` ← design-note, inception-finalize, planning-toolkit, repository-context-base
+- `workflow-adapter-markdown-find` / `workflow-adapter-markdown-read` ← planning-toolkit, orchestration-toolkit-execute, repository-context-base
+- `workflow-adapter-worktree-list` / `workflow-adapter-worktree-read` ← octa, orchestration-toolkit-execute, git-helpers-squash-merge
 - `quick-code-review` ← code-review-session-import-ai
 - `artifact-review` ← code-review-session-import-ai, orchestration-toolkit-execute
 - `review-lenses` ← quick-code-review, artifact-review
 
 **inception**
 - inception → base, framing/diverge/structure/deepen/converge, finalize, **discuss-toolkit-dig**
-- inception-finalize → **workflow-adapter-markdown**, **workflow-adapter-tracker**, the selected tracker provider's start skill
+- inception-finalize → **workflow-adapter-markdown-create**, **workflow-adapter-tracker-create**, the selected tracker provider's start skill
 - inception-framing → **discuss-toolkit-dig**
 - inception-deepen → **discuss-toolkit-dig**
 - inception-converge → finalize
 
 **design-note**
-- design-note → **workflow-adapter-markdown**, **discuss-toolkit-dig**, **planning-toolkit-plan**
+- design-note → **workflow-adapter-markdown-resolve**, **workflow-adapter-markdown-create**, **discuss-toolkit-dig**, **planning-toolkit-plan**
 
 **exec-plan**
 - exec-plan → base, **discuss-toolkit-dig**
@@ -172,36 +173,32 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **git-helpers**
 - draft-pr → pr-description
 - explain-pr → diff-explainer `(ext; explainer-studio)`
-- squash-merge → commit, **workflow-adapter-worktree**
+- squash-merge → commit, **workflow-adapter-worktree-list**, **workflow-adapter-worktree-remove**
 
 **octa**
-- octa-base → **workflow-adapter-worktree**
+- octa-base → **workflow-adapter-worktree-read**, **workflow-adapter-worktree-remove**
 - octa-overview → octa-base
 - octa-capture-feedback → octa-base
-- octa-start → octa-base, octa-handoff, **git-helpers-commit**, **workflow-adapter-worktree**
+- octa-start → octa-base, octa-handoff, **git-helpers-commit**, **workflow-adapter-worktree-resolve**, **workflow-adapter-worktree-list**
 - octa-groom → octa-base
 - octa-handoff → octa-base
-- octa-workflow-adapter → octa-base
 
 **planning-toolkit**
-- plan → base, **discuss-toolkit-dig**, **workflow-adapter-tracker**, **workflow-adapter-markdown**
-- resolve → base, **discuss-toolkit-dig**, **workflow-adapter-tracker**, **workflow-adapter-markdown**
+- plan → base, **discuss-toolkit-dig**, **workflow-adapter-tracker-create**, **workflow-adapter-tracker-read**, **workflow-adapter-tracker-update**, **workflow-adapter-tracker-relate**, **workflow-adapter-markdown-find**, **workflow-adapter-markdown-read**, **workflow-adapter-markdown-create**, **workflow-adapter-markdown-update**
+- resolve → base, **discuss-toolkit-dig**, **workflow-adapter-tracker-read**, **workflow-adapter-tracker-create**, **workflow-adapter-tracker-update**, **workflow-adapter-tracker-comment**, **workflow-adapter-tracker-relate**, **workflow-adapter-tracker-transition**, **workflow-adapter-markdown-find**, **workflow-adapter-markdown-read**, **workflow-adapter-markdown-create**, **workflow-adapter-markdown-update**
 - mvp → base, plan (a scope policy; it declares the standard and delegates the workflow)
-- base → **workflow-adapter-tracker**, **workflow-adapter-markdown**
+- base → the matching **workflow-adapter-tracker-<operation>** and **workflow-adapter-markdown-<operation>** skills
 
 **orchestration-toolkit**
-- execute → **artifact-review**, **workflow-adapter-tracker**, **workflow-adapter-markdown**, **workflow-adapter-worktree**, the selected tracker provider's start/groom/handoff skills, **git-helpers-commit**
+- execute → **artifact-review**, **workflow-adapter-tracker-read**, **workflow-adapter-tracker-comment**, **workflow-adapter-tracker-transition**, **workflow-adapter-markdown-find**, **workflow-adapter-markdown-read**, **workflow-adapter-worktree-list**, **workflow-adapter-worktree-read**, **workflow-adapter-worktree-create**, the selected tracker provider's start/groom/handoff skills, **git-helpers-commit**
 
-**workflow-adapter**
-- tracker → one selected tracker provider adapter
-- markdown → one selected durable Markdown provider adapter
-- worktree → one selected worktree provider adapter
-
-**workflow-adapter-llm-wiki**
-- workflow-adapter-llm-wiki → **workflow-adapter-markdown**, llm-wiki-base `(ext)`, llm-wiki-capture `(ext)`, llm-wiki-retrieve `(ext)`
-
-**workflow-adapter-wtm**
-- workflow-adapter-wtm → **workflow-adapter-worktree**, wtm-worktree `(ext)`
+**workflow-adapter contracts and implementations**
+- each `workflow-adapter-markdown-<operation>` skill → the matching installed implementation whose description selects the provider
+- each `workflow-adapter-tracker-<operation>` skill → the matching installed implementation whose description selects the provider
+- each `workflow-adapter-worktree-<operation>` skill → the matching installed implementation whose description selects the provider
+- `workflow-adapter-impl-llm-wiki-<operation>` → llm-wiki-base `(ext)` and the required llm-wiki operation skill `(ext)`
+- `workflow-adapter-impl-octa-<operation>` → **octa-base**
+- `workflow-adapter-impl-wtm-<operation>` → wtm-worktree `(ext)`
 
 **skill-quality**
 - skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review
@@ -214,7 +211,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - ai-council-fugu-cli → ai-council-codex-cli
 
 **repository-context**
-- base → **workflow-adapter-markdown** and the selected Markdown provider's distillation operation when tentative work knowledge is written or closed
+- base → **workflow-adapter-markdown-find**, **workflow-adapter-markdown-read**, **workflow-adapter-markdown-create**, **workflow-adapter-markdown-update**, and the selected Markdown provider's distillation operation when tentative work knowledge is written or closed
 - readme → base, pen-design (for an approved composed visual), **showcase-capture-plan** (when useful README media is missing and the user wants it produced), documentation-writer `(ext)`, **document-writing-standards**
 - pen-design → base, **showcase-capture-plan** (when real product evidence must be acquired), **showcase-pen-annotate** (when the job is only to annotate or frame one capture)
 - codebase → base, readme (when the main README needs substantial revision), pen-design (for an approved diagram), **lang-reference-\<language\>** when a matching installed skill exists

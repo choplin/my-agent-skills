@@ -1,0 +1,4 @@
+interface:
+  display_name: "octa Tracker Create Implementation"
+  short_description: "Create tracker operations through octa"
+  default_prompt: "Use $workflow-adapter-impl-octa-create to apply this validated tracker create operation through octa."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "octa Tracker Read Implementation"
+  short_description: "Read tracker operations through octa"
+  default_prompt: "Use $workflow-adapter-impl-octa-read to apply this validated tracker read operation through octa."

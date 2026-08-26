@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tracker Transition Adapter"
+  short_description: "Transition one tracker work record"
+  default_prompt: "Use $workflow-adapter-tracker-transition to apply this tracker lifecycle transition."

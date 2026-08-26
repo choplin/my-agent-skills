@@ -1,0 +1,4 @@
+interface:
+  display_name: "wtm Worktree Read Implementation"
+  short_description: "Read worktree operations through wtm"
+  default_prompt: "Use $workflow-adapter-impl-wtm-read to apply this validated worktree read operation through wtm."

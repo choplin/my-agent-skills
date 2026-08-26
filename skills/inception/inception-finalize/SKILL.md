@@ -28,7 +28,8 @@ The durable output is always the same shape: **one consolidated PRD note** in th
 ## Prerequisite — workflow adapters installed
 
 Finalize does not write either durable system itself. Use
-`workflow-adapter-markdown` for the PRD and `workflow-adapter-tracker` for the
+`workflow-adapter-markdown-create` for the PRD and
+`workflow-adapter-tracker-create` for the
 selected actions. If an adapter cannot be loaded or a write fails, stop and
 report the incomplete operation; do not silently choose another destination.
 
@@ -41,7 +42,7 @@ Locate the session under `.agents/inception/<topic-slug>/` (Glob if the slug is 
 ## Workflow
 
 1. **Get the consolidated PRD text** by running the CLI above.
-2. **Write the durable PRD.** Delegate a `create` operation to `workflow-adapter-markdown` with three things:
+2. **Write the durable PRD.** Delegate to `workflow-adapter-markdown-create` with three things:
 
    - the **body** — the consolidated PRD, in Japanese (see below);
    - the **title** — `PRD - <タイトル>`, written in the same language as the body;
@@ -52,17 +53,17 @@ Locate the session under `.agents/inception/<topic-slug>/` (Glob if the slug is 
    - **Never clobber** — if a PRD note on the same topic already exists, show it and ask whether to update it or write a new one alongside.
    - **Write the persisted note in Japanese.** The source PRD (CLI output) is plain English by `inception-base`'s rule — that rule governs the *thinking* artifacts. The durable note is read only by its owner, so translate the full content (headings and body) into plain, clear Japanese when persisting. Keep the same discipline: short sentences, concrete nouns, no rhetorical flourish; technical terms, proper nouns (product, service, company names), and code identifiers stay in their original form. Translate faithfully — do not add, drop, or reinterpret content while translating.
 3. **Hand off the actions.** Present the `Action` nodes and let the user choose how to carry them out — do not decide for them:
-   - **Tracker Project + Issues** — delegate the approved operations to `workflow-adapter-tracker`. A finalized inception footing is a **finite outcome/goal**, so **create a Project for this footing first, then register the promoted actions as Issues under that Project** (never as loose issues with no Project). Use the PRD's title/purpose for the Project name and description. This writes to an external system, so **show the proposed Project and its Issues, and get explicit approval before creating anything**. Issue promotion stays per-action — some actions are still too coarse to be Issues; only promote the ones the user picks — but every promoted Issue goes under the Project.
+   - **Tracker Project + Issues** — delegate each approved create to `workflow-adapter-tracker-create`. A finalized inception footing is a **finite outcome/goal**, so **create a Project for this footing first, then register the promoted actions as Issues under that Project** (never as loose issues with no Project). Use the PRD's title/purpose for the Project name and description. This writes to an external system, so **show the proposed Project and its Issues, and get explicit approval before creating anything**. Issue promotion stays per-action — some actions are still too coarse to be Issues; only promote the ones the user picks — but every promoted Issue goes under the Project.
    - **Execute one now** — for an action the user wants to start immediately,
      promote it to an Issue as above, then use the start skill for the provider
-     returned by `workflow-adapter-tracker`. Do not start implementing from
+     returned by `workflow-adapter-tracker-create`. Do not start implementing from
      inside finalize.
    - Or hand the list off as-is. Actions do not stay in the PRD; the PRD records direction, not the to-do list.
 4. **Retire the transient layer.** State plainly: the live open-questions queue is a point-in-time snapshot and is **not** persisted; the durable PRD is now the authoritative footing and the `.agents/inception/` graph is a spent working note. Leave the `.agents/` files in place; delete them only if the user asks.
 
 ## Self-check before declaring done
 
-- [ ] The PRD was written as one durable note tagged `prd`, through `workflow-adapter-markdown` — not left only in `.agents/`, and not written into the provider by hand.
+- [ ] The PRD was written as one durable note tagged `prd`, through `workflow-adapter-markdown-create` — not left only in `.agents/`, and not written into the provider by hand.
 - [ ] The durable PRD is written in **Japanese** (translated from the English source PRD), with technical terms, proper nouns, and identifiers left in their original form — under a `PRD - `-prefixed title in the same language.
 - [ ] For a full session: the Direction section preserves **rejected alternatives + rationale** (not just the chosen option).
 - [ ] **Background is permanent context** — it reads as standing project context that is still true months from now, with no session-process narration ("in this session we questioned/decided…", which duplicates Direction) and no progress snapshot ("implemented X", "collected N months of data", which belongs to the tracker). If it drifts, fix it before persisting; this is a keep-forever anchor. See the "Background: permanent context" contrast table in `inception-base/references/prd-template.md`.

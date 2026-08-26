@@ -51,11 +51,14 @@ rather than conceptually open, use `discuss-toolkit-dig`.
   contract, and handoff payload used below.
 - Use `discuss-toolkit-dig` for the outcome-defining dialogue. Ask only questions
   that can change the scope cut, unknown classification, or delivery structure.
-- Use `workflow-adapter-markdown` to find, read, and persist durable knowledge.
+- Use `workflow-adapter-markdown-find`, `workflow-adapter-markdown-read`,
+  `workflow-adapter-markdown-create`, and `workflow-adapter-markdown-update` for
+  their respective durable knowledge operations.
   If no Markdown provider is available, stop before pretending the durable
   record exists.
-- Use `workflow-adapter-tracker` for Project, Milestone, Issue, relation, and
-  lifecycle operations. If its selected provider is unavailable, finish a
+- Use the matching `workflow-adapter-tracker-<operation>` skill for Project,
+  Milestone, Issue, relation, and lifecycle operations. If its selected provider
+  is unavailable, finish a
   concrete proposal but report that registration remains incomplete.
 
 Read [references/output-contract.md](references/output-contract.md) before
@@ -66,8 +69,9 @@ drafting the proposal or writing either system.
 ### 1. Establish the planning surface
 
 Retrieve the relevant PRD, design notes, decision records, and prior scope notes
-through `workflow-adapter-markdown`. When a tracker Project or rough actions
-already exist, read them through `workflow-adapter-tracker`. Inspect the
+through `workflow-adapter-markdown-find` and `workflow-adapter-markdown-read`.
+When a tracker Project or rough actions already exist, read them through
+`workflow-adapter-tracker-read`. Inspect the
 repository only where current implementation facts materially constrain the
 plan.
 
@@ -218,16 +222,19 @@ into the proposal first.
 After approval:
 
 1. Send the completed scope policy, Outcome Contract, scope cut, Deferred
-   rationale, and decisions to `workflow-adapter-markdown`. Request an update
-   when one authoritative note clearly owns the subject; otherwise request a
-   linked planning-note create. Do not duplicate complete PRD or design content.
-2. Send `workflow-adapter-tracker` the approved operations for one finite
-   Project and its complete description.
+   rationale, and decisions to `workflow-adapter-markdown-update` when one
+   authoritative note clearly owns the subject; otherwise use
+   `workflow-adapter-markdown-create` for a linked planning note. Do not
+   duplicate complete PRD or design content.
+2. Send each approved work-record creation to
+   `workflow-adapter-tracker-create` for one finite Project and its complete
+   description. Use `workflow-adapter-tracker-update` for existing records and
+   `workflow-adapter-tracker-relate` for each dependency relation.
 3. Include Milestone creates only when the outcome has distinct observable
    stages.
 4. Include Issue creates or updates with work type, lifecycle intent,
    placement, and `blocked by` relations. Do not create Deferred roadmap Issues.
-5. Re-read the resulting Project through the adapter and compare it to the
+5. Re-read the resulting Project through `workflow-adapter-tracker-read` and compare it to the
    approved proposal. Repair omissions or mismatched dependencies before
    declaring completion.
 

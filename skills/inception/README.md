@@ -35,7 +35,7 @@ Stored under `.agents/inception/<topic-slug>/` (transient, not committed):
 - `graph.json` — the single source of truth
 - `prd.md` / `decisions.md` / `action-items.md` / `open-questions.md` — projections (regenerated; do not hand-edit)
 
-Everything above is transient. The **durable** artifact is produced only at the end by `inception-finalize`: one consolidated PRD written through `workflow-adapter-markdown` (one note in the repository scope, tagged `prd`), with the decisions' rejected alternatives preserved. After finalize, the durable PRD is authoritative and the `.agents/` graph is spent.
+Everything above is transient. The **durable** artifact is produced only at the end by `inception-finalize`: one consolidated PRD written through `workflow-adapter-markdown-create` (one note in the repository scope, tagged `prd`), with the decisions' rejected alternatives preserved. After finalize, the durable PRD is authoritative and the `.agents/` graph is spent.
 
 ## CLI
 
@@ -47,14 +47,14 @@ next <graph.json>       check <graph.json>      render <graph.json> <dir>
 finalize <graph.json>
 ```
 
-`next` is the key one — it walks `dependsOn` to surface the most foundational open point to discuss next. `finalize` prints the single consolidated PRD (rejected alternatives included, live queue/actions omitted) that `inception-finalize` persists through `workflow-adapter-markdown`.
+`next` is the key one — it walks `dependsOn` to surface the most foundational open point to discuss next. `finalize` prints the single consolidated PRD (rejected alternatives included, live queue/actions omitted) that `inception-finalize` persists through `workflow-adapter-markdown-create`.
 
 ## Conventions
 
 - **Decisions are first-class.** Closing a question on a choice creates a `Decision` node with rejected alternatives + rationale — the durable artifact that prevents re-litigation.
 - **Elicit via dig.** All drawing-out of the user's thinking goes through `discuss-toolkit-dig`; never fill gaps with the AI's assumptions.
 - **A full session starts only when asked.** `inception` is heavy, so the agent never opens one on its own judgment: an explicit user request starts it directly, while an inferred need or a handoff from another skill must first state the cost and get a go-ahead (offering plain conversation instead).
-- **Finalize is the one-way exit.** A session ends at `inception-finalize`: the working artifacts stay transient in `.agents/`, and only the consolidated PRD is confirmed through `workflow-adapter-markdown`; inception imposes no provider directory scheme. Concrete actions leave for the selected tracker (or are handed off as-is); the live open-questions queue is a snapshot and is discarded. After finalize the durable PRD is the source of truth — reopen by starting a fresh session or editing the note, not by re-rendering the retired graph.
+- **Finalize is the one-way exit.** A session ends at `inception-finalize`: the working artifacts stay transient in `.agents/`, and only the consolidated PRD is confirmed through `workflow-adapter-markdown-create`; inception imposes no provider directory scheme. Concrete actions leave for the selected tracker (or are handed off as-is); the live open-questions queue is a snapshot and is discarded. After finalize the durable PRD is the source of truth — reopen by starting a fresh session or editing the note, not by re-rendering the retired graph.
 - **Relationship to neighbors.** Inception owns the persistent, multi-phase development of a project's founding concept; `discuss-toolkit-dig` owns bounded conversational elicitation and creates no lasting artifact. Execution skills begin once the work unit is defined and groomed. The selected Markdown provider owns durable storage; inception supplies the complete `prd`-tagged note through the adapter.
 
 ## Installation

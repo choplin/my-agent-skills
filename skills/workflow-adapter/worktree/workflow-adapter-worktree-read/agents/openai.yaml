@@ -1,0 +1,4 @@
+interface:
+  display_name: "Worktree Read Adapter"
+  short_description: "Read one managed repository worktree"
+  default_prompt: "Use $workflow-adapter-worktree-read to read this managed repository worktree."

@@ -62,8 +62,10 @@ says most skills do not need. Skills are agent-agnostic by default.
 
 Verified against the CLI in use:
 
-- **Discovery walks `skills/<name>/SKILL.md`**, one level deep. A group folder
-  is therefore organization only — it is discarded on install.
+- **Discovery recursively finds leaf directories containing `SKILL.md` below
+  the selected source.** Group and optional family/provider directories are
+  therefore organization only — they are discarded on install. This was
+  verified with the repository's three-level `workflow-adapter` layout.
 - **A source may be a repository subdirectory**: `skills add
   <owner>/<repo>/skills/<group>` narrows the source to that group. Local
   absolute paths work as sources too.

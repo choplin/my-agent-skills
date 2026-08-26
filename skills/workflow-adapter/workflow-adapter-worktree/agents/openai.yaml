@@ -1,4 +1,0 @@
-interface:
-  display_name: "Worktree Workflow Adapter"
-  short_description: "Route worktree operations without provider coupling"
-  default_prompt: "Use $workflow-adapter-worktree to apply this provider-neutral worktree operation."

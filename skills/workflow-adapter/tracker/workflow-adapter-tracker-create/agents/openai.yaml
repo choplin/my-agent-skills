@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tracker Create Adapter"
+  short_description: "Create one tracker work record"
+  default_prompt: "Use $workflow-adapter-tracker-create to create this tracker work record."

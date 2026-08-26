@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tracker Comment Adapter"
+  short_description: "Comment on one tracker work record"
+  default_prompt: "Use $workflow-adapter-tracker-comment to post this tracker work-record comment."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Markdown Read Adapter"
+  short_description: "Read one durable Markdown document"
+  default_prompt: "Use $workflow-adapter-markdown-read to read this durable Markdown document."

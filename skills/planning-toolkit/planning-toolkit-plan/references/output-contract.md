@@ -127,7 +127,8 @@ Add a policy tag alongside `planning` when the active policy names one, so the
 record can be found by the standard it was cut against.
 
 Pass the completed Markdown and requested tags to
-`workflow-adapter-markdown`; request the `planning` tag separately rather than
+`workflow-adapter-markdown-create` or `workflow-adapter-markdown-update`;
+request the `planning` tag separately rather than
 embedding storage metadata in the body. Link source PRD/design/decision notes
 using provider-supported note locators.
 

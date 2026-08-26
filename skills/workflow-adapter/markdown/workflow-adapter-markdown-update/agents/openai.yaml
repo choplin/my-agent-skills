@@ -1,0 +1,4 @@
+interface:
+  display_name: "Markdown Update Adapter"
+  short_description: "Update one durable Markdown document"
+  default_prompt: "Use $workflow-adapter-markdown-update to update this durable Markdown document."
