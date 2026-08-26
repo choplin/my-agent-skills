@@ -159,8 +159,8 @@ boundary. Capture it and pass it to protected commands:
     octa issue unlock <number> --lease "$LEASE"
 
 The CLI returns the lease ID only at acquisition. It may appear in tool output
-and command arguments, but do not persist it in Issue comments, worktree notes,
-repository files, commits, or user-facing output.
+and command arguments, but do not persist it in Issue comments, worktree
+association metadata, repository files, commits, or user-facing output.
 Release it before a cross-session handoff. Use `issue unlock <number> --force`
 only for explicit recovery after confirming that no active session still owns
 the work; force recovery invalidates the old lease ID immediately.

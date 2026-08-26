@@ -5,7 +5,7 @@ description: >-
   it onto the base branch, rebasing onto the base first when needed and
   removing the worktree afterwards. Applies when finished branch work should
   land on the base as one clean commit.
-allowed-tools: Bash(git *), Bash(wtm *)
+allowed-tools: Bash(git *)
 user-invocable: false
 metadata:
   description-role: trigger
@@ -39,11 +39,13 @@ This skill is **explicit-invocation only** — never run it proactively.
 1. **Gather context**
    - `BRANCH=$(git rev-parse --abbrev-ref HEAD)`, `BASE` = arg or `main`.
    - Show `git log --oneline <base>..HEAD` so the user sees what will be squashed.
-   - Detect where the base is checked out (empty = nowhere):
-     ```
-     BASE_WT=$(git worktree list --porcelain | awk -v b="refs/heads/$BASE" '
-       /^worktree /{wt=$2} $0=="branch "b{print wt}')
-     ```
+   - Use `workflow-adapter-worktree` to list the repository worktrees and
+     identify the one whose branch is exactly `BASE`. Keep its absolute path as
+     `BASE_WT`; an empty result means the base is checked out nowhere. If the
+     adapter cannot resolve a provider, stop before changing history.
+   - Keep the provider-reported `main` worktree path as `MAIN_WT`. It is the safe
+     execution directory when this linked worktree is later removed and
+     `BASE_WT` is empty.
 
 2. **Rebase onto base if needed — automatic, backup ref first**
    - If base is **not** an ancestor of HEAD
@@ -81,22 +83,26 @@ This skill is **explicit-invocation only** — never run it proactively.
 
 5. **Delete the feature branch** (it is now fully merged)
    - If deleting the worktree too (step 6), do that **first**, then
-     `git -C "$BASE_WT" branch -d "$BRANCH"` (a checked-out branch can't be deleted).
+     `git -C "${BASE_WT:-$MAIN_WT}" branch -d "$BRANCH"` (a checked-out branch
+     can't be deleted).
    - Otherwise: `git switch <base>` (if you are on the feature branch), then
      `git branch -d "$BRANCH"` (`-d`, not `-D`; it is merged).
    - Do **not** push. The base is updated locally only.
 
 6. **Worktree removal — only if in a linked worktree, and CONFIRM FIRST**
-   - Detect a linked worktree: `git rev-parse --git-dir` ≠ `git rev-parse --git-common-dir`.
+   - Use the selected worktree provider's list result to identify the current
+     absolute path. Treat it as linked when it is not the repository's main
+     worktree.
    - If linked, **ask the user** whether to remove this worktree. If they decline, stop
      here after reporting the merge result.
-   - If they approve, hand off to the project's **worktree-management workflow**:
-     - If the repo uses `wtm` (e.g. `git worktree list` paths contain `wtm-worktrees`,
-       or `wtm` is on PATH), delegate to the `wtm-worktree` skill / `wtm remove`.
-     - Otherwise: `git worktree remove <path>`.
+   - If they approve, delegate an exact `remove` operation with branch
+     disposition `keep` to `workflow-adapter-worktree`. Branch deletion remains
+     step 5 and must not be repeated by the adapter. If no provider resolves,
+     leave the worktree in place and report the unapplied cleanup; do not bypass
+     the adapter with bare `git worktree remove`.
    - Caveat: you are removing the worktree you are standing in — run the removal and
-     all following commands from the base worktree (`git -C "$BASE_WT" …` or `cd "$BASE_WT"`),
-     since the current directory disappears.
+     all following commands from `BASE_WT`, or `MAIN_WT` when the base is not
+     checked out, since the current directory disappears.
 
 ## Success Criteria
 

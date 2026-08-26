@@ -1,0 +1,4 @@
+interface:
+  display_name: "wtm Workflow Adapter"
+  short_description: "Apply generic worktree operations through wtm"
+  default_prompt: "Use $workflow-adapter-wtm to apply this worktree operation through wtm."

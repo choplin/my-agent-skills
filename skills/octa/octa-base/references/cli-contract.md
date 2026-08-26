@@ -181,8 +181,8 @@ lease ID, stop and report the contention. Do not infer an owner and do not
 force-release it.
 
 The lease ID may appear in tool output and command arguments. Do not copy it
-into Issue comments, worktree notes, repository files, commits, or other
-durable project artifacts.
+into Issue comments, worktree association metadata, repository files, commits,
+or other durable project artifacts.
 
 The matching `--lease` is required for:
 

@@ -2,8 +2,8 @@
 
 ## Enter
 
-1. Use the installed `wtm-worktree` skill to confirm the selected worktree and
-   resolve its absolute path.
+1. Use `workflow-adapter-worktree` to confirm the selected worktree and resolve
+   its absolute path.
 2. Call `EnterWorktree` with `path` set to that path.
 3. Do not call `EnterWorktree` without `path`; that creates another worktree.
 4. Confirm that Claude Code's working directory is the selected worktree before
@@ -14,7 +14,7 @@
 1. Confirm that the retained entry workspace still exists. If it does not,
    retain the Issue worktree and report that cleanup cannot return safely.
 2. Call `ExitWorktree` with `action: "keep"`.
-3. Do not use `action: "remove"`; `wtm-worktree` owns removal.
+3. Do not use `action: "remove"`; `workflow-adapter-worktree` owns removal.
 4. Confirm that Claude Code's working directory is the retained entry workspace.
 5. Return to the caller so it can remove the Issue worktree.
 

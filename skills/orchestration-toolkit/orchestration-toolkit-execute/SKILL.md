@@ -23,11 +23,11 @@ Everything runs inline — no executor subagents, no dependency graph, no wave
 scheduling. A single node does not need a project control plane.
 
 Apply `workflow-adapter-tracker` for Issue reads, comments, and transitions;
-`workflow-adapter-markdown` for durable knowledge; `wtm-worktree` for worktree
-operations; and `git-helpers-commit` for every commit. The calling provider
-start skill supplies its implementation-completion procedure and any protected
-mutation handle. If neither was supplied, return to that provider's start skill
-before execution rather than guessing lifecycle state.
+`workflow-adapter-markdown` for durable knowledge; `workflow-adapter-worktree`
+for worktree operations; and `git-helpers-commit` for every commit. The calling
+provider start skill supplies its implementation-completion procedure and any
+protected mutation handle. If neither was supplied, return to that provider's
+start skill before execution rather than guessing lifecycle state.
 
 ## Invariants
 
@@ -94,9 +94,10 @@ resolve by preference.
 
 ### 3. Prepare the workspace
 
-Recover or create the Issue's worktree through `wtm-worktree`, based on the
-repository's normal target branch. Name the branch after the deliverable, never
-after the tracker identifier, and record the Issue in the worktree note.
+Recover or create the Issue's worktree through `workflow-adapter-worktree`,
+based on the repository's normal target branch. Name the branch after the
+deliverable, never after the tracker identifier, and record the Issue as opaque
+association metadata on the worktree.
 
 ### 4. Open the run record
 

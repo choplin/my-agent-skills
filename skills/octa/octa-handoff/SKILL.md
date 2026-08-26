@@ -30,8 +30,8 @@ Two more cases route elsewhere:
 
 Resolve the current Issue in this order:
 
-1. worktree note created by `octa-start`, containing repository identity and
-   `#number`;
+1. worktree association metadata created by `octa-start`, containing repository
+   identity and `#number`;
 2. the Issue explicitly selected in this session;
 3. current repository Issues in In Progress for which this live session
    retains a lease ID.

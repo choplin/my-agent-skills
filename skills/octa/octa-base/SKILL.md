@@ -201,8 +201,9 @@ When a session ends with an Issue still In Progress, record the goal, decisions
 and rationale, rejected alternatives, open questions, current state, and next
 concrete step. Keep the lease only while the same live session will continue
 imminently; otherwise release it after posting the handoff so another session
-can claim the Issue. Never put the lease ID in an Issue, worktree note, Git
-artifact, or user-facing report. Use `octa-handoff` for the full flow.
+can claim the Issue. Never put the lease ID in an Issue, worktree association
+metadata, Git artifact, or user-facing report. Use `octa-handoff` for the full
+flow.
 
 A handoff records a pause, so finished work takes the completion comment
 instead. If cross-session work has no Issue yet, create one first; the Issue is
@@ -227,10 +228,10 @@ not need the directory and OSC 7 background it contains.
 ## Octa references stay local
 
 Issue numbers are repository-local coordination references. Keep them in octa
-comments, local session context, and worktree notes. Do not put octa Issue or PR
-numbers into commits, branch names, repository files, or forge PR text. If a
-forge PR is used, record its URL in an octa Issue or PR comment so the durable
-link points from the local tracker to the external artifact.
+comments, local session context, and worktree association metadata. Do not put
+octa Issue or PR numbers into commits, branch names, repository files, or forge
+PR text. If a forge PR is used, record its URL in an octa Issue or PR comment so
+the durable link points from the local tracker to the external artifact.
 
 ## Core CLI mapping
 

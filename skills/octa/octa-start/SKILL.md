@@ -95,33 +95,35 @@ leased. On a new start, move the Issue to In Progress with
 `in progress` default. A resume already in that state needs no transition.
 
 The lease ID is a non-secret coordination handle and may appear in tool output
-and command arguments. Never put it in an Issue comment, worktree note,
-repository file, commit, or user-facing report.
+and command arguments. Never put it in an Issue comment, worktree association
+metadata, repository file, commit, or user-facing report.
 
 ### 4. Prepare or recover the workspace
 
 Choose autonomously from the deliverable:
 
 - `impl` or another repository change: use an isolated worktree when the
-  installed `wtm-worktree` skill is available; otherwise use the current
-  workspace and say so. Do not improvise one with a bare `git worktree add`:
-  it leaves nowhere to record the Issue reference, and the current-workspace
-  path already handles that case.
+  installed `workflow-adapter-worktree` can resolve a provider; otherwise use
+  the current workspace and say so. Do not improvise one with a bare
+  `git worktree add`: it bypasses the provider's association metadata, and the
+  current-workspace path already handles that case.
 - design/research without repository changes: use the current workspace.
 
-For a new worktree, use a descriptive branch name with no octa number. Put the
-local reference in the worktree note, for example:
+For a new worktree, use a descriptive branch name with no octa number. Pass the
+local reference as opaque worktree association metadata, for example:
 
 ```text
 octa:<repo>#<number> <title>
 ```
 
-The note identifies the Issue only; it must not contain the lease ID.
+The association metadata identifies the Issue only; it must not contain the
+lease ID.
 
-On resume, search worktree notes before creating anything. If exactly one
-matches, use it. With several, ask. With none, inspect current branch, status,
-commits, octa PR records, and Issue comments; recover plausible existing work
-before creating a replacement workspace.
+On resume, use `workflow-adapter-worktree` to list exact association-metadata
+matches before creating anything. If exactly one matches, use it. With several,
+ask. With none, inspect current branch, status, commits, octa PR records, and
+Issue comments; recover plausible existing work before creating a replacement
+workspace.
 
 After selecting or recovering an isolated worktree, and only under Codex or
 Claude Code, apply `octa-base`'s `references/terminal-pane-cwd.md` before

@@ -86,4 +86,5 @@ or a genuine gate, keep the lifecycle state required above. Keep the lease only
 while this same live session will continue imminently. Otherwise release it
 normally so a later session can explicitly resume the review or integration
 work with a fresh lease. Never put the lease ID in the completion comment,
-handoff note, worktree note, repository file, commit, or user-facing report.
+handoff note, worktree association metadata, repository file, commit, or
+user-facing report.

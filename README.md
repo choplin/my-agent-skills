@@ -79,8 +79,9 @@ skills or validation configuration.
 | `design-note` | design-note (write down a problem and the approach taken to it as one durable Markdown note — lighter than a PRD, shallower than a design doc) |
 | `exec-plan` | exec-plan, exec-plan-base (ad-hoc autonomous run with no tracker issue behind it; decision log + parking lot) |
 | `octa` | octa-base, octa-overview, octa-capture-feedback, octa-start, octa-groom, octa-handoff, octa-workflow-adapter (local tracker lifecycle; feedback capture, finite Projects, self-complete Issues, atomic leases, review/integration gates, and cross-session handoff) |
-| `workflow-adapter` | tracker, markdown (provider-neutral access boundaries for tracker work records and durable Markdown) |
+| `workflow-adapter` | tracker, markdown, worktree (provider-neutral access boundaries for tracker work records, durable Markdown, and repository worktrees) |
 | `workflow-adapter-llm-wiki` | workflow-adapter-llm-wiki (llm-wiki provider implementation of the durable Markdown adapter contract) |
+| `workflow-adapter-wtm` | workflow-adapter-wtm (wtm provider implementation of the worktree adapter contract) |
 | `planning-toolkit` | plan, resolve, mvp, base (turn an established direction into a finite outcome and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; `mvp` is a scope policy, not a phase — the smallest-build-that-teaches standard the cut is judged against) |
 | `orchestration-toolkit` | execute (carry one groomed tracker Issue inline through implementation, risk-based adversarial review, and the integration gate) |
 | `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
@@ -136,6 +137,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - `octa-base` ← octa lifecycle skills, octa-workflow-adapter
 - `workflow-adapter-tracker` ← inception-finalize, planning-toolkit, orchestration-toolkit-execute
 - `workflow-adapter-markdown` ← design-note, inception-finalize, planning-toolkit, orchestration-toolkit-execute, repository-context-base
+- `workflow-adapter-worktree` ← octa-start, orchestration-toolkit-execute, git-helpers-squash-merge
 - `quick-code-review` ← code-review-session-import-ai
 - `artifact-review` ← code-review-session-import-ai, orchestration-toolkit-execute
 - `review-lenses` ← quick-code-review, artifact-review
@@ -170,12 +172,13 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 **git-helpers**
 - draft-pr → pr-description
 - explain-pr → diff-explainer `(ext; explainer-studio)`
-- squash-merge → commit
+- squash-merge → commit, **workflow-adapter-worktree**
 
 **octa**
+- octa-base → **workflow-adapter-worktree**
 - octa-overview → octa-base
 - octa-capture-feedback → octa-base
-- octa-start → octa-base, octa-handoff, **git-helpers-commit**, wtm-worktree `(ext)`
+- octa-start → octa-base, octa-handoff, **git-helpers-commit**, **workflow-adapter-worktree**
 - octa-groom → octa-base
 - octa-handoff → octa-base
 - octa-workflow-adapter → octa-base
@@ -187,14 +190,18 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - base → **workflow-adapter-tracker**, **workflow-adapter-markdown**
 
 **orchestration-toolkit**
-- execute → **artifact-review**, **workflow-adapter-tracker**, **workflow-adapter-markdown**, the selected tracker provider's start/groom/handoff skills, **git-helpers-commit**, wtm-worktree `(ext)`
+- execute → **artifact-review**, **workflow-adapter-tracker**, **workflow-adapter-markdown**, **workflow-adapter-worktree**, the selected tracker provider's start/groom/handoff skills, **git-helpers-commit**
 
 **workflow-adapter**
 - tracker → one selected tracker provider adapter
 - markdown → one selected durable Markdown provider adapter
+- worktree → one selected worktree provider adapter
 
 **workflow-adapter-llm-wiki**
 - workflow-adapter-llm-wiki → **workflow-adapter-markdown**, llm-wiki-base `(ext)`, llm-wiki-capture `(ext)`, llm-wiki-retrieve `(ext)`
+
+**workflow-adapter-wtm**
+- workflow-adapter-wtm → **workflow-adapter-worktree**, wtm-worktree `(ext)`
 
 **skill-quality**
 - skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review
