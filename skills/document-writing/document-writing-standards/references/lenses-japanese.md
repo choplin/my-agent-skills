@@ -75,6 +75,8 @@ checks:
     their actors and relations become unclear.
   - Analytic constructions used where an ordinary Japanese predicate would
     preserve the same proposition more directly.
+  - Translated focus frames that postpone the proposition into 「こと」 or
+    「もの」 where ordinary Japanese word order would carry the licensed focus.
 non_goals:
   - Do not infer a defect from suspected translation or machine authorship.
   - Do not ban a phrase or construction by form or frequency alone.
@@ -82,6 +84,8 @@ non_goals:
     is conventional in the field and leaves the relation unambiguous.
   - Passive voice and missing actors are prose.voice unless the problem is the
     Japanese sentence construction itself.
+  - Whether focus is licensed at all is reference.discourse-grounding. This
+    lens judges its Japanese realization only after that test passes.
 ```
 
 ### Rules
@@ -106,6 +110,12 @@ non_goals:
   separates a claim from its reason, write the causal relation directly. Keep
   the frame when the separation creates a real contrast or answers a question
   already active in the text.
+- **Do not calque focus into an empty nominal.** Once focus is licensed, name
+  the focused proposition directly. Rewrite forms such as
+  「データが示したのは、そのことだ」 or 「これが意味するのは、そういうことだ」
+  with a predicate that states what the data supports or what the fact means.
+  Keep a nominal focus form where its contrasted candidates are named and the
+  construction is natural in context.
 
 ### Examples
 
@@ -119,6 +129,8 @@ non_goals:
 - After: 「本機能を導入する目的は、運用コストを削減することにある。」
 - Before: 「情報を整理することによって、判断を速めることができる。」
 - After: 「情報を整理すると、判断を速められる。」
+- Before: 「ログが示しているのは、そのことだ。」
+- After: 「ログにも、同じタイムアウトが記録されていた。」
 - Keep: 「この関数は入力値を正規化する。」 The inanimate subject names
   something that actually performs the operation.
 - Keep: 「管理者だけが設定を変更できる。」 Possibility is part of the

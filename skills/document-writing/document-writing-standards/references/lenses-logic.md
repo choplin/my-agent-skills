@@ -44,9 +44,11 @@ checks:
 - **Do not reduce a multi-causal case to one cause.** Where an example carries
   several kinds of problem, separate them and map each to the concept that
   explains it.
-- **Quote what is being denied.** When negating or limiting a proposition, write
-  the proposition itself exactly, in quotation marks. A vague denial that not
-  everything is solved states nothing.
+- **Quote what is being denied.** Where a negation belongs in the document,
+  write the proposition itself exactly, in quotation marks. A vague denial that
+  not everything is solved states nothing. `reference.discourse-grounding`
+  decides whether the negated proposition is available to the reader at all;
+  this rule does not license introducing one.
 
 ### Severity
 

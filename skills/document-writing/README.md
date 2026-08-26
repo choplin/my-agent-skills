@@ -32,8 +32,8 @@ says; `standards` determines how to express and organize it.
 
 Load only the layers the draft needs:
 
-- For any draft, use the expression layer, the document's language layer, and
-  that language's examples.
+- For any draft, use `reference.discourse-grounding`, the expression layer, the
+  document's language layer, and that language's examples.
 - For an argument, design rationale, or explanation, add logic and terminology.
 - For a document longer than a few sections, add structure.
 - For a chapter, article, or narrative explanation meant to be read
@@ -64,7 +64,7 @@ findings → `apply`.
 
 | Skill | Description |
 |-------|-------------|
-| `standards` | The standards as 22 lenses across five layers, for Japanese and English. Read directly while drafting; also the catalog the lanes select from |
+| `standards` | The standards as 23 lenses across five layers, for Japanese and English. Read directly while drafting; also the catalog the lanes select from |
 | `base` | The shared review machinery: blind per-lens detection, conflict resolution, layer-ordered application, one verification pass, the report format |
 | `review` | Full-layer detection, findings applied, revised document. The default lane |
 | `prose` | Sentence-level lenses only. Content and structure are not touched |

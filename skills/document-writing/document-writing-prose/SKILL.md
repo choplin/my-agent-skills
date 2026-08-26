@@ -21,7 +21,7 @@ Apply `document-writing-base` for the whole procedure. This skill supplies only
 the lane values.
 
 ```yaml
-lenses: prose.* and the language layer (ja.* or en.*)
+lenses: reference.discourse-grounding, prose.*, and the language layer (ja.* or en.*)
 deliverable: revised-document
 reviewers: single       # two where the document is long
 verify: true
@@ -40,18 +40,19 @@ structure — and reorganizing it would be a regression, not an improvement.
 
 ## What it removes
 
-The lenses are `prose.plain-expression`, `prose.self-reference`,
-`prose.concision`, `prose.sentence-load`, and `prose.voice`, plus the notation
-and diction lenses for the document's language. Together they cover the failures
-that make machine-written prose expensive to read: empty qualifiers, verbs that
-name the act of writing, sentences whose subject is the document, restatement,
-identifiers that are never referenced again, and the passive where an actor
-acted.
+The lenses are `reference.discourse-grounding`, `prose.plain-expression`,
+`prose.self-reference`, `prose.concision`, `prose.sentence-load`, and
+`prose.voice`, plus the language layer. Together they cover the failures that
+make machine-written prose expensive to read: contrasts and focus that depend
+on drafting history, empty qualifiers, verbs that name the act of writing,
+sentences whose subject is the document, restatement, identifiers that are
+never referenced again, and the passive where an actor acted.
 
 ## Reporting what it left alone
 
 Where a sentence cannot be fixed without moving text — a paragraph carrying two
-topics, a term that needs its introduction relocated — report it as unresolved
-with the lens that would own it, rather than reaching outside the lane.
+topics, a term that needs its introduction relocated, a discourse premise the
+document independently needs earlier — report it as unresolved with the lens
+that would own it, rather than reaching outside the lane.
 
 A caller who wants those fixed should use `document-writing-review`.

@@ -66,6 +66,7 @@ text. Run it before phase 4 and the expression lenses delete what it just added.
 | `terminology.definition` | terminology | terminology | [lenses-terminology.md](references/lenses-terminology.md) |
 | `terminology.consistency` | terminology | terminology | [lenses-terminology.md](references/lenses-terminology.md) |
 | `reference.antecedent` | terminology | terminology | [lenses-terminology.md](references/lenses-terminology.md) |
+| `reference.discourse-grounding` | terminology | terminology | [lenses-terminology.md](references/lenses-terminology.md) |
 | `structure.paragraph-unity` | structure | structure | [lenses-structure.md](references/lenses-structure.md) |
 | `structure.signposting` | structure | structure | [lenses-structure.md](references/lenses-structure.md) |
 | `structure.enumeration-landing` | structure | structure | [lenses-structure.md](references/lenses-structure.md) |
@@ -169,8 +170,9 @@ edits reportable separately:
 
 Do not read the whole catalog before writing. Read by layer:
 
-- Drafting anything: **expression**, plus the language layer for the language
-  being written, plus that language's example file.
+- Drafting anything: `reference.discourse-grounding`, **expression**, plus the
+  language layer for the language being written, plus that language's example
+  file.
 - Drafting an argument, a design rationale, or an explanation: add **logic**
   and **terminology**.
 - Structuring a document longer than a few sections: add **structure**.

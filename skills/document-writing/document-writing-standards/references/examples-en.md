@@ -132,10 +132,10 @@ Not padding: connectives that carry rhythm — But then again…, And yet…
 Paragraph-opening connectives that state the relation: If so, / In fact, /
 But, / Even this example shows…
 
-- Reject the wrong reading explicitly: The reason is not that the schema
-  changed. It is that two writers held the same lock.
-- Ground a negation with a counterfactual: Had the contract been explicit, the
-  mismatch would have surfaced at build time.
+- Reject a reading only when the preceding facts make it live: The reason is
+  not that the schema changed. It is that two writers held the same lock.
+- Ground a live contrast with a counterfactual: Had the contract been explicit,
+  the mismatch would have surfaced at build time.
 - Place forward references at a resting point: "The next chapter takes this up"
   belongs at the end of a paragraph or section.
 
@@ -182,6 +182,59 @@ specific fact, conceding what must be given up. Uniform landings read as filler.
   "the team agrees" in another
 - Aliasing: job / task / work item for one concept
 - Orthographic variants: log in / login / log-in; datastore / data store
+
+---
+
+## `reference.discourse-grounding`
+
+Read only from the document's start through the candidate expression.
+
+### Ungrounded contrast
+
+When monitoring has not appeared, reversing the clauses does not fix the
+defect.
+
+```text
+Before: This is not a monitoring problem. It is a prevention problem.
+Also before: The service needs prevention. Monitoring is not the answer.
+After: The service must reject invalid input before processing it.
+```
+
+### Grounded contrast
+
+Keep the contrast when the document supplies both the alternative and the
+distinction.
+
+```text
+Keep: The operations team proposed more monitoring. Monitoring detects a
+failure after it happens; it cannot reject invalid input before processing.
+```
+
+Keep a comparison that states its own axis and complete rule.
+
+```text
+Keep: Pricing depends on request volume, not user count.
+```
+
+### Focus
+
+```text
+Before: That is what the logs show.
+After: The logs record the same timeout.
+```
+
+### Metaphor
+
+```text
+Before: This interface is the bridge between both teams.
+After: Both teams exchange the same application data through this interface.
+```
+
+### Drafting context
+
+A rejected draft or corrective instruction available only during drafting is
+not a document alternative. Do not invent a reader misconception to preserve a
+contrast.
 
 ---
 

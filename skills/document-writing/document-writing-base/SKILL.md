@@ -75,7 +75,7 @@ and report that no language layer was available.
 writing meant to be read continuously.
 
 Where the document is very short, or the request names one narrow concern,
-reduce the lens set rather than running the full lane. Running nineteen lenses
+reduce the lens set rather than running the full lane. Running the full lens set
 over three paragraphs is waste, not thoroughness.
 
 A lane with `deliverable: revised-document` and no detection phase skips to
@@ -126,6 +126,10 @@ Conflicts between lenses are resolved by rule, not by vote:
   still holds.
 - `reference.antecedent` outranks `prose.concision` on a naming that repeats.
   Repeating a noun is cheaper than an unresolvable pronoun.
+- `reference.discourse-grounding` outranks `structure.signposting` and
+  `rhythm.cognitive-pacing` on a missing premise. Delete or flatten the marked
+  expression unless the source material independently requires moving that
+  premise earlier; do not invent a reader misconception to save the device.
 
 Drop findings that restate the lens rather than locating a defect, and findings
 whose anchor cannot be found in the document.
@@ -161,6 +165,7 @@ often breaks:
 
 - `structure.signposting` — connectives lost when paragraphs merged or split
 - `reference.antecedent` — referents removed by deletion
+- `reference.discourse-grounding` — contrasts or frames introduced by rewriting
 - `terminology.consistency` — wording changed unevenly across the document
 - `prose.concision` — padding introduced while rewriting
 

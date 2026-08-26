@@ -11,7 +11,8 @@ language falls back to, live in [examples-ja.md](examples-ja.md) and
 
 Documents that fail this layer can be read sentence by sentence and still not
 be understood, because the reader is asked to carry a term whose meaning was
-never fixed, or to resolve a reference that has no unique target.
+never fixed, to resolve a reference that has no unique target, or to supply a
+contrast or frame that exists only outside the document.
 
 ---
 
@@ -153,3 +154,80 @@ something, and the defect appears only when a reader tries to resolve them.
 
 `blocker` where no referent exists or two are equally available. `major` where
 the referent is recoverable only by re-reading.
+
+---
+
+## `reference.discourse-grounding`
+
+```yaml
+lens: reference.discourse-grounding
+layer: terminology
+packing_group: terminology
+objective: Falsify the claim that every focus, contrast, negation, metaphor,
+  and retrospective reference relies only on a question, alternative,
+  proposition, or mapping available to the reader at that point.
+checks:
+  - Focus constructions used before the text has raised a question or supplied
+    alternatives that make the focus meaningful.
+  - Negated alternatives that have not appeared and do not follow naturally
+    from what the reader has seen.
+  - A positive claim followed by a reversed denial of an equally inactive
+    alternative.
+  - Metaphors whose source-to-target mapping has not been established by
+    concrete material.
+  - Retrospective phrases that have a grammatical antecedent but rely on a
+    proposition or distinction available only in drafting history.
+non_goals:
+  - Do not require an alternative to be stated verbatim when the preceding
+    facts make the reader likely to infer it.
+  - Do not reject a sentence that introduces and grounds its own comparison,
+    or an ordinary topic-comment form that leaves no omitted context to recover.
+  - Do not reject a conventional metaphor whose mapping is fixed and
+    unambiguous in the document's field.
+  - Do not infer drafting history, translation, or machine authorship from the
+    form alone. Judge only the document up to the finding's location.
+```
+
+### The prefix test
+
+Read from the document's start through the candidate expression, without later
+text or conversation history. Identify:
+
+1. the question, alternative, proposition, or mapping the expression assumes;
+2. the earlier passage, immediate inference, or self-contained comparison that
+   made it available; and
+3. why focus, contrast, negation, or metaphor carries more information than a
+   plain assertion here.
+
+If the first or second answer cannot be located, the expression is ungrounded.
+If both can be located but the third cannot, leave this lens and route needless
+rhetoric to `prose.plain-expression`.
+
+### Rules
+
+- **Negate only a live alternative.** The negative side of a contrast must be
+  an option already proposed, a reading the preceding text makes plausible, or
+  a belief attributed to a real source. A sentence may establish its own
+  comparison where it names the decision axis and grounds the distinction; its
+  position before or after the positive claim does not matter.
+- **Focus only an active question.** Forms equivalent to “what matters is X”
+  or “what the evidence shows is X” require a question or competing candidates
+  already present in the reader's model. A resolvable pronoun alone does not
+  create that reason.
+- **Ground a metaphor before spending it.** The reader must be able to map the
+  metaphor's relevant parts onto concrete material already supplied, or onto a
+  mapping made explicit in the sentence itself. Otherwise state the relation
+  directly.
+- **Treat conversation as source material, not document context.** A rejected
+  draft, corrective feedback, prompt constraint, or abandoned interpretation
+  is not available to the reader merely because it appeared during drafting.
+- **Delete before backfilling.** Resolve an ungrounded expression first by
+  stating its positive proposition or concrete relation plainly. Move an
+  omitted premise earlier only when the document independently needs it. Never
+  invent a reader misconception merely to license a contrast.
+
+### Severity
+
+`major` where the passage answers a question, rejects an alternative, or spends
+a metaphor that the reader has had no reason to construct. `minor` where the
+required state is available but only after avoidable re-reading.

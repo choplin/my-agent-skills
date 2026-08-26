@@ -82,10 +82,12 @@ content_impact: reordering
   the example's climax.
 - **Do not disclose the payoff early.** Figures and specific facts that a later
   passage turns on must not appear in the paragraph before it.
-- **Reject the wrong reading explicitly** where the reader is likely to reach
-  it: name the reading, deny it, then give the real reason.
-- **Ground a negation.** When writing "not A but B", add one sentence of
-  grounds. A counterfactual usually serves.
+- **Reject an actual wrong reading explicitly** where the preceding text makes
+  the reader likely to reach it: name the reading, deny it, then give the real
+  reason. `reference.discourse-grounding` decides whether that reading is live.
+- **Explain a live contrast.** Once both alternatives are available, state why
+  one fails and the other holds. A counterfactual may ground the distinction.
+  Do not add an imagined misconception merely to make a contrast possible.
 
 ### Severity
 

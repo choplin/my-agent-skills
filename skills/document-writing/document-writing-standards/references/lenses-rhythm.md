@@ -32,9 +32,10 @@ Two apparent conflicts are not conflicts:
   both.
 
 The real constraint is placement, not principle. Anything this lens adds is
-still subject to `prose.self-reference`: a sentence introduced for pacing that
-talks about the document rather than the subject is padding regardless of how
-well it scans.
+still subject to `prose.self-reference` and `reference.discourse-grounding`: a
+sentence introduced for pacing is padding if it talks about the document, and
+it is ungrounded if it imports a belief, contrast, or metaphor the reader has
+had no reason to construct.
 
 ---
 
@@ -85,6 +86,10 @@ content_impact: none
 - **Boundaries.** Second-person address, requests to the reader, and the
   writer's own caveats belong at a chapter opening or close, not in the middle
   of an argument.
+- **No fabricated tension.** Do not create pacing by attributing an unsupported
+  belief to the reader, reviving an alternative rejected during drafting, or
+  introducing a metaphor before its concrete relation exists. Every addition
+  must pass `reference.discourse-grounding` against the document prefix.
 
 ### Applying findings from this lens
 
@@ -93,7 +98,9 @@ from: an event, a datum, a statement, a tradeoff, or a state of the writer's
 judgment. Where the section offers no such material, leave the passage flat.
 Manufacturing a beat out of sentences about the document is the failure mode
 this lens most easily produces, and `prose.self-reference` will correctly delete
-the result.
+the result. Manufacturing a disagreement or discovery from drafting history is
+the other failure mode; `reference.discourse-grounding` will delete or flatten
+it.
 
 ### Severity
 

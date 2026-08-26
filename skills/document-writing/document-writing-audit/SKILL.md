@@ -27,11 +27,10 @@ verify: false
 
 ## Why this lane spends the most
 
-One reviewer per lens is roughly eighteen agents on a full document, against
-five for `document-writing-review`. The asymmetry is deliberate: nothing is
-applied here, so a person reads every finding, and a missed defect is a defect
-that survives. Independence buys coverage, and coverage is what this lane is
-for.
+One reviewer runs for every selected lens, against one per packing group for
+`document-writing-review`. The asymmetry is deliberate: nothing is applied
+here, so a person reads every finding, and a missed defect is a defect that
+survives. Independence buys coverage, and coverage is what this lane is for.
 
 `document-writing-review` makes the opposite trade, because a revised document
 needs application to be coherent more than it needs detection to be exhaustive.
