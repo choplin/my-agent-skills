@@ -72,19 +72,24 @@ Read the item's `Detail`. Judge whether the response is unambiguous:
 
 Present the proposal **always paired with the original comment**, and record it in the
 item's `Approach`. Quote the item's `Detail` verbatim (the original reviewer comment) so
-the user judges the response against the exact wording, not a paraphrase:
+the user judges the response against the exact wording, not a paraphrase. Immediately
+after the quote, explain the comment's essential request or concern concisely in the
+language currently used with the user. Include this explanation even when the original
+comment is already in that language. Preserve material technical details and uncertainty;
+do not turn an ambiguous comment into a definite interpretation:
 
 ```markdown
 **Item {N}** ({source}): {summary}
 **Original comment**:
 > {verbatim Detail — the original reviewer comment}
+**Key point**: {concise explanation of the request or concern in the session language}
 **Proposed**: WHERE: {file:location} / WHAT: {specific change}   (or: POSTPONE — {why out of scope})
 
 Agree? (or refine / "skip")
 ```
 
-Never present a proposal without the original comment beside it. Do **not** change any
-code yet.
+Never present a proposal without both the original comment and its session-language key
+point beside it. Do **not** change any code yet.
 
 ### 3. User decides
 
@@ -125,6 +130,7 @@ their recorded `Approach`es are read back from `review.md`.
 | Applying a change before the user agrees | Wrong approach causes rework | Always propose and wait for agreement |
 | Batching several items into one proposal | Loses per-item decision; hides context | One item at a time — propose, decide, apply, next |
 | Proposing without the original comment | User can't judge against exact wording | Always quote the item's `Detail` beside the proposal |
+| Quoting without a session-language explanation | Cross-language or dense feedback is harder to assess | Add a concise key point in the language used with the user |
 | Forcing a design-level change through here | It needs an out-of-scope decision | Mark `postponed`; surface it as a follow-up |
 | Proposing multiple interpretations | Adds cognitive load | Use `discuss-toolkit-dig` to narrow down |
 | Concluding without an explicit signal | The user may have more feedback | Wait for "LGTM" / "以上" or an empty open list |
@@ -133,7 +139,7 @@ their recorded `Approach`es are read back from `review.md`.
 
 - [ ] Each `open` item driven to `resolved` / `skipped` / `postponed`
 - [ ] Items are worked strictly one at a time (no batching)
-- [ ] Every proposal is presented paired with the original comment (verbatim `Detail`)
+- [ ] Every proposal is presented with the original comment (verbatim `Detail`) and a concise key point in the language used with the user
 - [ ] A response is proposed and agreed before any code change
 - [ ] Ambiguous items go through `discuss-toolkit-dig` before a proposal
 - [ ] Out-of-scope items are `postponed`, not forced
