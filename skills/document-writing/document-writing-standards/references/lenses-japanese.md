@@ -57,6 +57,81 @@ unidentifiable, which is `major` and also a `structure.document-shape` finding.
 
 ---
 
+## `ja.syntax`
+
+```yaml
+lens: ja.syntax
+layer: japanese
+packing_group: japanese
+objective: Find Japanese sentences whose grammatical relations are needlessly
+  obscured by noun-heavy or indirect syntax, forcing the reader to recast the
+  sentence to determine who does what or which words belong together.
+checks:
+  - Abstract or inanimate subjects paired with an active transitive predicate
+    where the basis of an inference or the actual actor disappears.
+  - Nested adnominal clauses that postpone the head noun while the reader holds
+    several subjects and predicates.
+  - Actions frozen into nominalizations or chains of noun modifiers so that
+    their actors and relations become unclear.
+  - Analytic constructions used where an ordinary Japanese predicate would
+    preserve the same proposition more directly.
+non_goals:
+  - Do not infer a defect from suspected translation or machine authorship.
+  - Do not ban a phrase or construction by form or frequency alone.
+  - Do not rewrite an inanimate subject, nominalization, or analytic form that
+    is conventional in the field and leaves the relation unambiguous.
+  - Passive voice and missing actors are prose.voice unless the problem is the
+    Japanese sentence construction itself.
+```
+
+### Rules
+
+- **State the relation, not an abstract actor.** When an inanimate or abstract
+  subject is made to perform an inference, expose the actual relation with a
+  form such as 「〜から分かる」 or name the person making the judgment. Keep an
+  inanimate subject where it is conventional and the predicate describes what
+  the object actually does.
+- **Release the head noun early.** If the reader must retain more than one
+  subject-predicate relation before reaching a noun, split the modifiers into
+  sentences or make the noun the topic. Length alone is not a finding.
+- **Open nominalized actions into clauses.** Replace stacked サ変 nouns and
+  chains of 「の」 with verbs when the stack hides who acts or how the actions
+  relate. A repeated particle is a place to inspect, not a threshold.
+- **Prefer the ordinary predicate.** Replace forms such as
+  「〜することができる」「〜することによって」「意味を持つ」 only where a
+  shorter inflected verb, conditional, or existential form states exactly the
+  same thing. Preserve possibility, means, possession, and emphasis when they
+  are part of the proposition.
+- **Join stock claim-and-reason frames.** Where 「それは〜。なぜなら〜」 merely
+  separates a claim from its reason, write the causal relation directly. Keep
+  the frame when the separation creates a real contrast or answers a question
+  already active in the text.
+
+### Examples
+
+- Before: 「この結果は、従来の前提が誤っていたことを示している。」
+- After: 「この結果から、従来の前提が誤っていたと分かる。」
+- Before: 「多くの企業が導入を進めているが十分な効果を実感できていないという
+  課題を抱える技術である。」
+- After: 「多くの企業がこの技術を導入している。しかし、十分な効果を実感できた
+  企業は少ない。」
+- Before: 「本機能の導入の目的は、運用コストの削減の実現にある。」
+- After: 「本機能を導入する目的は、運用コストを削減することにある。」
+- Before: 「情報を整理することによって、判断を速めることができる。」
+- After: 「情報を整理すると、判断を速められる。」
+- Keep: 「この関数は入力値を正規化する。」 The inanimate subject names
+  something that actually performs the operation.
+- Keep: 「管理者だけが設定を変更できる。」 Possibility is part of the
+  permission being specified.
+
+### Severity
+
+`major` where the reader must re-read to recover the actor, predicate, or
+modifier boundary. `minor` where the relation is clear but an indirect
+construction adds local processing cost.
+
+---
+
 ## `ja.diction`
 
 ```yaml

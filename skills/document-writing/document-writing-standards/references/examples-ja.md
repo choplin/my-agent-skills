@@ -4,8 +4,8 @@ Concrete instances of the language-neutral lenses, for documents written in
 Japanese. Keyed by lens ID. Load alongside the lens definition; the lists are
 illustrative, not exhaustive.
 
-Japanese-only lenses (`ja.notation`, `ja.diction`) carry their own rules and
-examples in [lenses-japanese.md](lenses-japanese.md).
+Japanese-only lenses (`ja.notation`, `ja.syntax`, `ja.diction`) carry their own
+rules and examples in [lenses-japanese.md](lenses-japanese.md).
 
 ---
 

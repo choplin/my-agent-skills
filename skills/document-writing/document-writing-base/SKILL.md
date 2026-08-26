@@ -67,15 +67,15 @@ Confirm the document is a concrete file or supplied text. Determine its
 language, and its purpose if `structure.genre-purity` is selected.
 
 Exactly one language layer is included, chosen by reading the document:
-`ja.notation` and `ja.diction` for Japanese, `en.mechanics` and `en.diction` for
-English. For any other language, run the neutral layers alone and report that no
-language layer was available.
+`ja.notation`, `ja.syntax`, and `ja.diction` for Japanese; `en.mechanics` and
+`en.diction` for English. For any other language, run the neutral layers alone
+and report that no language layer was available.
 
 `rhythm.cognitive-pacing` is added only on an explicit request, and only for
 writing meant to be read continuously.
 
 Where the document is very short, or the request names one narrow concern,
-reduce the lens set rather than running the full lane. Running eighteen lenses
+reduce the lens set rather than running the full lane. Running nineteen lenses
 over three paragraphs is waste, not thoroughness.
 
 A lane with `deliverable: revised-document` and no detection phase skips to

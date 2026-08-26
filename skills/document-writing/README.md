@@ -64,7 +64,7 @@ findings → `apply`.
 
 | Skill | Description |
 |-------|-------------|
-| `standards` | The standards as 21 lenses across five layers, for Japanese and English. Read directly while drafting; also the catalog the lanes select from |
+| `standards` | The standards as 22 lenses across five layers, for Japanese and English. Read directly while drafting; also the catalog the lanes select from |
 | `base` | The shared review machinery: blind per-lens detection, conflict resolution, layer-ordered application, one verification pass, the report format |
 | `review` | Full-layer detection, findings applied, revised document. The default lane |
 | `prose` | Sentence-level lenses only. Content and structure are not touched |

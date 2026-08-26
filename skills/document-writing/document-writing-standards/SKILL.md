@@ -3,7 +3,7 @@ name: document-writing-standards
 description: >-
   The technical-writing standards behind document quality, defined as reusable
   review lenses: plain expression, paragraph structure, terminology discipline,
-  internal logic, and per-language notation and diction for Japanese and
+  internal logic, and per-language notation, syntax, and diction for Japanese and
   English. Apply while drafting or revising a technical document, chapter,
   article, README, design note, or explanatory prose, so the text meets the
   standard as written instead of being repaired afterwards.
@@ -32,6 +32,12 @@ The standards target one objective: **a reader should spend their attention on
 the subject, not on parsing the text.** Every lens either removes something
 that costs attention without adding information, or repairs something that
 makes the text fail to hold together.
+
+Lenses judge an observable defect, not the likely origin of the prose. A form
+that occurs often in machine-generated or translated text is not a finding
+unless the lens can show the attention cost or loss of meaning in this
+occurrence. Correlation may identify a place to inspect; it is never evidence
+by itself.
 
 ## Layers
 
@@ -71,6 +77,7 @@ text. Run it before phase 4 and the expression lenses delete what it just added.
 | `prose.sentence-load` | expression | expression | [lenses-expression.md](references/lenses-expression.md) |
 | `prose.voice` | expression | expression | [lenses-expression.md](references/lenses-expression.md) |
 | `ja.notation` | japanese | japanese | [lenses-japanese.md](references/lenses-japanese.md) |
+| `ja.syntax` | japanese | japanese | [lenses-japanese.md](references/lenses-japanese.md) |
 | `ja.diction` | japanese | japanese | [lenses-japanese.md](references/lenses-japanese.md) |
 | `en.mechanics` | english | english | [lenses-english.md](references/lenses-english.md) |
 | `en.diction` | english | english | [lenses-english.md](references/lenses-english.md) |
@@ -90,7 +97,7 @@ the document rather than supplied by the caller:
 
 | Document language | Language lenses | Example file |
 |---|---|---|
-| Japanese | `ja.notation`, `ja.diction` | `examples-ja.md` |
+| Japanese | `ja.notation`, `ja.syntax`, `ja.diction` | `examples-ja.md` |
 | English | `en.mechanics`, `en.diction` | `examples-en.md` |
 
 For a document in another language, run the four neutral layers without a
