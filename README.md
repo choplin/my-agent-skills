@@ -99,7 +99,7 @@ skills or validation configuration.
 | `codebase-structure` | codebase-structure, codebase-structure-review, codebase-structure-refactor, base (design a target structure; review ownership and boundaries without changing code; safely migrate an implementation; share the reviewability and boundary model) |
 | `refactoring-tools` | refactoring-tools-planner (inspect a repository and create an evidence-based, implementation-ready refactor plan without changing production code) |
 | `3d-print` | 3d-print, 3d-print-eufymake-cli (model a small printable object as parametric OpenSCAD; slice it from the CLI to trace a print warning back to the geometry that causes it) |
-| `obsidian` | obsidian-capture, obsidian-import-pdf (capture a web article or a PDF into the personal Obsidian vault as a Japanese summary note linked from today's Daily Note; vault-scoped, installed into the vault rather than globally) |
+| `obsidian` | obsidian-capture, obsidian-import-pdf (capture a web article, X post, YouTube video, or PDF into the personal Obsidian vault as a Japanese summary note linked from today's Daily Note; vault-scoped, installed into the vault rather than globally) |
 
 > MoonBit skills are **not** vendored here — install them straight from upstream: `skills add moonbitlang/skills`.
 

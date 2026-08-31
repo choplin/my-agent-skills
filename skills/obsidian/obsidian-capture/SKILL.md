@@ -1,10 +1,11 @@
 ---
 name: obsidian-capture
 description: >-
-  Capture a web article into the personal Obsidian vault. Use when given a URL
-  to file away: fetches the page, writes a Japanese summary note to
-  03_References/, and links it from today's Daily Note "## Captures" section.
-  Invoke explicitly as `/obsidian-capture <url>`.
+  Capture a web article, X post, or YouTube video into the personal Obsidian
+  vault. Use when given a URL to file away: fetches the page (or the video's
+  transcript), writes a Japanese summary note to 03_References/, and links it
+  from today's Daily Note "## Captures" section. Invoke explicitly as
+  `/obsidian-capture <url>`.
 user-invocable: true
 allowed-tools:
   - Bash
@@ -23,8 +24,8 @@ metadata:
 
 # Obsidian Capture
 
-Capture a web article into `~/Obsidian/My Vault` as a Japanese summary note in
-`03_References/`, then link it from today's Daily Note.
+Capture a web article, X post, or YouTube video into `~/Obsidian/My Vault` as a
+Japanese summary note in `03_References/`, then link it from today's Daily Note.
 
 The URL is passed as the invocation argument (`/obsidian-capture <url>`). If no
 URL is given, ask for one — do not guess.
@@ -38,8 +39,9 @@ on them:
 
 - **No topical tags at capture time.** The vault rule is: "Tags are added during
   processing (not capture) to reduce friction." So the only tag is `resource/web`
-  (the resource-type tag). Do NOT infer `area/*` or `project/*` tags, even if the
-  topic is obvious — that is the user's job during Process.
+  (or `resource/video` for a YouTube video — the resource-type tag). Do NOT
+  infer `area/*` or `project/*` tags, even if the topic is obvious — that is the
+  user's job during Process.
 - **A Japanese summary, not the full article.** The point of capture is a quick,
   reviewable gist for later processing. Save a structured Japanese summary and
   mark it `ai-summary: "true"`, matching existing notes like
@@ -84,6 +86,14 @@ same post is detected even if the URL has minor formatting differences:
 rg -n "web-source: .*status/<status-id>" 03_References
 ```
 
+For YouTube URLs, search the 11-character video ID instead of the whole URL —
+the same video is handed over as `youtu.be/<id>`, `watch?v=<id>`, `shorts/<id>`,
+or with a `&t=` timestamp appended, so a literal URL match misses duplicates:
+
+```bash
+rg -n --fixed-strings "<video-id>" 03_References
+```
+
 If any match is found, stop immediately. Report the existing note path and do not
 fetch the page, create a new note, or add another Daily Note capture link.
 
@@ -94,15 +104,13 @@ Do NOT use WebFetch for them. Instead run the bundled helper, which pulls the
 post from X's public syndication endpoint (no auth) via curl:
 
 ```bash
-python3 "$CLAUDE_PLUGIN_ROOT/scripts/fetch_x.py" "<url>"
+python3 "$HOME/Obsidian/My Vault/.agents/skills/obsidian-capture/scripts/fetch_x.py" "<url>"
 ```
 
-(If `$CLAUDE_PLUGIN_ROOT` is unset, use the skill directory:
-`.claude/skills/obsidian-capture/scripts/fetch_x.py`.) It prints the author,
-post date, full text (including long-form posts and any quoted post), and
-referenced links. Use that output as the source for the summary; the given URL
-stays the `web-source`, the author becomes `web-author`, and the post date
-becomes `web-published`.
+It prints the author, post date, full text (including long-form posts and any
+quoted post), and referenced links. Use that output as the source for the
+summary; the given URL stays the `web-source`, the author becomes `web-author`,
+and the post date becomes `web-published`.
 
 An X post has no title. Derive a short Japanese title from the post's gist for
 the filename and `web-title` (e.g. `<author>の投稿: <topic>`), and keep the
@@ -132,6 +140,32 @@ Chrome (no new login, nothing to bypass):
 
 Use the article's own heading as the title; keep the given post URL as `web-source`
 (so the Captures link points back to the post the user handed you).
+
+**YouTube URLs** (host `youtube.com`, `youtu.be`, including `/shorts/` and
+`/live/`) — WebFetch only sees the JS shell, so at best it returns the
+description, never the video's content. Run the bundled helper instead, which
+uses `yt-dlp` to read the metadata and the caption track without downloading the
+video:
+
+```bash
+python3 "$HOME/Obsidian/My Vault/.agents/skills/obsidian-capture/scripts/fetch_youtube.py" "<url>"
+```
+
+It prints the title, channel, publish date, duration, description, and the
+transcript as paragraphs prefixed with `[mm:ss]` markers. Use captions in the
+video's original language: the helper detects that language from the video
+metadata, prefers uploader-provided captions, and otherwise uses the original
+auto-generated track. Do not pass `--langs` unless the user explicitly asks to
+override the video's original language. The `Captions:` line says which track
+was used and whether it is official or auto-generated — auto-generated tracks
+carry recognition errors, so treat proper nouns and figures in them with
+suspicion rather than asserting them in the summary.
+
+Base the summary on the transcript, not the description. Use the video's own
+title as the title, the channel as `web-author`, and the publish date as
+`web-published`. If the helper exits non-zero because the video has no captions
+at all, report that and stop — do not summarize from the description alone, and
+do not download the audio to transcribe it.
 
 **All other URLs** — use `WebFetch`. Extract: title, source URL (the given URL),
 author/publication name, published date (if present in the page), and a
@@ -194,10 +228,22 @@ ai-summary: "true"
 article's main points and conclusions, faithful to the source>
 ```
 
+For a YouTube video, head each section of the body with the timestamp it starts
+at, so the note leads back into the video:
+
+```markdown
+## 00:00 導入 — 扱う問題
+- ...
+## 04:12 手法の説明
+- ...
+```
+
+
 Rules for the frontmatter:
 - `created` is date-only (`<TODAY>`).
 - `web-author` is a wikilink: `"[[Name]]"`. If unknown, leave the value empty.
-- `tags` contains exactly `resource/web` and nothing else.
+- `tags` contains exactly one resource-type tag and nothing else:
+  `resource/video` for a YouTube video, `resource/web` otherwise.
 
 ### 4. Link from today's Daily Note
 
@@ -244,13 +290,16 @@ Tell the user the saved file path and confirm the Captures link was added.
 
 - [ ] Before fetching, `03_References/` was searched for an existing
       `web-source` matching the given URL (including trailing-slash variants for
-      non-X URLs and status-ID matches for X URLs), and the run stopped
-      without changes if a match existed.
+      non-X URLs, status-ID matches for X URLs, and video-ID matches for YouTube
+      URLs), and the run stopped without changes if a match existed.
 - [ ] A file exists at `03_References/<TODAY> <Title>.md` (today's date prefix).
 - [ ] Frontmatter contains all of: `web-title`, `web-source` (= the given URL),
       `web-author`, `web-published`, `web-description`, `created` (= `<TODAY>`,
-      date-only), `tags` (exactly `resource/web`), `ai-summary: "true"`.
+      date-only), `tags` (exactly `resource/video` for a YouTube video and
+      `resource/web` otherwise), `ai-summary: "true"`.
 - [ ] The body is a Japanese summary (not the full source text, not English prose).
+- [ ] For a YouTube video, the summary came from the transcript (not the
+      description alone) and its sections carry timestamps.
 - [ ] `10_Daily Notes/<TODAY>.md` exists and contains exactly one new bullet
       under `## Captures` linking to the created note.
 - [ ] The Captures wikilink target matches the created file's basename (so it
@@ -269,6 +318,13 @@ Tell the user the saved file path and confirm the Captures link was added.
 - **Fetch failed / paywalled:** report and stop; create nothing.
 - **X post:** fetch with `scripts/fetch_x.py` (not WebFetch); derive a
   title since posts have none.
+- **YouTube video:** fetch with `scripts/fetch_youtube.py` (not WebFetch);
+  tag `resource/video`.
+- **YouTube video with no captions:** the helper exits non-zero — report and
+  stop; do not use translated captions or summarize from the description.
+- **Non-video YouTube URL** (channel, playlist, search results): the helper
+  rejects it as "not a YouTube video URL". Ask the user for a video URL; do not
+  fall back to WebFetch.
 - **X Article** (`x.com/.../article/...`, or a post that only links to one): the
   syndication helper can't read it — read it with Claude in Chrome (step 1). If the
   Chrome extension is not connected or not logged into X, report and stop.

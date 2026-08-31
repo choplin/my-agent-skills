@@ -4,7 +4,7 @@
 
 | Skill | Description |
 |-------|-------------|
-| `obsidian-capture` | Capture a web article into the personal Obsidian vault: fetch the page, write a Japanese summary note to `03_References/`, and link it from today's Daily Note |
+| `obsidian-capture` | Capture a web article, X post, or YouTube video into the personal Obsidian vault: fetch the source, write a Japanese summary note to `03_References/`, and link it from today's Daily Note |
 | `obsidian-import-pdf` | Import a PDF (local path or URL) into the vault: keep the original in `attachments/`, write a Japanese summary note that links to it, and link the note from today's Daily Note |
 
 Both skills implement only the **Capture** step of the vault's Zettelkasten
@@ -19,7 +19,8 @@ conventions documented in that vault's own `CLAUDE.md` (`03_References/`,
 be installed into that vault, not globally.
 
 `obsidian-capture` reads pages through WebFetch, falling back to the browser
-tools and, for X/Twitter, to the bundled `scripts/fetch_x.py`.
+tools for X Articles, `scripts/fetch_x.py` for X posts, and
+`scripts/fetch_youtube.py` plus `yt-dlp` for YouTube transcripts.
 
 `obsidian-import-pdf` also requires an installed `pdf` skill for extraction and
 OCR guidance.
