@@ -1,4 +1,4 @@
 interface:
   display_name: "Repository Context Codebase"
-  short_description: "Maintain a durable codebase Architecture Guide"
-  default_prompt: "Use $repository-context-codebase to create, refresh, or review this repository's Architecture Guide."
+  short_description: "Maintain layered codebase developer documentation"
+  default_prompt: "Use $repository-context-codebase to maintain layered developer documentation: an architectural mental model, one-topic design documents, and separate decision history."

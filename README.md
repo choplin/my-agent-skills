@@ -95,7 +95,7 @@ skills or validation configuration.
 | `app-reference` | backend, frontend (application-specific architecture and framework recommendations) |
 | `jira-cli` | jira-cli |
 | `showcase-capture` | plan, terminal, browser, screen, cleanshot-annotate, figma-annotate, pen-annotate (plan app/tool demo media; capture each shot on its appropriate surface; route planned annotations to a concrete editor workflow) |
-| `repository-context` | base, readme, pen-design, codebase (place repository work context and group tentative wiki notes by work; maintain the product README and living Architecture Guide; design editable documentation visuals) |
+| `repository-context` | base, readme, pen-design, codebase (place repository work context and group tentative wiki notes by work; maintain the product README and layered developer documentation; design editable documentation visuals) |
 | `codebase-structure` | codebase-structure, codebase-structure-review, codebase-structure-refactor, base (design a target structure; review ownership and boundaries without changing code; safely migrate an implementation; share the reviewability and boundary model) |
 | `refactoring-tools` | refactoring-tools-planner (inspect a repository and create an evidence-based, implementation-ready refactor plan without changing production code) |
 | `3d-print` | 3d-print, 3d-print-eufymake-cli (model a small printable object as parametric OpenSCAD; slice it from the CLI to trace a print warning back to the geometry that causes it) |

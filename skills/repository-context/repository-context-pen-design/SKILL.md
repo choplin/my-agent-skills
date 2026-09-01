@@ -6,7 +6,7 @@ description: >-
   visual-concept agreement through multiple comparable directions, selection,
   refinement, and verified export. Use for hero images, workflow illustrations,
   architecture or relationship diagrams, comparison panels, and conceptual
-  overviews in READMEs, documentation sites, Architecture Guides, and related
+  overviews in READMEs, documentation sites, architecture documents, and related
   explanatory material.
 ---
 

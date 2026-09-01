@@ -40,9 +40,9 @@ Classify information before choosing its home:
 | Mode | Does it explain what exists and why, or prescribe what someone must do? |
 
 The last distinction separates explanatory architecture from operational rules:
-describe the current dependency direction and its rationale in the Architecture
-Guide; put an instruction an agent must obey in `AGENTS.md`, linking to the
-explanation when useful.
+describe an established dependency direction in developer documentation; put
+an instruction an agent must obey in `AGENTS.md`, linking to the explanation
+when useful.
 
 ## Destinations
 
@@ -50,12 +50,9 @@ explanation when useful.
 |---|---|---|
 | Root `README.md` | The product's user-facing entrance: what it is, why it matters, and the shortest path to first success | Keep it focused and route readers to the documentation site for detail. Apply `repository-context-readme` for creation or substantial revision. |
 | Documentation site source | Detailed user documentation after first success | Introduce it when the README can no longer carry the detail clearly. Keep its source in the same repository by default, follow the site's established layout, and avoid prescribing a directory name here. |
-| Developer documentation (`docs/` by default) | The context repository developers need to understand, implement, verify, and safely change the product | Keep it distinct from product-user documentation. Give it one overview that establishes the mental model, then link to independently useful detail rather than turning the overview into an exhaustive reference. Follow an existing developer-documentation location when the repository has one. |
-| `docs/architecture.md` | The current codebase structure, concepts, ownership, relationships, design philosophy, and the reasons the present architecture takes its shape | Keep it explanatory rather than imperative. Apply `repository-context-codebase`; follow an existing architecture entry point when the repository already has one. |
-| `docs/decision-log.md` | A chronological index of design decisions: what was decided or changed, when, and what current document owns the resulting rule | Keep entries concise and link to the canonical current design document and relevant tracker or change when useful. Use it to reveal how the design accumulated, not as the source of current design truth or as a general work diary. Follow an existing decision-log location and format when present. |
+| Developer documentation (`docs/` by default) | Established context repository developers need to understand, implement, verify, and safely change the product | Keep it distinct from product-user documentation. Apply `repository-context-codebase` to choose and maintain its internal structure, following an existing developer-documentation location when the repository has one. |
 | `AGENTS.md` | Stable instructions agents must follow while working in the repository | Keep actionable rules, constraints, required checks, and prohibitions here. Do not use it as the codebase explanation. |
 | `CHANGELOG.md` | User-visible release outcomes | Maintain it as a near-default repository document. Follow the repository's existing changelog convention; otherwise use Keep a Changelog categories and record final outcomes rather than work narration. |
-| ADR | The context, alternatives, and outcome of a design decision whose history has clear shared value | Do not introduce ADRs from the start by default. Add one only when preserving the decision itself is clearly worth its maintenance cost, and follow the repository's chosen ADR location and format. |
 | Work tracker | All context a fresh executor needs to carry one finite work item from open to close, plus its progress and completion record | Keep the work self-contained even when this duplicates canonical context elsewhere. The duplication serves execution; it does not replace current repository documentation. |
 | Tentative durable knowledge | Discussion, hypotheses, investigation paths, interim findings, and provisional conclusions from one sequence of work | Group the sequence with a temporary work tag and distill it when that work closes. |
 | Durable local knowledge | Long-lived knowledge useful to the user or their agents but not valuable enough to share with product users or repository developers | Keep local research and history here only after the shared-value decision below. |
@@ -99,9 +96,10 @@ this order:
 3. **No continuing value** — do not retain it merely because it was captured.
 
 Shared value includes user guidance and limitations, user-visible changes,
-current architecture and its rationale, agent-facing rules, and design history
-that has earned an ADR. Do not promote an unverified conclusion into current
-repository documentation; leave it tentative until it can be resolved.
+established architecture, current design rules and rationale, agent-facing
+rules, and decision history. Do not promote an unverified conclusion into
+canonical repository documentation; leave it tentative until it can be
+resolved.
 
 Remove the work tag from every note whose distillation is complete, including a
 note being archived. Leave it only on unresolved notes that remain tentative.
@@ -111,7 +109,8 @@ The sequence is fully distilled when no note retains its work tag.
 
 - `repository-context-readme` owns the main product README and its reader
   journey.
-- `repository-context-codebase` owns the living Architecture Guide.
+- `repository-context-codebase` owns the developer-documentation structure and
+  its living architecture entry path.
 - `repository-context-pen-design` owns editable visual design after a calling
   documentation workflow fixes the audience, message, evidence, and placement.
 
