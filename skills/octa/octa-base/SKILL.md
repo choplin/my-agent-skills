@@ -17,10 +17,10 @@ across agents and sessions. octa stores coordination data locally; Git stores
 code and diffs. Run commands inside the target Git repository and prefer
 `--json` for machine-readable output.
 
-Before using an unfamiliar command, run `octa --help` and the relevant nested
-`--help`. If `octa` is unavailable, stop and report that the CLI must be
-installed; do not silently fall back to another tracker or a local markdown
-task list.
+Run documented commands without checking `--help`. Check the narrowest relevant
+`--help` only for an undocumented command or option, a suspected CLI mismatch,
+or after a documented command fails. Run `octa --help` only when the command
+tree is unclear. If `octa` is unavailable, stop; do not use another tracker.
 
 ## Route recurring work
 
@@ -235,7 +235,7 @@ the durable link points from the local tracker to the external artifact.
 
 ## Core CLI mapping
 
-Use exact help as the source of truth. Common operations are:
+Run these invocations directly:
 
 ```sh
 octa project list --active --json

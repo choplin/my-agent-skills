@@ -1,8 +1,8 @@
 # Octa CLI contract used by lifecycle skills
 
 Read this reference before constructing Issue list, GraphQL query, or
-lease-protected mutation commands. Inspect `octa --help` and the relevant
-nested help when the installed binary differs from these examples.
+lease-protected mutation commands. Run documented invocations directly and
+follow `octa-base`'s `--help` policy.
 
 This file records product mechanics. Lifecycle states, Issue authoring,
 ownership duration, review gates, and handoff policy remain in `octa-base` and
