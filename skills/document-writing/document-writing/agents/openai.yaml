@@ -1,0 +1,4 @@
+interface:
+  display_name: "Document Writing"
+  short_description: "Plan and write coherent technical documents"
+  default_prompt: "Use $document-writing to turn these sources into a coherent technical document through an explicit plot."

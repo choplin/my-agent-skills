@@ -1,9 +1,10 @@
 # document-writing
 
 Use this family both while writing new technical prose and while improving an
-existing document. `standards` supplies the rules used during drafting. The
-other skills inspect an existing document, revise it, or apply findings that
-have already been selected.
+existing document. The root `document-writing` skill plans substantial new
+documents through an explicit plot before drafting. `standards` supplies the
+rules used during drafting. The other skills inspect an existing document,
+revise it, or apply findings that have already been selected.
 
 Distinct from `document-toolkit`, which operates on documents as objects —
 verifying their claims, reworking a set, stripping what a set no longer needs —
@@ -14,7 +15,8 @@ These skills judge how a document reads and whether it holds together.
 
 | Task | Skill | Result |
 |------|-------|--------|
-| Write new prose or continue a draft | `standards` | The relevant writing rules are applied as the text is composed |
+| Write a new multi-section document from source material | `document-writing` | A plotted, drafted, reviewed, and acceptance-checked document |
+| Write a short passage or continue an established draft | `standards` | The relevant writing rules are applied as the text is composed |
 | Improve an existing draft throughout | `review` | A revised document, including content-preserving structural changes |
 | Fix wording without changing content or structure | `prose` | A sentence-level revision |
 | Inspect a document without changing it | `audit` | Located findings for a person to review |
@@ -23,12 +25,25 @@ These skills judge how a document reads and whether it holds together.
 Do not select `base` directly. It is the shared machinery used by the four
 review lanes.
 
-## Writing new prose
+## Writing new documents
+
+Use `document-writing` when the task must decide what a complete document needs
+to accomplish, not merely express already-settled content. It creates an
+explicit brief and document plot, passes a self-contained packet between
+planning, drafting, and revision, then checks the finished document against the
+plot and intended reader outcome.
+
+The plot records each section's reader question, entry and exit state, claims,
+support, relation to adjacent sections, and chosen representation. This keeps
+the workflow reproducible when different agents or passes do not share
+conversation history.
+
+## Writing prose inside an established structure
 
 `standards` is the writing-time entry point. It applies when a task creates or
-continues technical prose, including a chapter, article, README, design note,
-or explanation. The task and its source material determine what the document
-says; `standards` determines how to express and organize it.
+continues a passage whose purpose and place in the document are already
+established. The task and its source material determine what the passage says;
+`standards` determines how to express and organize it.
 
 Load only the layers the draft needs:
 
@@ -64,6 +79,7 @@ findings → `apply`.
 
 | Skill | Description |
 |-------|-------------|
+| `document-writing` | The document-level workflow: brief, plot, plot gate, drafting packet, first draft, lens review, and acceptance against the reader outcome |
 | `standards` | The standards as 23 lenses across five layers, for Japanese and English. Read directly while drafting; also the catalog the lanes select from |
 | `base` | The shared review machinery: blind per-lens detection, conflict resolution, layer-ordered application, one verification pass, the report format |
 | `review` | Full-layer detection, findings applied, revised document. The default lane |
@@ -73,6 +89,7 @@ findings → `apply`.
 
 ## When Skills Activate
 
+- **document-writing**: "turn these sources into a design document", "write a complete technical guide", "この調査結果から説明文書を書いて"
 - **standards**: "write a design note", "draft this README", "turn these notes into an explanation", "この内容から記事を書いて"
 - **review**: "この文書をまともにして", "clean up this draft", "this reads like it was written by an AI", "make this publishable", "文章の品質を上げて"
 - **prose**: "fix the wording only", "don't restructure it, just the sentences", "文章だけ直して"

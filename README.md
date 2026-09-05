@@ -88,7 +88,7 @@ skills or validation configuration.
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), discuss-toolkit-grill-me (candidate robustness), one-point (discussion pacing) |
 | `git-helpers` | commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten, squash-merge |
-| `document-writing` | standards, base, review, prose, audit, apply (the writing standards as 21 reusable lenses; four review lanes over shared machinery: full sweep, sentences only, findings only, or apply findings a person selected) |
+| `document-writing` | document-writing, standards, base, review, prose, audit, apply (a plot-mediated workflow for new documents; the writing standards as 23 reusable lenses; four review lanes over shared machinery: full sweep, sentences only, findings only, or apply findings a person selected) |
 | `document-toolkit` | fact-check, distill, trim (verify a document's claims, rework a whole set: consolidate / refresh / split / retire, or strip content the set no longer needs) |
 | `document-reader` | review, base, newcomer, skeptical-peer, implementer, decision-maker, domain-expert, revise (judge a finished document from the reader's side: dispatch one isolated agent per reader persona, report stumbles, objections and takeaways as findings only, then work those findings in with the author) |
 | `lang-reference` | go, java, python, rust, scala, sql, typescript |
@@ -215,6 +215,11 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - readme → base, pen-design (for an approved composed visual), **showcase-capture-plan** (when useful README media is missing and the user wants it produced), documentation-writer `(ext)`, **document-writing-standards**
 - pen-design → base, **showcase-capture-plan** (when real product evidence must be acquired), **showcase-pen-annotate** (when the job is only to annotate or frame one capture)
 - codebase → base, readme (when the main README needs substantial revision), pen-design (for an approved diagram), **lang-reference-\<language\>** when a matching installed skill exists
+
+**document-writing**
+- document-writing → standards, review
+- review, prose, audit, apply → base
+- base → standards
 
 **codebase-structure**
 - codebase-structure → base, codebase-structure-review, **app-reference-\<kind\>**, **lang-reference-\<language\>** when matching installed skills exist
