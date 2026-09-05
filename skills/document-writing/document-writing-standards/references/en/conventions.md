@@ -1,17 +1,13 @@
 # English Lenses
 
-Layer: **english** (phase 4, alongside expression). These lenses apply only to
-documents written in English. Determine that by reading the document.
+Language: **English**. Each lens declares the layer where its fixes apply.
 
 Findings here are `content_impact: none`. They are among the cheapest lenses in
 the catalog to run and the easiest to apply, because every rule is mechanical.
 
-These two lenses are the English counterpart of `ja.notation` and `ja.diction`.
-The rules come from the elementary usage rules and the misused-words reference
-of Strunk's *The Elements of Style*; the compositional rules of that work
-(paragraph unity, topic sentences, active voice, positive form, concrete
-language, omitting needless words, word order, emphasis) are language-neutral
-and live in the `structure.*` and `prose.*` lenses instead.
+These two lenses cover mechanical usage and diction. English composition rules
+live beside them in [composition.md](composition.md), rather than being treated
+as language-common.
 
 ---
 
@@ -19,8 +15,9 @@ and live in the `structure.*` and `prose.*` lenses instead.
 
 ```yaml
 lens: en.mechanics
-layer: english
-packing_group: english
+language: en
+layer: expression
+packing_group: english-expression
 objective: Find punctuation and sentence-boundary constructions that violate the
   usage conventions of English technical prose.
 checks:
@@ -68,8 +65,9 @@ participle that misattributes the action.
 
 ```yaml
 lens: en.diction
-layer: english
-packing_group: english
+language: en
+layer: expression
+packing_group: english-expression
 objective: Find word choices and register inconsistencies that break the
   conventions of English technical prose.
 checks:

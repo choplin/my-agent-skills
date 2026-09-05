@@ -1,7 +1,6 @@
 # Japanese Lenses
 
-Layer: **japanese** (phase 4, alongside expression). These lenses apply only to
-documents written in Japanese. Determine that by reading the document.
+Language: **Japanese**. Each lens declares the layer where its fixes apply.
 
 Findings here are `content_impact: none`. They are the cheapest lenses in the
 catalog to run and the easiest to apply, because every rule is mechanical.
@@ -12,8 +11,9 @@ catalog to run and the easiest to apply, because every rule is mechanical.
 
 ```yaml
 lens: ja.notation
-layer: japanese
-packing_group: japanese
+language: ja
+layer: expression
+packing_group: japanese-expression
 objective: Find punctuation, emphasis, and markup that violate the notation
   conventions for Japanese technical prose.
 checks:
@@ -61,8 +61,9 @@ unidentifiable, which is `major` and also a `structure.document-shape` finding.
 
 ```yaml
 lens: ja.syntax
-layer: japanese
-packing_group: japanese
+language: ja
+layer: expression
+packing_group: japanese-expression
 objective: Find Japanese sentences whose grammatical relations are needlessly
   obscured by noun-heavy or indirect syntax, forcing the reader to recast the
   sentence to determine who does what or which words belong together.
@@ -144,12 +145,64 @@ construction adds local processing cost.
 
 ---
 
+## `ja.proposition-integrity`
+
+```yaml
+lens: ja.proposition-integrity
+language: ja
+layer: structure
+packing_group: japanese-structure
+objective: Find one causal, conditional, concessive, or contrastive proposition
+  split into separate Japanese assertions that omit the relation between them.
+checks:
+  - A claim and its reason punctuated as independent assertions with no causal
+    relation.
+  - A condition separated from its consequence so that it reads as another
+    fact.
+  - A concession or contrast broken into assertions whose direction the reader
+    must reconstruct.
+  - Several short assertions that become one proposition when their omitted
+    connective is restored.
+non_goals:
+  - Do not merge distinct propositions; their connection is
+    structure.sentence-cohesion.
+  - Do not infer a defect from sentence length or paragraph frequency alone.
+  - Keep a deliberate hard break when each sentence stands independently and
+    the separation supplies real emphasis.
+```
+
+### Rules
+
+- Keep dependent clauses in one sentence where the relation is part of the
+  proposition, or state that relation explicitly across the boundary.
+- Recover the relation before choosing punctuation. Joining fragments without
+  naming whether they express cause, condition, concession, or contrast only
+  hides the same defect in a longer sentence.
+- Prefer ordinary Japanese connective forms over a stock claim-and-reason frame.
+
+### Examples
+
+- Before: 「誤操作を防ぐ。この設定は既定で無効である。」
+- After: 「誤操作を防ぐため、この設定は既定で無効である。」
+- Before: 「方式Aは速い。方式Bを採用する。方式Aは整合性を保証しない。」
+- After: 「方式Aは速いが整合性を保証しないため、方式Bを採用する。」
+- Keep: 「移行は失敗した。データは失われた。」 Both claims stand
+  independently; the source does not establish a causal relation.
+
+### Severity
+
+`major` when the omitted relation changes or underdetermines the proposition;
+`minor` when the reader can recover it but must recombine the sentences.
+
+---
+
 ## `ja.diction`
 
 ```yaml
 lens: ja.diction
-layer: japanese
-packing_group: japanese
+language: ja
+layer: expression
+packing_group: japanese-expression
 objective: Find word choices and sentence endings that break the register or
   the flow of Japanese technical prose.
 checks:

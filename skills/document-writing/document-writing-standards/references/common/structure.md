@@ -1,13 +1,11 @@
 # Structure Lenses
 
-Layer: **structure** (phase 3). Language-neutral. Fixes move text.
-`content_impact` is `reordering` for paragraph work and `structural` for
-anything that changes headings, section order, or the choice between prose and
-list.
+Layer: **structure** (phase 3). Language: **common**. Fixes may join sentences,
+move text, or change representation. Each lens declares its `content_impact`.
 
 Concrete instances — connectives, heading forms, landing phrasings — live in
-[examples-ja.md](examples-ja.md) and [examples-en.md](examples-en.md), keyed by
-lens ID. Load the file for the document's language.
+[Japanese examples](../ja/examples.md) and [English examples](../en/examples.md),
+keyed by lens ID. Load the file for the document's language.
 
 Structure is where prose that is locally readable still fails to be followable.
 The reader can parse every sentence and still not be able to say what the
@@ -19,15 +17,16 @@ argument was.
 
 ```yaml
 lens: structure.paragraph-unity
+language: common
 layer: structure
 packing_group: structure
-objective: Falsify the claim that each paragraph carries exactly one topic and
-  announces it in its first sentence.
+objective: Falsify the claim that each paragraph carries one job and establishes
+  that job before its supporting material becomes ambiguous.
 checks:
   - Paragraphs mixing several stages of movement (investigation, report,
     verification, evaluation).
-  - Paragraphs whose first sentence does not identify what the paragraph is about.
-  - Paragraphs whose actual topic sentence sits in the middle or at the end.
+  - Paragraphs whose governing topic or claim arrives only after supporting
+    material that cannot yet be placed.
   - Co-ordinate ideas expressed in non-parallel form.
 content_impact: reordering
 ```
@@ -36,8 +35,9 @@ content_impact: reordering
 
 - One paragraph, one topic. A long paragraph that runs several stages together
   is split into one paragraph per step of the argument.
-- The first sentence of a paragraph identifies its subject. Where the topic
-  sentence is buried, move it to the front and let the rest follow from it.
+- Establish the paragraph's subject or governing claim before the reader needs
+  it to place supporting material. The language profile decides whether that
+  requires a topic sentence first or permits an inductive entry.
 - End the paragraph in conformity with how it began.
 - Express co-ordinate ideas in parallel grammatical form.
 
@@ -51,13 +51,14 @@ content_impact: reordering
 
 ```yaml
 lens: structure.signposting
+language: common
 layer: structure
 packing_group: structure
 objective: Find places where the reader cannot tell how a passage relates to
   what came before it, or where material is placed so that the sequence breaks.
 checks:
-  - Paragraph openings with no connective marking the relation to the previous
-    paragraph.
+  - Paragraph openings whose relation to the previous paragraph is not encoded
+    by syntax, wording, order, or a connective.
   - Arguments that conclude, then handle objections, then restate the conclusion.
   - Forward references placed mid-argument.
   - Defenses of an example placed inside the passage they interrupt.
@@ -68,10 +69,9 @@ content_impact: reordering
 
 ### Rules
 
-- **Mark the relation at the paragraph head.** Open with the connective that
-  states how this step follows from the last. Machine-written prose typically
-  has correct paragraphs in an unmarked sequence, which is why it reads as an
-  undifferentiated flow.
+- **Make the relation available at the paragraph boundary.** Use the target
+  language's syntax, wording, order, or connective conventions. Do not require
+  the same surface marker in every language.
 - **Argue in one direction.** Handle objections and doubts first, then state
   the conclusion once. Do not state it, defend it, and restate it.
 - **Place forward references at a resting point.** A pointer to a later section
@@ -91,8 +91,51 @@ content_impact: reordering
 
 ### Severity
 
-`major` for a missing connective at a paragraph boundary or an argument that
-loops back on its own conclusion; `minor` for placement.
+`major` for an unrecoverable relation at a paragraph boundary or an argument
+that loops back on its own conclusion; `minor` for placement.
+
+---
+
+## `structure.sentence-cohesion`
+
+```yaml
+lens: structure.sentence-cohesion
+language: common
+layer: structure
+packing_group: structure
+objective: Find adjacent propositions in explanatory or argumentative prose
+  whose logical relation the reader must guess.
+checks:
+  - Adjacent propositions with no identifiable relation such as cause, result,
+    condition, contrast, sequence, elaboration, or example.
+  - A connective that names a different relation from the one the propositions
+    actually support.
+  - A run of individually clear assertions whose order and cumulative point
+    cannot be recovered.
+non_goals:
+  - Do not require an explicit connective where syntax or meaning already makes
+    the relation unambiguous.
+  - Do not join propositions merely to make sentences longer.
+  - A single proposition split by target-language sentence boundaries belongs
+    to the language profile; this lens relates distinct propositions.
+content_impact: none
+```
+
+### Rules
+
+- Assign the relation between each adjacent pair in explanatory or
+  argumentative prose. If no relation can be assigned, the sequence is not yet
+  an argument.
+- Require the relation to be recoverable; leave its natural realization through
+  syntax, ordering, particles, or connectives to the language profile.
+- Preserve a deliberate hard break where each assertion stands independently
+  and the break supplies emphasis rather than hiding a relation.
+
+### Severity
+
+`major` when the missing relation changes how the reader understands the
+argument; `minor` when the relation is recoverable but adds local processing
+cost.
 
 ---
 
@@ -100,6 +143,7 @@ loops back on its own conclusion; `minor` for placement.
 
 ```yaml
 lens: structure.enumeration-landing
+language: common
 layer: structure
 packing_group: structure
 objective: Find lists of properties, categories, or principles that are never
@@ -136,6 +180,7 @@ in the list has been attached to the situation under discussion.
 
 ```yaml
 lens: structure.document-shape
+language: common
 layer: structure
 packing_group: shape
 objective: Falsify the claim that the headings identify their content, the
@@ -182,10 +227,63 @@ forces forward references; `minor` for prose/list choice.
 
 ---
 
+## `structure.representation-choice`
+
+```yaml
+lens: structure.representation-choice
+language: common
+layer: structure
+packing_group: shape
+objective: Find material whose chosen representation makes its important
+  relationships materially harder to inspect than another available form.
+checks:
+  - State transitions and transition conditions buried in prose or a flat list.
+  - Data flow or dependency direction that must be reconstructed from sentences.
+  - Hierarchy or containment expressed as an undifferentiated sequence.
+  - A timeline or phase sequence whose order is difficult to scan.
+  - Repeated fields or comparisons across common axes not aligned in a table.
+  - A diagram or table used where prose, a list, or code would expose the
+    relevant relationship more directly.
+required_inputs:
+  - target rendering, accessibility, and maintenance constraints, when known
+content_impact: structural
+```
+
+### Rules
+
+- Choose the form that exposes the relationship the reader needs: prose for a
+  connected argument, a list for co-ordinate items or steps, a table for
+  repeated fields and shared comparison axes, a diagram for direction, state,
+  dependency, hierarchy, containment, or branching flow, and code where exact
+  executable form is the subject.
+- Prefer the smallest representation that makes the relationship inspectable.
+  A short linear sequence may remain prose; a diagram is not a quota.
+- Do not default to Mermaid or any other syntax. Select a form the target can
+  render accessibly and the maintainer can update. Where those constraints are
+  unknown, identify the needed representation without inventing a format
+  requirement.
+- Preserve every claim and epistemic status when changing form. A diagram or
+  table reorganizes supported material; it does not supply missing facts.
+
+### Reporting
+
+Every finding carries `content_impact: structural`, because changing
+representation overrides an authorial choice and may add or remove a document
+element.
+
+### Severity
+
+`major` when the current form obscures a relationship needed for the reader's
+task; `minor` when another form would reduce scanning or comparison cost without
+changing comprehension.
+
+---
+
 ## `structure.genre-purity`
 
 ```yaml
 lens: structure.genre-purity
+language: common
 layer: structure
 packing_group: shape
 objective: Falsify the claim that the document serves one documentation purpose

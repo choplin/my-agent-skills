@@ -38,6 +38,13 @@ support, relation to adjacent sections, and chosen representation. This keeps
 the workflow reproducible when different agents or passes do not share
 conversation history.
 
+The standards catalog owns common lenses for translation-stable document
+invariants and separate Japanese and English profiles for natural omission,
+proposition structure, clause linkage, sentence boundaries, diction, and
+cadence. The root workflow selects the common lenses and one language profile
+from the brief, applies them during drafting and review, then separately checks
+the reader outcome and preservation of content through revision.
+
 ## Writing prose inside an established structure
 
 `standards` is the writing-time entry point. It applies when a task creates or
@@ -47,9 +54,10 @@ established. The task and its source material determine what the passage says;
 
 Load only the layers the draft needs:
 
-- For any draft, use `reference.discourse-grounding`, the expression layer, the
-  document's language layer, and that language's examples.
-- For an argument, design rationale, or explanation, add logic and terminology.
+- For any draft, use `reference.discourse-grounding`, applicable common
+  expression lenses, the matching language profile, and that profile's examples.
+- For an argument, design rationale, or explanation, add common logic and
+  terminology lenses plus the profile's composition lenses.
 - For a document longer than a few sections, add structure.
 - For a chapter, article, or narrative explanation meant to be read
   continuously, add rhythm.
@@ -75,13 +83,18 @@ Choose a review lane according to how much authority it should have:
 The controlled workflow is `audit` → a person keeps, drops, or edits the
 findings → `apply`.
 
+When an existing draft needs missing explanations or representations added, its
+reader progression rebuilt, or its pacing reconsidered, the task is a substantial
+rebuild rather than a content-preserving review. Use the root `document-writing`
+workflow so those authoring decisions have a brief and plot.
+
 ## Skills
 
 | Skill | Description |
 |-------|-------------|
 | `document-writing` | The document-level workflow: brief, plot, plot gate, drafting packet, first draft, lens review, and acceptance against the reader outcome |
-| `standards` | The standards as 23 lenses across five layers, for Japanese and English. Read directly while drafting; also the catalog the lanes select from |
-| `base` | The shared review machinery: blind per-lens detection, conflict resolution, layer-ordered application, one verification pass, the report format |
+| `standards` | 38 lenses across five layers: common document invariants plus Japanese and English profiles. Read directly while drafting; also the catalog the lanes select from |
+| `base` | The shared review machinery: blind per-lens detection, conflict resolution, layer-ordered application, lens verification, before/after preservation, and the report format |
 | `review` | Full-layer detection, findings applied, revised document. The default lane |
 | `prose` | Sentence-level lenses only. Content and structure are not touched |
 | `audit` | Full-layer detection, one reviewer per lens, findings only, no edits |
@@ -110,7 +123,8 @@ lens, because nothing is applied and a missed defect survives.
 ## Layers and order
 
 Lenses sit in five layers, and findings apply in that order: logic, terminology,
-structure, expression with the language layer, then rhythm. An upper-layer fix
+structure, expression, then rhythm. Common and language-profile lenses share
+that ordering. An upper-layer fix
 rewrites the text a lower layer would otherwise have polished, so applying
 bottom-up wastes work. `rhythm` runs last as the only lens that adds text.
 

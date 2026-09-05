@@ -1,13 +1,13 @@
 # Terminology Lenses
 
-Layer: **terminology** (phase 2). Language-neutral. Fixes change which words
+Layer: **terminology** (phase 2). Language: **common**. Fixes change which words
 name which concepts and what expressions refer to. `content_impact` is `none`
 for renaming inside existing sentences, `reordering` where an introduction must
 move.
 
 Worked examples of correct and defective introductions, and the vague words each
-language falls back to, live in [examples-ja.md](examples-ja.md) and
-[examples-en.md](examples-en.md), keyed by lens ID.
+language falls back to, live in [Japanese examples](../ja/examples.md) and
+[English examples](../en/examples.md), keyed by lens ID.
 
 Documents that fail this layer can be read sentence by sentence and still not
 be understood, because the reader is asked to carry a term whose meaning was
@@ -20,6 +20,7 @@ contrast or frame that exists only outside the document.
 
 ```yaml
 lens: terminology.definition
+language: common
 layer: terminology
 packing_group: terminology
 objective: Find terms, coinages, and abbreviations that are used before the
@@ -54,9 +55,10 @@ language.
 ### Rules
 
 - A term central to a section is scoped before the section uses it.
-- Do not introduce a new concept as a bare dictionary assertion of the form
-  "X is Y". Place the object first, state what it does or how it differs, and
-  give the definition after that if one is still needed.
+- Do not lead with a label whose referent the reader has not yet encountered.
+  Place the object first, state what it does or how it differs, and give the
+  label after that if one is still needed. The language profile owns the
+  natural syntax of that introduction.
 - Expand every abbreviation at first use.
 - Mark the term at the point of definition so the reader can see that this is
   where it is fixed. (The marking convention is `ja.notation` or `en.diction`
@@ -78,6 +80,7 @@ the definition arrives after the first use.
 
 ```yaml
 lens: terminology.consistency
+language: common
 layer: terminology
 packing_group: terminology
 objective: Falsify the claim that one concept is named by one term throughout,
@@ -124,6 +127,7 @@ orthographic variants.
 
 ```yaml
 lens: reference.antecedent
+language: common
 layer: terminology
 packing_group: terminology
 objective: Find expressions whose referent the reader cannot resolve, or can
@@ -132,8 +136,6 @@ checks:
   - Demonstratives and pronouns with more than one candidate antecedent, or none.
   - Abstract phrases that do not resolve uniquely from context.
   - References to material that has not appeared yet.
-  - Participial or subordinate openers whose subject differs from the main
-    clause's subject.
 ```
 
 ### Rules
@@ -143,8 +145,8 @@ checks:
 - Where an abstract phrase does not resolve uniquely, fix it in place with an
   appositive in parentheses rather than forcing the reader to look back.
 - Do not refer forward to a concept or a document that has not been introduced.
-- An opening participial or subordinate clause must share its subject with the
-  main clause.
+- Language-specific profiles decide when an omitted or grammatically controlled
+  argument is recoverable. This common lens judges overt referring expressions.
 
 Machine-written prose accumulates these because each sentence is locally
 plausible. Phrases like "this point" or "in such cases" read as if they refer to
@@ -161,6 +163,7 @@ the referent is recoverable only by re-reading.
 
 ```yaml
 lens: reference.discourse-grounding
+language: common
 layer: terminology
 packing_group: terminology
 objective: Falsify the claim that every focus, contrast, negation, metaphor,

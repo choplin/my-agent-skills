@@ -1,11 +1,85 @@
 # Examples — English
 
-Concrete instances of the language-neutral lenses, for documents written in
-English. Keyed by lens ID. Load alongside the lens definition; the lists are
+Concrete instances of the common and English-profile lenses. Keyed by lens ID.
+Load alongside the lens definition; the lists are
 illustrative, not exhaustive.
 
-English-only lenses (`en.mechanics`, `en.diction`) carry their own rules and
-examples in [lenses-english.md](lenses-english.md).
+English-only conventions carry their own rules and examples in
+[conventions.md](conventions.md); composition rules live in
+[composition.md](composition.md).
+
+---
+
+## `en.argument-explicitness`
+
+```text
+Before: After moving the records to the central store, no longer knew which restrictions applied.
+After: After the platform team moved the records to the central store, its administrators no longer knew which restrictions applied.
+```
+
+Name the actor understood by the introductory modifier and the subject of the
+main clause. Do not require repetition when coordinated predicates still share
+one local subject and role.
+
+---
+
+## `en.information-order`
+
+```text
+Before: Because each department knows how its data is produced, who may use it, and under which restrictions, and because violations can cause incidents, difficult for a central administrator is governing every dataset.
+After: A central administrator cannot easily govern every dataset because each department holds the production and usage knowledge, including restrictions whose violation can cause incidents.
+```
+
+Place the governing claim early when a long opening would delay it beyond easy
+retention. Keep a short initial condition when the reader needs that frame first.
+
+---
+
+## `en.clause-linkage`
+
+```text
+Before: Each department owns the usage rules. The central team takes custody of the data. It needs company-wide authority.
+After: Because each department owns the usage rules, transferring custody to a central team requires company-wide authority.
+```
+
+Rank the ground as a dependent clause and retain the requirement as the main
+claim. Do not add causation if the source establishes only sequence.
+
+---
+
+## `en.sentence-boundaries`
+
+```text
+Before: The data leaves its owner. Moving under a central administrator. Who lacks the local usage knowledge.
+After: The data leaves its owner and moves under a central administrator who lacks the local usage knowledge.
+```
+
+Join fragments that complete one movement. Keep separate sentences where the
+topic, time, viewpoint, or argumentative job changes.
+
+---
+
+## `en.voice`
+
+```text
+Before: The restrictions are interpreted and access is approved.
+After: Each department interprets its restrictions and approves access.
+```
+
+Restore the actor when ownership matters. Keep the passive when the actor is
+unknown or irrelevant and the affected object is already the topic.
+
+---
+
+## `en.cadence`
+
+```text
+Before: Departments produce data. Departments store data. Departments define usage rules.
+After: Departments produce and store their own data, and they define its usage rules. Distribution starts there.
+```
+
+Develop the parallel facts together, then use the short sentence as deliberate
+footing. Do not vary length merely to avoid a visible pattern.
 
 ---
 
@@ -129,8 +203,9 @@ Not padding: connectives that carry rhythm — But then again…, And yet…
 
 ## `structure.signposting`
 
-Paragraph-opening connectives that state the relation: If so, / In fact, /
-But, / Even this example shows…
+One way to state a relation at a paragraph boundary is an opening connective:
+If so, / In fact, / But, / Even this example shows… Do not add one where order
+or syntax already makes the relation clear.
 
 - Reject a reading only when the preceding facts make it live: The reason is
   not that the schema changed. It is that two writers held the same lock.
@@ -138,6 +213,25 @@ But, / Even this example shows…
   the mismatch would have surfaced at build time.
 - Place forward references at a resting point: "The next chapter takes this up"
   belongs at the end of a paragraph or section.
+
+---
+
+## `structure.sentence-cohesion`
+
+```text
+Before: The cache entry expires. A worker refreshes it. Other requests receive the old value.
+After: When the cache entry expires, one worker refreshes it. Meanwhile, other requests receive the old value.
+```
+
+The first relation is a condition and the second is concurrency. The repair
+states those relations; it does not merely join the sentences.
+
+```text
+Keep: The migration failed. Data was lost.
+```
+
+Where the source establishes no causal relation, do not invent one with a
+connective.
 
 ---
 
@@ -159,6 +253,21 @@ specific fact, conceding what must be given up. Uniform landings read as filler.
 - Bare genre label (avoid): Background / Notes / Details
 - Headings that identify content: Why Retries Amplify Load / Ownership at the
   Transaction Boundary
+
+---
+
+## `structure.representation-choice`
+
+- States plus conditional branches: use a state diagram when the reader must
+  inspect the normal path and failure exits together.
+- Repeated comparison axes: align each option's subject, duration, and use in a
+  table.
+- A short causal relation: keep two propositions in connected prose when a
+  diagram would expose nothing more.
+- Exact executable form: put configuration or invocation syntax in code.
+
+Do not choose Mermaid unless the target is known to render and maintain it. The
+requirement is an inspectable representation, not a particular renderer.
 
 ---
 

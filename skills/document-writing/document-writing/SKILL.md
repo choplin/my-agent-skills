@@ -31,8 +31,9 @@ Produce these artifacts in order:
 
 1. `brief`
 2. `plot`
-3. `draft`
-4. `acceptance`
+3. `pre_review_draft`
+4. `final_document`
+5. `acceptance`
 
 They may be working notes in the response or files beside the requested output.
 Persist them only when the user asks for working artifacts or the surrounding
@@ -49,6 +50,7 @@ capabilities:
   standards: loaded | unavailable
   review_lane: loaded | unavailable
   isolated_drafting: available | unavailable
+  isolated_review: available | unavailable
   isolated_acceptance: available | unavailable
 ```
 
@@ -70,6 +72,10 @@ brief:
   use: <the situation in which they will use the document>
   reader_outcome: <what they should understand, decide, or be able to do>
   reading_behavior: continuous | task-led | lookup | mixed
+  pacing:
+    rhythm: required | not-required | sectional
+    sections: []
+    reason: <how the reading behavior determines the selection>
   scope:
     includes: []
     excludes: []
@@ -87,8 +93,21 @@ answers would materially change the document's audience, claims, or scope. Never
 label an assumption as a source or user decision.
 
 The brief passes when another agent could state, from the brief alone, who the
-document is for, what it must enable, which grounds may support it, and what is
-out of scope.
+document is for, what it must enable, which grounds may support it, what is out
+of scope, and how the reading behavior determines pacing.
+
+Select pacing from actual reading behavior, never from a label such as README or
+design note:
+
+- `continuous`: set rhythm to `required` when the material sustains a progression
+  across multiple passages. Set it to `not-required` only when the document is too
+  short to have meaningful pacing, and record that reason.
+- `mixed`: set rhythm to `sectional` and name the continuously read sections.
+- `task-led` or `lookup`: set rhythm to `not-required` unless the user explicitly
+  asks for narrative pacing.
+
+This selection is the explicit rhythm decision for every downstream standards
+and review pass. A file-type label never overrides it.
 
 ## 2. Build the plot
 
@@ -112,23 +131,20 @@ plot:
       relation_from_previous: <cause, contrast, dependency, sequence, expansion, or none>
       representations:
         - content: <claim, comparison, dependency, sequence, or other material>
+          relationship: <argument, co-ordination, repeated fields, state change,
+            data flow, dependency, hierarchy, containment, time, or phase>
           form: prose | list | table | diagram | code
           reason: <what relationship this form makes easiest to understand>
+          alternatives_rejected: []
       handoff_to_next: <what the next section may now rely on>
   open_decisions: []
 ```
 
-Choose representation from the material rather than from habit:
-
-- Use prose for an argument whose connective reasoning matters.
-- Use a list for co-ordinate items, steps, or a taxonomy.
-- Use a table for repeated fields or comparison across common axes.
-- Use a diagram when direction, state change, dependency, hierarchy, containment,
-  or a multi-stage flow is materially harder to recover from text.
-- Use code when exact executable form is itself part of the reader outcome.
-
-A diagram is not mandatory, and Mermaid is not a universal default. Select the
-format the target publication can render and the user can maintain.
+Inventory every relationship-bearing part of the material, then apply
+`structure.representation-choice` from `document-writing-standards` to select
+and justify each form. Give the lens the source material, plot, and known target
+rendering, accessibility, and maintenance constraints. The plot stores the
+decision; the lens owns the norm used to make it.
 
 ## 3. Run the plot gate
 
@@ -142,8 +158,10 @@ below are true:
 - A section's `entry_state` follows from the brief or earlier sections.
 - Its `exit_state` answers its `reader_question`.
 - `relation_from_previous` makes the section order defensible.
-- Each planned representation names the material it carries and exposes the
-  relationship named in its reason.
+- The source's relationship-bearing material is present in the representation
+  inventory.
+- `structure.representation-choice` returns no finding against the source and
+  planned representations.
 - The throughline reaches the document promise without an unexplained jump.
 
 Repair the plot when the gate exposes an ordering or coverage defect. Stop for
@@ -186,20 +204,49 @@ standards determine how that material is expressed. If the standards skill is
 unavailable, continue with a plain technical draft and report that the standards
 pass was unavailable.
 
+Pass the brief's pacing selection explicitly. Apply
+`rhythm.cognitive-pacing` to the whole draft when rhythm is `required`, only to
+the named sections when it is `sectional`, and not at all when it is
+`not-required`. The brief's reading behavior governs this choice; document genre
+labels do not.
+
 Representation plans are requirements unless the source material proves the
 planned form unsuitable. Record any substitution and its reason in
 `decisions_made_after_plot`; do not silently collapse a planned diagram or table
 into prose.
 
+Apply `structure.sentence-cohesion` to explanatory and argumentative prose while
+drafting, together with the matching language profile's terminology, structure,
+and expression lenses. Include the profile's cadence lens wherever the brief
+selects rhythm. Always include these profile lenses even when the document is
+short and the general writing-time selection would otherwise reduce the
+catalog. The common lenses own translation-stable relations; the profile owns
+natural omission, hierarchy, linkage, sentence boundaries, and cadence in the
+language being written.
+
 ## 6. Review, then integrate once
 
-After the first complete draft, apply `document-writing-review`. Treat its
-findings as local repairs: it may improve expression and content-preserving
-structure, but it does not supersede the accepted brief or plot.
+After the first complete draft, preserve it as `pre_review_draft`, then apply
+`document-writing-review`. Treat its findings as local repairs: it may improve
+expression and content-preserving structure, but it does not supersede the
+accepted brief or plot. Pass the brief's rhythm selection as an explicit lens
+override so a continuously read document is not reviewed with rhythm omitted.
+Do not reduce `structure.representation-choice`,
+`structure.sentence-cohesion`, or the matching language profile's applicable
+lenses.
 
 Preserve that lane's blind-review contract. Its lens reviewers receive the
 document and their lens definitions, not the brief or plot. The integrator that
-accepts or reconciles their repairs receives the complete drafting packet.
+accepts or reconciles their repairs receives:
+
+```yaml
+integration_packet:
+  drafting_packet: <the complete packet used for drafting>
+  pre_review_draft: <the complete first draft>
+  reviewed_draft: <the complete output of the review lane>
+  applied_findings: []
+  decisions_made_after_plot: []
+```
 
 Then integrate the result as one document. Reconcile section boundaries,
 cross-references, repeated definitions, transitions, and representation changes
@@ -207,6 +254,12 @@ against the plot. Where a lens repair conflicts with a plotted claim, support,
 or reader transition, preserve the plot and report the unresolved writing
 finding. If `document-writing-review` is unavailable, perform one inline
 copyedit against the loaded standards and report the degraded review path.
+
+Compare `pre_review_draft` with the integrated result. For every removed or
+rewritten passage that carried a premise, condition, limitation, contrast arm,
+or relation between claims, locate the same role in the final document or record
+an intentional, plot-consistent removal. Fluency and concision do not justify an
+untracked loss.
 
 ## 7. Run document acceptance
 
@@ -222,9 +275,20 @@ acceptance:
     claim_traceability: pass | fail
     reader_progression: pass | fail
     representation_fidelity: pass | fail
+    rhythm_selection: pass | fail
+    revision_preservation: pass | fail
     whole_document_coherence: pass | fail
-    writing_review: pass | unavailable | unresolved
+    writing_review: pass | degraded | unresolved
     independent_reconstruction: pass | fail | not-run
+  lens_conformance:
+    common:
+      structure.representation-choice: pass | fail
+      structure.sentence-cohesion: pass | fail | not-applicable
+      rhythm.cognitive-pacing: pass | fail | not-selected
+    profile:
+      language: ja | en | unavailable
+      lenses:
+        <each applicable profile lens ID>: pass | fail | not-selected
   deviations:
     - check: <failed check>
       location: <section or exact anchor>
@@ -245,17 +309,36 @@ Apply these tests:
 - **Representation fidelity:** Each planned non-prose element exists and makes
   the named relationship inspectable. Every recorded substitution remains fit
   for the same purpose.
+- **Rhythm selection:** The final lens set matches the pacing decision in the
+  brief, including sectional selection. File-type labels did not override it.
+- **Revision preservation:** Every premise, condition, limitation, contrast arm,
+  and logical relation present in `pre_review_draft` either performs the same
+  role in the final document or has an intentional removal recorded against the
+  plot.
 - **Whole-document coherence:** The section sequence realizes the throughline;
   the result does not read as independently adequate fragments joined together.
 - **Writing review:** The existing review lane completed, or its unavailable or
   unresolved coverage is reported.
 
+For `lens_conformance`, load each listed common lens and every applicable lens
+in the matching language profile from `document-writing-standards`, then run
+them against the final document. Give `structure.representation-choice` the
+relationship inventory and target constraints. Run
+`structure.sentence-cohesion` only where explanatory or argumentative prose
+exists, and run the common and profile cadence lenses only where the brief
+selected rhythm. A lens passes when it returns no surviving finding after the
+one acceptance revision. For an unsupported language, set `profile.language`
+to `unavailable` and report the coverage gap instead of substituting another
+language's norms.
+
 When an isolated reader is available, give it only the brief and finished
-document and ask it to reconstruct the document's questions, claims, and
-progression. Compare that reconstruction with the plot. Do not show it the plot
-before its read. When isolation is unavailable, perform the field-by-field tests
-above inline and set `independent_reconstruction: not-run`. Never report an
-independent or blind read unless a separate context actually performed it.
+document and ask it to reconstruct the document's questions, claims, progression,
+and relations between adjacent propositions. Compare that reconstruction with
+the plot. Do not show it the plot before its read and do not ask it to reproduce
+lens work; reader reconstruction and lens conformance are separate evidence.
+When isolation is unavailable, perform the field-by-field tests above inline and
+set `independent_reconstruction: not-run`. Never report an independent or blind
+read unless a separate context actually performed it.
 
 Revise once for acceptance failures that can be resolved from the existing brief,
 plot, and sources, then run acceptance once more. Do not loop. Report failures
@@ -278,6 +361,29 @@ unresolved: []
 Do not claim success when acceptance is unresolved. A polished document that
 does not deliver the brief is not complete.
 
+## Responsibility split
+
+Keep reusable norms in `document-writing-standards` and orchestration here:
+
+| Responsibility | Owner | Why |
+|---|---|---|
+| Whether prose, list, table, diagram, or code fits the material | `structure.representation-choice` | One bounded representation judgment can be reused while drafting and reviewing |
+| Whether distinct propositions connect | `structure.sentence-cohesion` | It can be falsified from one document in any language |
+| What may be omitted and still recovered | the matching language profile's argument lens | Recoverability is language-specific |
+| How propositions are ranked, linked, and ordered | the matching language profile's structure lenses | Natural realization differs between Japanese and English |
+| Where sentences end and what cadence is natural | the matching language profile's boundary and cadence lenses | Sentence formation is language-specific |
+| Whether one Japanese proposition was split apart | `ja.proposition-integrity` | It is a Japanese-specific realization defect |
+| Whether the document's shape serves its stated purpose | `structure.genre-purity` | The existing lens owns purpose and genre conformance |
+| Whether selected passages have usable pacing | `rhythm.cognitive-pacing` | The existing lens owns the pacing norm |
+| Which passages receive the pacing lens | this workflow and `document-writing-base` | Selection needs expected reading behavior, not another genre classification |
+| What the document must accomplish and in what order | this workflow | The brief and plot carry authorial intent, not a reusable defect rule |
+| Whether a review revision lost content | `document-writing-base` | The check compares the input and output of every applying review lane |
+| Whether the authored document lost a plotted role | this workflow | The stronger check also compares the plot, pre-review draft, and final document |
+
+Narrow review lanes may detect these reusable defects without a plot. This
+workflow still owns creating missing material and reconciling any structural
+finding with the document's intended outcome.
+
 ## Success criteria
 
 - [ ] Drafting began only after a complete brief and a passing plot gate.
@@ -285,6 +391,8 @@ does not deliver the brief is not complete.
       packet rather than an instruction that depended on conversation history;
       blind lens reviewers remained blind.
 - [ ] The draft preserves claim support and epistemic status from the plot.
+- [ ] The selected common lenses and every applicable lens in the matching
+      language profile pass on the final document.
 - [ ] Existing writing standards and review lanes were used without changing
       their responsibility boundaries.
 - [ ] Every claim of isolated or independent review names an execution that

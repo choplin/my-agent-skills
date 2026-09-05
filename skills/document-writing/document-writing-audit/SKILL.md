@@ -19,7 +19,7 @@ Apply `document-writing-base` for the whole procedure, stopping after
 normalization. This skill supplies only the lane values.
 
 ```yaml
-lenses: all layers except rhythm
+lenses: all applicable layers; rhythm selected from reading behavior
 deliverable: findings
 reviewers: per-lens
 verify: false

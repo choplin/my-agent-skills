@@ -30,7 +30,9 @@ verify: true
 Findings must follow the schema in `document-writing-standards`. The fields this
 lane depends on:
 
-- `lens` and `layer` — determine the phase a finding is applied in. A finding
+- `lens` and `layer` — determine the phase a finding is applied in. Optional
+  `also_raised_by` preserves lenses that found the same cause but does not
+  change ordering. A finding
   with neither cannot be ordered and is rejected rather than guessed at.
 - `location.anchor` — exact quoted text, long enough to locate uniquely.
 - `remediation` — concrete enough to apply without re-deriving the defect.
@@ -57,7 +59,8 @@ Re-anchor again before each phase, because earlier phases move text.
 ## Why order still matters
 
 Findings are applied in the same layer order the base defines: logic,
-terminology, structure, expression and language, rhythm. A supplied set is not
+terminology, structure, expression, rhythm. Common and language-profile lenses
+participate in those same layers. A supplied set is not
 pre-sorted, and applying an expression fix before a structural one wastes it —
 the paragraph it polished may be merged in the next phase.
 
@@ -68,6 +71,7 @@ lens is run to look for one. Where the applied set leaves obvious defects
 untouched, report that rather than fixing it: the caller's selection is the
 decision this lane exists to respect.
 
-The one exception is the verification pass, which re-runs the four lenses that
-application itself breaks. That pass repairs damage this lane caused; it does
-not extend the caller's selection.
+The exceptions are the verification pass, which re-runs the lenses that
+application itself commonly breaks, and the before/after preservation check.
+They repair or report damage this lane caused; they do not extend the caller's
+selection or authorize new content.

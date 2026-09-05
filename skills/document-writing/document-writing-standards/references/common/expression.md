@@ -1,13 +1,12 @@
 # Expression Lenses
 
-Layer: **expression** (phase 4). Language-neutral. Fixes stay inside a sentence
+Layer: **expression** (phase 4). Language: **common**. Fixes stay inside a sentence
 or a paragraph; `content_impact` is `none` for nearly every finding here.
 
-Every rule below holds in any language. The words that instantiate each rule do
-not, so the word lists and the before/after pairs live in the example files:
-[examples-ja.md](examples-ja.md) and [examples-en.md](examples-en.md), keyed by
-lens ID. Load the file for the document's language and use it as the concrete
-form of these rules — the list is illustrative, not exhaustive.
+The objectives below are language-common. Natural realization does not follow
+from examples alone, so language profiles own clause order, omission, voice,
+sentence boundaries, and cadence. Language-specific instances live in
+[Japanese examples](../ja/examples.md) and [English examples](../en/examples.md).
 
 This layer carries the largest share of what makes machine-written prose
 expensive to read. The defects are not errors of fact: the text is often correct
@@ -19,6 +18,7 @@ and still costs the reader far more attention than the content is worth.
 
 ```yaml
 lens: prose.plain-expression
+language: common
 layer: expression
 packing_group: expression
 objective: Find text that performs erudition or rhetoric instead of carrying
@@ -74,6 +74,7 @@ rhetoric: `major`.
 
 ```yaml
 lens: prose.self-reference
+language: common
 layer: expression
 packing_group: expression
 objective: Find sentences whose subject is the document itself rather than the
@@ -137,6 +138,7 @@ machine-written text.
 
 ```yaml
 lens: prose.concision
+language: common
 layer: expression
 packing_group: expression
 objective: Find text that can be removed without losing information.
@@ -161,8 +163,8 @@ non_goals:
   reinforcement.
 - Do not summarize a passage right after presenting it. One sentence of
   interpretation is enough.
-- Parallel facts with the same logical role belong in one sentence, with their
-  shared status marked at the head.
+- Present parallel facts with one recoverable shared status. The language
+  profile decides whether they belong in one sentence or a connected sequence.
 - Delete sentences whose only function is transition or evaluation.
 - Delete rhetorical dialogue with an imagined reader — a question posed and
   answered in a word, or a reaction attributed to the reader and then confirmed.
@@ -186,6 +188,7 @@ restatement.
 
 ```yaml
 lens: prose.sentence-load
+language: common
 layer: expression
 packing_group: expression
 objective: Find text that forces the reader to hold more than necessary, or to
@@ -216,8 +219,8 @@ checks:
   the specifics the argument needs.
 - **Send asides to footnotes.** Etymology, the name of a formulation, and other
   material one step off the main line belongs in a footnote, not inline.
-- **Keep related words together**, and **place the emphatic element at the end
-  of the sentence.**
+- **Keep related material close enough to recover.** The language profile owns
+  constituent order and the natural position of emphasis.
 
 ### Severity
 
@@ -230,34 +233,30 @@ re-read to be parsed.
 
 ```yaml
 lens: prose.voice
+language: common
 layer: expression
 packing_group: expression
-objective: Find narration that obscures who acts, addresses the reader wrongly,
-  or blurs the object under discussion.
+objective: Find narration that leaves a relevant actor or object unrecoverable,
+  addresses the reader without a document purpose, or blurs the object under
+  discussion.
 checks:
-  - Passive constructions and result-listing where an actor performed the action.
-  - Second-person address outside a boundary position.
   - Vague category words standing in for the actual object.
   - Fictional persona framing attached to an example for no purpose.
-  - Statements in negative form where a positive form is available.
 ```
 
 ### Rules
 
-- **Actor as subject.** In examples, write a chain of actions with an actor, not
-  a list of results in the passive.
+- **Keep relevant participants recoverable.** The language profile decides
+  whether to name an actor, omit it, or use active or passive voice.
 - **No decorative personas.** A fictional profile attached to an example adds a
   constraint the argument does not use.
-- **Address by role.** Within an argument, name the role — developer, reader,
-  operator. Second-person address belongs at a boundary: entering a scenario, or
-  closing a chapter.
+- **Address with a purpose.** The language profile decides whether a role name,
+  second person, or an impersonal construction fits the register and position.
 - **Name the object precisely.** Do not blur it with a wide category word. Once
   a term has been formalized in the text, keep using it and do not retreat to a
   vague one. Using a general word *before* the term is introduced is fine.
-- **Prefer the positive form.** State what is so rather than what is not, unless
-  the negation is the point.
-- **Write directives as judgment, not command,** where the text is reasoning
-  rather than specifying.
+- Preserve negation when it defines the operative boundary. Language profiles
+  own preferences for positive form, directives, and judgment.
 
 ### Severity
 

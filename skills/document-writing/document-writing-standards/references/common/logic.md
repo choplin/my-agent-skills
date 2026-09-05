@@ -1,13 +1,13 @@
 # Logic Lenses
 
-Layer: **logic** (phase 1). Language-neutral. Fixes change what the document
+Layer: **logic** (phase 1). Language: **common**. Fixes change what the document
 asserts, how it supports it, and how confidently it states it. Findings here are
 applied first because they rewrite text that every later layer would otherwise
 polish.
 
 Worked before/after pairs, and the hedging and concession vocabulary of each
-language, live in [examples-ja.md](examples-ja.md) and
-[examples-en.md](examples-en.md), keyed by lens ID.
+language, live in [Japanese examples](../ja/examples.md) and
+[English examples](../en/examples.md), keyed by lens ID.
 
 **These lenses do not judge whether a claim is true.** They judge whether the
 document supports it, marks its status honestly, and holds together with
@@ -20,6 +20,7 @@ subject; route that to `document-toolkit-fact-check`.
 
 ```yaml
 lens: logic.claim-support
+language: common
 layer: logic
 packing_group: logic
 objective: Falsify the claim that each assertion is supported by what the
@@ -34,8 +35,9 @@ checks:
 
 ### Rules
 
-- **State the mechanism of a causal claim in one sentence.** Do not assert that
-  A leads to B and leave out why.
+- **State the mechanism of a causal claim locally.** Do not assert that A leads
+  to B and leave out why. The language profile decides whether the mechanism
+  belongs in one clause, one sentence, or a connected sequence.
 - **Match the claim to its evidence.** Where the example supports only part of
   the claim, narrow the claim to what the example covers. Do not widen the
   example.
@@ -62,6 +64,7 @@ but unstated.
 
 ```yaml
 lens: logic.epistemic-status
+language: common
 layer: logic
 packing_group: logic
 objective: Falsify the claim that fact, opinion, hypothesis, and inference are
@@ -115,6 +118,7 @@ opinion. `minor` for groundless hedging.
 
 ```yaml
 lens: logic.internal-consistency
+language: common
 layer: logic
 packing_group: logic
 objective: Find places where the document contradicts itself, or leaves what it

@@ -1,20 +1,23 @@
-# Rhythm Lens
+# Common Rhythm Lens
 
-Layer: **rhythm** (phase 5). Opt-in. Never selected by a default preset.
+Layer: **rhythm** (phase 5). Language: **common**. Selected from the document's
+reading behavior.
 
-Every other lens in this catalog removes, replaces, or moves text. This one
-**adds** text, which is why it runs last: apply it before the expression lenses
-and they delete what it just introduced.
+This lens judges document-level cognitive movement. Language profiles own
+sentence and paragraph cadence. It may add a grounded opening, turn, or landing,
+which is why it runs after the subtractive layers.
 
-## When to enable it
+## Selection input
 
 Enable it for writing meant to be read continuously — a book chapter, a
 long-form article, an explanatory essay. There the reader's momentum is part of
-the objective, and prose that is correct but uniformly flat fails at it.
+the objective. Select the matching language cadence lens with it.
 
-Do not enable it for reference material, procedures, READMEs, or design notes.
-Sustained momentum is not their objective, and the devices this lens asks for
-would cost the reader attention that the subject should be getting.
+Do not enable it for lookup material. For task-led material, enable it only in a
+continuous explanatory passage whose momentum matters to completing the task.
+For a mixed document, scope it to the continuously read passages. README and
+design note are labels, not selection criteria; decide from how the passage is
+read.
 
 ## The relationship to the rest of the catalog
 
@@ -43,13 +46,12 @@ had no reason to construct.
 
 ```yaml
 lens: rhythm.cognitive-pacing
+language: common
 layer: rhythm
 packing_group: rhythm
 objective: Falsify the claim that the document sustains a reason to keep
   reading, rather than running at one cognitive mode from start to finish.
 checks:
-  - Runs of three or more long declarative sentences with no short footing or stop.
-  - Dense paragraphs running three or more deep with no sparse paragraph between.
   - A fixed viewpoint distance held for a whole section.
   - An opening that states an agenda without creating any open tension.
   - A section opening that declares what the section will cover.
@@ -60,13 +62,6 @@ content_impact: none
 
 ### Rules
 
-- **Beat.** Set footing with a short sentence, run with a longer one, stop with
-  a short one. Alternate assertion with hesitation rather than asserting
-  throughout.
-- **Density.** After two or three dense paragraphs, place a sparse one. Its
-  function is limited to one of three things: fixing a settled point in a line,
-  presenting what is judged next, or switching viewpoint distance. Alternate
-  paragraphs that sit close to the specifics with paragraphs that step back.
 - **Opening.** The first few sentences open one unresolved tension. The form is
   free — restating the reader's experience, a question answered immediately, a
   general proposition the text will test, a belief stated and then broken by

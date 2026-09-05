@@ -22,7 +22,7 @@ Apply `document-writing-base` for the whole procedure. This skill supplies only
 the lane values.
 
 ```yaml
-lenses: all layers except rhythm
+lenses: all applicable layers; rhythm selected from reading behavior
 deliverable: revised-document
 reviewers: per-packing-group
 verify: true
@@ -48,8 +48,8 @@ Where the caller wants maximum detection instead, that is
   `document-writing-audit`.
 - Findings already exist and were selected by a person —
   `document-writing-apply`.
-- The document is meant to be read continuously and its pacing matters — stay
-  here and ask for `rhythm.cognitive-pacing` explicitly.
+- The caller needs a different rhythm choice from the one implied by reading
+  behavior — stay here and override `rhythm.cognitive-pacing` explicitly.
 
 ## What this lane does not decide
 
@@ -59,7 +59,8 @@ still be wrong, and it can be clean and correct and still fail to convince
 anyone. Route subject-matter verification to `document-toolkit-fact-check`, and
 whether readers follow, believe, and can act on it to `document-reader-review`.
 
-It applies `structure.document-shape` findings, which rename headings, reorder
-sections, and convert between prose and lists. These override choices the writer
-may have made deliberately, so they are reported individually under
-`structural_changes` rather than folded into the revision summary.
+It applies structural findings, which may rename headings, reorder sections, or
+change representation among prose, lists, tables, diagrams, and code. These
+override choices the writer may have made deliberately, so they are reported
+individually under `structural_changes` rather than folded into the revision
+summary.

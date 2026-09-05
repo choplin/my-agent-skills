@@ -1,12 +1,9 @@
 ---
 name: document-writing-standards
 description: >-
-  The technical-writing standards behind document quality, defined as reusable
-  review lenses: plain expression, paragraph structure, terminology discipline,
-  internal logic, and per-language notation, syntax, and diction for Japanese and
-  English. Apply while drafting or revising a technical document, chapter,
-  article, README, design note, or explanatory prose, so the text meets the
-  standard as written instead of being repaired afterwards.
+  Reusable review lenses that define common technical-document invariants and
+  natural Japanese or English prose. Apply them while drafting or revising a
+  technical document or explanatory passage.
 user-invocable: false
 metadata:
   description-role: trigger
@@ -41,79 +38,93 @@ by itself.
 
 ## Layers
 
-Lenses are grouped into layers by what a fix touches. The layer determines the
-order in which findings may be applied: a fix at an upper layer rewrites the
-text that lower layers inspect, so applying bottom-up wastes work.
+Every lens has two independent dimensions. Its directory or `language` field
+selects the language profile; its `layer` determines what a fix touches and the
+order in which findings may be applied. Japanese and English lenses do not form
+one late phase: an omitted argument is repaired before proposition structure,
+and proposition structure before sentence cadence.
 
 | Phase | Layer | Fix touches |
 |---|---|---|
 | 1 | **logic** | what the document asserts and how claims connect |
 | 2 | **terminology** | which words name which concepts, and what they refer to |
-| 3 | **structure** | paragraph and section boundaries, order, headings |
-| 4 | **expression** + the language layer | sentences, wording, notation |
-| 5 | **rhythm** (opt-in) | pacing; adds text rather than removing it |
+| 3 | **structure** | sentences, paragraphs, sections, order, and representation |
+| 4 | **expression** | sentence boundaries, wording, voice, notation |
+| 5 | **rhythm** (selected by reading behavior) | document pacing and language cadence |
 
-Phase 5 runs last because `rhythm.cognitive-pacing` is the only lens that adds
-text. Run it before phase 4 and the expression lenses delete what it just added.
+Phase 5 runs last because pacing work may add a grounded opening, turn, or
+landing. Run it before phase 4 and expression fixes may delete what it added.
 
 ## Lens index
 
-| Lens ID | Layer | Packing group | Reference |
+| Lens ID | Language | Layer | Reference |
 |---|---|---|---|
-| `logic.claim-support` | logic | logic | [lenses-logic.md](references/lenses-logic.md) |
-| `logic.epistemic-status` | logic | logic | [lenses-logic.md](references/lenses-logic.md) |
-| `logic.internal-consistency` | logic | logic | [lenses-logic.md](references/lenses-logic.md) |
-| `terminology.definition` | terminology | terminology | [lenses-terminology.md](references/lenses-terminology.md) |
-| `terminology.consistency` | terminology | terminology | [lenses-terminology.md](references/lenses-terminology.md) |
-| `reference.antecedent` | terminology | terminology | [lenses-terminology.md](references/lenses-terminology.md) |
-| `reference.discourse-grounding` | terminology | terminology | [lenses-terminology.md](references/lenses-terminology.md) |
-| `structure.paragraph-unity` | structure | structure | [lenses-structure.md](references/lenses-structure.md) |
-| `structure.signposting` | structure | structure | [lenses-structure.md](references/lenses-structure.md) |
-| `structure.enumeration-landing` | structure | structure | [lenses-structure.md](references/lenses-structure.md) |
-| `structure.document-shape` | structure | shape | [lenses-structure.md](references/lenses-structure.md) |
-| `structure.genre-purity` | structure | shape | [lenses-structure.md](references/lenses-structure.md) |
-| `prose.plain-expression` | expression | expression | [lenses-expression.md](references/lenses-expression.md) |
-| `prose.self-reference` | expression | expression | [lenses-expression.md](references/lenses-expression.md) |
-| `prose.concision` | expression | expression | [lenses-expression.md](references/lenses-expression.md) |
-| `prose.sentence-load` | expression | expression | [lenses-expression.md](references/lenses-expression.md) |
-| `prose.voice` | expression | expression | [lenses-expression.md](references/lenses-expression.md) |
-| `ja.notation` | japanese | japanese | [lenses-japanese.md](references/lenses-japanese.md) |
-| `ja.syntax` | japanese | japanese | [lenses-japanese.md](references/lenses-japanese.md) |
-| `ja.diction` | japanese | japanese | [lenses-japanese.md](references/lenses-japanese.md) |
-| `en.mechanics` | english | english | [lenses-english.md](references/lenses-english.md) |
-| `en.diction` | english | english | [lenses-english.md](references/lenses-english.md) |
-| `rhythm.cognitive-pacing` | rhythm | rhythm | [lenses-rhythm.md](references/lenses-rhythm.md) |
+| `logic.claim-support` | common | logic | [logic.md](references/common/logic.md) |
+| `logic.epistemic-status` | common | logic | [logic.md](references/common/logic.md) |
+| `logic.internal-consistency` | common | logic | [logic.md](references/common/logic.md) |
+| `terminology.definition` | common | terminology | [terminology.md](references/common/terminology.md) |
+| `terminology.consistency` | common | terminology | [terminology.md](references/common/terminology.md) |
+| `reference.antecedent` | common | terminology | [terminology.md](references/common/terminology.md) |
+| `reference.discourse-grounding` | common | terminology | [terminology.md](references/common/terminology.md) |
+| `structure.paragraph-unity` | common | structure | [structure.md](references/common/structure.md) |
+| `structure.signposting` | common | structure | [structure.md](references/common/structure.md) |
+| `structure.sentence-cohesion` | common | structure | [structure.md](references/common/structure.md) |
+| `structure.enumeration-landing` | common | structure | [structure.md](references/common/structure.md) |
+| `structure.document-shape` | common | structure | [structure.md](references/common/structure.md) |
+| `structure.representation-choice` | common | structure | [structure.md](references/common/structure.md) |
+| `structure.genre-purity` | common | structure | [structure.md](references/common/structure.md) |
+| `prose.plain-expression` | common | expression | [expression.md](references/common/expression.md) |
+| `prose.self-reference` | common | expression | [expression.md](references/common/expression.md) |
+| `prose.concision` | common | expression | [expression.md](references/common/expression.md) |
+| `prose.sentence-load` | common | expression | [expression.md](references/common/expression.md) |
+| `prose.voice` | common | expression | [expression.md](references/common/expression.md) |
+| `rhythm.cognitive-pacing` | common | rhythm | [rhythm.md](references/common/rhythm.md) |
+| `ja.argument-recovery` | ja | terminology | [composition.md](references/ja/composition.md) |
+| `ja.topic-continuity` | ja | structure | [composition.md](references/ja/composition.md) |
+| `ja.proposition-realization` | ja | structure | [composition.md](references/ja/composition.md) |
+| `ja.connective-calibration` | ja | structure | [composition.md](references/ja/composition.md) |
+| `ja.proposition-integrity` | ja | structure | [conventions.md](references/ja/conventions.md) |
+| `ja.sentence-boundaries` | ja | expression | [composition.md](references/ja/composition.md) |
+| `ja.notation` | ja | expression | [conventions.md](references/ja/conventions.md) |
+| `ja.syntax` | ja | expression | [conventions.md](references/ja/conventions.md) |
+| `ja.diction` | ja | expression | [conventions.md](references/ja/conventions.md) |
+| `ja.cadence` | ja | rhythm | [rhythm.md](references/ja/rhythm.md) |
+| `en.argument-explicitness` | en | terminology | [composition.md](references/en/composition.md) |
+| `en.information-order` | en | structure | [composition.md](references/en/composition.md) |
+| `en.clause-linkage` | en | structure | [composition.md](references/en/composition.md) |
+| `en.sentence-boundaries` | en | expression | [composition.md](references/en/composition.md) |
+| `en.voice` | en | expression | [composition.md](references/en/composition.md) |
+| `en.mechanics` | en | expression | [conventions.md](references/en/conventions.md) |
+| `en.diction` | en | expression | [conventions.md](references/en/conventions.md) |
+| `en.cadence` | en | rhythm | [rhythm.md](references/en/rhythm.md) |
 
-## Language
+## Language profiles
 
-The `logic`, `terminology`, `structure`, and `expression` layers are
-language-neutral: every rule in them holds in any language. What differs by
-language is which words instantiate a rule, so those lens files carry rules only
-and the concrete forms live in example files keyed by lens ID —
-[examples-ja.md](references/examples-ja.md) and
-[examples-en.md](references/examples-en.md).
+Select every applicable common lens, then exactly one language profile by
+reading the prose:
 
-Exactly one language layer applies to a document, and it is selected by reading
-the document rather than supplied by the caller:
-
-| Document language | Language lenses | Example file |
+| Prose language | Profile files | Examples |
 |---|---|---|
-| Japanese | `ja.notation`, `ja.syntax`, `ja.diction` | `examples-ja.md` |
-| English | `en.mechanics`, `en.diction` | `examples-en.md` |
+| Japanese | [composition](references/ja/composition.md), [conventions](references/ja/conventions.md), [rhythm](references/ja/rhythm.md) | [examples](references/ja/examples.md) |
+| English | [composition](references/en/composition.md), [conventions](references/en/conventions.md), [rhythm](references/en/rhythm.md) | [examples](references/en/examples.md) |
 
-For a document in another language, run the four neutral layers without a
-language layer and without an example file, and report that no language layer
-was available. Do not apply Japanese or English conventions to it.
+Common lenses state only invariants that survive translation. Language profiles
+own what may be omitted, how propositions are ranked and linked, where governing
+material appears, how sentence boundaries work, and what cadence is natural.
+Examples illustrate those rules; they never create a rule absent from a lens.
+
+For another language, run common lenses alone and report that no natural-language
+profile was available. Do not substitute Japanese or English composition rules.
 
 For a document that mixes languages — English identifiers or quoted terms inside
-Japanese prose is the common case — the language layer follows the prose, not
+Japanese prose is the common case — the language profile follows the prose, not
 the quoted material. Code, identifiers, and quotations are out of scope for
 `ja.*` and `en.*` alike.
 
-`rhythm.cognitive-pacing` is never selected by default. It optimizes for
-sustained reading momentum, which is an objective of narrative and long-form
-explanatory writing, not of reference or procedural documentation. Enable it
-explicitly.
+Select `rhythm.cognitive-pacing` from actual reading behavior. Include it for
+continuously read material, omit it for lookup material, and scope it to the
+continuous passages in a mixed document. A file-type label such as README or
+design note does not decide.
 
 ## What this catalog does not cover
 
@@ -135,7 +146,9 @@ rather than a display format.
 ```yaml
 id: <stable within one run>
 lens: <lens ID from the index>
-layer: logic | terminology | structure | expression | japanese | english | rhythm
+also_raised_by: []       # other lens IDs that found the same cause
+language: common | ja | en
+layer: logic | terminology | structure | expression | rhythm
 severity: blocker | major | minor
 location:
   anchor: <exact quoted text from the document, long enough to be unique>
@@ -145,6 +158,10 @@ evidence: <why it violates the lens, citing the standard>
 remediation: <the smallest edit that resolves it, concrete enough to apply>
 content_impact: none | reordering | structural
 ```
+
+`lens` is the lens that owns the remediation after conflict resolution.
+`also_raised_by` preserves other selected lenses that independently located the
+same cause; do not encode an array in `lens` or duplicate the finding.
 
 Severity for these lenses:
 
@@ -162,22 +179,28 @@ edits reportable separately:
 
 - `none` — the edit stays inside a sentence or a paragraph.
 - `reordering` — the edit moves text without changing what is asserted.
-- `structural` — the edit changes headings, section order, or the choice
-  between prose and list. It touches decisions a writer may have made
-  deliberately.
+- `structural` — the edit changes headings, section order, or representation
+  among prose, list, table, diagram, and code. It touches decisions a writer may
+  have made deliberately.
 
 ## Using the standards while writing
 
 Do not read the whole catalog before writing. Read by layer:
 
-- Drafting anything: `reference.discourse-grounding`, **expression**, plus the
-  language layer for the language being written, plus that language's example
-  file.
-- Drafting an argument, a design rationale, or an explanation: add **logic**
-  and **terminology**.
+- Drafting anything: `reference.discourse-grounding`, applicable common
+  **expression**, the matching language profile's **terminology**,
+  **structure**, and **expression** lenses, and that language's example file.
+  Omission, information order, clause linkage, and sentence boundaries remain
+  relevant in short prose.
+- Drafting an argument, a design rationale, or an explanation: add common
+  **logic**, **terminology**, and applicable **structure** lenses.
+- Choosing how to present relationship-bearing material: add
+  `structure.representation-choice`.
 - Structuring a document longer than a few sections: add **structure**.
-- Writing a chapter, article, or narrative explanation meant to be read
-  continuously: add **rhythm**.
+- Writing material meant to be read continuously: add
+  `rhythm.cognitive-pacing` and the profile's cadence lens, regardless of its
+  file-type label. Omit both for lookup material and scope both to continuous
+  passages in mixed material.
 
 Applying the standards while writing is cheaper than repairing afterwards,
 because upper-layer defects force lower-layer text to be rewritten.

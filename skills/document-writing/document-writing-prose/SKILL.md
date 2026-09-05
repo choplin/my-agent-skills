@@ -21,7 +21,7 @@ Apply `document-writing-base` for the whole procedure. This skill supplies only
 the lane values.
 
 ```yaml
-lenses: reference.discourse-grounding, prose.*, and the language layer (ja.* or en.*)
+lenses: reference.discourse-grounding, structure.sentence-cohesion, prose.*, and the matching language profile's terminology, structure, and expression lenses
 deliverable: revised-document
 reviewers: single       # two where the document is long
 verify: true
@@ -41,12 +41,20 @@ structure — and reorganizing it would be a regression, not an improvement.
 ## What it removes
 
 The lenses are `reference.discourse-grounding`, `prose.plain-expression`,
-`prose.self-reference`, `prose.concision`, `prose.sentence-load`, and
-`prose.voice`, plus the language layer. Together they cover the failures that
-make machine-written prose expensive to read: contrasts and focus that depend
-on drafting history, empty qualifiers, verbs that name the act of writing,
-sentences whose subject is the document, restatement, identifiers that are
-never referenced again, and the passive where an actor acted.
+`structure.sentence-cohesion`, `prose.self-reference`, `prose.concision`,
+`prose.sentence-load`, and `prose.voice`, plus the matching language profile.
+The profile contributes only lenses whose remedies stay within the existing
+paragraph and preserve its claims; cadence is included only when reading
+behavior selects rhythm. Together they
+cover the failures that make machine-written prose expensive to read: contrasts
+and focus that depend on drafting history, disconnected propositions, empty
+qualifiers, verbs that name the act of writing, sentences whose subject is the
+document, restatement, identifiers that are never referenced again, and the
+passive where an actor acted. In Japanese this includes argument recovery,
+topic continuity, proposition realization, connective calibration, proposition
+integrity, sentence boundaries, notation, syntax, and diction. In English it
+includes argument explicitness, information order, clause linkage, sentence
+boundaries, voice, mechanics, and diction.
 
 ## Reporting what it left alone
 
