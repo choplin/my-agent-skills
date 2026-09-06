@@ -3,8 +3,11 @@
 Skills for operating on documents as objects: verifying what one claims, and
 keeping a whole set of them high-signal.
 
-How a document reads and whether it holds together is `document-writing`.
-Whether it works on the reader it was written for is `document-reader`.
+How a document reads and whether it holds together is handled by the separately
+installed `document-writing` workflow. Whether it works on the reader it was
+written for is handled by its bundled `document-reader` review system. Both are
+distributed from
+[`choplin/document-writing-skills`](https://github.com/choplin/document-writing-skills).
 
 ## Skills
 
