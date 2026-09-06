@@ -1,7 +1,9 @@
 # Structure Lenses
 
-Layer: **structure** (phase 3). Language: **common**. Fixes may join sentences,
-move text, or change representation. Each lens declares its `content_impact`.
+Language: **common**. These are planning principles and editorial heuristics.
+They may suggest joining sentences, moving text, changing representation, or
+revising the plot. Interpret them against audience, purpose, focus, and genre;
+their metadata describes the usual reach of a change, not automatic authority.
 
 Concrete instances — connectives, heading forms, landing phrasings — live in
 [Japanese examples](../ja/examples.md) and [English examples](../en/examples.md),
@@ -33,8 +35,9 @@ content_impact: reordering
 
 ### Rules
 
-- One paragraph, one topic. A long paragraph that runs several stages together
-  is split into one paragraph per step of the argument.
+- Give each paragraph a recoverable governing job. One paragraph may carry
+  several related moves when their connection is the point; split it when the
+  reader can no longer place them under the same job.
 - Establish the paragraph's subject or governing claim before the reader needs
   it to place supporting material. The language profile decides whether that
   requires a topic sentence first or permits an inductive entry.
@@ -201,10 +204,11 @@ content_impact: structural
 - **A heading names the question the section answers, or the object it treats.**
   A noun phrase naming the object is acceptable. Interrogative or declarative
   form does not matter; identifying the content does.
-- **Do not use a procedural heading** — one that names a writing move rather
-  than a subject — or an information-free one.
-- **Do not put the conclusion in the heading.** The reader should not know the
-  outcome from the table of contents.
+- Use procedural headings when the reader is following a procedure and topical
+  headings when the reader is locating or understanding material.
+- A heading may disclose a conclusion when scanability or decision-making
+  benefits from it. Preserve discovery only when the document's progression
+  depends on the reader reaching the conclusion in sequence.
 - **Order sections so the argument does not need forward references** to be
   followable.
 - **Choose prose or list by the material.** Definitions, taxonomies, and
@@ -215,10 +219,9 @@ content_impact: structural
 
 ### Reporting
 
-Every finding from this lens carries `content_impact: structural`. A writer may
-have chosen a section order or a heading deliberately, and the fix overrides
-that choice. Findings here are reported separately from the rest so the change
-is visible rather than folded into a general revision.
+Return document-shape concerns as plot or developmental-edit observations.
+Record the intended structural change and its reason because it overrides an
+authorial choice; do not send it through the local finding-application lane.
 
 ### Severity
 
@@ -267,9 +270,9 @@ content_impact: structural
 
 ### Reporting
 
-Every finding carries `content_impact: structural`, because changing
-representation overrides an authorial choice and may add or remove a document
-element.
+Return representation changes as plot or developmental-edit observations.
+Changing form overrides an authorial choice and may add or remove a document
+element, so record the relationship to expose, the chosen form, and the reason.
 
 ### Severity
 
@@ -286,8 +289,8 @@ lens: structure.genre-purity
 language: common
 layer: structure
 packing_group: shape
-objective: Falsify the claim that the document serves one documentation purpose
-  rather than mixing purposes that need different shapes.
+objective: Examine whether each passage serves a reader need in a shape suited
+  to that need, and whether mixtures remain navigable and intentional.
 checks:
   - Tutorial material interrupted by reference tables or design rationale.
   - How-to guides that stop to explain why the mechanism works.
@@ -309,17 +312,15 @@ content_impact: structural
 
 ### Rules
 
-- Determine the document's purpose from what it claims to be and who it
-  addresses. Where the document does not declare one, infer it and say so in
-  the finding.
-- Report material that belongs to a different purpose, and where it should go.
-  A tutorial that pauses for design rationale loses the learner; a reference
-  that narrates cannot be scanned.
-- Do not report a mixture the document's own framing justifies. A README
-  deliberately spans purposes; a chapter may carry an explanation inside a
-  tutorial as a marked aside.
+- Determine the reader need of the passage and the larger document. A label or
+  directory name does not settle the genre.
+- Separate or link material when a change of purpose interrupts the current
+  use. A tutorial may include the explanation required for the next action; a
+  reference may link to fuller explanation rather than absorb it.
+- Mixed documents are normal. Make their boundaries and navigation clear rather
+  than pursuing purity as an end in itself.
 
 ### Severity
 
-`major` where the mixture defeats the document's purpose for its reader;
-`minor` for a short aside.
+Treat the issue as major only where the mixture defeats the reader's current
+purpose. A short useful aside is not a defect by category alone.

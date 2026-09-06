@@ -1,7 +1,8 @@
 # Expression Lenses
 
-Layer: **expression** (phase 4). Language: **common**. Fixes stay inside a sentence
-or a paragraph; `content_impact` is `none` for nearly every finding here.
+Language: **common**. These are line-edit heuristics, not a lexical blacklist or
+an automatic deletion pass. Use them after the argument and plot are stable,
+and judge each change by the passage's intended movement.
 
 The objectives below are language-common. Natural realization does not follow
 from examples alone, so language profiles own clause order, omission, voice,

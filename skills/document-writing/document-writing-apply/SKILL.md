@@ -1,77 +1,33 @@
 ---
 name: document-writing-apply
 description: >-
-  Applies a set of already-reviewed writing findings to a document in
-  dependency order, re-verifying each finding's anchor against the current text
-  and reporting anything it cannot locate as stale. Applies when findings from
-  a document audit have been read and selected by a person, or when a caller
-  holds located findings and wants them applied without a fresh review.
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+  Applies a person-selected set of local document conformance findings, rejects
+  stale or substantive instructions, and verifies that the edits preserve the
+  document. Applies after document-writing-audit or equivalent human review.
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task
 metadata:
   description-role: trigger
 ---
 
-# Document Apply
+# Apply Document Findings
 
-The application-only lane. No detection; findings come from the caller.
-
-Apply `document-writing-base` for the application, verification, and report
-steps, entering at step 4. This skill supplies only the lane values.
+Use the apply path in `document-writing-base`.
 
 ```yaml
-lenses: none — findings are supplied
+stage: apply
+guidance: lenses named by accepted findings
 deliverable: revised-document
-reviewers: 0
+intervention: selected-findings
 verify: true
 ```
 
-## Input contract
+Accept only findings that conform to the check schema in
+`document-writing-standards`. Re-resolve each exact anchor immediately before
+application and mark absent or changed anchors stale. Reject any item whose
+remedy adds substance, changes a claim or its epistemic status, reorganizes the
+reader progression, or otherwise exceeds `content_impact: none`; route it to
+holistic review instead.
 
-Findings must follow the schema in `document-writing-standards`. The fields this
-lane depends on:
-
-- `lens` and `layer` — determine the phase a finding is applied in. Optional
-  `also_raised_by` preserves lenses that found the same cause but does not
-  change ordering. A finding
-  with neither cannot be ordered and is rejected rather than guessed at.
-- `location.anchor` — exact quoted text, long enough to locate uniquely.
-- `remediation` — concrete enough to apply without re-deriving the defect.
-- `content_impact` — decides whether the change is reported under
-  `structural_changes`.
-
-Findings normally come from `document-writing-audit`, after a person has kept,
-dropped, or edited them. A caller may also supply hand-written findings in the
-same shape.
-
-## Stale anchors
-
-The document has usually been edited between the audit and this call — that is
-the point of the human step in between. Before applying anything, locate each
-anchor in the document as it stands.
-
-**Report every anchor that no longer matches as stale and unapplied. Do not
-relocate it by guess.** A finding was written against text that no longer
-exists; applying its remediation somewhere nearby produces an edit nobody
-reviewed, at a location nobody chose.
-
-Re-anchor again before each phase, because earlier phases move text.
-
-## Why order still matters
-
-Findings are applied in the same layer order the base defines: logic,
-terminology, structure, expression, rhythm. Common and language-profile lenses
-participate in those same layers. A supplied set is not
-pre-sorted, and applying an expression fix before a structural one wastes it —
-the paragraph it polished may be merged in the next phase.
-
-## What this lane does not do
-
-It does not detect. A finding the caller did not supply is not applied, and no
-lens is run to look for one. Where the applied set leaves obvious defects
-untouched, report that rather than fixing it: the caller's selection is the
-decision this lane exists to respect.
-
-The exceptions are the verification pass, which re-runs the lenses that
-application itself commonly breaks, and the before/after preservation check.
-They repair or report damage this lane caused; they do not extend the caller's
-selection or authorize new content.
+Apply accepted findings in dependency order defined by
+`document-writing-base`. Verify only damage introduced by this application.
+Do not detect or silently fix unrelated defects.

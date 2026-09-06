@@ -1,4 +1,8 @@
-# Japanese Rhythm Lens
+# 日本語のリズムレンズ
+
+これは通読する文章の編集に用いる経験則であり、独立した局所検査ではない。
+文章の焦点とプロットが求める認知的な動きを、日本語の文と段落でどう実現するかを
+判断する。一定の長短や定型的な波形を文章へ強制しない。
 
 ## `ja.cadence`
 
@@ -7,20 +11,62 @@ lens: ja.cadence
 language: ja
 layer: rhythm
 packing_group: japanese-rhythm
-objective: Find continuously read Japanese prose whose repeated sentence and
-  paragraph movement makes distinct ideas sound mechanically equal.
+objective: 文や段落の動きが反復され、異なる考えが機械的に同じ重みで聞こえる、
+  通読される日本語の文章を見つける。
 checks:
-  - A run of bare assertions ending with the same grammatical weight.
-  - Every sentence carrying one fact and stopping, despite unequal logical roles.
-  - Repeated dense paragraphs with no sentence or paragraph that fixes a point.
-  - Short sentences used uniformly rather than as deliberate footing or emphasis.
+  - 観察、逡巡、断定、再観察のいずれか一つだけで押し切る箇所。
+  - 同じ文法的な重みで終わる、裸の断定の連続。
+  - 論理的な役割が異なるのに、一文ごとに一つの事実を述べて停止する箇所。
+  - 要点を固定する文や段落を挟まず、密な段落が繰り返される箇所。
+  - 足場や強調としてではなく、一様に使われる短文。
+  - 密な段落が三つ以上続き、確定事項、次の判定対象、視点距離の切替のどれも挟まない箇所。
+  - 情報の列挙後に具体への着地も、間としての意図もない箇所。
 non_goals:
-  - Do not vary endings or sentence length for variety alone.
-  - Do not manufacture hesitation, tension, or a reader belief.
-  - Do not join sentences before their arguments and hierarchy are recoverable.
+  - 変化を付けるためだけに語尾や文の長さを変えない。
+  - 逡巡、緊張、読者の信念を捏造しない。
+  - 項と命題の階層を復元する前に文を結合しない。
 content_impact: none
 ```
 
-Vary movement by function: establish a point, develop it through a clause,
-pause, or change viewpoint distance. Sentence length is evidence only when the
-boundaries repeatedly give unequal propositions the same rhetorical weight.
+要点を立てる、節で展開する、停止する、視点距離を変える、という役割に応じて動きを
+変える。文の長さは、境界の反復によって異なる重みの命題が同じ調子に聞こえる場合に
+限って欠陥の根拠になる。
+
+認知上の一単位は「観察→逡巡→断定→再観察」とする。同じ順序を機械的に反復せず、
+対象の出来事、データ、発言、書き手の実際の判断状態が許す箇所だけでモードを切り替える。
+断定だけで押し切らず、後で根拠によって検証される逡巡または確信を置く。事実にない
+迷いを演出のために作らない。
+転回点では、事実に基づく譲歩、関係を反転する接続、短い停止の順に置いてよい。
+短い停止は新しい情報または判断を固定する場合だけ残し、操作の実況には使わない。
+
+密な段落が二つか三つ続いたら、次のいずれかを行う疎な段落を置く。
+
+- 確定した点を一行で固定する。
+- 次に判定する対象を提示する。
+- 具体と意味づけの間で視点距離を切り替える。
+
+箇条書きは情報を圧縮する形式としてだけでなく、本文の呼吸を止める間として使ってよい。
+ただし各項目は `structure.enumeration-landing` に従って具体へ着地させる。問いを段階的に
+回収する場合は、前半と後半の答えがそれぞれ実質的な内容を持ち、操作の名前だけを本文に
+書かない。
+
+### 執筆後の点検
+
+日本語の通読文へこの lens を適用した後は、次を一度ずつ確認する。
+
+1. 段落冒頭と独立した短文に `prose.self-reference` の話題テストを行う。
+2. 「答えの半分」「緊張」「回収」「線を引く」など、規範の装置名が本文へ漏れて
+   いないか調べる。漏れていれば装置を宣言せず内容として実現し直す。
+3. 開いた問い、思い込み、後で答える約束と、その回収位置を対応づける。約束した
+   答えを回収できない場合は、答えを加えるか問いを削除する。
+4. 長い断定文が三つ以上連続する箇所と、密な段落が三つ以上連続する箇所を調べる。
+5. 二人称の呼びかけ、依頼、謙抑が論証の中盤にあれば、境界へ移すか削除する。
+
+### 症状から処方を選ぶ
+
+- 全段落が同じ調子なら、文の拍と密度波形を調べる。
+- 正しいが読み進める理由がなければ、対象の性質から未回収の緊張を作れるか調べる。
+- 理論の節で流れが止まるなら、理論より前に読者がその名前を必要とする違和感があるか調べる。
+- 緩い文が駄文に見えるなら、`prose.self-reference` の話題テストを行う。
+- 結びが説教調なら、抽象を冒頭の事実、読者の経験、序盤の問いのいずれかへ着地させる。
+- 冒頭が事務的なら、議題表を増やさず、対象に実在する問い、抵抗、崩される期待から始める。

@@ -1,11 +1,13 @@
 # Common Rhythm Lens
 
-Layer: **rhythm** (phase 5). Language: **common**. Selected from the document's
-reading behavior.
+Language: **common**. This planning and editorial heuristic applies where the
+document is meant to be read continuously. Select it from reader behavior and
+the plot, not from file type or a requirement that every document perform a
+narrative arc.
 
-This lens judges document-level cognitive movement. Language profiles own
-sentence and paragraph cadence. It may add a grounded opening, turn, or landing,
-which is why it runs after the subtractive layers.
+This lens considers document-level cognitive movement. Language profiles own
+sentence and paragraph cadence. It may influence the plot or motivate a
+grounded opening, turn, or landing; it does not run as a final decorative pass.
 
 ## Selection input
 
@@ -54,6 +56,9 @@ objective: Falsify the claim that the document sustains a reason to keep
 checks:
   - A fixed viewpoint distance held for a whole section.
   - An opening that states an agenda without creating any open tension.
+  - A continuously read passage that closes every tension before giving the
+    reader another grounded reason to continue.
+  - A question or promised answer that is opened and never discharged.
   - A section opening that declares what the section will cover.
   - Theory introduced before the reader has felt the problem it names.
   - A close that ends on abstraction instead of landing on something concrete.
@@ -67,6 +72,12 @@ content_impact: none
   general proposition the text will test, a belief stated and then broken by
   fact. What is prohibited is only the bare agenda list with no stance. An
   agenda carrying a stance is fine.
+- **Tension lifecycle.** Keep at least one grounded tension open through a
+  continuously read passage: an unanswered question, a belief that the evidence
+  will test, or an answer explicitly promised for later. Record where each
+  promised answer is discharged. A final thematic tension may remain open only
+  when the document has not promised to answer it and the reader can distinguish
+  that deliberate opening from an omission.
 - **Section entry.** Do not open by declaring what the section covers. Enter by
   restating the unease the previous section left, by writing the objection the
   reader would raise, or from the writer's own admission. Put the bridge between

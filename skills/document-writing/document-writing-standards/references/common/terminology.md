@@ -1,9 +1,9 @@
 # Terminology Lenses
 
-Layer: **terminology** (phase 2). Language: **common**. Fixes change which words
-name which concepts and what expressions refer to. `content_impact` is `none`
-for renaming inside existing sentences, `reordering` where an introduction must
-move.
+Language: **common**. Concept introduction is a planning and editorial judgment;
+consistency and antecedent resolution can also be local checks. Follow each
+lens's role in the standards index rather than assuming that all terminology
+work is copyediting.
 
 Worked examples of correct and defective introductions, and the vague words each
 language falls back to, live in [Japanese examples](../ja/examples.md) and
@@ -23,56 +23,51 @@ lens: terminology.definition
 language: common
 layer: terminology
 packing_group: terminology
-objective: Find terms, coinages, and abbreviations that are used before the
-  document has told the reader what they mean.
+objective: Judge whether the intended reader has the conceptual understanding
+  needed at the point of use, with attention proportional to novelty and
+  argumentative centrality.
 checks:
-  - For each specialized term, locate its first use and its introduction, and
-    report every case where the first use comes first.
-  - Abbreviations expanded nowhere, or expanded after their first use.
-  - Terms central to a section that the section never scopes.
-  - Coinages introduced as bare dictionary assertions with no grounding.
-  - Several concepts collapsed under a new umbrella term with no statement that
-    they reduce to the same thing.
+  - A concept central to the argument that the audience cannot yet understand.
+  - A familiar term whose particular load-bearing property remains implicit.
+  - A new central concept named before its motivation and boundaries can be
+    understood.
+  - A secondary concept given more explanatory weight than its role warrants.
+  - An abstraction named even though ordinary prose would be clearer.
+  - An abbreviation the audience cannot resolve at its first needed use.
 non_goals:
-  - Do not report a passage that describes a concept and names it afterwards.
-    That order satisfies this lens.
+  - Do not define established domain knowledge merely because it is technical.
+  - Do not require every term to be defined before its first textual occurrence.
+  - Do not require a formal term for a minor or one-off concept.
 ```
 
 ### What is judged
 
-**The position of the term's first use, not the order of exposition.**
-
-This distinction decides most of the findings this lens should and should not
-produce. A passage that describes something, establishes what it does, and then
-gives it a name is correct and is the normal way to introduce a concept in
-technical writing: at the moment the name appears, the reader already holds its
-meaning. The defect is the opposite case — the name appears first and the
-reader is asked to carry it until an explanation arrives, or none arrives.
-
-Worked pairs for both orders are in the example files for the document's
-language.
+Judge the reader's conceptual state, not first-use position alone. Four inputs
+govern the decision: audience prior knowledge, whether the concept is standard
+or document-specific, its argumentative centrality, and the exact property the
+argument depends on. First use is only a useful inspection point.
 
 ### Rules
 
-- A term central to a section is scoped before the section uses it.
-- Do not lead with a label whose referent the reader has not yet encountered.
-  Place the object first, state what it does or how it differs, and give the
-  label after that if one is still needed. The language profile owns the
-  natural syntax of that introduction.
-- Expand every abbreviation at first use.
-- Mark the term at the point of definition so the reader can see that this is
-  where it is fixed. (The marking convention is `ja.notation` or `en.diction`
-  depending on the language.)
-- Where a list pairs terms with their definitions, use one consistent form
-  across the list, with the term marked.
-- When several concepts are gathered under one new umbrella term, state in one
-  sentence, immediately before naming it, that they reduce to the same thing.
-  Merging needs a bridge just as separating does.
+- Assume established domain knowledge that the named audience can reasonably
+  supply. Explain only the aspect this document uses when that aspect may not be
+  part of the shared understanding.
+- Develop a central unfamiliar concept from motivating context, examples, and
+  boundaries toward a usable definition. Naming may come early as a provisional
+  handle or late as a culmination; choose the order that supports understanding.
+- Introduce a secondary unfamiliar concept briefly at the point of need.
+- Leave a minor abstraction unnamed when repeating its concrete meaning costs
+  less than teaching and maintaining a term.
+- Expand an abbreviation when the audience needs the expansion, not by an
+  audience-free first-use ritual.
+- When several concepts are gathered under an umbrella, explain the relation
+  that makes the grouping useful. They need not literally reduce to one thing.
 
 ### Severity
 
-`blocker` where a term the argument depends on is never defined. `major` where
-the definition arrives after the first use.
+Treat the issue as major when the argument depends on a concept the reader
+cannot construct. Late definition is not itself a severity. This lens produces
+an editorial observation, not an auto-applicable finding.
 
 ---
 

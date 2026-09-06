@@ -1,14 +1,12 @@
 ---
 name: document-writing
 description: >-
-  Turns source material, decisions, or an established brief into a coherent
-  technical document through an explicit document plot before prose is drafted.
-  Applies when writing a new multi-section document or substantially rebuilding
-  one, especially when several agents or passes must preserve the same audience,
-  argument, evidence, and intended reader outcome without relying on conversation
-  history. Produces the document and reports any acceptance criteria it could not
-  satisfy. Existing drafts that only need review, audit, or copyediting belong to
-  the narrower document-writing lanes.
+  Plans, drafts, and revises substantial documents through a durable editorial
+  workflow. Applies to books and chapters, technical documentation, academic
+  writing, and general explanatory or argumentative documents when the work
+  must establish the audience, governing idea, content model, and reader
+  progression before polishing prose. Also applies when an existing draft
+  needs developmental editing rather than sentence cleanup alone.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, AskUserQuestion
 metadata:
   description-role: trigger
@@ -16,388 +14,196 @@ metadata:
 
 # Document Writing
 
-Write the document through an explicit plot. The plot is the shared source of
-intent between planning, drafting, review, and revision; conversation history is
-never part of the handoff contract.
+Treat writing as a sequence of editorial decisions, not as prose followed by a
+large lens sweep. Establish what the document is trying to do and how the reader
+will get there; only then draft and edit at progressively smaller scales.
 
-This skill owns the document-level outcome. Apply `document-writing-standards`
-while drafting and `document-writing-review` after the first complete draft.
-Those skills remain responsible for local writing defects; they do not replace
-the plot or decide what the document must accomplish.
+Read [workflow.md](references/workflow.md) before starting. Read
+[artifacts.md](references/artifacts.md) whenever the work will span files,
+sessions, or agents. Select exactly one relevant plot template from `assets/`
+after the earlier planning artifacts exist; a template is a prompt for thought,
+not a form that must be filled completely.
 
-## Operating contract
+When maintaining or evaluating this skill rather than using it for a document,
+read [evaluation.md](references/evaluation.md). Do not load evaluation
+expectations into the agent being forward-tested.
 
-Produce these artifacts in order:
+Use `document-writing-standards` according to the roles in its lens index.
+Planning principles inform the brief, focus, content model, and plot. Editorial
+heuristics support judgment during developmental and line editing. Local checks
+belong near copyediting. A heuristic observation is not automatically a defect,
+and a local finding does not authorize changing the document's argument.
 
-1. `brief`
-2. `plot`
-3. `pre_review_draft`
-4. `final_document`
-5. `acceptance`
+## Choose the route
 
-They may be working notes in the response or files beside the requested output.
-Persist them only when the user asks for working artifacts or the surrounding
-workflow requires a durable handoff. Regardless of storage, keep their fields
-explicit: later stages must not recover missing intent from chat history.
+- **New document:** assignment → discovery → focus → content model → plot →
+  draft → developmental edit → line edit → copyedit → proof and acceptance.
+- **Existing document:** editorial assignment → diagnostic reading → reverse
+  outline → editorial diagnosis → revised plot → substantive revision → line
+  edit → copyedit → proof and acceptance.
+- **Settled content and structure:** route wording-only work to
+  `document-writing-prose`, detection-only work to `document-writing-audit`, or
+  selected findings to `document-writing-apply`.
 
-Do not begin prose until the plot passes the plot gate. Do not declare the
-document complete merely because the writing lenses are clean.
+Combine adjacent planning stages for a short, low-risk document, but do not skip
+their decisions. If the document's governing idea or reader progression is not
+yet stable, prose editing is premature.
 
-Before building the brief, record execution capabilities:
+## 1. Establish the assignment
 
-```yaml
-capabilities:
-  standards: loaded | unavailable
-  review_lane: loaded | unavailable
-  isolated_drafting: available | unavailable
-  isolated_review: available | unavailable
-  isolated_acceptance: available | unavailable
-```
+Record the audience, their relevant prior knowledge, use situation, intended
+reader outcome, document kind, scope, constraints, sources, and unresolved
+questions. For revision, also record the permitted degree of intervention and
+what must be preserved.
 
-Mark a skill `loaded` only after its full instructions are available in the
-current run. Knowing its name or approximating its behavior from this skill is
-not loading it. Mark isolation `available` only when work can actually run in a
-separate context; adopting a different persona in the same context is inline
-self-review, not isolation.
+Infer ordinary details where one interpretation is strongly supported. Ask only
+when alternatives would materially change the document. Mark assumptions as
+assumptions; do not silently promote them to facts.
 
-## 1. Build the brief
+The assignment is usable when a new editor can tell what success means without
+recovering intent from conversation history.
 
-Extract the brief from the request and source material:
+## 2. Discover the material
 
-```yaml
-brief:
-  audience:
-    identity: <who will read>
-    prior_knowledge: <what they can already be expected to know>
-  use: <the situation in which they will use the document>
-  reader_outcome: <what they should understand, decide, or be able to do>
-  reading_behavior: continuous | task-led | lookup | mixed
-  pacing:
-    rhythm: required | not-required | sectional
-    sections: []
-    reason: <how the reading behavior determines the selection>
-  scope:
-    includes: []
-    excludes: []
-  grounds:
-    - id: <stable ID>
-      locator: <file, URL, supplied passage, or named decision>
-      kind: source | user-decision | assumption
-  constraints: []
-  unknowns: []
-```
+Read the sources and existing draft before imposing an outline. Capture useful
+facts, claims, examples, constraints, disagreements, gaps, and provenance.
+Separate what the material establishes from what the author wants to argue.
 
-Infer ordinary details when the evidence makes one reading clearly more likely,
-and record the inference under `unknowns`. Ask the user only when different
-answers would materially change the document's audience, claims, or scope. Never
-label an assumption as a source or user decision.
+For an existing draft, create a reverse outline: state the job of each section
+or paragraph, its main claim, its support, and its relation to the whole. Record
+the structure that actually exists, including repetition and missing bridges;
+do not rewrite it into the structure you wish existed.
 
-The brief passes when another agent could state, from the brief alone, who the
-document is for, what it must enable, which grounds may support it, what is out
-of scope, and how the reading behavior determines pacing.
+Stop for a source or scope decision only when the central argument cannot be
+supported from the available material. Local uncertainty may remain visible.
 
-Select pacing from actual reading behavior, never from a label such as README or
-design note:
+## 3. Find the focus
 
-- `continuous`: set rhythm to `required` when the material sustains a progression
-  across multiple passages. Set it to `not-required` only when the document is too
-  short to have meaningful pacing, and record that reason.
-- `mixed`: set rhythm to `sectional` and name the continuously read sections.
-- `task-led` or `lookup`: set rhythm to `not-required` unless the user explicitly
-  asks for narrative pacing.
+Write a compact statement of:
 
-This selection is the explicit rhythm decision for every downstream standards
-and review pass. A file-type label never overrides it.
+- the governing question, problem, or reader task;
+- the central answer, controlling idea, or intended change in the reader;
+- why it matters to this audience;
+- the tension, gap, or obstacle that makes the document necessary;
+- the boundaries that keep the document from becoming a survey of everything.
 
-## 2. Build the plot
+This is not final prose. Revise it freely until it distinguishes the document
+from a generic treatment of the topic. In the data-warehousing example, merely
+defining a data warehouse would miss the focus; the load-bearing issue is the
+centralized ownership or governance assumption and what follows from it.
 
-A plot is not a heading outline. It specifies the reader's progression and the
-logical work performed by every part of the document.
+## 4. Build the content model
 
-```yaml
-plot:
-  promise: <the document-level question or outcome>
-  throughline: <how the sections collectively deliver the promise>
-  sections:
-    - id: <stable ID>
-      heading_intent: <what this section is for, not necessarily its final title>
-      reader_question: <the question answered here>
-      entry_state: <what the reader knows or believes on entry>
-      exit_state: <what changes by the end>
-      claims:
-        - statement: <claim or instruction>
-          grounds: [<ground IDs>]
-          status: supported | user-decided | assumed | unresolved
-      relation_from_previous: <cause, contrast, dependency, sequence, expansion, or none>
-      representations:
-        - content: <claim, comparison, dependency, sequence, or other material>
-          relationship: <argument, co-ordination, repeated fields, state change,
-            data flow, dependency, hierarchy, containment, time, or phase>
-          form: prose | list | table | diagram | code
-          reason: <what relationship this form makes easiest to understand>
-          alternatives_rejected: []
-      handoff_to_next: <what the next section may now rely on>
-  open_decisions: []
-```
+Inventory the concepts, claims, evidence, examples, procedures, decisions, and
+relationships the document needs. Rank concepts by argumentative centrality and
+reader novelty:
 
-Inventory every relationship-bearing part of the material, then apply
-`structure.representation-choice` from `document-writing-standards` to select
-and justify each form. Give the lens the source material, plot, and known target
-rendering, accessibility, and maintenance constraints. The plot stores the
-decision; the lens owns the norm used to make it.
+- Assume established domain knowledge when the named audience can reasonably
+  supply it.
+- Develop a central unfamiliar concept from motivating context toward a usable
+  definition.
+- Introduce a secondary unfamiliar concept briefly at the point of need.
+- Avoid naming a minor abstraction when ordinary prose is clearer.
+- Explain the particular property the argument depends on, even when the term
+  itself is familiar.
 
-## 3. Run the plot gate
+Choose representations from the relationships in the material: prose for a
+line of reasoning, steps for action, a table for repeated fields or comparison,
+a diagram for topology or flow, and code for executable detail. These are
+judgments, not mandatory transformations.
 
-Check the plot before drafting. It passes only when all applicable statements
-below are true:
+## 5. Make the plot
 
-- Every item in `scope.includes` is owned by at least one section.
-- Every section performs a distinct job toward `reader_outcome`.
-- Each non-obvious claim names support or is visibly marked `assumed` or
-  `unresolved`.
-- A section's `entry_state` follows from the brief or earlier sections.
-- Its `exit_state` answers its `reader_question`.
-- `relation_from_previous` makes the section order defensible.
-- The source's relationship-bearing material is present in the representation
-  inventory.
-- `structure.representation-choice` returns no finding against the source and
-  planned representations.
-- The throughline reaches the document promise without an unexplained jump.
+Choose the template that matches the document:
 
-Repair the plot when the gate exposes an ordering or coverage defect. Stop for
-the user's decision when the defect requires a new claim, source, or scope
-choice. Do not disguise that gap with fluent prose.
+- [general plot](assets/plot-general.md)
+- [book or chapter plot](assets/plot-book.md)
+- [technical-document plot](assets/plot-technical.md)
+- [academic plot](assets/plot-academic.md)
 
-## 4. Create a self-contained drafting packet
+The plot is a free-form account of the reader's progression. It may contain
+headings, scene or section cards, questions, diagrams, fragments, alternatives,
+or notes to the writer. Preserve its axis: what each movement does, what it may
+rely on, what changes for the reader, and how it advances the governing idea.
+Do not turn the template into a required YAML schema or equate the plot with a
+table of contents.
 
-Pass the writer one packet containing:
+Test the plot as a whole:
 
-```yaml
-drafting_packet:
-  brief: <the complete accepted brief>
-  plot: <the complete accepted plot>
-  source_material: <the cited passages or resolvable source locations>
-  decisions_made_after_plot: []
-  output_constraints: <format, location, length, notation, and repository rules>
-```
+- Does its sequence answer the governing question or enable the reader task?
+- Does each movement earn its place and prepare what follows?
+- Are central claims supported and limitations visible?
+- Does conceptual emphasis match argumentative importance rather than ease of
+  definition?
+- Does the chosen document kind match the reader's use?
 
-Give the complete packet to any isolated agent whose work depends on document
-intent, including drafting and integration. Do not pass instructions such as
-"continue the approach we discussed" or expect the agent to infer why a section
-exists. If isolation is unavailable, execute the same packet inline; subagents
-improve isolation but are not required.
+Resolve plot-level failures upstream. Do not ask a sentence lens to repair them.
 
-For a document too large for one drafting context, partition only at plot section
-boundaries. Give every writer the full brief and plot, the sources for its
-section, and the completed preceding section needed by its `entry_state`. One
-integrator still owns the complete draft.
+## 6. Draft and edit from large scale to small scale
 
-## 5. Draft against the plot
+Draft against the accepted plot while preserving claim status and source
+boundaries. A draft may discover a better focus or structure; when it does,
+revise the upstream artifact first or alongside the draft so the durable intent
+does not become false.
 
-Write one complete draft whose section boundaries follow the logical jobs in the
-plot. Preserve the plot's claims and statuses; do not turn an assumption into a
-fact or invent support to make a transition smooth.
+Run these passes in order:
 
-Load and apply `document-writing-standards` by its writing-time selection rules.
-The plot determines what the document says and how the reader progresses; the
-standards determine how that material is expressed. If the standards skill is
-unavailable, continue with a plain technical draft and report that the standards
-pass was unavailable.
+1. **Developmental edit:** argument, coverage, order, section purpose,
+   proportion, conceptual emphasis, and representation.
+2. **Line or stylistic edit:** paragraph movement, continuity, emphasis,
+   transitions, sentence shape, voice, and cadence in the target language.
+3. **Copyedit:** terminology consistency, references, grammar, syntax, notation,
+   and house style.
+4. **Proof and acceptance:** final completeness, formatting, cross-references,
+   rendering, and success against the assignment and plot.
 
-Pass the brief's pacing selection explicitly. Apply
-`rhythm.cognitive-pacing` to the whole draft when rhythm is `required`, only to
-the named sections when it is `sectional`, and not at all when it is
-`not-required`. The brief's reading behavior governs this choice; document genre
-labels do not.
+Give reviewers the audience, focus, plot, and relevant sources. Independence
+means they do not see one another's findings; it does not mean withholding the
+context required to judge the document. Classify every issue by the earliest
+artifact that can resolve it, then return it there:
 
-Representation plans are requirements unless the source material proves the
-planned form unsuitable. Record any substitution and its reason in
-`decisions_made_after_plot`; do not silently collapse a planned diagram or table
-into prose.
+- wrong promise or scope → assignment or focus;
+- missing or misconceived substance → discovery or content model;
+- wrong progression or emphasis → plot;
+- paragraph or sentence realization → line edit;
+- local correctness or consistency → copyedit.
 
-Apply `structure.sentence-cohesion` to explanatory and argumentative prose while
-drafting, together with the matching language profile's terminology, structure,
-and expression lenses. Include the profile's cadence lens wherever the brief
-selects rhythm. Always include these profile lenses even when the document is
-short and the general writing-time selection would otherwise reduce the
-catalog. The common lenses own translation-stable relations; the profile owns
-natural omission, hierarchy, linkage, sentence boundaries, and cadence in the
-language being written.
+After an upstream revision, inspect its downstream dependents before continuing.
+Do not mechanically preserve text whose premise changed.
 
-## 6. Review, then integrate once
+## 7. Accept the document
 
-After the first complete draft, preserve it as `pre_review_draft`, then apply
-`document-writing-review`. Treat its findings as local repairs: it may improve
-expression and content-preserving structure, but it does not supersede the
-accepted brief or plot. Pass the brief's rhythm selection as an explicit lens
-override so a continuously read document is not reviewed with rhythm omitted.
-Do not reduce `structure.representation-choice`,
-`structure.sentence-cohesion`, or the matching language profile's applicable
-lenses.
+Acceptance asks whether the document works, not whether every heuristic fired:
 
-Preserve that lane's blind-review contract. Its lens reviewers receive the
-document and their lens definitions, not the brief or plot. The integrator that
-accepts or reconciles their repairs receives:
+- The intended reader can reach the promised understanding, decision, or task.
+- Required scope is covered and excluded scope has not leaked in.
+- Important claims retain support, qualification, and provenance.
+- The reader progression realizes the plot's governing axis.
+- Conceptual explanation is proportional to novelty and importance.
+- Representations serve the relationships they were chosen for.
+- Line and copyediting introduced no loss or contradiction.
+- The delivered format is complete and usable.
 
-```yaml
-integration_packet:
-  drafting_packet: <the complete packet used for drafting>
-  pre_review_draft: <the complete first draft>
-  reviewed_draft: <the complete output of the review lane>
-  applied_findings: []
-  decisions_made_after_plot: []
-```
+Revise failures at their owning stage. If resolution requires new authority,
+evidence, or a material scope choice, report it instead of hiding it with fluent
+prose.
 
-Then integrate the result as one document. Reconcile section boundaries,
-cross-references, repeated definitions, transitions, and representation changes
-against the plot. Where a lens repair conflicts with a plotted claim, support,
-or reader transition, preserve the plot and report the unresolved writing
-finding. If `document-writing-review` is unavailable, perform one inline
-copyedit against the loaded standards and report the degraded review path.
+## Delivering the work
 
-Compare `pre_review_draft` with the integrated result. For every removed or
-rewritten passage that carried a premise, condition, limitation, contrast arm,
-or relation between claims, locate the same role in the final document or record
-an intentional, plot-consistent removal. Fluency and concision do not justify an
-untracked loss.
-
-## 7. Run document acceptance
-
-Evaluate the complete document against the brief and plot, not against drafting
-process completion.
-
-```yaml
-acceptance:
-  outcome: pass | unresolved
-  checks:
-    audience_fit: pass | fail
-    scope_coverage: pass | fail
-    claim_traceability: pass | fail
-    reader_progression: pass | fail
-    representation_fidelity: pass | fail
-    rhythm_selection: pass | fail
-    revision_preservation: pass | fail
-    whole_document_coherence: pass | fail
-    writing_review: pass | degraded | unresolved
-    independent_reconstruction: pass | fail | not-run
-  lens_conformance:
-    common:
-      structure.representation-choice: pass | fail
-      structure.sentence-cohesion: pass | fail | not-applicable
-      rhythm.cognitive-pacing: pass | fail | not-selected
-    profile:
-      language: ja | en | unavailable
-      lenses:
-        <each applicable profile lens ID>: pass | fail | not-selected
-  deviations:
-    - check: <failed check>
-      location: <section or exact anchor>
-      plot_item: <brief or plot field>
-      effect: <what the reader cannot understand, decide, or do>
-```
-
-Apply these tests:
-
-- **Audience fit:** The document relies only on the prior knowledge in the brief,
-  or supplies what is missing before use.
-- **Scope coverage:** Every included scope item and plotted reader question has a
-  corresponding passage; excluded material has not leaked in.
-- **Claim traceability:** Every material assertion maps to a plotted claim and
-  retains its support and epistemic status.
-- **Reader progression:** Each section establishes its exit state, and the next
-  section uses no premise absent from its entry state.
-- **Representation fidelity:** Each planned non-prose element exists and makes
-  the named relationship inspectable. Every recorded substitution remains fit
-  for the same purpose.
-- **Rhythm selection:** The final lens set matches the pacing decision in the
-  brief, including sectional selection. File-type labels did not override it.
-- **Revision preservation:** Every premise, condition, limitation, contrast arm,
-  and logical relation present in `pre_review_draft` either performs the same
-  role in the final document or has an intentional removal recorded against the
-  plot.
-- **Whole-document coherence:** The section sequence realizes the throughline;
-  the result does not read as independently adequate fragments joined together.
-- **Writing review:** The existing review lane completed, or its unavailable or
-  unresolved coverage is reported.
-
-For `lens_conformance`, load each listed common lens and every applicable lens
-in the matching language profile from `document-writing-standards`, then run
-them against the final document. Give `structure.representation-choice` the
-relationship inventory and target constraints. Run
-`structure.sentence-cohesion` only where explanatory or argumentative prose
-exists, and run the common and profile cadence lenses only where the brief
-selected rhythm. A lens passes when it returns no surviving finding after the
-one acceptance revision. For an unsupported language, set `profile.language`
-to `unavailable` and report the coverage gap instead of substituting another
-language's norms.
-
-When an isolated reader is available, give it only the brief and finished
-document and ask it to reconstruct the document's questions, claims, progression,
-and relations between adjacent propositions. Compare that reconstruction with
-the plot. Do not show it the plot before its read and do not ask it to reproduce
-lens work; reader reconstruction and lens conformance are separate evidence.
-When isolation is unavailable, perform the field-by-field tests above inline and
-set `independent_reconstruction: not-run`. Never report an independent or blind
-read unless a separate context actually performed it.
-
-Revise once for acceptance failures that can be resolved from the existing brief,
-plot, and sources, then run acceptance once more. Do not loop. Report failures
-that require a new source, claim, or user decision as unresolved.
-
-## Final response
-
-Return or link the finished document first. Then report:
-
-```yaml
-document: <path or supplied result>
-plot: <persisted path, included, or not-persisted>
-standards: applied | unavailable
-review: applied | degraded
-acceptance: pass | unresolved
-independent_reconstruction: pass | fail | not-run
-unresolved: []
-```
-
-Do not claim success when acceptance is unresolved. A polished document that
-does not deliver the brief is not complete.
-
-## Responsibility split
-
-Keep reusable norms in `document-writing-standards` and orchestration here:
-
-| Responsibility | Owner | Why |
-|---|---|---|
-| Whether prose, list, table, diagram, or code fits the material | `structure.representation-choice` | One bounded representation judgment can be reused while drafting and reviewing |
-| Whether distinct propositions connect | `structure.sentence-cohesion` | It can be falsified from one document in any language |
-| What may be omitted and still recovered | the matching language profile's argument lens | Recoverability is language-specific |
-| How propositions are ranked, linked, and ordered | the matching language profile's structure lenses | Natural realization differs between Japanese and English |
-| Where sentences end and what cadence is natural | the matching language profile's boundary and cadence lenses | Sentence formation is language-specific |
-| Whether one Japanese proposition was split apart | `ja.proposition-integrity` | It is a Japanese-specific realization defect |
-| Whether the document's shape serves its stated purpose | `structure.genre-purity` | The existing lens owns purpose and genre conformance |
-| Whether selected passages have usable pacing | `rhythm.cognitive-pacing` | The existing lens owns the pacing norm |
-| Which passages receive the pacing lens | this workflow and `document-writing-base` | Selection needs expected reading behavior, not another genre classification |
-| What the document must accomplish and in what order | this workflow | The brief and plot carry authorial intent, not a reusable defect rule |
-| Whether a review revision lost content | `document-writing-base` | The check compares the input and output of every applying review lane |
-| Whether the authored document lost a plotted role | this workflow | The stronger check also compares the plot, pre-review draft, and final document |
-
-Narrow review lanes may detect these reusable defects without a plot. This
-workflow still owns creating missing material and reconciling any structural
-finding with the document's intended outcome.
+Lead with the finished document or its link. Then identify the latest durable
+planning artifacts, the editorial passes completed, material deviations from
+the plot, and unresolved decisions. Do not claim an independent review unless a
+separate context actually performed it.
 
 ## Success criteria
 
-- [ ] Drafting began only after a complete brief and a passing plot gate.
-- [ ] Every handoff that depended on document intent received the complete
-      packet rather than an instruction that depended on conversation history;
-      blind lens reviewers remained blind.
-- [ ] The draft preserves claim support and epistemic status from the plot.
-- [ ] The selected common lenses and every applicable lens in the matching
-      language profile pass on the final document.
-- [ ] Existing writing standards and review lanes were used without changing
-      their responsibility boundaries.
-- [ ] Every claim of isolated or independent review names an execution that
-      actually ran in a separate context; inline checks are labeled inline.
-- [ ] Acceptance evaluates the reader outcome and document throughline, not only
-      lens cleanliness.
-- [ ] At most one acceptance-driven revision was performed, and every remaining
-      failure is reported.
+- [ ] Audience knowledge and intended use shaped content and terminology.
+- [ ] Discovery preceded commitment to a structure.
+- [ ] A governing focus and content model existed before the plot.
+- [ ] The plot preserved a discernible reader progression without becoming a
+      rigid form.
+- [ ] Developmental decisions preceded line and copy edits.
+- [ ] Lens observations were interpreted in document context and routed to the
+      stage that owned the problem.
+- [ ] Durable artifacts make the work resumable without chat history.
+- [ ] Acceptance was checked against the assignment and plot.

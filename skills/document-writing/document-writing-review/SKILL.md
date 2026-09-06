@@ -1,13 +1,11 @@
 ---
 name: document-writing-review
 description: >-
-  Raises a document to a sound technical-writing baseline in one pass, running
-  independent per-lens reviewers across every layer and applying their findings
-  in dependency order. Targets how the document reads and holds together —
-  plain expression, paragraph structure, defined terms, resolvable references,
-  internal logic — not whether its subject matter is correct. Applies when
-  prose is hard to follow, argues loosely, or reads as machine-written, and
-  when a draft needs to be brought to a publishable standard.
+  Performs a holistic editorial review and revision of an existing document.
+  Applies when the draft may have the wrong focus, conceptual emphasis,
+  explanation depth, order, or reader progression—not merely awkward sentences.
+  Builds an editorial assignment, reverse outline, diagnosis, and revised plot
+  before substantive, line, and copy edits.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task, AskUserQuestion
 metadata:
   description-role: trigger
@@ -15,52 +13,58 @@ metadata:
 
 # Document Review
 
-The default lane. Full-layer detection, findings applied, revised document
-returned.
+Review from the whole document inward. Read
+`../document-writing/references/workflow.md` and follow its existing-document
+branch. If work will span sessions or files, also follow
+`../document-writing/references/artifacts.md`.
 
-Apply `document-writing-base` for the whole procedure. This skill supplies only
-the lane values.
+## Workflow
 
-```yaml
-lenses: all applicable layers; rhythm selected from reading behavior
-deliverable: revised-document
-reviewers: per-packing-group
-verify: true
-```
+1. Establish the editorial assignment: audience and prior knowledge, use,
+   intended outcome, document kind, constraints, degree of intervention, and
+   protected content.
+2. Read diagnostically and make a reverse outline of what the draft actually
+   does.
+3. State the governing focus you can recover, conflicts within it, and any
+   plausible alternatives. Distinguish unclear expression from an unsettled
+   idea.
+4. Build an editorial diagnosis covering substance, support, conceptual
+   emphasis, order, proportion, representation, and reader movement.
+5. Propose a free-form revised plot. Do not revise prose until the proposed
+   progression is coherent. Ask only when competing plots would materially
+   change the author's position or scope.
+6. Revise substantively against the plot.
+7. Apply a connected line edit and then local copyedit through
+   `document-writing-base`.
+8. Verify the result against the assignment, focus, plot, and protected content.
 
-## Why this lane spends where it does
+Use planning principles and editorial heuristics from
+`document-writing-standards` in stages 2–6. They are aids to diagnosis and
+judgment, not independent mandates. Use conformance checks only after the
+document's substance and structure are stable.
 
-Detection runs one reviewer per packing group rather than per lens, because the
-result is a revised document rather than a list a person reads. When findings
-are applied automatically, a consistent application matters more than an
-exhaustive detection: a lens that misses one instance of padding costs little,
-while two reviewers editing the same paragraph from different angles costs
-coherence.
+## Review context
 
-Where the caller wants maximum detection instead, that is
-`document-writing-audit`.
+Any reviewer receives the relevant audience, focus, reverse outline, current
+plot, sources, and intervention boundary. Reviewers may be blind to one
+another's conclusions, but never blind to the context needed to judge why the
+document exists.
 
-## Choosing another lane
+## Routing findings
 
-- The document's content and structure must not move, only its sentences —
-  `document-writing-prose`.
-- Nothing should be changed automatically; the caller will read every finding —
-  `document-writing-audit`.
-- Findings already exist and were selected by a person —
-  `document-writing-apply`.
-- The caller needs a different rhythm choice from the one implied by reading
-  behavior — stay here and override `rhythm.cognitive-pacing` explicitly.
+Name the earliest artifact that owns each issue. A missing premise, misplaced
+definition, or inverted conceptual emphasis is a developmental issue even when
+it appears in one sentence. Do not repair it through the smallest possible
+local edit merely because the anchor is easy to locate.
 
-## What this lane does not decide
+If the user permits only content-preserving changes, return upstream issues as
+observations and confine the revision to that boundary. If the task is truly
+wording-only, use `document-writing-prose` instead.
 
-It does not judge whether the document is right about its subject, or whether it
-works on the reader it was written for. A document can leave this lane clean and
-still be wrong, and it can be clean and correct and still fail to convince
-anyone. Route subject-matter verification to `document-toolkit-fact-check`, and
-whether readers follow, believe, and can act on it to `document-reader-review`.
+## Deliverable
 
-It applies structural findings, which may rename headings, reorder sections, or
-change representation among prose, lists, tables, diagrams, and code. These
-override choices the writer may have made deliberately, so they are reported
-individually under `structural_changes` rather than folded into the revision
-summary.
+Lead with the revised document or link. Then give a concise account of the
+recovered focus, principal plot changes, important content decisions, passes
+completed, context limitations, and unresolved questions. Preserve intermediate
+artifacts according to the artifact reference so the work can resume without
+conversation history.

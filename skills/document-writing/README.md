@@ -1,134 +1,107 @@
 # document-writing
 
-Use this family both while writing new technical prose and while improving an
-existing document. The root `document-writing` skill plans substantial new
-documents through an explicit plot before drafting. `standards` supplies the
-rules used during drafting. The other skills inspect an existing document,
-revise it, or apply findings that have already been selected.
+This family treats document writing and revision as an editorial workflow. It
+establishes the assignment, learns the material, finds the governing focus,
+models the content, and creates a flexible genre-specific plot before drafting
+or substantive revision. Developmental editing comes before line editing,
+copyediting, and proof.
 
-Distinct from `document-toolkit`, which operates on documents as objects —
-verifying their claims, reworking a set, stripping what a set no longer needs —
-and from `document-reader`, which judges a document from the reader's side.
-These skills judge how a document reads and whether it holds together.
+Intermediate artifacts can be stored as immutable Markdown revisions with
+explicit lineage. There is no mutable state file or separate event log; current
+heads and upstream changes are derived from revision files and their digests.
 
 ## Choose by task
 
 | Task | Skill | Result |
-|------|-------|--------|
-| Write a new multi-section document from source material | `document-writing` | A plotted, drafted, reviewed, and acceptance-checked document |
-| Write a short passage or continue an established draft | `standards` | The relevant writing rules are applied as the text is composed |
-| Improve an existing draft throughout | `review` | A revised document, including content-preserving structural changes |
-| Fix wording without changing content or structure | `prose` | A sentence-level revision |
-| Inspect a document without changing it | `audit` | Located findings for a person to review |
-| Apply findings a person has already selected | `apply` | A revised document containing only the selected changes, plus verification repairs |
+|---|---|---|
+| Create or substantially rebuild a document | `document-writing` | Durable planning artifacts, a drafted and edited document, and acceptance against audience and plot |
+| Holistically revise an existing draft | `review` | Reverse outline, editorial diagnosis, revised plot, and revised document |
+| Write inside an already settled plan | `standards` | Relevant planning, editorial, and language guidance used during composition |
+| Improve prose without changing content or structure | `prose` | A connected line edit |
+| Inspect stable prose without changing it | `audit` | Local conformance findings only |
+| Apply approved local findings | `apply` | Content-preserving edits with stale-anchor and preservation checks |
 
-Do not select `base` directly. It is the shared machinery used by the four
-review lanes.
+`base` is internal machinery for the line, copyedit, audit, and apply lanes.
 
-## Writing new documents
+## Workflow
 
-Use `document-writing` when the task must decide what a complete document needs
-to accomplish, not merely express already-settled content. It creates an
-explicit brief and document plot, passes a self-contained packet between
-planning, drafting, and revision, then checks the finished document against the
-plot and intended reader outcome.
+For a new document:
 
-The plot records each section's reader question, entry and exit state, claims,
-support, relation to adjacent sections, and chosen representation. This keeps
-the workflow reproducible when different agents or passes do not share
-conversation history.
+```text
+assignment → discovery → focus → content model → plot → draft
+           → developmental edit → line edit → copyedit → proof/acceptance
+```
 
-The standards catalog owns common lenses for translation-stable document
-invariants and separate Japanese and English profiles for natural omission,
-proposition structure, clause linkage, sentence boundaries, diction, and
-cadence. The root workflow selects the common lenses and one language profile
-from the brief, applies them during drafting and review, then separately checks
-the reader outcome and preservation of content through revision.
+For an existing document:
 
-## Writing prose inside an established structure
+```text
+editorial assignment → diagnostic reading → reverse outline
+                     → editorial diagnosis → revised plot
+                     → substantive revision → line/copy/proof
+```
 
-`standards` is the writing-time entry point. It applies when a task creates or
-continues a passage whose purpose and place in the document are already
-established. The task and its source material determine what the passage says;
-`standards` determines how to express and organize it.
+Adjacent planning artifacts may be combined for small documents, but their
+decisions are not skipped. A plot is a free-form account of reader progression,
+not a mandatory data schema. Templates are supplied for general documents,
+books or chapters, technical documents, and academic work.
 
-Load only the layers the draft needs:
+## Lens placement
 
-- For any draft, use `reference.discourse-grounding`, applicable common
-  expression lenses, the matching language profile, and that profile's examples.
-- For an argument, design rationale, or explanation, add common logic and
-  terminology lenses plus the profile's composition lenses.
-- For a document longer than a few sections, add structure.
-- For a chapter, article, or narrative explanation meant to be read
-  continuously, add rhythm.
+`document-writing-standards` classifies guidance by use:
 
-`standards` is not a user-invoked review lane. It activates as part of the
-writing task so that the first draft follows the rules instead of relying on a
-later repair pass.
+- planning principles inform focus, concept treatment, document kind,
+  representation, argument, and plot;
+- editorial heuristics support contextual judgment during developmental and
+  line editing;
+- conformance checks detect local correctness and consistency defects after the
+  larger decisions are stable.
 
-## Working with an existing document
+Only the third category flows directly through `audit` and `apply`. Reviewers
+receive the relevant audience and plot context; “blind” means independent of
+other reviewers' conclusions, not deprived of document intent.
 
-Choose a review lane according to how much authority it should have:
+## Durable artifacts
 
-- Use `review` when the whole document may be improved. It can rename headings,
-  reorder sections, and convert between prose and lists while preserving the
-  document's claims.
-- Use `prose` when the document's content and structure are settled. It changes
-  sentences only.
-- Use `audit` when a person must approve every change. It returns findings and
-  does not edit the document.
-- Use `apply` after that approval. It applies the surviving findings in
-  dependency order and rejects findings whose anchors are stale.
+For multi-session work, store artifacts beside the target in a
+`<document>.writing/` directory unless the project defines another location.
+Each artifact revision records its kind, revision number, predecessor, and the
+paths and SHA-256 digests of upstream artifacts. Revisions are immutable. A
+changed upstream digest triggers downstream review and a new revision, not a
+central status mutation.
 
-The controlled workflow is `audit` → a person keeps, drops, or edits the
-findings → `apply`.
+## References
 
-When an existing draft needs missing explanations or representations added, its
-reader progression rebuilt, or its pacing reconsidered, the task is a substantial
-rebuild rather than a content-preserving review. Use the root `document-writing`
-workflow so those authoring decisions have a brief and plot.
+### Editorial workflow
+
+- [Editors Canada: Professional Editorial Standards](https://editors.ca/publications/professional-editorial-standards/) and [The Fundamentals of Editing](https://editors.ca/publications/professional-editorial-standards/fundamentals-editing/)
+- [CIEP: About proofreading and editing](https://www.ciep.uk/resource/about-proofreading-and-editing.html), [Editorial glossary](https://www.ciep.uk/resource/editorial-glossary.html), [The publishing workflow](https://www.ciep.uk/learn-and-develop/the-ciep-competency-framework/the-publishing-workflow.html), and [What is an editorial brief?](https://www.ciep.uk/resource/what-is-an-editorial-brief-and-how-does-it-help-both-authors-and-editorial-professionals.html)
+- [Purdue OWL: Genre analysis and reverse outlining](https://owl.purdue.edu/owl/graduate_writing/introduction_to_writing/documents/drafting-your-document/handouts/genre-analysis-activity.pdf)
+
+### Technical writing
+
+- Google Technical Writing on [audience](https://developers.google.com/tech-writing/one/audience), [document scope and organization](https://developers.google.com/tech-writing/one/documents), and [large-document outlines](https://developers.google.com/tech-writing/two/large-docs)
+- [Diátaxis](https://diataxis.fr/start-here/) and its [workflow guidance](https://www.diataxis.fr/how-to-use-diataxis/)
+
+### Academic writing
+
+- [ICMJE: Preparing a Manuscript for Submission](https://icmje.org/recommendations/browse/manuscript-preparation/preparing-for-submission.html)
+- [EQUATOR Network](https://www.equator-network.org/)
+- [Taylor & Francis: Writing your paper](https://authorservices.taylorandfrancis.com/wp-content/uploads/2021/03/Writing_your_paper_ebook.pdf)
+
+### Original lens sources
+
+- [`japanese-tech-writing`](https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d): Japanese technical prose, argument, reader load, voice, and notation
+- [`cognitive-rhythm-writing`](https://gist.github.com/k16shikano/eb2929f13ed19c97188393d297be8432): cognitive pacing and Japanese cadence
+- [`writing-clearly-and-concisely`](https://github.com/obra/the-elements-of-style/tree/05fc4f0d2b97b7c042dd9949ad658568e4a1324e/skills/writing-clearly-and-concisely): English mechanics, composition, and concision
 
 ## Skills
 
-| Skill | Description |
-|-------|-------------|
-| `document-writing` | The document-level workflow: brief, plot, plot gate, drafting packet, first draft, lens review, and acceptance against the reader outcome |
-| `standards` | 38 lenses across five layers: common document invariants plus Japanese and English profiles. Read directly while drafting; also the catalog the lanes select from |
-| `base` | The shared review machinery: blind per-lens detection, conflict resolution, layer-ordered application, lens verification, before/after preservation, and the report format |
-| `review` | Full-layer detection, findings applied, revised document. The default lane |
-| `prose` | Sentence-level lenses only. Content and structure are not touched |
-| `audit` | Full-layer detection, one reviewer per lens, findings only, no edits |
-| `apply` | Applies findings a person already selected, re-verifying every anchor |
-
-## When Skills Activate
-
-- **document-writing**: "turn these sources into a design document", "write a complete technical guide", "この調査結果から説明文書を書いて"
-- **standards**: "write a design note", "draft this README", "turn these notes into an explanation", "この内容から記事を書いて"
-- **review**: "この文書をまともにして", "clean up this draft", "this reads like it was written by an AI", "make this publishable", "文章の品質を上げて"
-- **prose**: "fix the wording only", "don't restructure it, just the sentences", "文章だけ直して"
-- **audit**: "tell me what's wrong with this document", "review it but don't change it", "指摘だけして"
-- **apply**: "apply these findings", "この指摘を反映して"
-
-## How the lanes differ
-
-Four axes: which lenses run, whether a revised document or findings comes back,
-how many reviewers, and whether the verification pass runs. Each lane fixes
-those four values and delegates everything else to `base`.
-
-`review` and `audit` make opposite trades on the same lens set. `review` runs
-one reviewer per packing group, because a revised document needs application to
-be coherent more than it needs detection to be exhaustive. `audit` runs one per
-lens, because nothing is applied and a missed defect survives.
-
-## Layers and order
-
-Lenses sit in five layers, and findings apply in that order: logic, terminology,
-structure, expression, then rhythm. Common and language-profile lenses share
-that ordering. An upper-layer fix
-rewrites the text a lower layer would otherwise have polished, so applying
-bottom-up wastes work. `rhythm` runs last as the only lens that adds text.
-
-## Installation
-
-Install these skills through the repository's `skills add` workflow documented
-in the root README.
+| Skill | Responsibility |
+|---|---|
+| `document-writing` | End-to-end new-document and substantial-rebuild workflow |
+| `standards` | Planning principles, editorial heuristics, local checks, and Japanese/English profiles |
+| `base` | Shared context-aware line/copy/audit/apply machinery |
+| `review` | Existing-document developmental review and revision |
+| `prose` | Content-preserving line edit |
+| `audit` | Local conformance findings without edits |
+| `apply` | Application of selected local findings |

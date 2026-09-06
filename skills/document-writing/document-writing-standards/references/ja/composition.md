@@ -1,9 +1,9 @@
-# Japanese Composition Lenses
+# 日本語の構成レンズ
 
-Language: **Japanese**. These lenses define how Japanese realizes reference,
-topic continuity, proposition hierarchy, connection, and sentence boundaries.
-They supplement the language-common semantic lenses; examples do not substitute
-for these norms.
+言語：**日本語**。このファイルのレンズは、日本語における項の省略、主題の継続、
+命題の階層、接続、文の境界を扱う。各レンズを局所的な適合検査として使えるか、
+編集上の経験則として使うかは、カタログの役割欄に従う。経験則の `objective` と
+`checks` は検討箇所を示すものであり、該当する表現を自動的に欠陥とはしない。
 
 ## `ja.argument-recovery`
 
@@ -12,26 +12,22 @@ lens: ja.argument-recovery
 language: ja
 layer: terminology
 packing_group: japanese-reference
-objective: Find omitted actors, objects, complements, sources, targets, or
-  scopes whose recovery makes the reader search backward or choose among
-  candidates.
+objective: 省略された行為者、目的語、補語、情報源、対象、範囲を復元するために、
+  読者が前を探したり複数の候補から選んだりしなければならない箇所を見つける。
 checks:
-  - An omitted argument carried across a sentence or paragraph boundary.
-  - Several predicates sharing an omitted noun after its semantic role changes.
-  - A transitive or relational predicate left abstract because its object,
-    target, or scope is missing.
-  - Zero anaphora with no unique, locally active referent.
+  - 文または段落の境界を越えて持ち越された省略項。
+  - 意味役割が変化した後も、複数の述語が同じ省略名詞を共有している箇所。
+  - 目的語、対象、範囲がなく、他動詞的または関係的な述語が抽象的なままの箇所。
+  - 一意かつ局所的に活性化した指示対象を持たないゼロ照応。
 non_goals:
-  - Do not repeat an argument when one local topic remains active and keeps the
-    same role across predicates.
-  - Do not require Japanese subjects or objects mechanically.
-  - Overt but ambiguous demonstratives belong to reference.antecedent.
+  - 局所的な主題が一つだけ活性化し、複数の述語で同じ役割を保つ場合は、項を繰り返さない。
+  - 日本語の主語や目的語を機械的に明示させない。
+  - 明示されているが曖昧な指示語は reference.antecedent が扱う。
 content_impact: none
 ```
 
-Restore the smallest noun phrase that makes the role unique. Repeat a noun when
-a predicate change also changes its role; do not replace one difficult omission
-with a chain of 「これ」「それ」「そこ」.
+役割を一意にする最小の名詞句を補う。述語が変わって名詞の役割も変わるなら名詞を
+繰り返す。一つの難しい省略を「これ」「それ」「そこ」の連鎖に置き換えない。
 
 ## `ja.topic-continuity`
 
@@ -40,22 +36,21 @@ lens: ja.topic-continuity
 language: ja
 layer: structure
 packing_group: japanese-structure
-objective: Find passages where the reader cannot tell whether a topic
-  continues, narrows, contrasts, or changes.
+objective: 主題が継続、限定、対比、転換のどれに当たるかを読者が判断できない箇所を見つける。
 checks:
-  - A zero subject retained after the acting or discussed entity changes.
-  - は, が, も, or a contrastive は that presents the wrong information status.
-  - The same topic needlessly reintroduced in consecutive sentences.
-  - A new topic introduced without enough naming to distinguish it from the old.
+  - 行為または議論の対象が変わった後も維持されるゼロ主語。
+  - は、が、も、または対比の「は」が、意図した情報状態と一致しない箇所。
+  - 同じ主題を連続する文で不必要に導入し直している箇所。
+  - 新しい主題を、以前の主題と区別できるだけの名指しなしに導入している箇所。
 non_goals:
-  - Do not map は to main clause or が to subordinate clause mechanically.
-  - Do not force an explicit subject while one topic remains uniquely active.
+  - 「は」を主節、「が」を従属節に機械的に対応させない。
+  - 一つの主題が一意に活性化している間は、主語を明示させない。
 content_impact: none
 ```
 
-Use は to maintain or contrast a topic and が to introduce or focus a subject
-only where that information structure is intended. Name the topic again at a
-real switch; omit it where repetition would falsely restart the passage.
+意図する情報構造に応じて、「は」で主題を維持または対比し、「が」で主語を導入または
+焦点化する。実際に主題が切り替わる箇所では名詞を再掲し、反復によって文章を
+再開したように見せる箇所では省略する。
 
 ## `ja.proposition-realization`
 
@@ -64,30 +59,25 @@ lens: ja.proposition-realization
 language: ja
 layer: structure
 packing_group: japanese-structure
-objective: Find a recoverable proposition hierarchy that Japanese syntax leaves
-  flat, reverses, or delays until the reader must rebuild it.
+objective: 復元可能な命題の階層を日本語の構文が平坦化、逆転、または遅延し、
+  読者に再構成させている箇所を見つける。
 checks:
-  - A main claim and its reason, condition, limitation, evidence, or consequence
-    presented as co-equal assertions.
-  - A subordinate clause placed where the main predicate arrives only after the
-    reader must retain several unresolved relations.
-  - A connective or conjunctive form that makes the dependent proposition look
-    like the conclusion.
-  - A contrast forced into subordination even though both sides need equal weight.
+  - 中心主張とその理由、条件、限定、根拠、帰結を同格の断定として並べた箇所。
+  - 複数の未解決な関係を保持しなければ主述語へ到達できない位置に置かれた従属節。
+  - 依存する命題を結論のように見せる接続詞または接続形式。
+  - 両側が同じ重みを必要とするのに、従属関係へ押し込められた対比。
 required_output:
-  - main proposition
-  - dependent proposition or co-ordinate counterpart
-  - relation
-  - chosen Japanese realization
+  - 中心命題
+  - 従属命題または同格の対立項
+  - 関係
+  - 選択した日本語での実現方法
 content_impact: none
 ```
 
-Realize reason, condition, concession, and consequence through an appropriate
-clause form such as 「ため」「ので」「なら」「場合」「ても」「ものの」. Use a
-separate sentence with 「しかし」「一方」「ところが」 where the alternatives
-remain co-ordinate. Put the main clause first when delaying it would overload
-working memory; put grounds first when the reader needs them to interpret the
-claim.
+理由、条件、譲歩、帰結は、「ため」「ので」「なら」「場合」「ても」「ものの」などの
+適切な節形式で表す。両側が同格なら、「しかし」「一方」「ところが」を伴う別の文に
+する。中心節を遅らせると作業記憶を圧迫する場合は中心節を先に置き、主張を解釈する
+ために根拠が先に必要な場合は根拠を先に置く。
 
 ## `ja.connective-calibration`
 
@@ -96,23 +86,21 @@ lens: ja.connective-calibration
 language: ja
 layer: structure
 packing_group: japanese-structure
-objective: Find relations that Japanese leaves under-marked, or marks twice
-  through both syntax and a redundant connective.
+objective: 日本語として関係の表示が足りない箇所、または構文と重複する接続表現で
+  関係を二重に示した箇所を見つける。
 checks:
-  - A cause, consequence, contrast, restriction, example, or continuation that
-    must be inferred from adjacency alone.
-  - Repeated paragraph or sentence openings with generic additive connectives.
-  - A connective repeating a relation already unambiguously encoded by a clause.
-  - A connective whose strength or direction does not match the relation.
+  - 因果、帰結、対比、限定、例示、継続を、隣接関係だけから推測しなければならない箇所。
+  - 一般的な添加の接続詞で文や段落を繰り返し始めている箇所。
+  - 節形式ですでに一意な関係を、接続詞でも重ねている箇所。
+  - 強さまたは方向が実際の関係と一致しない接続詞。
 non_goals:
-  - Do not require a connective where particles, inflection, order, or lexical
-    meaning already makes the relation effortless to recover.
-  - Do not delete a connective that carries contrast, scope, or pacing.
+  - 助詞、活用、語順、語彙ですでに関係を無理なく復元できる場合は、接続詞を要求しない。
+  - 対比、範囲、リズムを担う接続詞を削除しない。
 content_impact: none
 ```
 
-Choose among clause linkage, particles, ordering, and an explicit connective.
-The target is a recoverable relation, not a target count of connectives.
+節の接続、助詞、語順、明示的な接続詞から適切な方法を選ぶ。目標は関係を復元可能に
+することであり、接続詞を一定数にすることではない。
 
 ## `ja.sentence-boundaries`
 
@@ -121,24 +109,20 @@ lens: ja.sentence-boundaries
 language: ja
 layer: expression
 packing_group: japanese-expression
-objective: Find Japanese sentence boundaries that merely restart the grammar
-  while one local movement continues, or joins that overload one sentence.
+objective: 一つの局所的な動きを文法だけ再開する日本語の文境界、または一文を
+  過負荷にする接続を見つける。
 checks:
-  - A boundary separating a claim from its reason, condition, qualification,
-    example, or result without adding emphasis or reducing load.
-  - Consecutive independent assertions that repeatedly reactivate the same topic.
-  - Dependent material promoted to a sentence with the same cadence as its main claim.
-  - A joined sentence whose nested modifiers or delayed predicate exceed what
-    the reader can retain.
+  - 強調も負荷軽減もせず、主張を理由、条件、限定、例、結果から切り離す境界。
+  - 同じ主題を繰り返し活性化する、連続した独立断定。
+  - 中心主張と同じ調子の文へ昇格された従属的な内容。
+  - 入れ子の修飾または遅延した述語を、読者が保持できないほど詰め込んだ文。
 non_goals:
-  - Do not infer a defect from sentence length or count alone.
-  - Preserve a hard stop that changes topic, time, viewpoint, argumentative
-    stage, or supplies deliberate emphasis.
-  - Do not repair fragmentation by creating a sentence-load defect.
+  - 文の長さや数だけから欠陥を推測しない。
+  - 主題、時間、視点、論証の段階を変える境界、または意図的な強調となる停止は残す。
+  - 断片化を直すために prose.sentence-load の欠陥を作らない。
 content_impact: none
 ```
 
-Remove a boundary only after `ja.argument-recovery` and
-`ja.proposition-realization` establish what the clauses share and how they
-relate. A readable paragraph may contain several short sentences when each stop
-has a job.
+境界を取り除くのは、`ja.argument-recovery` と `ja.proposition-realization` によって、
+節が共有するものと節間の関係を確定した後に限る。各停止に役割があるなら、読みやすい
+段落に複数の短文があってもよい。

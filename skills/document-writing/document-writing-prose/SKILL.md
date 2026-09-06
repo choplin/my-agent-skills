@@ -1,12 +1,9 @@
 ---
 name: document-writing-prose
 description: >-
-  Rewrites a document's sentences to a plain, low-effort standard without
-  touching its content or its structure: removes rhetoric that carries no
-  information, sentences about the document rather than its subject, padding,
-  and notation slips. Applies when the argument and the section layout are
-  settled and only the wording is at fault, or when a caller asks for the
-  writing to be cleaned up without anything being reorganized.
+  Line-edits settled Japanese or English prose as a connected passage while
+  preserving its claims and document architecture. Applies when content and
+  structure are already accepted and only the prose should change.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Task
 metadata:
   description-role: trigger
@@ -14,53 +11,26 @@ metadata:
 
 # Document Prose
 
-The narrow lane. Sentence-level lenses only, findings applied, revised document
-returned.
-
-Apply `document-writing-base` for the whole procedure. This skill supplies only
-the lane values.
+Use the line-edit path in `document-writing-base`.
 
 ```yaml
-lenses: reference.discourse-grounding, structure.sentence-cohesion, prose.*, and the matching language profile's terminology, structure, and expression lenses
+stage: line
+guidance: applicable editorial heuristics and the matching language profile
 deliverable: revised-document
-reviewers: single       # two where the document is long
+intervention: content-preserving
 verify: true
 ```
 
-## The boundary this lane holds
+Read prose as connected movement. Improve paragraph continuity, proposition or
+clause realization, information order, transitions, sentence boundaries,
+voice, diction, and cadence together. Do not optimize each lens or sentence in
+isolation.
 
-Every finding here is `content_impact: none`. Paragraphs are not merged or
-split, sections are not reordered, headings are not renamed, and no claim is
-restated. If the argument is unsound or the sections are in the wrong order,
-this lane leaves it that way and says so.
+The audience, document kind, focus, and plot are editorial context, even though
+this lane cannot change them. If those are unavailable, infer only what the
+document strongly supports and report the limitation.
 
-That boundary is the point. A caller reaches for this lane when the document's
-substance is settled — an agreed design, a reviewed decision, a published
-structure — and reorganizing it would be a regression, not an improvement.
-
-## What it removes
-
-The lenses are `reference.discourse-grounding`, `prose.plain-expression`,
-`structure.sentence-cohesion`, `prose.self-reference`, `prose.concision`,
-`prose.sentence-load`, and `prose.voice`, plus the matching language profile.
-The profile contributes only lenses whose remedies stay within the existing
-paragraph and preserve its claims; cadence is included only when reading
-behavior selects rhythm. Together they
-cover the failures that make machine-written prose expensive to read: contrasts
-and focus that depend on drafting history, disconnected propositions, empty
-qualifiers, verbs that name the act of writing, sentences whose subject is the
-document, restatement, identifiers that are never referenced again, and the
-passive where an actor acted. In Japanese this includes argument recovery,
-topic continuity, proposition realization, connective calibration, proposition
-integrity, sentence boundaries, notation, syntax, and diction. In English it
-includes argument explicitness, information order, clause linkage, sentence
-boundaries, voice, mechanics, and diction.
-
-## Reporting what it left alone
-
-Where a sentence cannot be fixed without moving text — a paragraph carrying two
-topics, a term that needs its introduction relocated, a discourse premise the
-document independently needs earlier — report it as unresolved with the lens
-that would own it, rather than reaching outside the lane.
-
-A caller who wants those fixed should use `document-writing-review`.
+Do not add claims or explanations, remove qualifications, change section order,
+rename concepts, or switch representation. When good prose depends on one of
+those changes, leave an upstream editorial observation rather than forcing a
+local repair.

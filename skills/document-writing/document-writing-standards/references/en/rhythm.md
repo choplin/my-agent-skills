@@ -1,5 +1,9 @@
 # English Rhythm Lens
 
+This is an editorial heuristic for continuously read prose, not an independent
+local conformance test. Use it to realize the cognitive movement in the plot;
+do not impose a fixed sentence-length waveform.
+
 ## `en.cadence`
 
 ```yaml

@@ -1,9 +1,8 @@
 # English Lenses
 
-Language: **English**. Each lens declares the layer where its fixes apply.
-
-Findings here are `content_impact: none`. They are among the cheapest lenses in
-the catalog to run and the easiest to apply, because every rule is mechanical.
+Language: **English**. Follow each lens's role in the catalog. Mechanics can be
+checked locally; diction also requires domain, audience, and house-style
+judgment and must not be reduced to a blacklist.
 
 These two lenses cover mechanical usage and diction. English composition rules
 live beside them in [composition.md](composition.md), rather than being treated
@@ -72,6 +71,7 @@ objective: Find word choices and register inconsistencies that break the
   conventions of English technical prose.
 checks:
   - Words used in a sense their established usage does not carry.
+  - A summary that shifts tense without a change in time or viewpoint.
   - Mixed American and British spelling.
   - Contractions and register shifting within one document.
   - Person and number shifting between sections.
@@ -85,16 +85,31 @@ non_goals:
 
 - **Use words in their established sense.** The recurring offenders in technical
   prose:
-  - *comprise* — the whole comprises the parts; it is not "is comprised of".
-  - *less* / *fewer* — *fewer* for countables.
-  - *which* / *that* — *that* introduces a restrictive clause, *which* a
-    non-restrictive one, and takes commas.
+  - *all right* is two words.
+  - *comprise* — prefer “the whole comprises the parts” or “the whole consists
+    of the parts.” Treat “is comprised of” as a style choice unless the document
+    uses the forms inconsistently or the relation becomes ambiguous.
+  - *less* / *fewer* — prefer *fewer* for individually counted items and *less*
+    for amounts. Keep established amount readings such as time, money, distance,
+    measurements, and constructions such as “10 items or less.”
+  - *which* / *that* — in American technical prose, prefer *that* for a
+    restrictive clause and *which* with commas for a non-restrictive one. In
+    British prose, restrictive *which* is established usage; preserve the
+    document's chosen convention.
   - *effect* / *affect*, *principal* / *principle*, *complement* /
     *compliment*, *discreet* / *discrete*.
   - *literally* for emphasis, *utilize* where *use* is meant, *methodology*
     where *method* is meant.
-  - *due to* where *because of* is meant.
+  - *can* / *may* where capability and permission must be distinguished.
+  - *divided into* / *composed of* where division and composition differ.
+  - *fact* for a judgment that cannot be directly verified.
+  - *phase* where *aspect* or *topic* is meant.
+  - *while* where the reader cannot tell whether the relation is temporal,
+    contrastive, or concessive.
+  - *etc.* where omitted items are material and the reader cannot recover them.
   - *e.g.* / *i.e.* used interchangeably.
+- **Keep one tense in a summary.** Shift tense only when the summarized sequence
+  itself changes time or the document deliberately changes viewpoint.
 - **One spelling convention.** American or British, consistently: *behavior* and
   *behaviour* do not mix, nor *-ize* and *-ise*.
 - **One register.** Contractions are acceptable in documentation that has chosen

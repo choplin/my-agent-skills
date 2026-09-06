@@ -4,6 +4,9 @@ Concrete instances of the common and English-profile lenses. Keyed by lens ID.
 Load alongside the lens definition; the lists are
 illustrative, not exhaustive.
 
+Examples for planning principles and editorial heuristics illustrate contextual
+judgments, not constructions that must always produce a finding.
+
 English-only conventions carry their own rules and examples in
 [conventions.md](conventions.md); composition rules live in
 [composition.md](composition.md).
@@ -80,6 +83,20 @@ After: Departments produce and store their own data, and they define its usage r
 
 Develop the parallel facts together, then use the short sentence as deliberate
 footing. Do not vary length merely to avoid a visible pattern.
+
+---
+
+## `en.diction`
+
+- Summary tense: “The worker reads the record, validated it, and then writes the
+  result” becomes “The worker reads the record, validates it, and then writes the
+  result” when all three actions belong to the same summary viewpoint.
+- Capability and permission: use *can* for ability and *may* for permission when
+  the distinction changes the instruction.
+- Amount readings: keep “10 items or less” and “less than 20 minutes”; prefer
+  “fewer retries” for individually counted attempts.
+- Ambiguous *while*: replace it with *during*, *whereas*, *although*, or a more
+  direct clause relation only when the intended relation is otherwise unclear.
 
 ---
 

@@ -1,9 +1,9 @@
 # Logic Lenses
 
-Layer: **logic** (phase 1). Language: **common**. Fixes change what the document
-asserts, how it supports it, and how confidently it states it. Findings here are
-applied first because they rewrite text that every later layer would otherwise
-polish.
+Language: **common**. These are planning principles and editorial heuristics.
+They change what the document asserts, how it supports it, and how confidently
+it states it, so they do not flow directly through copyedit or automatic
+finding application. Use them with the assignment, sources, focus, and plot.
 
 Worked before/after pairs, and the hedging and concession vocabulary of each
 language, live in [Japanese examples](../ja/examples.md) and
@@ -23,11 +23,12 @@ lens: logic.claim-support
 language: common
 layer: logic
 packing_group: logic
-objective: Falsify the claim that each assertion is supported by what the
-  document actually provides.
+objective: Examine whether material claims have the kind and amount of support
+  their role, genre, audience, and stated confidence require.
 checks:
-  - Assertions whose grounds appear nowhere in the text.
-  - Causal claims stated without their mechanism.
+  - Load-bearing assertions whose grounds appear nowhere in the document or its
+    declared sources.
+  - Causal claims whose mechanism the intended reader needs but cannot supply.
   - Claims broader than the examples offered for them.
   - Distinct things collapsed into one.
   - Multi-causal phenomena reduced to a single cause.
@@ -35,9 +36,10 @@ checks:
 
 ### Rules
 
-- **State the mechanism of a causal claim locally.** Do not assert that A leads
-  to B and leave out why. The language profile decides whether the mechanism
-  belongs in one clause, one sentence, or a connected sequence.
+- **Make needed support available at the useful scale.** A causal mechanism may
+  be local, developed in a later passage, represented visually, cited to an
+  accepted source, or treated as prior knowledge. Decide from the claim's role
+  and the audience; do not require one explanatory sentence per causal claim.
 - **Match the claim to its evidence.** Where the example supports only part of
   the claim, narrow the claim to what the example covers. Do not widen the
   example.
@@ -46,17 +48,16 @@ checks:
 - **Do not reduce a multi-causal case to one cause.** Where an example carries
   several kinds of problem, separate them and map each to the concept that
   explains it.
-- **Quote what is being denied.** Where a negation belongs in the document,
-  write the proposition itself exactly, in quotation marks. A vague denial that
-  not everything is solved states nothing. `reference.discourse-grounding`
-  decides whether the negated proposition is available to the reader at all;
-  this rule does not license introducing one.
+- **Develop support when the argument needs it.** The remedy may add evidence,
+  mechanism, an example, a limitation, or an entire movement to the plot. It may
+  instead narrow or remove the claim. Choose the smallest change only after
+  deciding which argument the document ought to make.
 
 ### Severity
 
-`major` where an assertion the argument depends on has no stated grounds, or
-where the claim exceeds its evidence. `minor` where the mechanism is inferable
-but unstated.
+Treat an unsupported load-bearing claim as a major editorial issue. A mechanism
+the audience can supply, or one intentionally deferred and signposted, is not an
+issue merely because it is absent from the sentence.
 
 ---
 
@@ -126,7 +127,7 @@ objective: Find places where the document contradicts itself, or leaves what it
 checks:
   - Passages asserting incompatible things about the same object.
   - Concepts treated differently in different sections.
-  - Questions posed and never answered.
+  - Questions that promise an answer and never deliver it.
   - Forward references whose target never delivers.
   - Concessions and limitations that end the passage without resuming the
     argument.
@@ -137,8 +138,10 @@ checks:
 
 - **A concept keeps one treatment across sections.** Where a definition,
   classification, or standing changes between sections, report both sites.
-- **Every question the document poses is answered.** Where it is not, either
-  answer it or remove the question. Do not open what is not closed.
+- **Every promised answer is delivered.** Answer or remove a question that the
+  document presents as something it will resolve. A final thematic tension may
+  remain open when no later answer was promised and the ending makes that choice
+  distinguishable from an omission.
 - **Every forward reference delivers.** A promise that a later section takes
   something up must be discharged where it says. An unpaid forward reference is
   a defect, not a stylistic choice.

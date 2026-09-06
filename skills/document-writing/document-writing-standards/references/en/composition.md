@@ -2,6 +2,9 @@
 
 Language: **English**. These lenses define English-specific argument
 explicitness, clause linkage, information order, sentence boundaries, and voice.
+Use each according to its role in the catalog. For editorial heuristics,
+`objective` and `checks` identify places to consider; they do not make every
+matching construction a defect.
 
 ## `en.argument-explicitness`
 

@@ -1,9 +1,8 @@
-# Japanese Lenses
+# 日本語の慣用レンズ
 
-Language: **Japanese**. Each lens declares the layer where its fixes apply.
-
-Findings here are `content_impact: none`. They are the cheapest lenses in the
-catalog to run and the easiest to apply, because every rule is mechanical.
+言語：**日本語**。表記と構文の局所的な適合検査に加え、文脈を必要とする語法上の
+経験則を収める。各レンズの用途はカタログの役割欄に従う。形式だけで機械的に
+判定せず、適合検査として使う場合も文書の分野、読者、既存の表記規約を確認する。
 
 ---
 
@@ -14,46 +13,46 @@ lens: ja.notation
 language: ja
 layer: expression
 packing_group: japanese-expression
-objective: Find punctuation, emphasis, and markup that violate the notation
-  conventions for Japanese technical prose.
+objective: 日本語の技術文書における表記規則に反する句読法、強調、markupを見つける。
 checks:
-  - Dashes used in Japanese running text or headings.
-  - Nakaguro used for coordination.
-  - Bold and kagi-kakko used interchangeably.
-  - Headings packing two elements around a rule character.
-  - Term-definition lists separated by a rule instead of a full-width colon.
-  - Code, diffs, logs, and configuration fragments not in code blocks.
+  - 日本語の地の文で、一行に複数の文を置いた箇所。
+  - 日本語の地の文または見出しで使われたダッシュ。
+  - 並列に使われた中黒。
+  - 太字と鉤括弧の混同。
+  - 罫線文字の前後に二要素を詰め込んだ見出し。
+  - 用語と定義を、全角コロンではなく罫線で区切った箇条書き。
+  - コードブロックに入っていないコード、差分、ログ、設定の断片。
 ```
 
-### Rules
+### 規則
 
-- **No dashes in Japanese running text or headings.** This covers the em dash
-  `—`, the horizontal bar `―`, and the doubled 「——」. Rewrite by function:
-  - Apposition or insertion (「A——挿入——B」) becomes parentheses（）.
-  - Restatement or elaboration (「A——B」) becomes two sentences, or one clause
-    joined with a comma.
-  - Out of scope: the en dash `–` for ranges, English compounds such as
-    `Curry–Howard`, code blocks, and bibliographic entries.
-- **No nakaguro（・）for coordination.** Use と, や, or a list. Inside a single
-  proper noun it is fine.
-- **Bold and kagi-kakko have different jobs.** Bold marks a term at the point
-  where the document defines or introduces it. 「」 marks an already-introduced
-  term being referred to, a quotation, or a byname. First definition in bold,
-  every later mention in 「」.
-- **Do not pack two elements into a heading with a rule character.** 「種別──主題」
-  「主題──概念」 become a single natural phrase: drop to one element, or join
-  with a particle or a comma. A column heading is not a bare genre label
-  either — 「基礎」「補足」 become 「同値関係としての分類」「ループ不変条件と帰納法」.
-- **Term-definition lists use a full-width colon**: 「**用語**：説明」. Not a rule
-  character, not a hyphen.
-- **Fragments of code, diffs, logs, and configuration go in code blocks.**
-- **Footnotes use the `[^ラベル]` form.** (What belongs in a footnote is
-  `prose.sentence-load`.)
+- **一文ごとに改行する。** 段落の区切りには空行を使う。表、コードブロック、
+  引用元の改行を保存する必要がある引用は対象外とする。
+- **日本語の地の文や見出しにダッシュを使わない。** emダッシュ `—`、horizontal
+  bar `―`、2倍ダッシュ「——」が該当する。機能に応じて書き換える。
+  - 同格または挿入（「A——挿入——B」）は括弧（）にする。
+  - 言い換えまたは敷衍（「A——B」）は二文に分けるか、読点で一つの節につなぐ。
+  - 範囲を示すenダッシュ `–`、`Curry–Howard` のような英語の複合語、
+    コードブロック、書誌情報は対象外とする。
+- **並列に中黒（・）を使わない。** 「と」「や」または箇条書きを使う。一つの
+  固有名詞に含まれる中黒は残す。
+- **太字と鉤括弧の役割を分ける。** 文書内で用語を定義または導入する箇所では
+  太字にする。導入済みの用語への言及、引用、通称には「」を使う。最初の定義は
+  太字、それ以降の言及は「」とする。
+- **罫線文字の前後に二要素を詰め込まない。** 「種別──主題」「主題──概念」は、
+  一方へ絞るか、助詞または読点でつないだ一つの自然な句にする。コラム見出しも
+  「基礎」「補足」のような種別名だけにせず、「同値関係としての分類」
+  「ループ不変条件と帰納法」のように内容を特定する。
+- **用語と定義の箇条書きには全角コロンを使う**：「**用語**：説明」。罫線文字や
+  ハイフンで区切らない。
+- **コード、差分、ログ、設定の断片はコードブロックに入れる。**
+- **脚注には `[^ラベル]` 形式を使う。** 脚注へ移す内容は
+  `prose.sentence-load` が判断する。
 
-### Severity
+### 重大度
 
-`minor` throughout, except a heading whose two packed elements make the subject
-unidentifiable, which is `major` and also a `structure.document-shape` finding.
+原則として `minor` とする。二要素を詰め込んだ見出しによって対象を特定できない
+場合は `major` とし、`structure.document-shape` の finding にもする。
 
 ---
 
@@ -64,84 +63,65 @@ lens: ja.syntax
 language: ja
 layer: expression
 packing_group: japanese-expression
-objective: Find Japanese sentences whose grammatical relations are needlessly
-  obscured by noun-heavy or indirect syntax, forcing the reader to recast the
-  sentence to determine who does what or which words belong together.
+objective: 名詞中心または間接的な構文によって文法関係が不必要に隠れ、誰が何を
+  するか、どの語が結びつくかを知るために読み直しが必要な日本語文を見つける。
 checks:
-  - Abstract or inanimate subjects paired with an active transitive predicate
-    where the basis of an inference or the actual actor disappears.
-  - Nested adnominal clauses that postpone the head noun while the reader holds
-    several subjects and predicates.
-  - Actions frozen into nominalizations or chains of noun modifiers so that
-    their actors and relations become unclear.
-  - Analytic constructions used where an ordinary Japanese predicate would
-    preserve the same proposition more directly.
-  - Translated focus frames that postpone the proposition into 「こと」 or
-    「もの」 where ordinary Japanese word order would carry the licensed focus.
+  - 推論の根拠または実際の行為者が消える、抽象物・無生物主語と能動的他動詞の組合せ。
+  - 複数の主語と述語を保持させたまま主要名詞を遅らせる、入れ子の連体節。
+  - 行為者と関係が不明になる、行為の名詞化または名詞修飾の連鎖。
+  - 通常の日本語の述語なら同じ命題をより直接的に表せる箇所の分析的な構文。
+  - 通常の日本語の語順で焦点を表せるのに、命題を「こと」「もの」へ遅らせる翻訳調の焦点構文。
 non_goals:
-  - Do not infer a defect from suspected translation or machine authorship.
-  - Do not ban a phrase or construction by form or frequency alone.
-  - Do not rewrite an inanimate subject, nominalization, or analytic form that
-    is conventional in the field and leaves the relation unambiguous.
-  - Passive voice and missing actors are prose.voice unless the problem is the
-    Japanese sentence construction itself.
-  - Whether focus is licensed at all is reference.discourse-grounding. This
-    lens judges its Japanese realization only after that test passes.
+  - 翻訳文または機械生成文に見えることだけから欠陥を推測しない。
+  - 形式または出現頻度だけを根拠に表現や構文を禁止しない。
+  - 分野で慣用され、関係が明確な無生物主語、名詞化、分析的な形式は書き換えない。
+  - 日本語構文そのものが問題でなければ、受動態と行為者の欠落は prose.voice が扱う。
+  - 焦点化が成立するかは reference.discourse-grounding が判断する。この lens は、
+    その判定を通過した後の日本語での実現だけを扱う。
 ```
 
-### Rules
+### 規則
 
-- **State the relation, not an abstract actor.** When an inanimate or abstract
-  subject is made to perform an inference, expose the actual relation with a
-  form such as 「〜から分かる」 or name the person making the judgment. Keep an
-  inanimate subject where it is conventional and the predicate describes what
-  the object actually does.
-- **Release the head noun early.** If the reader must retain more than one
-  subject-predicate relation before reaching a noun, split the modifiers into
-  sentences or make the noun the topic. Length alone is not a finding.
-- **Open nominalized actions into clauses.** Replace stacked サ変 nouns and
-  chains of 「の」 with verbs when the stack hides who acts or how the actions
-  relate. A repeated particle is a place to inspect, not a threshold.
-- **Prefer the ordinary predicate.** Replace forms such as
-  「〜することができる」「〜することによって」「意味を持つ」 only where a
-  shorter inflected verb, conditional, or existential form states exactly the
-  same thing. Preserve possibility, means, possession, and emphasis when they
-  are part of the proposition.
-- **Join stock claim-and-reason frames.** Where 「それは〜。なぜなら〜」 merely
-  separates a claim from its reason, write the causal relation directly. Keep
-  the frame when the separation creates a real contrast or answers a question
-  already active in the text.
-- **Do not calque focus into an empty nominal.** Once focus is licensed, name
-  the focused proposition directly. Rewrite forms such as
-  「データが示したのは、そのことだ」 or 「これが意味するのは、そういうことだ」
-  with a predicate that states what the data supports or what the fact means.
-  Keep a nominal focus form where its contrasted candidates are named and the
-  construction is natural in context.
+- **抽象的な行為者ではなく関係を書く。** 無生物または抽象物の主語に推論させている
+  場合は、「〜から分かる」のような形で実際の関係を示すか、判断した人物を明示する。
+  無生物主語が慣用的で、述語がその対象の実際の働きを述べる場合は残す。
+- **主要名詞を早く出す。** 名詞へ到達するまでに複数の主述関係を保持しなければ
+  ならない場合は、修飾部を別の文にするか、名詞を主題にする。長さだけを finding の
+  根拠にしない。
+- **名詞化した行為を節へ戻す。** サ変名詞や「の」の連鎖によって行為者または行為間の
+  関係が隠れる場合は、動詞を使う。同じ助詞の反復は検査箇所であり、閾値ではない。
+- **通常の述語を使う。** 「〜することができる」「〜することによって」
+  「意味を持つ」は、より短い活用形、条件形、存在表現でまったく同じ命題を表せる
+  場合だけ置き換える。可能性、手段、所有、強調が命題の一部なら保持する。
+- **定型的な主張と理由をつなぐ。** 「それは〜。なぜなら〜」が主張を理由から
+  分離しているだけなら、因果関係を直接書く。分離が実在する対比を作る場合、または
+  文書内ですでに生じた問いへ答える場合は残す。
+- **焦点を空の名詞へ翻訳しない。** 焦点化が成立した後は、焦点となる命題を直接書く。
+  「データが示したのは、そのことだ」「これが意味するのは、そういうことだ」は、
+  データが何を裏付け、事実が何を意味するかを述べる述語へ直す。対比される候補が
+  明示され、文脈上自然な場合は名詞焦点構文を残す。
 
-### Examples
+### 例
 
-- Before: 「この結果は、従来の前提が誤っていたことを示している。」
-- After: 「この結果から、従来の前提が誤っていたと分かる。」
-- Before: 「多くの企業が導入を進めているが十分な効果を実感できていないという
+- 修正前：「この結果は、従来の前提が誤っていたことを示している。」
+- 修正後：「この結果から、従来の前提が誤っていたと分かる。」
+- 修正前：「多くの企業が導入を進めているが十分な効果を実感できていないという
   課題を抱える技術である。」
-- After: 「多くの企業がこの技術を導入している。しかし、十分な効果を実感できた
+- 修正後：「多くの企業がこの技術を導入している。しかし、十分な効果を実感できた
   企業は少ない。」
-- Before: 「本機能の導入の目的は、運用コストの削減の実現にある。」
-- After: 「本機能を導入する目的は、運用コストを削減することにある。」
-- Before: 「情報を整理することによって、判断を速めることができる。」
-- After: 「情報を整理すると、判断を速められる。」
-- Before: 「ログが示しているのは、そのことだ。」
-- After: 「ログにも、同じタイムアウトが記録されていた。」
-- Keep: 「この関数は入力値を正規化する。」 The inanimate subject names
-  something that actually performs the operation.
-- Keep: 「管理者だけが設定を変更できる。」 Possibility is part of the
-  permission being specified.
+- 修正前：「本機能の導入の目的は、運用コストの削減の実現にある。」
+- 修正後：「本機能を導入する目的は、運用コストを削減することにある。」
+- 修正前：「情報を整理することによって、判断を速めることができる。」
+- 修正後：「情報を整理すると、判断を速められる。」
+- 修正前：「ログが示しているのは、そのことだ。」
+- 修正後：「ログにも、同じタイムアウトが記録されていた。」
+- 維持：「この関数は入力値を正規化する。」無生物主語が実際にその処理を行う対象を示している。
+- 維持：「管理者だけが設定を変更できる。」可能性が指定される権限の一部である。
 
-### Severity
+### 重大度
 
-`major` where the reader must re-read to recover the actor, predicate, or
-modifier boundary. `minor` where the relation is clear but an indirect
-construction adds local processing cost.
+行為者、述語、修飾境界を復元するために読み直しが必要なら `major` とする。関係は
+明確だが間接的な構文によって局所的な処理負荷が生じる場合は `minor` とする。
 
 ---
 
@@ -152,47 +132,39 @@ lens: ja.proposition-integrity
 language: ja
 layer: structure
 packing_group: japanese-structure
-objective: Find one causal, conditional, concessive, or contrastive proposition
-  split into separate Japanese assertions that omit the relation between them.
+objective: 一つの因果、条件、譲歩、対比の命題を、関係を省いた複数の日本語の
+  断定へ分割している箇所を見つける。
 checks:
-  - A claim and its reason punctuated as independent assertions with no causal
-    relation.
-  - A condition separated from its consequence so that it reads as another
-    fact.
-  - A concession or contrast broken into assertions whose direction the reader
-    must reconstruct.
-  - Several short assertions that become one proposition when their omitted
-    connective is restored.
+  - 主張と理由を、因果関係のない独立した断定として区切った箇所。
+  - 条件を帰結から切り離し、別の事実のように見せる箇所。
+  - 読者が方向を再構成しなければならない複数の断定へ、譲歩または対比を分割した箇所。
+  - 省略された接続関係を補うと一つの命題になる、複数の短い断定。
 non_goals:
-  - Do not merge distinct propositions; their connection is
-    structure.sentence-cohesion.
-  - Do not infer a defect from sentence length or paragraph frequency alone.
-  - Keep a deliberate hard break when each sentence stands independently and
-    the separation supplies real emphasis.
+  - 別個の命題を結合しない。その接続は structure.sentence-cohesion が扱う。
+  - 文の長さや段落の頻度だけから欠陥を推測しない。
+  - 各文が独立して成立し、分離が実際の強調になる場合は、意図的な強い境界を残す。
 ```
 
-### Rules
+### 規則
 
-- Keep dependent clauses in one sentence where the relation is part of the
-  proposition, or state that relation explicitly across the boundary.
-- Recover the relation before choosing punctuation. Joining fragments without
-  naming whether they express cause, condition, concession, or contrast only
-  hides the same defect in a longer sentence.
-- Prefer ordinary Japanese connective forms over a stock claim-and-reason frame.
+- 関係が命題の一部なら、従属節を一文に収めるか、文境界を越えて関係を明示する。
+- 句読点を選ぶ前に関係を復元する。因果、条件、譲歩、対比のどれかを示さずに断片を
+  結合しても、同じ欠陥を長い文に隠すだけである。
+- 定型的な主張と理由の枠より、通常の日本語の接続形式を使う。
 
-### Examples
+### 例
 
-- Before: 「誤操作を防ぐ。この設定は既定で無効である。」
-- After: 「誤操作を防ぐため、この設定は既定で無効である。」
-- Before: 「方式Aは速い。方式Bを採用する。方式Aは整合性を保証しない。」
-- After: 「方式Aは速いが整合性を保証しないため、方式Bを採用する。」
-- Keep: 「移行は失敗した。データは失われた。」 Both claims stand
-  independently; the source does not establish a causal relation.
+- 修正前：「誤操作を防ぐ。この設定は既定で無効である。」
+- 修正後：「誤操作を防ぐため、この設定は既定で無効である。」
+- 修正前：「方式Aは速い。方式Bを採用する。方式Aは整合性を保証しない。」
+- 修正後：「方式Aは速いが整合性を保証しないため、方式Bを採用する。」
+- 維持：「移行は失敗した。データは失われた。」両方の主張は独立しており、資料は
+  因果関係を示していない。
 
-### Severity
+### 重大度
 
-`major` when the omitted relation changes or underdetermines the proposition;
-`minor` when the reader can recover it but must recombine the sentences.
+省略された関係によって命題が変わるか一意に定まらない場合は `major` とする。
+読者が復元できるものの、文を再結合しなければならない場合は `minor` とする。
 
 ---
 
@@ -203,36 +175,30 @@ lens: ja.diction
 language: ja
 layer: expression
 packing_group: japanese-expression
-objective: Find word choices and sentence endings that break the register or
-  the flow of Japanese technical prose.
+objective: 日本語の技術文書の文体または流れを壊す語の選択と文末を見つける。
 checks:
-  - i-adjectives terminated with です.
-  - Mixed である体 and ですます体.
-  - Sino-Japanese words chosen by surface resemblance rather than established
-    usage.
-  - Person names inconsistently romanized or transliterated.
+  - イ形容詞に「です」を続けた終止。
+  - である体とですます体の混在。
+  - 慣用ではなく表面的な類似で選んだ漢語。
+  - 原綴りと翻字が一貫しない人物名。
 non_goals:
-  - Choosing between competing terms for one concept is
-    terminology.consistency. This lens covers the word's register and form.
+  - 一つの概念に対する複数の用語から選ぶ問題は terminology.consistency が扱う。
+    この lens は語の文体と形式を扱う。
 ```
 
-### Rules
+### 規則
 
-- **No i-adjective plus です**（「難しいです」「多いです」）. Treat an occurrence as a
-  symptom rather than a surface defect: an i-adjective needs a bare terminal
-  ending only when the sentence is isolated from what surrounds it. In
-  connected prose the sentence continues (「〜は難しく、…」) or is received by
-  「〜でしょう」「〜である」. Do not patch the ending — rewrite the passage around
-  it. ナ-adjective plus です（「重要です」）is out of scope.
-- **One style throughout.** である体 and ですます体 do not mix within a document,
-  except where a quotation or a marked aside justifies it.
-- **Do not assign a Sino-Japanese word by intuition.** Use the term established
-  in the field. Push notification is 配信, not 配送.
-- **Person names in their original spelling** (Lehman, Bainbridge), except for
-  historical figures and eponymous concepts whose katakana form is the
-  established Japanese name.
+- **イ形容詞に「です」を続けない**（「難しいです」「多いです」）。表面的な欠陥ではなく、
+  文が前後から孤立した兆候として扱う。流れのある文章なら「〜は難しく、…」と続けるか、
+  「〜でしょう」「〜である」で受ける。文末だけを修正せず、前後の流れから書き直す。
+  ナ形容詞の「です」（「重要です」）は対象外とする。
+- **文体を統一する。** 引用または明示された挿話として理由がある場合を除き、文書内で
+  である体とですます体を混在させない。
+- **漢語を直感で割り当てない。** 分野で定着した用語を使う。push notification は
+  「配送」ではなく「配信」とする。
+- **人物名は原綴りにする**（Lehman、Bainbridge）。ただし歴史上の人物や、人名を冠した
+  概念についてカタカナ表記が日本語の定着名なら、その表記を使う。
 
-### Severity
+### 重大度
 
-`major` for mixed style across a document. `minor` for individual endings and
-word choices.
+文書全体で文体が混在する場合は `major`、個別の文末または語の選択は `minor` とする。

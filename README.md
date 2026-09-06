@@ -88,7 +88,7 @@ skills or validation configuration.
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), discuss-toolkit-grill-me (candidate robustness), one-point (discussion pacing) |
 | `git-helpers` | commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten, squash-merge |
-| `document-writing` | document-writing, standards, base, review, prose, audit, apply (a plot-mediated workflow for new documents; 38 writing lenses split into common invariants and Japanese/English profiles; four review lanes over shared machinery: full sweep, sentences only, findings only, or apply findings a person selected) |
+| `document-writing` | document-writing, standards, base, review, prose, audit, apply (an editorial workflow for new and existing documents; durable brief, discovery, focus, content-model, plot, and revision artifacts; planning principles, editorial heuristics, and local checks with Japanese/English profiles) |
 | `document-toolkit` | fact-check, distill, trim (verify a document's claims, rework a whole set: consolidate / refresh / split / retire, or strip content the set no longer needs) |
 | `document-reader` | review, base, newcomer, skeptical-peer, implementer, decision-maker, domain-expert, revise (judge a finished document from the reader's side: dispatch one isolated agent per reader persona, report stumbles, objections and takeaways as findings only, then work those findings in with the author) |
 | `lang-reference` | go, java, python, rust, scala, sql, typescript |
