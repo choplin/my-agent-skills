@@ -1,217 +1,232 @@
 ---
 name: skill-quality-standard
 description: >-
-  Defines the qualitative standard for a good agent skill: loadability,
-  context economy, concrete guidance, judgeable outcomes, precise
-  descriptions, calibrated control, direct present-tense contracts, and
-  reusable instruction patterns. Applies when authoring, reviewing, or
-  improving skill content.
+  Defines a role-aware qualitative standard for agent skills: classify what a
+  skill contributes, preserve model judgment where the work is interpretive,
+  specify only necessary workflow boundaries, and use scripts or mechanical
+  validation only for genuinely deterministic operations. Applies when
+  authoring, reviewing, or improving skill content.
 metadata:
   description-role: trigger
 ---
 
 # Skill quality standard
 
-Use this as the canonical qualitative definition of what a good skill is.
-Authoring produces content that conforms to it; `skill-quality-review` applies it
-with model judgment and reports departures from it; `skill-quality-improve` keeps
-candidate edits within it. A mechanical evaluation, when one is possible,
-provides separate quantitative evidence and does not redefine this standard.
+Use this as the canonical qualitative definition of a good skill. A skill is
+guidance interpreted by a capable model, not a program that guarantees one
+behavior. Its job is to contribute information or control the model needs while
+leaving the rest to the model's reasoning.
 
-The standard has one mechanical precondition (B0), six content requirements
-(B1–B6), and a library of reusable structures (B7). Read
-`references/anti-patterns.md` when detecting violations. Read
-`references/instruction-patterns.md` when selecting an instruction structure.
-Read `references/writing-descriptions.md` when writing or judging frontmatter
-descriptions. Read `references/agentskills-best-practices.md` only when the
-condensed rules here leave an authoring question unresolved.
+Start by identifying what the skill contributes. Do not apply one content shape
+to every skill.
 
-These guidelines distill the [agentskills.io best practices](https://agentskills.io/skill-creation/best-practices)
-reproduced in `references/agentskills-best-practices.md`.
+## 1. Classify before prescribing
 
----
+First identify which sources of value apply:
 
-## B0. Be loadable
+| Value source | Question |
+|--------------|----------|
+| **Capability uplift** | What does this help the model do that it otherwise cannot do, or cannot do consistently? |
+| **Encoded intent** | What chosen practice, constraint, sequence, or organizational context does this supply for work the model can already perform? |
 
-A skill must load before any content requirement can matter. Run the mechanical
-preflight first:
+These sources are non-exclusive. A capability uplift may become redundant as
+models improve; encoded intent remains useful only while it faithfully expresses
+what its users want or require.
+
+- Review a capability uplift by asking what useful ability or consistency it
+  adds beyond the base model. Simplify or remove it when that uplift disappears.
+- Review encoded intent by asking whether it faithfully communicates the
+  intended practice or constraint. Do not judge it by whether that intent is
+  universally superior.
+
+Identify the skill's primary role:
+
+| Role | Contribution | Typical content |
+|------|--------------|-----------------|
+| **Guidance** | Gives a direction, norm, lens, or body of domain judgment | principles, rationale, boundaries, representative examples |
+| **Workflow** | Coordinates work whose order or handoffs matter | stages, decisions, handoff contracts, stop conditions |
+| **Task** | Performs a task or produces an artifact | task-specific knowledge, tools, inputs, outputs |
+
+This is a lens, not a required metadata field or an exclusive taxonomy. A skill
+may combine roles. Classify each substantial part by the kind of control it
+needs:
+
+| Nature of the work | Give the model | Appropriate control |
+|--------------------|----------------|---------------------|
+| **Interpretive** | direction, relevant considerations, trade-offs, boundaries | high freedom; the model judges in context |
+| **Coordinated** | necessary order, decisions, handoffs, invariants | constrain the spine; leave individual steps flexible |
+| **Deterministic** | exact operation, inputs, outputs, failure behavior | scripts, schemas, commands, and mechanical checks may be appropriate |
+
+Separately classify each relevant property of the result as **qualitatively
+reviewable**, **mechanically checkable**, or both. One deliverable may combine
+them: schema compliance can be mechanical while usefulness remains qualitative.
+A clear purpose does not imply a binary success criterion. Call a property
+mechanically checkable only when it can be evaluated reproducibly without model
+judgment.
+
+Use the least control that preserves the task's real requirements. Do not turn
+this classification into another schema, score, or decision tree that claims to
+settle contextual judgment mechanically.
+
+Read `references/skill-types.md` when the value source or role is unclear, or
+when reviewing the coverage and boundaries of a larger skill library. Its domain
+categories are examples for discovery, not required labels.
+
+## 2. Apply the common standard
+
+These requirements apply to every role.
+
+### Be loadable
+
+Run the mechanical preflight before reviewing content:
 
 ```sh
 skill-quality-standard/scripts/lint-frontmatter.sh <skill-path>
 ```
 
-The script checks that frontmatter starts and closes with `---`, top-level entries
-use `key: value`, unquoted scalar values avoid YAML's `: ` parsing trap, and both
-`name` and `description` exist. Exit 0 means the checked skills satisfy this
-loadability precondition; exit 1 identifies malformed files to fix before applying
-B1–B7.
+Exit 0 means this lightweight lint found none of the common frontmatter traps it
+checks; it is not a complete YAML parse. Exit 1 identifies a likely
+load-blocking format problem to fix before applying the qualitative standard.
+Use the repository's real YAML parser when available, especially before claiming
+that frontmatter is loadable.
 
-Use a real YAML parser as the fallback when the script is unavailable. Confirm
-that parsing succeeds and returns non-empty string values for `name` and
-`description`.
+### Spend context wisely
 
-## B1. Spend context wisely
+- Add what the model lacks: domain facts, current constraints, non-obvious
+  judgment, tool contracts, and real gotchas. Omit general knowledge.
+- Keep one coherent contribution. A skill can combine roles when they serve the
+  same task, but unrelated capabilities belong elsewhere.
+- Prefer deletion, merging, and generalization over another case-specific rule.
+  More encoded detail is not inherently more reliable.
+- Keep only material that changes action or judgment. Remove design history,
+  speculative exceptions, duplicated guidance, and unused contract data.
 
-Once a skill activates, its full body loads into the context window and competes for attention with everything else. Be economical:
+Ask of each passage: *What useful decision or action becomes possible because
+the model read this?* If there is no concrete answer, cut it.
 
-- **Add what the agent lacks; omit what it knows.** Don't explain what a PDF is, how HTTP works, or what a migration does. Jump straight to project-specific conventions, non-obvious edge cases, and the particular tools/APIs to use. Test for each line: *"Would the agent get this wrong without this instruction?"* If no, cut it.
-- **Design coherent units.** Scope a skill like a function — one coherent unit of work that composes with others. "Query a database and format results" is coherent; adding "database administration" is too much. Too narrow forces many skills to co-load; too broad is hard to trigger precisely.
-- **Aim for moderate detail.** Concise stepwise guidance with one working example beats exhaustive documentation. When you find yourself covering every edge case, ask whether the agent's own judgment handles most of them.
+### State the current direction directly
 
-Apply progressive disclosure as three distinct layers. Each layer earns its
-place by answering a different question:
+Describe the desired action, direction, boundary, or contract. Do not make the
+model reconstruct it from rejected alternatives or former behavior. Preserve
+negative wording when it expresses a present safety boundary or invariant, not
+merely design history.
 
-| Layer | What belongs there | Loading rule |
-|-------|--------------------|--------------|
-| `description` | What the skill does and the information its recorded role needs for discovery or identification | Always present; apply B4's trigger/documentation distinction |
-| `SKILL.md` | The execution spine needed on every run: objective and deliverable, step sequence, decision points, present constraints and gotchas, plus routing conditions for bundled resources | Loaded when the skill activates |
-| `references/` | Execution detail for an individual step or flow, plus material needed only for a particular domain, variant, exception, audit, or maintenance question | Loaded only when that step begins or another named condition applies |
+### Make the result reviewable at the right level
 
-- **Make `SKILL.md` a process, not a knowledge dump.** Keep the conceptual
-  background needed to execute or choose among branches; move extended theory,
-  schemas, exhaustive examples, API detail, and variant-specific procedures out
-  of the always-loaded body. The spec recommends keeping the body below 500 lines
-  and 5,000 tokens, but relevance on every run is the governing test — staying
-  under the limit does not justify unrelated detail.
-- **Route operational detail at its decision point.** Keep the common workflow
-  and selection rule in `SKILL.md`, then name the exact reference and load
-  condition: "For AWS deployments, read `references/aws.md` before planning the
-  deployment." A skill with several workflows keeps only their shared process and
-  routing logic in the body; it does not inline every workflow's detailed steps.
-- **Disclose multi-step workflows one step at a time.** When a skill coordinates
-  several substantial steps, keep their order, handoff contract, and completion
-  conditions in `SKILL.md`; put each step's execution instructions in its own
-  reference file. Tell the agent to read that file when the step begins, use it to
-  produce the handoff, then continue from the orchestration spine. Do not preload
-  all step references: while one step is active, details for later or completed
-  steps are irrelevant context. A compact step may remain inline when separating
-  it would cost more routing text than it saves, but several detailed procedures
-  in one always-loaded body are a strong signal to split them.
-- **Keep always-needed safeguards in the body.** A constraint, invariant, or
-  gotcha that must shape every run — or that the agent may not know it needs until
-  after making the mistake — cannot depend on a conditional reference. B2 defines
-  this rule for gotchas.
-- **Separate supporting background from execution guidance.** Research notes,
-  source material, provenance, and design rationale that do not change execution
-  belong in `references/`, when retaining them is useful. Do not make them a step
-  in the normal workflow. Make them discoverable with a narrow purpose such as
-  "Read `references/research.md` only when auditing the rationale or revising this
-  skill." If no plausible future task needs the material, omit it from the skill.
-- **Do not duplicate layers.** A detail has one canonical home. `SKILL.md` names
-  the reference and the condition for reading it; it does not repeat a condensed
-  copy that grows stale. Keep references directly discoverable from `SKILL.md`
-  rather than relying on the agent to inventory a directory.
+State what the skill is meant to help the model accomplish. Match the account of
+success to the work:
 
-## B2. Capture the "why" and concrete criteria
+- For interpretive work, give enough direction and considerations for a model or
+  human to explain why the result fits the context. Do not imply a unique correct
+  answer.
+- For coordinated work, make the required handoffs and preserved invariants
+  visible.
+- For deterministic work, state the observable input/output contract and valid
+  failure behavior.
 
-The highest-value content is what the agent can't infer: experiential judgment and environment-specific facts.
+Reviewability is not a guarantee. Do not invent measurable criteria merely to
+make qualitative work look objective.
 
-- **Concrete criteria, not adjectives.** "Write clean code" / "follow best practices" add zero information — the agent already knows them. Replace with the specific rule *and the experience behind it*: not "functions should be small" but "split a function when fixing a bug in one part could break another — e.g. `processOrder()` doing validation + pricing → split into `validate()` and `calculatePrice()`."
-- **Explain why.** A rule with its rationale lets the agent handle edge cases the rule didn't anticipate. Prefer "because [specific problem that occurred]" over "because best practices say so." A threshold the agent has no basis for (e.g. an arbitrary "20 lines") leaves it unable to judge the 21-line case.
-- **Gotchas are gold.** Maintain a Gotchas section of environment-specific facts that defy reasonable assumptions (e.g. "the `users` table uses soft deletes — queries must include `WHERE deleted_at IS NULL`"). Keep gotchas in `SKILL.md`, not a reference file — the agent must read them *before* hitting the situation, and may not recognize the trigger to load a file. See `references/instruction-patterns.md`.
+## 3. Apply only the relevant role guidance
 
-## B3. Make the outcome judgeable
+### Guidance: orient judgment
 
-Without a concrete account of a successful *deliverable*, an agent can complete
-every step and still miss the point. Give the acting agent and a reviewer enough
-evidence to judge the result in context.
+A guidance or normative skill should shape reasoning without replacing it.
 
-- **Describe success in terms of the deliverable, not completed steps.** Explain
-  what the result should accomplish, preserve, reveal, or enable.
-- **Ground judgment in observable evidence.** Use concrete criteria, examples,
-  trade-offs, and domain-specific failure modes. Qualitative criteria may require
-  interpretation; give the reviewer the evidence and rationale needed to exercise
-  that judgment well.
-- **Match the evaluation form to the work.** Use deterministic validation when a
-  reproducible checker genuinely exists. Use a model review for qualities such as
-  clarity, coherence, usefulness, or appropriate judgment. Do not manufacture a
-  binary proxy merely to make qualitative work look measurable.
-- **Add validation loops** where they help: do the work → inspect it against the
-  relevant criteria → revise. A validator may be a script, a reference checklist,
-  or a reasoned model self-check. See `references/instruction-patterns.md`.
+- State the direction, scope, and important considerations.
+- Explain the reason behind a non-obvious principle so the model can handle cases
+  the text does not enumerate.
+- Use examples to reveal judgment, not to define an exhaustive case table.
+- Prefer a small set of generative principles over detailed rules that encode one
+  author's interpretation of every edge case.
+- Let the model resolve tensions in context. Name a hard boundary only when the
+  work truly has one.
 
-## B4. Write the description to its role
+Qualities such as clarity, usefulness, taste, coherence, or sound judgment stay
+qualitative. Review them with model or human judgment and make uncertainty
+visible.
 
-A `description` does one of two jobs, and which one is a recorded fact rather
-than a judgement made while writing. Judge it against the job it has.
+### Workflow: constrain the spine
 
-- **When the description is a trigger**, it decides whether the skill activates at the right time. Too broad → "always available, never used."
-  - **Intent-based, not keyword-based.** Describe the problem the user is solving, not bare keywords. "Triggers on 'code review'" misfires on "review this code *tutorial*."
-  - **Written in the positive.** The model matches on what is present, not on what has been ruled out. Resolve observed mistriggers by making the intended situation more precise, without adding a negative catalogue of adjacent work.
-- **When the description is documentation**, something else supplies the decision to run the skill: a caller names it, a standing instruction names it, or the user types its name. Trigger phrasings and exclusions buy nothing there and cost listing budget.
-- **Never redirect.** No "use `other-skill` instead", no sibling names. Skills are distributed one at a time, so the neighbour may not be installed. State the work this skill covers precisely enough that its boundary is visible from the positive description.
+A workflow skill should prescribe only the coordination that makes it a
+workflow.
 
-Weak: `description: used when the user mentions "code review"`
-Strong: `description: Reviews code changes for quality issues and returns the findings. Applies when someone asks to review a diff, check code for bugs, or get a read on what was just written.`
+- Include an order only where later work depends on earlier work.
+- Define handoffs, approval points, invariants, and stop conditions that must be
+  shared across stages.
+- Leave the method inside a stage to the model when several approaches can work.
+- Keep a compact workflow inline. For substantial stages, keep only order and
+  handoff contracts in `SKILL.md`; route to one stage reference when that stage
+  begins.
+- Use a checklist only when persistent progress tracking prevents a real
+  coordination failure. A numbered procedure is enough for most short flows.
 
-Read `references/writing-descriptions.md` before judging this requirement or rewriting a
-description: it holds the full guidance behind these bullets, including how to
-settle which job a description has.
+### Task: separate judgment from machinery
 
-## B5. Calibrate control
+A task skill often mixes interpretive choices with deterministic
+operations. Treat them separately.
 
-Match the prescriptiveness of each part to the fragility of the task — most skills are a mix, so calibrate part by part.
+- Give the model task-specific knowledge and a clear default where choosing among
+  tools is incidental to the task.
+- Keep context-dependent planning and adaptation as guidance.
+- Use a script when the operation itself is repeatable, has a stable input/output
+  contract, or is fragile enough that textual reimplementation creates needless
+  variance.
+- Use schemas and mechanical validators at actual machine or external-contract
+  boundaries. Do not introduce structured intermediates solely to constrain the
+  model's reasoning.
+- Keep safety-critical and destructive operations explicit even when the rest of
+  the task allows freedom.
 
-- **Give freedom** where multiple approaches are valid and variation is fine; here, explaining *why* beats rigid steps. (A code-review checklist can say *what* to look for without prescribing exact steps.)
-- **Be prescriptive** where operations are fragile, consistency matters, or a sequence must hold — e.g. "Run exactly this command; do not add flags."
-- **Provide defaults, not menus.** Pick one tool and mention alternatives briefly as escape hatches: "Use pdfplumber for text; for scanned PDFs needing OCR, use pdf2image + pytesseract" — not "you can use pypdf, pdfplumber, PyMuPDF, or pdf2image…".
-- **Favor procedures over declarations.** Teach *how to approach* a class of problems, not the answer to one instance. "Read the schema, join on the `_id` convention, apply filters as WHERE clauses" generalizes; "join orders to customers on customer_id where region='EMEA'" doesn't. (Specific details — output templates, "never output PII", tool-specific commands — are still fine; it's the *approach* that should generalize.)
+## 4. Place content where it earns its load cost
 
-## B6. State the current contract directly
+Use progressive disclosure according to relevance, not file size alone:
 
-A skill is an executable description of how the agent should behave now. Write
-that contract directly, without making the agent reconstruct it from discarded
-alternatives or the path that produced it.
+| Layer | Content |
+|-------|---------|
+| `description` | What the skill contributes and the context needed for its recorded trigger or documentation role |
+| `SKILL.md` | The direction, shared workflow spine, essential constraints, gotchas, and routing decisions needed whenever the skill runs |
+| `references/` | Domain, variant, or stage detail loaded only when a named decision or step requires it |
+| `scripts/` | Deterministic operations executed without reproducing their logic in context |
+| `assets/` | Materials copied or transformed into the deliverable |
 
-- **Use the desired behavior as the subject.** State the action, output, boundary,
-  or decision rule that applies now. Prefer "Return a Markdown report with..." to
-  "Do not return the old JSON format." The first sentence gives the agent a
-  target; the second spends context activating an irrelevant target.
-- **Remove historical residue.** Origin stories, superseded names, former
-  workflows, and comparisons with previous implementations belong outside the
-  skill. Judge the current artifact on its own. Consult version history only when
-  an explicit migration, deprecation, interoperability, or versioned external
-  contract is itself part of the current deliverable and needs verification.
-- **Rewrite contrast-defined behavior.** Inspect `not X`, `instead of X`,
-  `rather than X`, and negative imperatives. If `X` is merely an old or rejected
-  design, delete the comparison and state the selected behavior. Preserve a
-  negative constraint when it directly expresses a present invariant or safety
-  boundary, such as "Never expose credentials."
-- **Require an explicit reason for compatibility content.** Compatibility belongs
-  in a skill only when interoperability, migration, deprecation, or a versioned
-  schema/protocol is part of the task's current deliverable. Name the external
-  contract and the consequence the agent must preserve. Treat compatibility as
-  absent when no such requirement is evidenced.
+Name each reference from `SKILL.md` at the point where it becomes relevant. Do
+not duplicate its contents in the body, eagerly load all references, or create a
+reference whose routing text costs more than the detail it contains.
 
-Detection sweep: first flag historical markers such as `legacy`, `formerly`,
-`previously`, `backward-compatible`, `no longer`, `replaced`, and `deprecated`.
-Then inspect contrast and negative forms semantically: ask whether the sentence
-defines an intrinsic current constraint or makes a discarded alternative part of
-the instructions. Report the latter even when it contains no historical keyword.
+Keep a gotcha in `SKILL.md` when the model must know it before it could recognize
+the condition that makes it relevant.
 
-## B7. Reusable instruction patterns
+## 5. Write the description to its actual role
 
-When a task calls for one of these structures, read `references/instruction-patterns.md` for the concrete template:
+A description may trigger the skill from the user's intent or document a skill
+selected by a caller. Determine which role is recorded before judging it.
 
-- **Gotchas** — environment facts that defy assumptions (keep in `SKILL.md`)
-- **Output templates** — give a concrete format to pattern-match against, rather than describing it in prose
-- **Checklists** — track progress across multi-step workflows with dependencies/gates
-- **Validation loops** — do → validate → fix → repeat until pass
-- **Plan-validate-execute** — for batch/destructive ops: build a plan, validate against a source of truth, then execute
-- **Bundled scripts** — if traces show the agent reinventing the same logic each run, write a tested script once and bundle it in `scripts/`
+- A trigger description states the positive intent the skill serves, using the
+  language in which that need appears.
+- A documentation description identifies the contribution, inputs, or place in a
+  larger flow without pretending to perform discovery.
+- Neither redirects to sibling skills or catalogs excluded work.
+- Both stay concise because descriptions share the global context budget.
 
----
+Read `references/writing-descriptions.md` when writing or reviewing a
+description.
 
-## Conformance checklist
+## 6. Select structures after classification
 
-Run this against the skill (or dispatch `skill-quality-review`):
+Read `references/instruction-patterns.md` only when the classification above
+shows that a concrete structure may help. Read `references/anti-patterns.md` when
+reviewing for excess or misplaced control. Read
+`references/agentskills-best-practices.md` only when these condensed rules leave
+an authoring question unresolved.
 
-- [ ] **Adds value**: content is what the agent *wouldn't* know on its own (no "write clean code", no explaining what a PDF is)
-- [ ] **Concrete + rationale**: every non-obvious rule has a specific criterion and a "because [real problem]"
-- [ ] **Gotchas present** (if the domain has them) and kept in `SKILL.md`
-- [ ] **Judgeable outcome**: the desired deliverable and relevant evidence are concrete enough for reasoned review; qualitative work has not been forced into an artificial binary proxy
-- [ ] **Description matches its role**: a trigger is intent-based and positive; documentation carries no trigger phrasings; neither names a sibling skill
-- [ ] **Calibrated**: prescriptive where fragile, free where flexible; defaults not menus; procedures not one-off answers
-- [ ] **Present-tense contract**: desired behavior is stated directly; history and discarded alternatives are absent; any compatibility content names the external contract that requires it
-- [ ] **Context-economical**: `SKILL.md` is the orchestration spine; substantial branch and step details load individually from discoverable references only when needed; supporting background has a separate conditional home; content is not duplicated across layers
-- [ ] **Refined**: run against ≥1 real task and revised from the trace (the empirical loop is `skill-quality-optimize`)
+The available structures are not a checklist. The absence of a template,
+checklist, schema, script, or validation loop is not a defect unless the task's
+actual coordination or deterministic boundary needs it.
+
+## Review rule
+
+First classify the skill and its substantial parts. Apply the common standard,
+then only the relevant role guidance. When two designs communicate the same
+direction and preserve the same real constraints, prefer the simpler one and
+leave the remaining judgment to the model.

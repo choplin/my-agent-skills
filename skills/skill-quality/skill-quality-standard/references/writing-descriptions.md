@@ -1,7 +1,7 @@
 # Writing Descriptions
 
-How to write the `description` of a skill, and how to judge one. Loaded from
-standard requirement B4.
+How to write the `description` of a skill, and how to judge one. Load this from
+the standard's description section.
 
 ## A description does one of two jobs
 
@@ -46,11 +46,10 @@ Upstream
 [skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices),
 restated because everything below assumes it.
 
-**Say what the skill does and when to use it.** Both halves. "Extract text and
-tables from PDF files, fill forms, merge documents" is the first half; "Use when
-working with PDF files or when the user mentions PDFs, forms, or document
-extraction" is the second. A description with only the first half cannot be
-selected reliably.
+**Say what the skill contributes.** A trigger also states the positive intent
+that should select it; a documentation description instead identifies its place
+or contribution inside the already-selected flow. Do not add trigger language
+where a caller supplies the decision.
 
 **Write in the third person.** The description is injected into the system
 prompt, and a shifting point of view causes discovery problems.

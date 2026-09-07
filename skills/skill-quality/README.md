@@ -6,9 +6,14 @@ creating content; this family does not own their intent-capture or drafting flow
 
 ## Problem
 
-"Good" needs a stable qualitative definition before it can be reviewed.
-`skill-quality-standard` owns that definition. Two deliberately separate paths
-answer different questions:
+"Good" depends first on what a skill contributes. `skill-quality-standard`
+identifies whether its value comes from capability uplift, encoded intent, or both,
+distinguishes guidance, workflow coordination, and task execution, then
+calibrates each part as interpretive, coordinated, or deterministic. It does not
+force one content shape onto every skill.
+
+After that classification, two separate assessment paths answer different
+questions:
 
 - **Qualitative path (normal)** — the model applies the standard with judgment to
   the skill text, its context, and observable deliverables. `skill-quality-review`
@@ -22,9 +27,11 @@ unreliable, iterating *degrades* quality rather than improving it.
 
 ## Architecture
 
-The paths share artifacts, not verdicts. The qualitative review judges the
-standard as a whole. The quantitative path reports only what its named task set
-and mechanical signal measure. Neither result is converted into the other.
+The paths share artifacts, not verdicts. The qualitative review applies the
+common standard and only the role guidance relevant to the target. The
+quantitative path is a specialized option for outcomes with a real mechanical
+boundary; it reports only what its named task set and signal measure. Neither
+result is converted into the other.
 
 | Path | Owner | Question | Availability |
 |---|---|---|---|
@@ -48,10 +55,11 @@ present usage, separate from its eligibility rule and setup cost.
 
 ### Skill: `skill-quality-standard`
 
-The canonical B0–B7 standard for good skill content. It owns the loadability
-preflight, normative requirements, anti-patterns, description guidance, and
-reusable instruction patterns. Authoring, review, and improvement refer to it by
-name rather than carrying independent definitions of quality.
+The role-aware standard for good skill content. It owns the initial
+classification, common requirements, role-specific guidance, loadability
+preflight, anti-patterns, description guidance, and optional instruction
+patterns. Authoring, review, and improvement refer to it by name rather than
+carrying independent definitions of quality.
 
 ### Skill: `skill-quality-optimize`
 
@@ -81,9 +89,8 @@ keeps every candidate conformant with `skill-quality-standard`.
 
 ### Skill: `skill-quality-review`
 
-One advisory review pass — findings, never a gate or a loop. **Static** checks the
-target against `skill-quality-standard`, with B1–B6 reported as conformance topics
-and B7 supplying reusable patterns. Optional **family** mode
+One advisory review pass — findings, never a gate or a loop. **Static** classifies
+the target and applies the relevant parts of `skill-quality-standard`. Optional **family** mode
 reconstructs caller → delegate → reference → deliverable paths to find unused
 contract data, duplicated ownership, repeated context, and historical residue
 across cooperating skills. Optional **deliverable** mode runs the skill on a few

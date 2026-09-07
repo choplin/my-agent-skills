@@ -1,90 +1,71 @@
-# Content Anti-Patterns
+# Content anti-patterns
 
-Common failure modes in skill content, grouped by the content-quality topic they violate (see SKILL.md, Layer B). Use this to detect problems when reviewing a skill.
+Use these as examples of misplaced control, not as an exhaustive defect list.
+Classify the skill and the affected passage before applying them.
 
-## Context economy (B1)
-
-| Anti-pattern | Example | Problem |
-|--------------|---------|---------|
-| Explaining what the agent knows | "A PDF is a file format that contains text..." | Wastes context; agent already knows it |
-| Scope creep | One skill covering review + security + perf + docs | Tries to do too much, activates imprecisely, does nothing well |
-| Exhaustive detail | Documenting every edge case in `SKILL.md` | Agent struggles to extract what's relevant; pursues inapplicable paths |
-| All branches inline | Full AWS, GCP, and Azure procedures in `SKILL.md` | Every run loads two irrelevant workflows; keep shared routing in the body and branch detail in references |
-| All step details inline | A five-step workflow includes each step's full procedure in `SKILL.md` | Work on one step carries instructions for completed and future steps; keep orchestration in the body and load one step reference when that step begins |
-| Eager step loading | "Read all files in `references/` before starting" | Defeats progressive disclosure by loading mutually irrelevant step details together |
-| Background in the execution spine | Research history or design provenance between procedural steps | Always spends context despite not changing execution; retain it as a supporting reference only when future audit or revision needs it |
-| Reference without a load trigger | "see references/ for details" | Agent doesn't know *when* or *why* to load it, so it either ignores it or loads it needlessly |
-| Orphaned reference | A useful research or procedure file never named by `SKILL.md` | The agent cannot discover it from the loaded skill |
-| Duplicated layers | The same rules summarized in `SKILL.md` and repeated in a reference | Wastes context and creates two copies that can drift |
-
-**Detection**: definitions of common concepts; long feature lists in one skill;
-`SKILL.md` over ~500 lines; multiple branch- or step-specific procedures loaded
-together; instructions to read every reference before starting; step references
-loaded before their step begins; background that does not affect an action or
-decision; reference files without a specific "read this when…" or "read this
-only to audit/revise…" condition; useful files not discoverable from `SKILL.md`;
-material duplicated across layers.
-
-## Why & concrete criteria (B2)
+## Classification failures
 
 | Anti-pattern | Example | Problem |
 |--------------|---------|---------|
-| Generic advice | "Write clean code" | Agent already knows this; adds no experiential insight |
-| Missing rationale | "Always use interfaces" | Agent can't judge exceptions without knowing why |
-| Ungrounded threshold | "Functions ≤ 20 lines" with no basis | Agent can't judge the 21-line edge case |
-| Assumed context | "Follow team standards" | Agent doesn't know your standards |
-| Gotcha buried in a reference file | soft-delete rule in `references/db.md` | Agent hits the bug before loading the file |
+| One shape for every skill | Requiring every normative skill to have steps, a deliverable template, and a validator | Confuses guidance with workflow and machinery |
+| Whole-skill labeling | Calling a mixed task skill "deterministic" because one file transform is scriptable | Pushes exact control into planning and judgment that should remain flexible |
+| Mechanical-looking taxonomy | Required metadata or a scoring tree for deciding how much freedom the model gets | Pretends contextual classification is deterministic and creates another contract to maintain |
 
-**Detection**: adjectives without measurable rules; rules without "because [specific problem]"; references to unspecified conventions; gotchas outside `SKILL.md`.
-
-## Judgeable outcome (B3)
+## Common failures
 
 | Anti-pattern | Example | Problem |
 |--------------|---------|---------|
-| Ungrounded success | "Output should be high quality" | Agent and reviewer have no evidence or rationale on which to judge it |
-| Process-focused criteria | "✓ Read code ✓ Find issues ✓ Write review" | All steps done, but the deliverable may still be wrong |
-| Generic example | "AI: Provides helpful guidance" | No concrete input/output to match against |
-| Artificial binary proxy | "Pass if the prose contains all five headings" | Replaces qualitative usefulness with an easy-to-count structure |
+| Explaining what the model knows | "A PDF is a file format that contains text..." | Spends context without changing action or judgment |
+| Scope creep | One skill covering review, security, performance, and documentation without a common task | Activates imprecisely and mixes unrelated guidance |
+| Exhaustive detail | Documenting every imagined edge case | Makes irrelevant paths salient and suppresses useful judgment |
+| Historical residue | "This used to call v1; it now calls v2" | Loads a discarded execution model alongside the current one |
+| Duplicated layers | The same rules in `SKILL.md` and a reference | Wastes context and creates competing copies |
+| Unused contract data | A field or artifact is produced but no consumer reads it | Adds coordination cost without affecting behavior |
 
-**Detection**: "high quality" / "useful" / "correct" without evidence or rationale;
-checklists that verify steps instead of the deliverable; abstract examples;
-binary or numeric proxies that omit the qualitative property they claim to measure.
-
-## Triggering description (B4)
+## Guidance failures
 
 | Anti-pattern | Example | Problem |
 |--------------|---------|---------|
-| Keyword-based trigger | "Triggers on 'code review'" | "Review this code *tutorial*" triggers incorrectly |
-| Negative boundary catalogue | "Should NOT trigger for tutorials, plans, or prose reviews" | Makes adjacent work salient while leaving the intended situation underspecified |
+| Empty adjective | "Use good judgment" | Gives the model no direction it did not already have |
+| Rule catalog | A principle expanded into dozens of narrow cases | Replaces transferable reasoning with one author's enumerated interpretation |
+| False objectivity | "Pass if the review contains all five headings" | Substitutes a countable proxy for qualitative usefulness |
+| Specification theater | Qualitative guidance expanded into YAML/JSON, a checklist, and a validator | Adds context and maintenance while still not guaranteeing behavior |
+| Unexplained hard boundary | "Always use interfaces" | Prevents the model from judging exceptions because the reason is missing |
 
-**Detection**: keyword lists without intent; `not for` / `should not trigger`
-catalogues; redirects to sibling skills. For observed false positives, require a
-more precise positive intent rather than another exclusion.
+Good guidance may remain qualitative. Ask whether it supplies a useful direction,
+consideration, trade-off, or boundary—not whether it can be converted into a
+binary test.
 
-## Calibration (B5)
-
-| Anti-pattern | Example | Problem |
-|--------------|---------|---------|
-| Menu of options | "Use pypdf, pdfplumber, PyMuPDF, or pdf2image…" | No default; agent wastes time choosing |
-| Rigid steps for a flexible task | scripted exact steps for code review | Prevents context-dependent judgment |
-| One-off answer instead of a method | "Join orders to customers on customer_id where region='EMEA'" | Useful only for this exact task; doesn't generalize |
-
-**Detection**: equal-weight option lists; prescriptive sequences where variation is fine; instructions that solve one instance rather than teaching the approach.
-
-## Current contract (B6)
+## Workflow failures
 
 | Anti-pattern | Example | Problem |
 |--------------|---------|---------|
-| Compatibility by default | "Keep the legacy output for backward compatibility" with no identified consumer or contract | Makes an unevidenced former state constrain current behavior |
-| Historical narration | "This used to call the v1 tool; it now calls v2" | Loads an irrelevant execution path alongside the active one |
-| Behavior defined by rejection | "Do not produce the old JSON response" | Activates the rejected format without specifying the desired deliverable |
-| Implicit contrast | "Use the report workflow instead of the previous export flow" | Forces the agent to distinguish two models when only one should be in context |
+| Decorative sequence | Numbered steps whose order has no dependency | Turns a flexible task into ceremony |
+| All stage detail inline | A long orchestration skill includes every stage's full procedure | Loads completed and future work into the current stage |
+| Eager reference loading | "Read every file in `references/` before starting" | Defeats progressive disclosure |
+| Missing handoff | A stage produces an artifact whose next consumer and required properties are unclear | Leaves the actual coordination contract implicit |
+| Checklist by default | A short, obvious procedure duplicated as progress boxes | Adds tracking state without preventing a meaningful omission |
 
-**Detection**: flag history markers (`legacy`, `formerly`, `previously`,
-`backward-compatible`, `no longer`, `replaced`, `deprecated`) and contrast forms
-(`not X`, `instead of X`, `rather than X`, negative imperatives). Classify each
-match by meaning, not syntax. It is a defect when the sentence imports a former or
-rejected design into the current instructions. It is valid when it directly
-expresses a present invariant or safety boundary. Compatibility content is valid
-only when it names the current interoperability, migration, deprecation, or
-versioned schema/protocol requirement that makes it executable.
+## Deterministic-operation failures
+
+| Anti-pattern | Example | Problem |
+|--------------|---------|---------|
+| Prose reimplementation | Repeatedly asking the model to hand-write the same stable file transform | Recreates avoidable variance and cost |
+| Scripted judgment | A script assigns a quality verdict to prose from keyword presence | Encodes a weak proxy as authority |
+| Invented intermediate schema | Requiring planning thoughts in JSON although no tool or consumer needs JSON | Constrains reasoning without establishing a real boundary |
+| Validator without ground truth | A shell script checks formatting and claims the result is useful | Validates what is easy to count rather than what matters |
+
+Use scripts and schemas when they implement stable operations or real interfaces.
+Their presence is not evidence that the surrounding task is deterministic.
+
+## Description and placement failures
+
+| Anti-pattern | Example | Problem |
+|--------------|---------|---------|
+| Keyword trigger | "Triggers on `code review`" | Matches words rather than user intent |
+| Negative catalog | "Not for tutorials, plans, or prose" | Makes adjacent work salient without defining the positive scope |
+| Reference without a load condition | "See references for details" | The model cannot decide when the context cost is justified |
+| Orphaned reference | Useful material never named by `SKILL.md` | The activated skill cannot discover it |
+
+When reviewing, prefer removing, merging, or generalizing misplaced content.
+Move detail only when it remains useful and has a clear load condition.

@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# lint-frontmatter.sh — will this skill's YAML frontmatter actually load?
+# lint-frontmatter.sh — catch common load-blocking frontmatter mistakes.
 #
-# A skill whose frontmatter does not parse is never loaded at all: the agent behaves
-# as if it did not exist, and the symptom ("my skill never triggers") looks nothing
-# like the cause. This is the mechanical precondition to any content review.
+# A skill whose frontmatter does not parse is never loaded. This lightweight lint
+# catches recurring mistakes without claiming to implement a complete YAML parser.
 #
 # It checks exactly four things, and nothing else:
 #   1. delimiters     — opens with --- on line 1, closed by a later ---
@@ -15,7 +14,7 @@
 # breaks skills, and the only one with real subtlety — is scalar_trap_in().
 #
 # Usage: lint-frontmatter.sh [PATH...]   # SKILL.md files and/or dirs (default: .)
-# Exit:  0 = all clean, 1 = at least one file is broken, 2 = bad usage
+# Exit:  0 = no checked trap found, 1 = at least one likely load blocker, 2 = bad usage
 set -euo pipefail
 
 die() { echo "error: $*" >&2; exit 2; }
@@ -127,10 +126,10 @@ main() {
   done
 
   if [ "$broken" -gt 0 ]; then
-    echo "lint-frontmatter: ${#files[@]} checked, $broken BROKEN — these skills will not load." >&2
+    echo "lint-frontmatter: ${#files[@]} checked, $broken with likely load-blocking mistakes." >&2
     return 1
   fi
-  echo "lint-frontmatter: ${#files[@]} checked, all clean." >&2
+  echo "lint-frontmatter: ${#files[@]} checked, common traps clean." >&2
 }
 
 main "$@"

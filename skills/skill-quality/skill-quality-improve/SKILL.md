@@ -47,14 +47,21 @@ distinct train tasks** exhibit it.
 For each surviving cluster, write the smallest edit that would have prevented the
 failure, while keeping the candidate conformant with `skill-quality-standard`:
 
-- Prefer adding a **Gotcha** or a **concrete criterion with its rationale** over
-  vague prose — the failure reason *is* the rationale ("because task t2 produced
-  X when the input was Y").
+- Classify the affected part as interpretive, coordinated, or deterministic
+  before choosing the edit.
+- For an interpretive failure, adjust the smallest relevant principle, rationale,
+  example, or gotcha. For a coordination failure, adjust the sequence, handoff,
+  invariant, or stop condition. For a deterministic failure, adjust the existing
+  operation or its real input/output contract; use a script or schema only when
+  that boundary is genuinely mechanical.
 - Keep `SKILL.md` economical: if the fix is bulky reference material, move it to
   `references/` with an explicit load trigger, not into the always-loaded body.
-- Do not rewrite working sections. Touch only what a failure cluster points at.
+- Prefer correcting, deleting, or generalizing existing content before adding a
+  new rule. Do not rewrite working sections; touch only what a failure cluster
+  points at.
 
-Apply B6 to every changed passage: state the resulting current behavior directly.
+Apply the standard's common requirement to every changed passage: state the
+resulting current behavior directly.
 Remove former-state or rejected-alternative framing introduced by the edit. Retain
 compatibility language only when the failure cluster identifies a current
 interoperability, migration, deprecation, or versioned schema/protocol requirement;
@@ -82,7 +89,7 @@ edits). Record a one-line changelog of what changed and which failure clusters i
 targets — the orchestrator uses this when reporting, and it becomes the `--reason`
 passed to `gate.sh`.
 
-Then run the B0 loadability preflight on the candidate — **mandatory whenever the
+Then run the standard's loadability preflight on the candidate — **mandatory whenever the
 edit touched the frontmatter**, since an edit to `description` is the likeliest way
 to break it:
 

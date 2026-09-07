@@ -1,93 +1,95 @@
-# Instruction Patterns
+# Instruction patterns
 
-Reusable structures for skill content. Not every skill needs all of them — use the ones that fit the task. (Source: [agentskills.io best practices](https://agentskills.io/skill-creation/best-practices).)
+Select a structure only after classifying the work it serves. These are options,
+not required features of a good skill.
 
-## Gotchas
+## For interpretive guidance
 
-Environment-specific facts that defy reasonable assumptions. These are concrete corrections to mistakes the agent *will* make otherwise — not general advice. Keep them in `SKILL.md` (not a reference file): the agent must read them before hitting the situation, and may not recognize the trigger to load a separate file.
+### Principles with rationale
+
+State a small number of directions and explain why they matter. Let the model
+apply them to cases not named in the skill.
+
+```markdown
+Prefer changes that preserve the reader's existing mental model, because a
+locally elegant rewrite can make the surrounding document harder to navigate.
+```
+
+### Representative examples
+
+Use one example to expose a distinction or quality of judgment. Say what the
+example demonstrates; do not grow it into a case catalog.
+
+### Gotchas
+
+Keep an environment fact in `SKILL.md` when the model must know it before it
+could recognize the condition that would trigger a reference.
 
 ```markdown
 ## Gotchas
 
-- The `users` table uses soft deletes. Queries must include
-  `WHERE deleted_at IS NULL` or results include deactivated accounts.
-- The user ID is `user_id` in the database, `uid` in the auth service,
-  and `accountId` in the billing API — all the same value.
-- `/health` returns 200 whenever the web server is up, even if the DB is
-  down. Use `/ready` to check full service health.
+- The `users` table uses soft deletes. Include `deleted_at IS NULL` in queries
+  whose result should contain active users only.
 ```
 
-> When you correct an agent mid-task, add the correction here. It's the most direct way to improve a skill iteratively.
+## For coordinated workflows
 
-## Output templates
+### Compact procedure
 
-Agents pattern-match against concrete structures better than prose descriptions. Short templates inline in `SKILL.md`; longer or conditional ones in `assets/`, referenced so they load only when needed.
+Use a short numbered procedure when order matters. State why a gate or handoff
+exists when the dependency is not obvious.
 
-````markdown
-## Report structure
+### Stage routing
 
-Use this template, adapting sections as needed:
+Keep the shared order and handoff contract in `SKILL.md`. Load a detailed stage
+reference only when that stage begins.
 
 ```markdown
-# [Analysis Title]
-
-## Executive summary
-[One-paragraph overview of key findings]
-
-## Key findings
-- Finding 1 with supporting data
-
-## Recommendations
-1. Specific actionable recommendation
+1. Frame the decision and write `brief.md`.
+2. Before research, read `references/research.md`; use `brief.md` as its scope.
+3. Synthesize the decision from the research artifact.
 ```
-````
 
-## Checklists for multi-step workflows
+### Persistent checklist
 
-An explicit checklist helps the agent track progress and avoid skipping steps — especially with dependencies or validation gates.
+Use a checklist when work spans contexts or branches and losing progress would
+cause a meaningful coordination failure. Do not duplicate an ordinary short
+procedure as a checklist.
+
+## For deterministic operations
+
+### Bundled script
+
+Bundle a script when an operation has stable inputs and outputs, deterministic
+reliability matters, or the same implementation would otherwise be recreated.
+Document the invocation and failure behavior; keep implementation detail out of
+`SKILL.md` unless the model must modify the script.
+
+### Schema or structured intermediate
+
+Use a schema when a tool, protocol, or downstream consumer requires exact
+structure. Do not use one merely to serialize the model's reasoning.
+
+### Mechanical validation loop
+
+Use do → validate → fix when a trustworthy checker exists for the property being
+validated. Name that property and avoid claiming the checker proves qualities it
+cannot observe.
 
 ```markdown
-## Form processing workflow
-
-Progress:
-- [ ] Step 1: Analyze the form (`scripts/analyze_form.py`)
-- [ ] Step 2: Create field mapping (edit `fields.json`)
-- [ ] Step 3: Validate mapping (`scripts/validate_fields.py`)
-- [ ] Step 4: Fill the form (`scripts/fill_form.py`)
-- [ ] Step 5: Verify output (`scripts/verify_output.py`)
+1. Generate the configuration.
+2. Run `scripts/validate-config.sh <path>`; it checks the external schema.
+3. Fix reported schema violations and rerun until it exits 0.
 ```
 
-## Validation loops
+## For destructive or safety-critical operations
 
-Have the agent validate its own work before moving on: do the work → run a validator (script, reference checklist, or self-check) → fix → repeat until it passes.
+Use plan → verify against a source of truth → execute when a mistaken target or
+order would cause material harm. Structure only the fields needed to validate or
+execute the operation; the plan need not be machine-readable otherwise.
 
-```markdown
-## Editing workflow
+## For output shape
 
-1. Make your edits
-2. Run validation: `python scripts/validate.py output/`
-3. If validation fails: review the error, fix, re-run
-4. Only proceed when validation passes
-```
-
-A reference document can serve as the validator — instruct the agent to check its work against it before finalizing.
-
-## Plan-validate-execute
-
-For batch or destructive operations, have the agent build an intermediate plan in a structured format, validate it against a source of truth, and only then execute.
-
-```markdown
-## PDF form filling
-
-1. Extract fields: `python scripts/analyze_form.py input.pdf` → `form_fields.json`
-2. Create `field_values.json` mapping each field name to its value
-3. Validate: `python scripts/validate_fields.py form_fields.json field_values.json`
-4. If validation fails, revise `field_values.json` and re-validate
-5. Fill: `python scripts/fill_form.py input.pdf field_values.json output.pdf`
-```
-
-The key ingredient is step 3: a validator that checks the plan against the source of truth and emits actionable errors ("Field 'signature_date' not found — available: customer_name, order_total, signature_date_signed") so the agent can self-correct.
-
-## Bundled scripts
-
-When iterating, compare execution traces across runs. If the agent keeps reinventing the same logic (building charts, parsing a format, validating output), write a tested script once and bundle it in `scripts/`. This removes a recurring source of variance and error.
+Provide a template when a real consumer expects a stable shape. For a
+human-facing qualitative deliverable, a light outline or representative example
+usually preserves more useful judgment than a mandatory field-by-field schema.
