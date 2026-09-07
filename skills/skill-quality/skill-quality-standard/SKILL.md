@@ -57,7 +57,50 @@ Once a skill activates, its full body loads into the context window and competes
 - **Add what the agent lacks; omit what it knows.** Don't explain what a PDF is, how HTTP works, or what a migration does. Jump straight to project-specific conventions, non-obvious edge cases, and the particular tools/APIs to use. Test for each line: *"Would the agent get this wrong without this instruction?"* If no, cut it.
 - **Design coherent units.** Scope a skill like a function — one coherent unit of work that composes with others. "Query a database and format results" is coherent; adding "database administration" is too much. Too narrow forces many skills to co-load; too broad is hard to trigger precisely.
 - **Aim for moderate detail.** Concise stepwise guidance with one working example beats exhaustive documentation. When you find yourself covering every edge case, ask whether the agent's own judgment handles most of them.
-- **Use progressive disclosure with explicit load triggers.** Keep `SKILL.md` lean (the spec recommends <500 lines / <5,000 tokens); move detailed material to `references/`. Crucially, tell the agent *when* to load each file: "Read `references/api-errors.md` if the API returns a non-200 status" beats a generic "see references/ for details."
+
+Apply progressive disclosure as three distinct layers. Each layer earns its
+place by answering a different question:
+
+| Layer | What belongs there | Loading rule |
+|-------|--------------------|--------------|
+| `description` | What the skill does and the information its recorded role needs for discovery or identification | Always present; apply B4's trigger/documentation distinction |
+| `SKILL.md` | The execution spine needed on every run: objective and deliverable, step sequence, decision points, present constraints and gotchas, plus routing conditions for bundled resources | Loaded when the skill activates |
+| `references/` | Execution detail for an individual step or flow, plus material needed only for a particular domain, variant, exception, audit, or maintenance question | Loaded only when that step begins or another named condition applies |
+
+- **Make `SKILL.md` a process, not a knowledge dump.** Keep the conceptual
+  background needed to execute or choose among branches; move extended theory,
+  schemas, exhaustive examples, API detail, and variant-specific procedures out
+  of the always-loaded body. The spec recommends keeping the body below 500 lines
+  and 5,000 tokens, but relevance on every run is the governing test — staying
+  under the limit does not justify unrelated detail.
+- **Route operational detail at its decision point.** Keep the common workflow
+  and selection rule in `SKILL.md`, then name the exact reference and load
+  condition: "For AWS deployments, read `references/aws.md` before planning the
+  deployment." A skill with several workflows keeps only their shared process and
+  routing logic in the body; it does not inline every workflow's detailed steps.
+- **Disclose multi-step workflows one step at a time.** When a skill coordinates
+  several substantial steps, keep their order, handoff contract, and completion
+  conditions in `SKILL.md`; put each step's execution instructions in its own
+  reference file. Tell the agent to read that file when the step begins, use it to
+  produce the handoff, then continue from the orchestration spine. Do not preload
+  all step references: while one step is active, details for later or completed
+  steps are irrelevant context. A compact step may remain inline when separating
+  it would cost more routing text than it saves, but several detailed procedures
+  in one always-loaded body are a strong signal to split them.
+- **Keep always-needed safeguards in the body.** A constraint, invariant, or
+  gotcha that must shape every run — or that the agent may not know it needs until
+  after making the mistake — cannot depend on a conditional reference. B2 defines
+  this rule for gotchas.
+- **Separate supporting background from execution guidance.** Research notes,
+  source material, provenance, and design rationale that do not change execution
+  belong in `references/`, when retaining them is useful. Do not make them a step
+  in the normal workflow. Make them discoverable with a narrow purpose such as
+  "Read `references/research.md` only when auditing the rationale or revising this
+  skill." If no plausible future task needs the material, omit it from the skill.
+- **Do not duplicate layers.** A detail has one canonical home. `SKILL.md` names
+  the reference and the condition for reading it; it does not repeat a condensed
+  copy that grows stale. Keep references directly discoverable from `SKILL.md`
+  rather than relying on the agent to inventory a directory.
 
 ## B2. Capture the "why" and concrete criteria
 
@@ -170,5 +213,5 @@ Run this against the skill (or dispatch `skill-quality-review`):
 - [ ] **Description matches its role**: a trigger is intent-based and positive; documentation carries no trigger phrasings; neither names a sibling skill
 - [ ] **Calibrated**: prescriptive where fragile, free where flexible; defaults not menus; procedures not one-off answers
 - [ ] **Present-tense contract**: desired behavior is stated directly; history and discarded alternatives are absent; any compatibility content names the external contract that requires it
-- [ ] **Context-economical**: lean `SKILL.md`; heavy material in `references/` with explicit load triggers
+- [ ] **Context-economical**: `SKILL.md` is the orchestration spine; substantial branch and step details load individually from discoverable references only when needed; supporting background has a separate conditional home; content is not duplicated across layers
 - [ ] **Refined**: run against ≥1 real task and revised from the trace (the empirical loop is `skill-quality-optimize`)

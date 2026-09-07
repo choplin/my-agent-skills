@@ -9,9 +9,21 @@ Common failure modes in skill content, grouped by the content-quality topic they
 | Explaining what the agent knows | "A PDF is a file format that contains text..." | Wastes context; agent already knows it |
 | Scope creep | One skill covering review + security + perf + docs | Tries to do too much, activates imprecisely, does nothing well |
 | Exhaustive detail | Documenting every edge case in `SKILL.md` | Agent struggles to extract what's relevant; pursues inapplicable paths |
-| Reference without a load trigger | "see references/ for details" | Agent doesn't know *when* to load it, so it doesn't |
+| All branches inline | Full AWS, GCP, and Azure procedures in `SKILL.md` | Every run loads two irrelevant workflows; keep shared routing in the body and branch detail in references |
+| All step details inline | A five-step workflow includes each step's full procedure in `SKILL.md` | Work on one step carries instructions for completed and future steps; keep orchestration in the body and load one step reference when that step begins |
+| Eager step loading | "Read all files in `references/` before starting" | Defeats progressive disclosure by loading mutually irrelevant step details together |
+| Background in the execution spine | Research history or design provenance between procedural steps | Always spends context despite not changing execution; retain it as a supporting reference only when future audit or revision needs it |
+| Reference without a load trigger | "see references/ for details" | Agent doesn't know *when* or *why* to load it, so it either ignores it or loads it needlessly |
+| Orphaned reference | A useful research or procedure file never named by `SKILL.md` | The agent cannot discover it from the loaded skill |
+| Duplicated layers | The same rules summarized in `SKILL.md` and repeated in a reference | Wastes context and creates two copies that can drift |
 
-**Detection**: definitions of common concepts; long feature lists in one skill; `SKILL.md` over ~500 lines; reference files with no "read this when…" condition.
+**Detection**: definitions of common concepts; long feature lists in one skill;
+`SKILL.md` over ~500 lines; multiple branch- or step-specific procedures loaded
+together; instructions to read every reference before starting; step references
+loaded before their step begins; background that does not affect an action or
+decision; reference files without a specific "read this when…" or "read this
+only to audit/revise…" condition; useful files not discoverable from `SKILL.md`;
+material duplicated across layers.
 
 ## Why & concrete criteria (B2)
 

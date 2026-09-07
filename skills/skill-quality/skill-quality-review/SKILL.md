@@ -103,7 +103,14 @@ as "the skill doesn't trigger" (a B4 symptom) when B4 is not the problem at all.
 
 - **B1 context economy** — Any content explaining what the agent already knows (cut
   candidates)? Coherent unit or scope-creeping? `SKILL.md` lean with heavy material
-  in `references/` behind "read this when…" triggers?
+  in `references/` behind specific load conditions? Does the body contain only the
+  execution spine needed across runs, with branch-specific procedures routed at
+  their decision points? For a substantial multi-step workflow, does the body keep
+  only sequence and handoff contracts while each step's detail loads from its own
+  reference when that step begins? Does any instruction eagerly load unrelated
+  step references? Is non-execution background kept out of the normal workflow
+  and exposed, if useful, only through a narrow audit/revision reference? Is each
+  reference directly discoverable without duplicating its contents in the body?
 - **B2 why & concrete criteria** — For each piece of guidance: concrete? has
   rationale? Can the agent apply it on an edge case without asking for
   clarification? Gotchas present (where the domain has them) and kept in `SKILL.md`?
