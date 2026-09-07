@@ -38,6 +38,14 @@ to_json_array() { printf '%s' "$1" | jq -R 'split(",") | map(gsub("^\\s+|\\s+$";
 TRAIN_J=$(to_json_array "$TRAIN")
 HOLD_J=$(to_json_array "$HOLDOUT")
 
+jq -n -e --argjson train "$TRAIN_J" --argjson holdout "$HOLD_J" '
+  ($train | length) > 0
+  and ($holdout | length) > 0
+  and ($train | unique | length) == ($train | length)
+  and ($holdout | unique | length) == ($holdout | length)
+  and (($train - $holdout) | length) == ($train | length)
+' >/dev/null || die "train and holdout must be non-empty, contain unique task ids, and be disjoint"
+
 SIGCMD_J=$(printf '%s' "$SIGNAL_CMD" | jq -R .)
 
 jq -n \

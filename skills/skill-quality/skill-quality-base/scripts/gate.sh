@@ -23,9 +23,25 @@ STATE="$RUN_DIR/state.json"
 [ -f "$STATE" ] || die "no state.json in $RUN_DIR"
 tmp="$STATE.tmp"
 
+split_complete() {
+  jq -e --arg v "$1" --arg s "$2" '
+    (.tasks[$s] // []) as $declared
+    | (.scores[$v] // {}) as $score
+    | ($score[($s + "_detail")] // null) as $detail
+    | if ($detail | type) != "object" or ($declared | length) == 0 then false
+      else
+        ($score[$s] | type) == "number"
+        and (($detail | keys | sort) == ($declared | sort))
+        and all($detail[]; . == "pass" or . == "fail")
+        and ($score[$s] == ([$detail[] | select(. == "pass")] | length) / ($detail | length))
+      end
+  ' "$STATE" >/dev/null
+}
+
 if [ "$SETBASE" -eq 1 ]; then
-  V0H=$(jq -r '.scores.v0.holdout // "null"' "$STATE")
-  [ "$V0H" != "null" ] || die "v0 holdout not recorded yet (run record.sh --version v0 --split holdout first)"
+  split_complete v0 train || die "v0 train results are missing or incomplete"
+  split_complete v0 holdout || die "v0 holdout results are missing or incomplete"
+  V0H=$(jq -r '.scores.v0.holdout' "$STATE")
   jq '.best = {version: "v0", holdout_score: .scores.v0.holdout} | .status = "running"' "$STATE" > "$tmp"
   mv "$tmp" "$STATE"
   echo "baseline set: v0 holdout=$V0H" >&2
@@ -37,8 +53,9 @@ fi
 
 BEST_H=$(jq -r '.best.holdout_score' "$STATE")
 [ "$BEST_H" != "null" ] || die "baseline not set — run: gate.sh $RUN_DIR --set-baseline"
-CAND_H=$(jq -r --arg v "$CAND" '.scores[$v].holdout // "null"' "$STATE")
-[ "$CAND_H" != "null" ] || die "candidate $CAND has no recorded holdout score (evaluate + record.sh first)"
+split_complete "$CAND" train || die "candidate $CAND train results are missing or incomplete"
+split_complete "$CAND" holdout || die "candidate $CAND holdout results are missing or incomplete"
+CAND_H=$(jq -r --arg v "$CAND" '.scores[$v].holdout' "$STATE")
 
 jq --arg cand "$CAND" --arg reason "$REASON" '
   .budget.iteration += 1

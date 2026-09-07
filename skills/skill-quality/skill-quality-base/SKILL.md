@@ -80,7 +80,7 @@ Full schema, layout, and stop conditions: `references/state-schema.md`.
 
 ## Scripts (shell, agent-agnostic)
 
-POSIX-ish `bash` (works on macOS's bash 3.2). All three scripts depend on **`jq`**
+POSIX-ish `bash` (works on macOS's bash 3.2). The runtime scripts depend on **`jq`**
 and check for it up front. They follow the same default-fail discipline: the
 mechanical parts are script-enforced, never model-asserted.
 
@@ -91,6 +91,8 @@ mechanical parts are script-enforced, never model-asserted.
 - `scripts/gate.sh` — set the v0 baseline, then for each candidate decide
   accept (strictly beats best on held-out) or reject/revert, advance the budget,
   and recompute status. **The only sanctioned writer of accept decisions.**
+- `scripts/test.sh` — exercise the split-isolation, complete-recording, and gate
+  preconditions. Run it when changing the loop scripts.
 
 See `references/state-schema.md` for exact invocations of the loop scripts.
 

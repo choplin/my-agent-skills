@@ -28,8 +28,8 @@ signal is the loss. Mechanism and laws live in `skill-quality-base` — load it.
    and let the user decide rather than guessing.
 3. **A mechanical verification signal exists** (oracle or executable anchor).
    If the deliverable's quality is a human judgment call, **stop** — a loop with a
-   signal that can't discriminate converges on worse output (base law 1). Run
-   route the assessment to `skill-quality-review`.
+   signal that can't discriminate converges on worse output (base law 1). Route
+   the assessment to `skill-quality-review`.
 
 If any precondition is unmet, say so and stop; do not fabricate tasks or a signal.
 

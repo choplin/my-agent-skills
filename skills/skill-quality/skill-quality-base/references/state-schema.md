@@ -54,7 +54,8 @@ scratchpad path when outside a repo. One directory per skill under optimization.
 - **signal.kind** — which verification-signal design is in use (see
   `references/verification-signals.md`). `command` is the required mechanical
   checker for the `oracle` or `anchor`.
-- **tasks** — the fixed split. `train` feeds edit proposal; `holdout` decides
+- **tasks** — the fixed, non-empty split. Task ids are unique within each split
+  and cannot appear in both. `train` feeds edit proposal; `holdout` decides
   accept/reject and is never used to derive edits.
 - **budget** — `max_iterations` bounds the loop; `no_improve_limit` consecutive
   rejects mean the loop has converged (or the verifier is too weak to make
@@ -90,21 +91,22 @@ record.sh <run-dir> --version vN --split train|holdout \
 ```
 
 Computes `score = passes / total` for that split and stores it plus per-task
-detail. Run it after evaluating a version on a split. Warns if the recorded task
-ids differ from the declared split.
+detail. Run it after evaluating a version on a split. Rejects results unless the
+recorded task ids exactly match the declared split.
 
 ### gate.sh — set baseline, then accept/reject candidates
 
 ```bash
-# once, after v0's holdout is recorded:
+# once, after both v0 splits are recorded:
 gate.sh <run-dir> --set-baseline
 
-# per candidate, after its holdout is recorded:
+# per candidate, after both splits are recorded:
 gate.sh <run-dir> --candidate vN [--reason 'text']
 ```
 
-`--set-baseline` copies `scores.v0.holdout` into `best.holdout_score` and flips
-status to `running`. Per candidate, the gate:
+`--set-baseline` verifies that both v0 splits are complete, copies
+`scores.v0.holdout` into `best.holdout_score`, and flips status to `running`.
+Each candidate must also have complete train and holdout results. The gate then:
 
 1. increments `budget.iteration`;
 2. **accepts** iff `scores[vN].holdout` is *strictly greater* than
@@ -115,8 +117,8 @@ status to `running`. Per candidate, the gate:
 4. appends a `history` entry and recomputes `status`.
 
 Ties are rejected on purpose: an edit must earn its place. The gate refuses to
-run until a baseline held-out score exists and the candidate's held-out score is
-recorded.
+run until the baseline and candidate contain complete results for both declared
+splits.
 
 ## Stop conditions
 

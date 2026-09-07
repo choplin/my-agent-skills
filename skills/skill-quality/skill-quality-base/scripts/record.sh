@@ -23,18 +23,22 @@ STATE="$RUN_DIR/state.json"
 case "$SPLIT" in train|holdout) ;; *) die "--split must be train|holdout";; esac
 [ -n "$RESULTS" ] || die "--results required (e.g. t1::pass,t2::fail)"
 
-RESULTS_J=$(printf '%s' "$RESULTS" | jq -R '
+RESULT_ROWS=$(printf '%s' "$RESULTS" | jq -R '
   split(",") | map(gsub("^\\s+|\\s+$";"")) | map(select(length>0))
-  | map(split("::") | {key: .[0], value: (.[1] // "fail")})
-  | from_entries')
+  | map(split("::"))')
 
-echo "$RESULTS_J" | jq -e 'length > 0 and all(.[]; . == "pass" or . == "fail")' >/dev/null \
-  || die "results must be non-empty and every value must be pass|fail"
+echo "$RESULT_ROWS" | jq -e '
+  length > 0
+  and all(.[]; length == 2 and .[0] != "" and (.[1] == "pass" or .[1] == "fail"))
+  and (map(.[0]) | unique | length) == length
+' >/dev/null || die "results must contain each task id exactly once as taskid::pass|fail"
+
+RESULTS_J=$(echo "$RESULT_ROWS" | jq 'map({key: .[0], value: .[1]}) | from_entries')
 
 DECLARED=$(jq --arg s "$SPLIT" '.tasks[$s]' "$STATE")
 MISMATCH=$(jq -n --argjson got "$RESULTS_J" --argjson decl "$DECLARED" \
   '(($got|keys) - $decl) + ($decl - ($got|keys)) | length')
-[ "$MISMATCH" = "0" ] || echo "warning: recorded tasks differ from declared $SPLIT split" >&2
+[ "$MISMATCH" = "0" ] || die "recorded tasks must exactly match the declared $SPLIT split"
 
 SCORE=$(echo "$RESULTS_J" | jq 'to_entries | (map(select(.value=="pass"))|length) as $p | ($p / length)')
 

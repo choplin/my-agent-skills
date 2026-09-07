@@ -92,15 +92,15 @@ skill-quality-base/scripts/record.sh <dir> --version vN --split <split> \
 ```
 
 For a v0 baseline feeding the loop, also run
-`skill-quality-base/scripts/gate.sh <dir> --set-baseline` once the holdout is
+`skill-quality-base/scripts/gate.sh <dir> --set-baseline` once both splits are
 recorded.
 
 ## Output
 
 Before reporting, self-check: every task in the declared split has a recorded
-pass/fail (`record.sh` warns on a mismatch — don't ignore it); holdout
-deliverables were not read before scoring; and the same mechanical command was
-used for every comparable deliverable.
+pass/fail (`record.sh` rejects a mismatch); holdout deliverables were not read
+before scoring; and the same mechanical command was used for every comparable
+deliverable.
 
 Report the pass rate per split, failing tasks and reasons, the exact signal, and
 the scope it measures. State the result against a threshold only when that
