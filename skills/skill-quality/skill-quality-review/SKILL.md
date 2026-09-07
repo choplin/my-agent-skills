@@ -176,21 +176,48 @@ them.
 
 ## Report
 
-Return, in this order:
+Make the decision and next actions visible before the audit trail. Return, in this
+order:
 
-1. **Coverage** — the B0 preflight verdict (clean, or the lint output); which modes
-   ran; for family mode, the bounded skills, reconstructed paths, unresolved
-   dynamic edges, and exclusions; if `deliverable` was skipped or left unjudged,
-   which case and why.
-2. **Overall conformance** — Pass / Needs Improvement / Needs Major Revision.
-3. **Family findings** (family mode only) — grouped by the five primary kinds,
-   with the ownership/use evidence and affected execution paths.
-4. **Per-topic findings (B1–B6)** — Strong / Adequate / Weak, with verbatim quotes
-   (copy the exact text, don't paraphrase — the point is to let the reader verify
-   without re-reading the source); fold in deliverable evidence where it applies.
-5. **Priority fixes** — ordered by impact, with concrete before/after
-   recommendations.
-6. **Strengths** — what to preserve, including intentional boundary enforcement.
+1. **Conclusion** — the overall conformance (Pass / Needs Improvement / Needs
+   Major Revision) and its reason in 2–3 sentences. Name the highest-impact issue;
+   do not recap every topic.
+2. **Action required** — up to five material findings, ordered by likely effect on
+   an agent using the skill. Include only gaps that could change an outcome or
+   cause meaningful waste; omit informational observations. For each finding give:
+
+   - the problem in one sentence;
+   - the exact source quote that proves it;
+   - the consequence for an agent or deliverable.
+
+   If there are no material findings, say so in one sentence.
+3. **Recommended changes** — a concrete before/after recommendation for each
+   finding above, in the same order. Do not introduce fixes for issues absent from
+   **Action required**.
+4. **Strengths** — a short list of what to preserve, including intentional
+   boundary enforcement. Keep this shorter than **Action required** unless the
+   review passes with no material findings.
+5. **Audit details** — compact supporting coverage after the actionable report:
+
+   - **Coverage** — the B0 preflight verdict and modes run. For family mode, also
+     give the bounded skills, reconstructed paths, unresolved dynamic edges, and
+     exclusions. If deliverable mode was skipped or unjudged, name the fallback
+     case and why.
+   - **Family** (family mode only) — group material family findings by the five
+     primary kinds and give ownership/use evidence plus affected paths. Point back
+     to an item in **Action required** when it already contains the finding; do not
+     repeat the full explanation.
+   - **B1–B6** — use a compact table with columns `Topic`, `Verdict`, and
+     `Evidence`. Give every topic a Strong / Adequate / Weak verdict. Quote exact
+     wording for Weak verdicts and for any conclusion that depends on precise
+     wording. For uneventful Strong or Adequate topics, a concise source pointer
+     or observed behavior is enough. Fold in deliverable evidence where it
+     applies.
+
+The report is an action-oriented summary with an audit appendix, not six equally
+weighted mini-reviews. Keep evidence sufficient to verify each judgment, but do
+not repeat the same quote or explanation across sections; cross-reference the
+earlier finding instead.
 
 Use the labels as qualitative summaries, not calculated grades:
 
@@ -203,12 +230,16 @@ Use the labels as qualitative summaries, not calculated grades:
   warrants that judgment. A failed B0 remains Needs Major Revision because the
   skill cannot load at all.
 
-Before returning, self-check: B0 was actually *run*, not assumed; every B1–B6
-verdict cites at least one verbatim quote; Coverage names which modes ran and, if
-family mode ran, its boundary, paths, unresolved edges, and exclusions; every
-family finding has one primary kind and ownership/use evidence; retained handoff
-guards state why both sides enforce them; if deliverable was skipped, Coverage
-names which fallback case and why; no numeric score appears anywhere (a number
+Before returning, self-check: the conclusion and material actions are understandable
+without reading **Audit details**; **Action required** contains no more than five
+findings and each has a quote and consequence; every recommended change maps to a
+finding; B0 was actually *run*, not assumed; every B1–B6 verdict has evidence, with
+verbatim quotes reserved for Weak or wording-dependent judgments; Coverage names
+which modes ran and, if family mode ran, its boundary, paths, unresolved edges,
+and exclusions; every family finding has one primary kind and ownership/use
+evidence; retained handoff guards state why both sides enforce them; if deliverable
+was skipped, Coverage names which fallback case and why; repeated evidence is
+cross-referenced rather than copied; no numeric score appears anywhere (a number
 invites gating — see Boundary).
 
 Findings only. Applying them, and any iterate-and-recheck, is the human's call (or,
