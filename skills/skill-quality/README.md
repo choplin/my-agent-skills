@@ -66,12 +66,14 @@ writes edits by the content-quality rubric in `skill-quality-base`.
 
 ### Skill: `skill-quality-review`
 
-One advisory review pass — findings, never a gate or a loop. Two modes that
-degrade gracefully: **static** (score the `SKILL.md` against the B1–B6 rubric, no
-run needed) and **deliverable** (run the skill on a few real tasks and read the
-outputs qualitatively). When the deliverable can't be observed, it does static only
-and says so. This is the home for skills the mechanical loop can't touch, and a
-cheap sanity check before committing to a loop.
+One advisory review pass — findings, never a gate or a loop. **Static** always
+scores the target `SKILL.md` against the B1–B6 rubric. Optional **family** mode
+reconstructs caller → delegate → reference → deliverable paths to find unused
+contract data, duplicated ownership, repeated context, and historical residue
+across cooperating skills. Optional **deliverable** mode runs the skill on a few
+real tasks and reads the outputs qualitatively. When the deliverable can't be
+observed, it does static only and says so. This is the home for skills the
+mechanical loop can't touch, and a cheap sanity check before committing to a loop.
 
 ### Skill: `skill-quality-base`
 
@@ -93,7 +95,9 @@ the distribution model.
 ## Which to use
 
 - **Is this skill any good? / benchmark it** → `skill-quality-evaluate` (mechanical) or `skill-quality-review` (advisory).
-- **Review before shipping** → `skill-quality-review` (static always; add the deliverable read when observable).
+- **Review before shipping** → `skill-quality-review` (static always; add family
+  mode for cooperating skills or repository scope, and the deliverable read when
+  observable).
 - **Autonomously tune a skill** → `skill-quality-optimize` — *only* with a working skill, real tasks, and a mechanical pass/fail signal. No signal → the loop makes it worse; review instead.
 
 ## License

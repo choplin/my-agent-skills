@@ -3,9 +3,10 @@ name: skill-quality-review
 description: >-
   Reviews a skill's quality in one advisory pass and returns findings, never
   as a gate or a loop. Static mode scores SKILL.md against the content-quality
-  rubric; deliverable mode runs the skill on a few real tasks and reads the
-  outputs qualitatively, falling back to static mode when the outputs cannot
-  be observed.
+  rubric; optional family mode reconstructs execution paths across cooperating
+  skills; deliverable mode runs the skill on a few real tasks and reads the
+  outputs qualitatively, falling back to static mode when outputs cannot be
+  observed.
 metadata:
   description-role: documentation
 ---
@@ -37,16 +38,22 @@ that way, this skill **never**:
 If you want an accept/revert loop driven by a trustworthy mechanical signal, that
 is `skill-quality-optimize`, not this.
 
-## Two modes
+## Review modes
 
-Run **both** when you can. `static` is always available (reading text is free);
-`deliverable` is an add-on that needs the skill to be runnable and its output
-observable.
+Run `static` always. Add `family` when the user explicitly names a cooperating
+skill family or repository scope; it expands the static read rather than
+replacing it. Add `deliverable` when the skill is runnable and its output is
+observable. The default remains one target skill in static mode.
 
 | Mode | Reads | Needs | Answers |
 |------|-------|-------|---------|
 | **static** | the `SKILL.md` (+ references) | nothing | is the *content* well-written? |
+| **family** | callers, delegates, references, schemas, and consumers on execution paths | an explicit family or repository scope | is the *cooperating system* economical and consistently owned? |
 | **deliverable** | outputs from running the skill on real tasks | runnable skill + observable output | does the skill *actually help*? |
+
+When `family` is selected, read `references/family-review.md` before static
+review. It owns path reconstruction, ownership/use inventories, finding
+classifications, and the handoff-boundary exception.
 
 ### Graceful fallback
 
@@ -151,14 +158,18 @@ them.
 Return, in this order:
 
 1. **Coverage** — the B0 preflight verdict (clean, or the lint output); which modes
-   ran; if `deliverable` was skipped or left unjudged, which case and why.
+   ran; for family mode, the bounded skills, reconstructed paths, unresolved
+   dynamic edges, and exclusions; if `deliverable` was skipped or left unjudged,
+   which case and why.
 2. **Overall assessment** — Pass / Needs Improvement / Needs Major Revision.
-3. **Per-topic findings (B1–B5)** — Strong / Adequate / Weak, with verbatim quotes
+3. **Family findings** (family mode only) — grouped by the five primary kinds,
+   with the ownership/use evidence and affected execution paths.
+4. **Per-topic findings (B1–B5)** — Strong / Adequate / Weak, with verbatim quotes
    (copy the exact text, don't paraphrase — the point is to let the reader verify
    without re-reading the source); fold in deliverable evidence where it applies.
-4. **Priority fixes** — ordered by impact, with concrete before/after
+5. **Priority fixes** — ordered by impact, with concrete before/after
    recommendations.
-5. **Strengths** — what to preserve.
+6. **Strengths** — what to preserve, including intentional boundary enforcement.
 
 Grade against a stated basis, so two reviewers converge instead of each picking a
 band by feel (don't reimport the B2 "ungrounded threshold" anti-pattern into your
@@ -174,8 +185,11 @@ own verdict):
 
 Before returning, self-check: B0 was actually *run*, not assumed; every B1–B5
 verdict cites at least one verbatim quote; Coverage names which modes ran and, if
-deliverable was skipped, which fallback case and why; no numeric score appears
-anywhere (a number invites gating — see Boundary).
+family mode ran, its boundary, paths, unresolved edges, and exclusions; every
+family finding has one primary kind and ownership/use evidence; retained handoff
+guards state why both sides enforce them; if deliverable was skipped, Coverage
+names which fallback case and why; no numeric score appears anywhere (a number
+invites gating — see Boundary).
 
 Findings only. Applying them, and any iterate-and-recheck, is the human's call (or,
 where a trustworthy mechanical signal exists, `skill-quality-optimize`'s).
