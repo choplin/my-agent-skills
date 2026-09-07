@@ -1,7 +1,7 @@
 ---
 title: "Loops and Oracles — Why the Execution and Quality Skills Are Shaped This Way"
 created: 2026-06-11
-updated: 2026-08-23
+updated: 2026-09-07
 ---
 
 # Loops and Oracles
@@ -96,10 +96,13 @@ that compensates for a specific generation's weakness.
 
 ## How that lands in this repository
 
-- **`skill-quality`** — the optimization loop refuses to run without a
-  mechanical pass/fail signal (no oracle, no loop), proposes edits only from
-  train traces, and accepts only what beats a held-out split. Where no
-  mechanical signal exists, `skill-quality-review` is advisory and never a gate.
+- **`skill-quality`** — the normal path applies `skill-quality-standard`
+  qualitatively through `skill-quality-review`, with model judgment producing
+  evidence-backed findings. The separate quantitative path exists only when a
+  reproducible mechanical pass/fail signal can be defined before the run, a
+  requirement with high practical setup cost; it proposes edits from train traces
+  and accepts only what beats a held-out split. The repository currently uses the
+  quantitative path infrequently.
 - **`artifact-review`** — the rigorous pass uses fresh independent reviewers
   against risk-selected definitions from `review-lenses`, and reports coverage
   gaps rather than implying completeness. This is generator/evaluator separation
@@ -125,6 +128,9 @@ that compensates for a specific generation's weakness.
 
 ## History
 
+- **2026-09-07** — Separated the normal qualitative standard-and-review path
+  from the conditional quantitative optimization path, which requires a
+  mechanical checker and excludes model-judged proxy scores.
 - **2026-08-23** — Updated the review mapping to the focused
   `artifact-review` skill and its shared `review-lenses` dependency after the
   former toolkit split.

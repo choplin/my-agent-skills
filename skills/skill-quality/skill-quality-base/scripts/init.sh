@@ -24,7 +24,8 @@ done
 [ -n "$SKILL" ]   || die "--skill required"
 [ -n "$TRAIN" ]   || die "--train required (comma-separated task ids)"
 [ -n "$HOLDOUT" ] || die "--holdout required (comma-separated task ids)"
-case "$SIGNAL_KIND" in oracle|anchor|self-criteria) ;; *) die "--signal-kind must be oracle|anchor|self-criteria";; esac
+case "$SIGNAL_KIND" in oracle|anchor) ;; *) die "--signal-kind must be oracle|anchor";; esac
+[ -n "$SIGNAL_CMD" ] || die "--signal-cmd required for a mechanical signal"
 case "$MAXIT" in ''|*[!0-9]*) die "--max-iterations must be a positive integer";; esac
 
 STATE="$RUN_DIR/state.json"
@@ -37,7 +38,7 @@ to_json_array() { printf '%s' "$1" | jq -R 'split(",") | map(gsub("^\\s+|\\s+$";
 TRAIN_J=$(to_json_array "$TRAIN")
 HOLD_J=$(to_json_array "$HOLDOUT")
 
-if [ -z "$SIGNAL_CMD" ]; then SIGCMD_J=null; else SIGCMD_J=$(printf '%s' "$SIGNAL_CMD" | jq -R .); fi
+SIGCMD_J=$(printf '%s' "$SIGNAL_CMD" | jq -R .)
 
 jq -n \
   --arg    skill  "$SKILL" \

@@ -1,42 +1,57 @@
 # skill-quality
 
-Tools to keep a skill's quality honest: **measure it, review it, and optimize it.**
-Authoring a skill from scratch is out of scope — use whatever skill-creation path
-your agent provides for that, then bring the result here.
+The normative standard for good skills, plus the tools that review conformance and
+measure or optimize behavior. Skill-authoring workflows use the standard while
+creating content; this family does not own their intent-capture or drafting flow.
 
 ## Problem
 
-Authoring produces a skill; it doesn't prove the skill is any good. Empirically,
-most aren't: a survey of 49 public skills (SWE-Skills-Bench) found 39 gave no
-pass-rate lift, and a few made things worse. Two different failures hide here, and
-they need different tools:
+"Good" needs a stable qualitative definition before it can be reviewed.
+`skill-quality-standard` owns that definition. Two deliberately separate paths
+answer different questions:
 
-- **Bad content** — generic advice ("write clean code") the agent already knows,
-  vague criteria, keyword-y descriptions. Visible by *reading* the skill.
-- **No real effect** — the skill reads fine but doesn't change outcomes. Only
-  visible by *running* it on real tasks.
+- **Qualitative path (normal)** — the model applies the standard with judgment to
+  the skill text, its context, and observable deliverables. `skill-quality-review`
+  returns evidence-backed findings rather than a score or guarantee.
+- **Quantitative path (conditional)** — when a reproducible mechanical pass/fail signal
+  can be defined before the run, `skill-quality-evaluate` measures performance on
+  real tasks and `skill-quality-optimize` may improve that measurement.
 
 And "just iterate on it" is not safe: when the thing judging the output is
 unreliable, iterating *degrades* quality rather than improving it.
 
-## Two tracks
+## Architecture
 
-The family splits along how "good" is decided — a high-trust autonomous loop, and
-a one-shot advisory review — because their trust models are different.
+The paths share artifacts, not verdicts. The qualitative review judges the
+standard as a whole. The quantitative path reports only what its named task set
+and mechanical signal measure. Neither result is converted into the other.
 
-| | **Optimize loop** | **Review** |
-|---|---|---|
-| Skills | `skill-quality-optimize` / `-evaluate` / `-improve` | `skill-quality-review` |
-| Decides good via | a **mechanical** verification signal | a human reading **findings** |
-| Autonomy | autonomous: gate + iterate, unattended | one-shot, advisory: no gate, no loop |
-| Covers | skills with a machine-checkable deliverable | everything else (subjective output, no signal) + a cheap pre-check |
-| Risk model | verifier precision caps quality (four laws) | can't compound — one pass, human decides |
+| Path | Owner | Question | Availability |
+|---|---|---|---|
+| Qualitative standard | `skill-quality-standard` | What properties should a good skill have? | Always |
+| Qualitative review | `skill-quality-review` | How well does this skill satisfy those properties in context? | Default |
+| Quantitative evaluation | `skill-quality-evaluate` / `-optimize` / `-improve` | What pass rate does this fixed mechanical signal observe? | Requires a reproducible checker with high practical setup cost |
 
-Keeping the loop **mechanical-only** is deliberate: an imprecise signal driven in a
-loop makes things worse (`skill-quality-base` law 1). The advisory reviewer is
-where an LLM/static judgment belongs — run once, never gating, so it can't compound.
+A faithful mechanical proxy for useful, coherent, well-judged output is difficult
+to construct, which gives the quantitative path a high practical setup threshold.
+Model judgment belongs in review and never enters the quantitative gate. The loop
+remains mechanical-only because an imprecise signal driven repeatedly makes output
+worse (`skill-quality-base` law 1).
+
+## Current usage
+
+The qualitative path is currently the routine path in this repository. The
+quantitative path is currently used infrequently. This is an observation about
+present usage, separate from its eligibility rule and setup cost.
 
 ## Components
+
+### Skill: `skill-quality-standard`
+
+The canonical B0–B7 standard for good skill content. It owns the loadability
+preflight, normative requirements, anti-patterns, description guidance, and
+reusable instruction patterns. Authoring, review, and improvement refer to it by
+name rather than carrying independent definitions of quality.
 
 ### Skill: `skill-quality-optimize`
 
@@ -47,43 +62,41 @@ working skill, real tasks, and a mechanical verification signal.
 | Training loop | skill-quality-optimize |
 |---------------|------------------------|
 | Training data | success/failure-labeled traces from running the skill |
-| Loss function | a mechanical **verification signal** (oracle / anchor / self-criteria) |
+| Loss function | a mechanical **verification signal** (oracle or executable anchor) |
 | Gradient + learning rate | proposed text edits at a controlled magnitude |
 | Parameters | the skill's `SKILL.md` |
 | Step + regularization + held-out gate | propose → gate → accept/revert |
 
 ### Skill: `skill-quality-evaluate`
 
-The loss step, **also useful standalone**: run a skill on real tasks, score each
-deliverable against a mechanical signal, report a pass rate with the failing
-traces. Use it to baseline a fresh draft or audit an existing skill.
+The quantitative path: run a skill on real tasks, score each deliverable
+against a predetermined reproducible checker, and report the pass rate and failing
+traces. If judgment by a model is required, use review instead.
 
 ### Skill: `skill-quality-improve`
 
 One improvement step: cluster failures across train traces, adopt only recurring
 ones, apply minimal edits at the budgeted magnitude, emit a candidate version. It
-writes edits by the content-quality rubric in `skill-quality-base`.
+keeps every candidate conformant with `skill-quality-standard`.
 
 ### Skill: `skill-quality-review`
 
-One advisory review pass — findings, never a gate or a loop. **Static** always
-scores the target `SKILL.md` against the B1–B6 rubric. Optional **family** mode
+One advisory review pass — findings, never a gate or a loop. **Static** checks the
+target against `skill-quality-standard`, with B1–B6 reported as conformance topics
+and B7 supplying reusable patterns. Optional **family** mode
 reconstructs caller → delegate → reference → deliverable paths to find unused
 contract data, duplicated ownership, repeated context, and historical residue
 across cooperating skills. Optional **deliverable** mode runs the skill on a few
 real tasks and reads the outputs qualitatively. When the deliverable can't be
-observed, it does static only and says so. This is the home for skills the
-mechanical loop can't touch, and a cheap sanity check before committing to a loop.
+observed, it does static only and says so. This is the normal quality-assessment
+path.
 
 ### Skill: `skill-quality-base`
 
-Shared resources, two domains:
-- **Optimization loop** — the training-loop model, the run-directory + `state.json`
-  schema, the four laws, and the agent-agnostic shell+jq scripts `init.sh`
-  (scaffold), `record.sh` (score), `gate.sh` (the sole writer of accept/reject).
-- **Content-quality rubric** — `references/content-quality-rubric.md` (B1–B6),
-  `anti-patterns.md`, `instruction-patterns.md`. What `skill-quality-review` scores
-  against and `skill-quality-improve` writes edits by.
+The quantitative optimization substrate: the training-loop model, run-directory
+and `state.json` schema, four laws, verification-signal policy, and the
+agent-agnostic shell+jq scripts `init.sh` (scaffold), `record.sh` (score), and
+`gate.sh` (the sole writer of accept/reject).
 
 ## Installation
 
@@ -94,11 +107,16 @@ the distribution model.
 
 ## Which to use
 
-- **Is this skill any good? / benchmark it** → `skill-quality-evaluate` (mechanical) or `skill-quality-review` (advisory).
+- **Author or revise skill content** → apply `skill-quality-standard`.
+- **Assess a skill's quality** → `skill-quality-review` by default.
+- **A reproducible mechanical checker exists and a pass rate is wanted** →
+  `skill-quality-evaluate`.
 - **Review before shipping** → `skill-quality-review` (static always; add family
   mode for cooperating skills or repository scope, and the deliverable read when
   observable).
-- **Autonomously tune a skill** → `skill-quality-optimize` — *only* with a working skill, real tasks, and a mechanical pass/fail signal. No signal → the loop makes it worse; review instead.
+- **Autonomously tune a measured outcome** → `skill-quality-optimize` — *only*
+  with a working skill, real tasks, and a reproducible mechanical pass/fail
+  signal. Model judgment stays in review.
 
 ## License
 

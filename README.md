@@ -10,7 +10,7 @@ Skills are the only primitive here — distributed to any coding agent via the [
 
 ```
 skills/                      # portable, agent-agnostic skills (the source of truth)
-  <group>/                   #   organized by group (former plugin name)
+  <group>/                   #   organized by installable skill group
     [<family>/]              #   optional organization inside a larger group
       <namespaced-skill>/SKILL.md
 scripts/validate-skills.sh   # strict skill-validator check (used by lefthook and CI)
@@ -84,7 +84,7 @@ skills or validation configuration.
 | `workflow-adapter-impl` | `llm-wiki/`, `octa/`, `wtm/`, each split into matching operation-specific implementations |
 | `planning-toolkit` | plan, resolve, mvp, base (turn an established direction into a finite outcome and its delivery graph; resolve blocking research/design and make implementation autonomous-ready; `mvp` is a scope policy, not a phase — the smallest-build-that-teaches standard the cut is judged against) |
 | `orchestration-toolkit` | execute (carry one groomed tracker Issue inline through implementation, risk-based adversarial review, and the integration gate) |
-| `skill-quality` | skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-review, skill-quality-base (measure / review / autonomously optimize an existing skill; mechanical loop + one-shot advisory review) |
+| `skill-quality` | skill-quality-standard, skill-quality-review, skill-quality-optimize, skill-quality-evaluate, skill-quality-improve, skill-quality-base (qualitative standard + model-judged review by default; quantitative evaluation requires a reproducible mechanical checker and has high setup cost, with low current usage) |
 | `ai-council` | ai-council, ai-council-codex-cli, ai-council-fugu-cli |
 | `discuss-toolkit` | dig (intent fidelity), discuss-toolkit-grill-me (candidate robustness), one-point (discussion pacing) |
 | `git-helpers` | commit, draft-pr, explain-pr, pr-description, rebase-onto-rewritten, squash-merge |
@@ -204,10 +204,10 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - `workflow-adapter-impl-wtm-<operation>` → wtm-worktree `(ext)`
 
 **skill-quality**
-- skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve, skill-quality-review
+- skill-quality-optimize → base, skill-quality-evaluate, skill-quality-improve
 - skill-quality-evaluate → base
-- skill-quality-improve → base
-- skill-quality-review → base
+- skill-quality-improve → base, skill-quality-standard
+- skill-quality-review → skill-quality-standard
 
 **ai-council**
 - ai-council → ai-council-codex-cli, ai-council-fugu-cli

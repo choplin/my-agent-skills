@@ -17,9 +17,10 @@ candidate version. This is the gradient + parameter-update step of the training
 loop (`skill-quality-base`). It does **not** decide whether the edit survives —
 that is the held-out gate (`gate.sh`).
 
-> Load `skill-quality-base` for the run layout, the laws, and the content-quality
-> rubric (`references/content-quality-rubric.md`) — this step only decides *which*
-> edits to make; the rubric decides *how to write them well*.
+> Load `skill-quality-base` for the run layout and laws. Load
+> `skill-quality-standard` for the normative requirements applied to every
+> candidate. This step decides *which* edits to make; the standard governs how
+> to write them well.
 
 ## Inputs
 
@@ -44,8 +45,7 @@ distinct train tasks** exhibit it.
 ### 2. Turn each adopted cluster into a minimal edit
 
 For each surviving cluster, write the smallest edit that would have prevented the
-failure, applying the content-quality rubric (`skill-quality-base`,
-`references/content-quality-rubric.md`):
+failure, while keeping the candidate conformant with `skill-quality-standard`:
 
 - Prefer adding a **Gotcha** or a **concrete criterion with its rationale** over
   vague prose — the failure reason *is* the rationale ("because task t2 produced
@@ -53,6 +53,12 @@ failure, applying the content-quality rubric (`skill-quality-base`,
 - Keep `SKILL.md` economical: if the fix is bulky reference material, move it to
   `references/` with an explicit load trigger, not into the always-loaded body.
 - Do not rewrite working sections. Touch only what a failure cluster points at.
+
+Apply B6 to every changed passage: state the resulting current behavior directly.
+Remove former-state or rejected-alternative framing introduced by the edit. Retain
+compatibility language only when the failure cluster identifies a current
+interoperability, migration, deprecation, or versioned schema/protocol requirement;
+name that requirement in the candidate.
 
 ### 3. Respect the edit-magnitude budget
 
@@ -81,7 +87,7 @@ edit touched the frontmatter**, since an edit to `description` is the likeliest 
 to break it:
 
 ```
-skill-quality-base/scripts/lint-frontmatter.sh versions/v<next>/
+skill-quality-standard/scripts/lint-frontmatter.sh versions/v<next>/
 ```
 
 It must exit 0. Fix and re-run until it does; never hand a failing candidate to the
@@ -95,7 +101,8 @@ Before handing back, confirm: (1) every edit traces to a ≥2-task cluster adopt
 in step 1; (2) any new gotcha landed in `SKILL.md`, not `references/`; (3) the
 changelog names the specific clusters addressed; (4) the lint exited 0. A malformed
 candidate caught here costs nothing; caught by the gate it wastes a held-out
-evaluation round.
+evaluation round; and (5) changed passages describe the current contract directly,
+with every compatibility exception tied to an explicit current requirement.
 
 ## Output
 

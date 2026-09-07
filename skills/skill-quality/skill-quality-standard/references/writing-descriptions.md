@@ -1,7 +1,7 @@
 # Writing Descriptions
 
 How to write the `description` of a skill, and how to judge one. Loaded from
-rubric item B4.
+standard requirement B4.
 
 ## A description does one of two jobs
 
@@ -13,7 +13,7 @@ the model actually has to make that choice from context.
 Which job a given description has is a fact about how the skill is reached, not
 a matter of taste. Some repositories record it as `metadata.description-role`,
 with the values `trigger` and `documentation`; when that key is present, take it
-as given and score the description against the job it names.
+as given and judge the description against the job it names.
 
 When it is absent, work the role out first:
 
@@ -91,8 +91,8 @@ where it can be stated as a prerequisite and checked at run time.
 out what this skill covers. Handing them a different name defers that answer and
 spends the one field with a hard limit on someone else's job.
 
-State the boundary in terms of the work instead of the neighbour: say what this
-skill does and does not cover, not who covers the rest.
+State the work this skill covers precisely enough that its boundary is visible
+without naming the neighbour or cataloguing excluded work.
 
 ## Workflow membership is stated, not routed
 
@@ -131,11 +131,10 @@ applies to. The model matches on what is there, not on what is ruled out.
 being matched against, and they are worth more than a carefully abstracted
 summary.
 
-**Add an exclusion only after observing a real mistrigger.** A `Should NOT
-trigger for …` clause is a correction, not a design step. Written up front it
-guesses at confusions that may never occur, while spending characters the
-positive description needs. Even then, describe the situation that must not
-match — not the skill that should have won it.
+**Refine the positive intent after a real mistrigger.** Identify what the intended
+requests have in common and make that condition precise. Keep the adjacent work
+out of the description; a `Should NOT trigger for …` catalogue makes those
+concepts salient and spends characters without giving the model a better target.
 
 ## Writing documentation
 

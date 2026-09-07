@@ -20,7 +20,7 @@ Key conventions (details in the architecture doc):
 - **Skills only.** Nothing is distributed outside a skill directory: no separately-installed subagent, command, or hook, and no installer. A capability that would need one is written as a skill that runs inline on any agent; a host-side wrapper, if an environment wants one, lives in that environment and may hold nothing the skill needs. Host-specific *presentation* metadata may travel inside a skill (`agents/openai.yaml`).
 - **Docs.** Every `docs/*.md` carries `created` / `updated` frontmatter (no dated filenames) and ends with a `## History` section — newest first, one entry per substantive change, stating what changed and why. History is where the past lives, so the body can describe only the current state: no "previously / no longer / used to" in the body.
 - **Runtime & dependencies.** Default to bash+jq; escalate runtime (Python/Node) only by fit, declare it in a leaf-bundled `flake.nix`, and resolve it in a preflight (PATH → `nix develop` → aggregated fail). Full policy: [`docs/skill-runtime-and-dependencies.md`](./docs/skill-runtime-and-dependencies.md).
-- **Descriptions.** Two independent settings, neither inferred from the other: `user-invocable: false` when no real situation has the user typing `/name`, and `metadata.description-role` (`trigger` / `documentation`) for whether the description must make the model choose the skill. `disable-model-invocation` is never set — blocking fails silently when a caller or standing instruction needs the skill, and a `Skill(name)` deny rule stops what must not run — so every description stays in context and `documentation` means *shorter*, not free. Descriptions are English only. How to write one: the `skill-quality-base` skill (`references/writing-descriptions.md`).
+- **Descriptions.** Two independent settings, neither inferred from the other: `user-invocable: false` when no real situation has the user typing `/name`, and `metadata.description-role` (`trigger` / `documentation`) for whether the description must make the model choose the skill. `disable-model-invocation` is never set — blocking fails silently when a caller or standing instruction needs the skill, and a `Skill(name)` deny rule stops what must not run — so every description stays in context and `documentation` means *shorter*, not free. Descriptions are English only. How to write one: the `skill-quality-standard` skill (`references/writing-descriptions.md`).
 
 ## Recommended Skills
 
@@ -28,7 +28,8 @@ When working in this repository, actively use these skills:
 
 | Skill | Use When |
 |-------|----------|
-| `/skill-quality-review` | Reviewing or improving an existing skill's quality (static rubric + deliverable read). Autonomously tune with skill-quality-optimize |
+| `/skill-quality-standard` | Authoring or revising skill content against the repository's normative quality requirements |
+| `/skill-quality-review` | Checking an existing skill's conformance with skill-quality-standard; add a deliverable read when observable |
 | `/plugin-dev:skill-development` | Skill file structure and formatting |
 | `/plugin-dev:agent-development` | Creating subagents |
 | `/plugin-dev:command-development` | Creating slash commands |

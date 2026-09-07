@@ -2,7 +2,7 @@
 
 Use this mode for an explicitly named cooperating skill family or repository
 scope. It extends static review to defects that no one `SKILL.md` owns visibly.
-Run it before making B1–B5 judgments so those judgments use the complete path
+Run it before making B1–B6 judgments so those judgments use the complete path
 evidence. It remains advisory: path findings are not a gate, score, automatic
 edit, or optimization signal.
 
@@ -36,7 +36,7 @@ Stop at external boundaries. Put unresolved dynamic edges and excluded areas in
 Coverage; a partial reconstruction must not read as a complete family audit.
 
 Run the B0 preflight against every in-scope skill directory before applying the
-rubric. If it fails anywhere, use the existing B0 stop rule and identify the
+standard. If it fails anywhere, use the existing B0 stop rule and identify the
 affected path in Coverage.
 
 ## Build ownership and use inventories
@@ -64,7 +64,7 @@ when their current text agrees, because they can drift independently.
 
 ## Judge path-level context and ownership
 
-Apply B1–B5 to each local skill, then use the path inventories for cross-skill
+Apply B1–B6 to each local skill, then use the path inventories for cross-skill
 findings:
 
 - Flag the same rule or reference loaded more than once on one execution path;
@@ -77,14 +77,16 @@ findings:
   whose condition selects one narrow lens but whose loading unit forces unrelated
   material into context; a trigger can be correct while the unit is still too
   broad.
-- Describe the current contract directly. Read version history only when wording
-  depends on a former state (for example, `previously`, `no longer`, `legacy`) or
-  when competing models cannot be explained from the current tree. History is
-  evidence for **historical residue**, not a default input.
+- Describe the current contract directly and judge historical residue from the
+  current tree. Former-state wording (for example, `previously`, `no longer`,
+  `legacy`) is already sufficient evidence of residue; its origin does not need
+  reconstruction. Consult version history only when an explicit migration,
+  deprecation, interoperability, or versioned external contract is itself in
+  scope and the current artifacts cannot verify it.
 
 Classify every family finding as exactly one primary kind:
 
-- **local content quality** — a B1–B5 defect within one skill or reference;
+- **local content quality** — a B1–B6 defect within one skill or reference;
 - **cross-skill duplication** — redundant content loaded on the same path;
 - **missing or competing ownership** — no authority, or several authorities,
   for one executable contract;
@@ -93,7 +95,7 @@ Classify every family finding as exactly one primary kind:
 - **historical residue** — former-state language or structure that no longer
   describes the current contract.
 
-Use secondary rubric topics where helpful, but do not blur the primary kind.
+Use secondary standard requirements where helpful, but do not blur the primary kind.
 
 ## Calibration fixture
 

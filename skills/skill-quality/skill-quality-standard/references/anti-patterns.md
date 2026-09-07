@@ -25,24 +25,29 @@ Common failure modes in skill content, grouped by the content-quality topic they
 
 **Detection**: adjectives without measurable rules; rules without "because [specific problem]"; references to unspecified conventions; gotchas outside `SKILL.md`.
 
-## Self-evaluable output (B3)
+## Judgeable outcome (B3)
 
 | Anti-pattern | Example | Problem |
 |--------------|---------|---------|
-| Unmeasurable success | "Output should be high quality" | Agent cannot verify; no self-feedback loop |
+| Ungrounded success | "Output should be high quality" | Agent and reviewer have no evidence or rationale on which to judge it |
 | Process-focused criteria | "✓ Read code ✓ Find issues ✓ Write review" | All steps done, but the deliverable may still be wrong |
 | Generic example | "AI: Provides helpful guidance" | No concrete input/output to match against |
+| Artificial binary proxy | "Pass if the prose contains all five headings" | Replaces qualitative usefulness with an easy-to-count structure |
 
-**Detection**: "high quality" / "useful" / "correct" without definition; checklists that verify steps instead of the deliverable; abstract examples.
+**Detection**: "high quality" / "useful" / "correct" without evidence or rationale;
+checklists that verify steps instead of the deliverable; abstract examples;
+binary or numeric proxies that omit the qualitative property they claim to measure.
 
 ## Triggering description (B4)
 
 | Anti-pattern | Example | Problem |
 |--------------|---------|---------|
 | Keyword-based trigger | "Triggers on 'code review'" | "Review this code *tutorial*" triggers incorrectly |
-| No exclusions on an ambiguous trigger | broad description, no "Should NOT trigger" | False positives in adjacent contexts |
+| Negative boundary catalogue | "Should NOT trigger for tutorials, plans, or prose reviews" | Makes adjacent work salient while leaving the intended situation underspecified |
 
-**Detection**: keyword lists without intent; missing exclusions where the trigger overlaps neighboring skills.
+**Detection**: keyword lists without intent; `not for` / `should not trigger`
+catalogues; redirects to sibling skills. For observed false positives, require a
+more precise positive intent rather than another exclusion.
 
 ## Calibration (B5)
 
@@ -53,3 +58,21 @@ Common failure modes in skill content, grouped by the content-quality topic they
 | One-off answer instead of a method | "Join orders to customers on customer_id where region='EMEA'" | Useful only for this exact task; doesn't generalize |
 
 **Detection**: equal-weight option lists; prescriptive sequences where variation is fine; instructions that solve one instance rather than teaching the approach.
+
+## Current contract (B6)
+
+| Anti-pattern | Example | Problem |
+|--------------|---------|---------|
+| Compatibility by default | "Keep the legacy output for backward compatibility" with no identified consumer or contract | Makes an unevidenced former state constrain current behavior |
+| Historical narration | "This used to call the v1 tool; it now calls v2" | Loads an irrelevant execution path alongside the active one |
+| Behavior defined by rejection | "Do not produce the old JSON response" | Activates the rejected format without specifying the desired deliverable |
+| Implicit contrast | "Use the report workflow instead of the previous export flow" | Forces the agent to distinguish two models when only one should be in context |
+
+**Detection**: flag history markers (`legacy`, `formerly`, `previously`,
+`backward-compatible`, `no longer`, `replaced`, `deprecated`) and contrast forms
+(`not X`, `instead of X`, `rather than X`, negative imperatives). Classify each
+match by meaning, not syntax. It is a defect when the sentence imports a former or
+rejected design into the current instructions. It is valid when it directly
+expresses a present invariant or safety boundary. Compatibility content is valid
+only when it names the current interoperability, migration, deprecation, or
+versioned schema/protocol requirement that makes it executable.

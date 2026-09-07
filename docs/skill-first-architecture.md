@@ -1,7 +1,7 @@
 ---
 title: "Skill-First Distribution Architecture"
 created: 2026-06-22
-updated: 2026-08-03
+updated: 2026-09-07
 ---
 
 # Skill-First Distribution Architecture
@@ -135,9 +135,9 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
 
 - **Descriptions** — what a `description` is for, and how the two invocation
   settings (`user-invocable`, `metadata.description-role`) are decided: the
-  `skill-quality-base` skill (`references/writing-descriptions.md`), summarized in
-  the repo `CLAUDE.md`. It lives with the skill that reviews descriptions rather
-  than in `docs/`, so the reviewer loads it where it is applied.
+  `skill-quality-standard` skill (`references/writing-descriptions.md`), summarized in
+  the repo `CLAUDE.md`. It lives with the normative skill-quality standard so
+  authoring, review, and improvement load the same requirement.
 - **Runtime & dependencies** — convention 7 above:
   [skill-runtime-and-dependencies.md](./skill-runtime-and-dependencies.md).
 
@@ -152,6 +152,10 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
 
 ## History
 
+- **2026-09-07** — Moved qualitative skill-content requirements into the
+  dedicated `skill-quality-standard`. Model-judged review applies that standard
+  by default; quantitative improvement remains a separate path for outputs with
+  a reproducible mechanical checker.
 - **2026-08-03** — Agent-specific add-ons (`opts/`) and their install scripts
   removed. The repository became a catalog: it ships only skill directories and
   no installer, and which skills an environment installs is decided outside it.

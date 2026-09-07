@@ -6,8 +6,8 @@ quality caps the quality of everything downstream — an imprecise signal makes
 iteration degrade output rather than improve it. Design it before running.
 
 A usable signal is **mechanical and reproducible**: two runs on the same
-deliverable return the same verdict, and the verdict does not consult the same
-judgment that produced the deliverable. Three designs, in order of preference.
+deliverable return the same verdict, and the verdict does not consult model
+judgment. Two designs qualify.
 
 ## 1. Oracle (pass/fail from ground truth)
 
@@ -34,33 +34,15 @@ consistent with the anchors.
   matters — anchors that a wrong deliverable can still satisfy give false passes,
   which is exactly what degrades the loop.
 
-## 3. Self-criteria (agent-judged deliverable criteria)
-
-When neither an oracle nor anchors exist, fall back to the deliverable success
-criteria from the content-quality rubric B3 (`content-quality-rubric.md`):
-**binary, observable, specific** checks a
-fresh agent applies by reading the output. Set `signal.kind = self-criteria` and
-`command = null`.
-
-- Each criterion must be answerable Yes/No, verifiable by reading the output (no
-  external state), and unambiguous (two judges agree).
-- Reduce self-judgment noise: use a *separate, fresh* agent context to judge (not
-  the one that produced the output), and phrase criteria so a skeptic and an
-  advocate would score them the same.
-- This is the weakest signal. Treat a self-criteria loop's result as provisional
-  and spot-check held-out deliverables by hand.
-
 ## The boundary: what cannot be a signal
 
 Some qualities cannot be mechanized — "is this blog post interesting?", "is this
 prose elegant?", subjective product taste. No amount of iteration automates them;
 across the whole research literature this remains the part left to humans.
 
-When the deliverable's quality lives in such a judgment:
-
-- **Do not run the optimization loop on it.** A loop with a signal that cannot
-  discriminate will happily "converge" on worse output.
-- Use `skill-quality-evaluate` once to establish a baseline on whatever *is*
-  checkable, and hand the subjective dimension to a human reviewer.
-- Split the deliverable: mechanize the checkable parts (facts, structure,
-  constraints), keep the taste-dependent parts human-gated.
+When the relevant quality lives in such a judgment, use
+`skill-quality-standard` + `skill-quality-review`. A model may apply those
+qualitative criteria with judgment and explain its evidence, but that result is
+not a verification signal and never enters the quantitative gate. If one bounded
+part of a deliverable is mechanically checkable, evaluate may report that part's
+measurement while leaving the qualitative assessment separate.

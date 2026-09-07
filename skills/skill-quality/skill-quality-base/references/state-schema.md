@@ -30,7 +30,7 @@ scratchpad path when outside a repo. One directory per skill under optimization.
 ```json
 {
   "target_skill": "skill-name-or-path",
-  "signal": { "kind": "oracle|anchor|self-criteria", "command": null },
+  "signal": { "kind": "oracle|anchor", "command": "<checker command>" },
   "tasks": {
     "train":   ["t1", "t2", "t3"],
     "holdout": ["h1", "h2"]
@@ -52,8 +52,8 @@ scratchpad path when outside a repo. One directory per skill under optimization.
 ```
 
 - **signal.kind** — which verification-signal design is in use (see
-  `references/verification-signals.md`). `command` is the mechanical checker when
-  the signal is an `oracle` or `anchor`; `null` for agent-judged `self-criteria`.
+  `references/verification-signals.md`). `command` is the required mechanical
+  checker for the `oracle` or `anchor`.
 - **tasks** — the fixed split. `train` feeds edit proposal; `holdout` decides
   accept/reject and is never used to derive edits.
 - **budget** — `max_iterations` bounds the loop; `no_improve_limit` consecutive
@@ -73,8 +73,8 @@ scratchpad path when outside a repo. One directory per skill under optimization.
 ```bash
 init.sh --run-dir <dir> --skill <name> \
         --train t1,t2,t3 --holdout h1,h2 \
-        --signal-kind oracle|anchor|self-criteria \
-        [--signal-cmd '<checker command>'] \
+        --signal-kind oracle|anchor \
+        --signal-cmd '<checker command>' \
         [--max-iterations N] [--force]
 ```
 

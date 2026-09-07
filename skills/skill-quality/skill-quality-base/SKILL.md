@@ -1,30 +1,22 @@
 ---
 name: skill-quality-base
 description: >-
-  The shared model behind skill-quality work, in two domains: the
-  optimization-loop model with its run-directory and state schema, the four
-  laws, and the agent-agnostic shell+jq scripts; and the content-quality
-  rubric with its anti-patterns and instruction patterns. Also owns the
-  loadability preflight that checks a skill's YAML frontmatter parses at all.
-  Applies whenever a skill's quality is measured, reviewed, or improved.
+  Defines the quantitative skill-optimization model: its run directory and
+  state schema, four evaluation laws, verification-signal policy, and the
+  agent-agnostic shell+jq scripts that record results and gate candidate
+  versions. Applies when a skill is evaluated or improved from real task runs.
 user-invocable: false
 metadata:
-  description-role: trigger
+  description-role: documentation
 ---
 
-# skill-quality base resources
+# Skill quality optimization base
 
-This skill owns the resources shared across the **skill-quality** family. Other
-skill-quality skills **delegate to this skill by name** instead of referencing
-plugin-root paths, so the same skills work whether installed flat by the skills
-CLI or loaded as part of a plugin.
-
-It holds **two independent domains**, used by different family members, plus one
-precondition that sits under both:
-
-- **Optimization loop** (the run layout, four laws, and `init.sh`/`record.sh`/`gate.sh`) — used by `skill-quality-optimize`, `skill-quality-evaluate`, `skill-quality-improve`.
-- **Content-quality rubric** (`references/content-quality-rubric.md`, `references/anti-patterns.md`, `references/instruction-patterns.md`, `references/writing-descriptions.md`) — the B1–B6 rubric for judging *what a skill says*. `skill-quality-review` scores against it; `skill-quality-improve` writes edits by it. This is orthogonal to the loop: reviewing text needs no run, no signal, no gate.
-- **B0 loadability preflight** (`scripts/lint-frontmatter.sh`) — mechanical, and it comes before either domain. See below.
+This skill owns the quantitative optimization machinery shared by
+`skill-quality-optimize`, `skill-quality-evaluate`, and `skill-quality-improve`.
+Other skills delegate to it by name so the same workflow works whether installed
+flat or as part of a plugin. The normative definition of a good skill belongs to
+`skill-quality-standard`.
 
 References here are addressed in two forms. In both, resolve the path **relative
 to this skill's installed directory** (load this skill, then read/run the named
@@ -32,19 +24,6 @@ file from its own root):
 
 - `` `skill-quality-base` skill (`references/<file>`) `` → read `references/<file>` from this skill.
 - `skill-quality-base/scripts/<name>.sh` → run this skill's script.
-
-## Which skill does what
-
-| The work at hand | Skill |
-|---|---|
-| Judge a skill's text and get findings back, once, with no loop and no gate | `skill-quality-review` |
-| Find out how well a skill actually performs, by running it on real tasks against a mechanical signal | `skill-quality-evaluate` |
-| Improve a skill autonomously until the score plateaus or the budget runs out | `skill-quality-optimize` |
-| Produce one edit step from labeled failure traces, inside a run that is already going | `skill-quality-improve` |
-
-The dividing line is whether a mechanical verification signal exists. With one,
-the loop can run and its score means something. Without one, only the advisory
-read is available — see law 1.
 
 ## The core idea: a skill is an optimizable artifact
 
@@ -69,8 +48,8 @@ this family enforces — do not shortcut them:
    iteration *degrade* quality, not improve it (OpenSkill: a ~57%-precision
    self-verifier drove pass rate down 82.7% → 78.0% over more rounds). If you
    cannot build a signal that mechanically discriminates good output from bad,
-   **do not run the loop** — score once for a baseline and route the judgment to
-   a human. See `references/verification-signals.md`.
+   **do not run the quantitative path** — use `skill-quality-review` for a
+   qualitative assessment. See `references/verification-signals.md`.
 2. **Isolate the oracle; gate on held-out.** Edits are proposed from *train*
    trajectories; whether an edit is kept is decided only by its score on a
    *held-out* task split the improver never sees. Training on your test set
@@ -99,46 +78,12 @@ Full schema, layout, and stop conditions: `references/state-schema.md`.
   evals/               # per-version, per-split scored results
 ```
 
-## B0. Loadability comes before content quality
-
-A skill whose frontmatter is broken **is never loaded at all** — the agent silently
-behaves as if it did not exist. No B1–B6 finding matters in that state, and the
-symptom ("my skill doesn't trigger") looks nothing like the cause. So loadability is
-checked **mechanically, first**, by `scripts/lint-frontmatter.sh`; it is a
-precondition, not a rubric topic scored by judgment.
-
-The trap that motivates it: an unquoted `description` containing **`: `** (colon +
-space) — YAML reads it as a nested key and the file fails to parse
-(`mapping values are not allowed in this context`). Prose invites it constantly
-("the FIRST step: writing the script", "handed to a consumer: a workflow, a report"),
-and it reads perfectly to a human, which is exactly why the check is mechanical.
-
-The script checks four things and deliberately nothing else — it is not a YAML
-implementation, and the scope is set by what has actually broken skills here, not by
-what YAML permits in theory:
-
-1. the frontmatter opens with `---` on line 1 and is closed by a later `---`;
-2. every non-indented line inside it is a `key: value` line;
-3. no unquoted value contains `: ` or ends with `:`;
-4. `name` and `description` are present.
-
-Each rule was verified against a real YAML parser, and rule 3 is scoped to where the
-trap actually bites: quoted values and block scalars (`|`, `>`) escape it by
-construction, and everything inside a block scalar or on a continuation line is raw
-text, so indented lines are skipped. Passing means "this file parses and keeps its
-metadata", nothing more.
-
 ## Scripts (shell, agent-agnostic)
 
-POSIX-ish `bash` (works on macOS's bash 3.2); the three loop scripts additionally
-depend on **`jq`** and check for it up front, while `lint-frontmatter.sh` is pure
-shell — no Python, no per-host runtime. They follow the same default-fail discipline: the
+POSIX-ish `bash` (works on macOS's bash 3.2). All three scripts depend on **`jq`**
+and check for it up front. They follow the same default-fail discipline: the
 mechanical parts are script-enforced, never model-asserted.
 
-- `scripts/lint-frontmatter.sh <path>…` — the B0 loadability preflight. Takes
-  `SKILL.md` files and/or directories (recurses for `SKILL.md`; defaults to `.`).
-  Exit 0 = clean, 1 = at least one file broken. Used by `skill-quality-review`
-  (before scoring) and `skill-quality-improve` (before emitting a candidate).
 - `scripts/init.sh` — scaffold `state.json` from the target skill, the
   train/held-out split, and the signal kind.
 - `scripts/record.sh` — record a version's pass/fail results on a split and
@@ -156,7 +101,3 @@ layout, hand-maintain `state.json` with the same fields, split tasks into
 train/held-out, propose edits only from train traces, and accept a candidate only
 after its recorded held-out score is *strictly greater* than the current best —
 never by judgment alone.
-
-For B0 without the script, run the frontmatter through any real YAML parser and
-confirm it both parses and yields a non-empty string `description` — reading the
-file and judging it by eye is exactly what misses a `: ` buried mid-sentence.

@@ -26,10 +26,10 @@ signal is the loss. Mechanism and laws live in `skill-quality-base` — load it.
    and the held-out score is noise, not signal; `skill-quality-evaluate` gives the
    sizing, ~5 train / ~3 holdout). If unsure whether your count is enough, say so
    and let the user decide rather than guessing.
-3. **A mechanical verification signal exists** (oracle / anchor / self-criteria).
+3. **A mechanical verification signal exists** (oracle or executable anchor).
    If the deliverable's quality is a human judgment call, **stop** — a loop with a
    signal that can't discriminate converges on worse output (base law 1). Run
-   `skill-quality-evaluate` once for a baseline and hand the rest to a human.
+   route the assessment to `skill-quality-review`.
 
 If any precondition is unmet, say so and stop; do not fabricate tasks or a signal.
 
@@ -95,8 +95,7 @@ over the real skill.
 
 - `skill-quality-evaluate` — the loss step; also runs standalone to audit/baseline.
 - `skill-quality-improve` — the gradient+update step.
-- `skill-quality-base` — state schema, laws, scripts, and the content-quality
-  rubric that `improve` writes edits by.
-- `skill-quality-review` — advisory review (static rubric + deliverable read); a
-  cheap pre-filter before committing to a run, and the home for skills this loop
-  can't touch (no mechanical signal).
+- `skill-quality-base` — state schema, laws, verification-signal policy, and loop scripts.
+- `skill-quality-standard` — normative requirements that every candidate preserves.
+- `skill-quality-review` — the separate qualitative path for the usual case where
+  no mechanical signal exists.
