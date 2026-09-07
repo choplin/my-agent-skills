@@ -120,12 +120,24 @@ Every blocking design issue names exactly one authority:
 
 | Authority | Meaning |
 |---|---|
-| **AI** | AI may choose the best-supported option within the confirmed contract and record rationale. |
 | **Human** | AI prepares evidence, viable options, consequences, and a recommendation; the user chooses. |
+| **AI** | AI may choose the best-supported option within the confirmed contract and record rationale. |
 | **External** | A named external owner or artifact must supply the choice or input. |
+
+**Assignment test.** The default is Human. AI qualifies only when the Outcome
+Contract and completed research evidence rank the options without appealing to
+user preference — no viable alternative survives the contract. When two or more
+options survive, the choice is a preference call and belongs to Human.
+
+A design issue exists only because the choice binds downstream work; reversible
+detail never becomes one (section 4). AI authority is therefore the exception,
+not the starting point.
 
 Authority is not a confidence level. Do not substitute AI authority merely
 because a human or external answer is slow.
+
+Authority governs only who chooses among options. It confers no permission to
+commit, integrate, or close work.
 
 Every decision record contains:
 

@@ -165,8 +165,12 @@ it asks for. Do not run a mode questionnaire:
 | The selected Issue | Hand off to |
 |---|---|
 | Entails repository changes toward a commit (normally `impl`) | `orchestration-toolkit-execute` |
-| Produces a non-repository deliverable — analysis, design, research (normally `design`/`research`) | Ordinary in-session work; record the deliverable on the Issue |
+| Produces a deliverable that lives outside the repository — analysis, research, or a decision recorded on the Issue | Ordinary in-session work; record the deliverable on the Issue |
 | Is a trivial, self-evident change | Implement it directly; for a repository change, satisfy `octa-base`'s implementation completion gate before closing it |
+
+Route by where the deliverable lands, not by the Type label. A `design` or
+`research` Issue whose deliverable is repository content is a repository change:
+take the first row.
 
 State the choice in one line and proceed. If dependencies on sibling Issues
 surface while working, that is the signal to stop and route the Project-sized
@@ -193,9 +197,12 @@ Issue–PR link change does. When the procedure returns Done, continue with step
 8. Otherwise report the exact unresolved gate or explicit commit-only outcome
 it returned.
 
-Design/research work records its result and acceptance evidence in the Issue.
-Close it to Done with `octa issue close <number> --lease "$LEASE"` after
-acceptance, then release the lease normally.
+This lane covers only design/research whose deliverable stays outside the
+repository. Such work records its result and acceptance evidence in the Issue.
+Close it to Done with `octa issue close <number> --lease "$LEASE"` after the
+user accepts the recorded result, then release the lease normally. Silence is
+not acceptance. When the work turned out to change repository content, it is an
+`impl` change: apply `implementation-completion.md` instead of closing here.
 
 ### 7. Finish or pause
 
