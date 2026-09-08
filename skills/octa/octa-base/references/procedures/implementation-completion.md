@@ -8,27 +8,38 @@ pass it to every protected Issue mutation.
 ## Pre-commit human review
 
 1. Finish the implementation and run the relevant checks without committing.
-2. Before asking for approval, orient the user with enough relevant context to
-   review the implementation effectively. The account should be concise and
-   self-contained: bring forward the problem, intended behavior, and material
-   context needed to judge the result instead of making the user reconstruct
-   them from the Issue or discover the review questions from the diff. Choose
-   the structure and level of detail that best fit the change.
+2. Present a concise, self-contained review brief that lets the user decide
+   whether the implementation satisfies the Issue and is safe to approve,
+   without reopening the Issue or reconstructing the change from the diff.
 
-   Explain the work in coherent change units rather than collapsing it into one
-   summary. Help the user understand what changed, why it was needed, how the
-   implementation realizes it, and what deserves scrutiny. Ground each
-   explanation in the corresponding change by weaving in whichever location is
-   most useful in context — for example a file and line, class, function, or
-   variable — without turning those references into an inventory.
+   Include the context and evidence that decision depends on:
 
-   Exercise judgment about supporting detail. Surface design decisions,
-   constraints, deviations, uncertainty, unverified critical behavior, and
-   risks when they affect review. Omit routine passing checks, pass counts,
-   workspace metadata, path or symbol dumps, lifecycle narration, and other
-   execution detail that does not help the user judge the change. Translate
-   implementation terminology into the behavior or risk it represents, and
-   end with the specific approval or decision needed from the user.
+   - the Issue number and title as the review's starting point, plus its Project
+     or parent Issue when that context materially explains the scope;
+   - the original problem and intended behavior;
+   - the material change units, connecting what changed, why it was needed, and
+     how the implementation produces the intended behavior;
+   - the evidence for acceptance-critical behavior; and
+   - when material to the decision, consequential design choices, scope
+     boundaries, deviations, uncertainty, unverified critical behavior, and
+     residual risks.
+
+   These are content requirements, not required headings or a fixed order.
+   Adapt the presentation to the change: a small change may need only a few
+   sentences, while a larger change may use short sections or grouped bullets.
+   Explain larger work in coherent change units that connect behavior,
+   rationale, and implementation rather than collapsing it into one summary.
+
+   Do not satisfy the brief with an inventory of files, symbols, checks, or
+   lifecycle events. Use code locations and verification details only where
+   they help explain behavior, evidence, or risk. Omit routine passing checks,
+   pass counts, workspace metadata, and other execution detail that does not
+   affect the decision. Re-read the Issue when necessary to recover its problem,
+   intended behavior, or acceptance context.
+
+   At this gate, ask only whether the implementation is approved. Approval
+   authorizes the established commit and integration workflow unless the user
+   explicitly limits it.
 3. Move the Issue to In Review with `issue set --as "In Review"` and the lease,
    then wait for explicit approval before invoking `git-helpers-commit`. Silence is not
    approval, and requesting implementation earlier is not approval of the
