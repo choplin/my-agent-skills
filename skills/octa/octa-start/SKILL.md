@@ -24,8 +24,12 @@ report any of the six that is missing rather than substituting another one —
 then fetch Issue candidate context in one read:
 
 ```graphql
-{
-  issues(filter: { stateType: ["open", "in progress"] }, limit: 100) {
+query StartCandidates($offset: Int!) {
+  issues(
+    filter: { stateType: ["open", "in progress"] }
+    offset: $offset
+    limit: 100
+  ) {
     number
     title
     state
@@ -39,9 +43,16 @@ then fetch Issue candidate context in one read:
 }
 ```
 
-Run the document with `octa query`. Retrieve and merge every page by following
-the `octa` product skill's query mechanics. Exclude In Review Issues, then
-present two sections across every Project and No Project:
+Run the document with `octa query --variables '{"offset": 0}'` and inspect the
+response `errors`. Append that page's `data.issues` to one candidate list. When
+the page contains exactly 100 Issues, add 100 to `offset` and run the same
+document again; when it contains fewer than 100, stop. Thus 100 and 200 total
+records require final empty reads at offsets 100 and 200, while 101 and 201
+stop after the one-record pages at offsets 100 and 200. Merge all pages before
+excluding, ordering, selecting, or reporting any Issue.
+
+Exclude In Review Issues, then present two sections across every Project and
+No Project:
 
 1. **In flight** — In Progress Issues first, most recently updated first. These
    are resume candidates.

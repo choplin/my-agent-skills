@@ -27,8 +27,12 @@ Run `octa project list --active --json` in the current repository.
 Query the selected Project's Backlog Issues by numeric ID:
 
 ```graphql
-query GroomQueue($projectId: Int!) {
-  issues(filter: { state: "Backlog", projectId: $projectId }, limit: 100) {
+query GroomQueue($projectId: Int!, $offset: Int!) {
+  issues(
+    filter: { state: "Backlog", projectId: $projectId }
+    offset: $offset
+    limit: 100
+  ) {
     number
     title
     leased
@@ -38,12 +42,19 @@ query GroomQueue($projectId: Int!) {
 }
 ```
 
-Run it with `octa query --variables '{"projectId": <id>}'`. Retrieve and merge
-every page by following the `octa` product skill's query mechanics. Order by
-Issue number, oldest first, and let the Milestone placement and blocker graph
-override that where they say more. Show number, title, and Type label when
-present; show untyped Issues explicitly rather than inferring a Type. If empty,
-say so and stop.
+Run it with
+`octa query --variables '{"projectId": <id>, "offset": 0}'` and inspect the
+response `errors`. Append that page's `data.issues` to one Backlog list. When
+the page contains exactly 100 Issues, add 100 to `offset` and run the same
+document again; when it contains fewer than 100, stop. Thus 100 and 200 total
+records require final empty reads at offsets 100 and 200, while 101 and 201
+stop after the one-record pages at offsets 100 and 200. Merge all pages before
+ordering, selecting, or reporting any Issue.
+
+Order by Issue number, oldest first, and let the Milestone placement and
+blocker graph override that where they say more. Show number, title, and Type
+label when present; show untyped Issues explicitly rather than inferring a
+Type. If empty, say so and stop.
 
 An Issue is not groomable when its description depends on an unresolved
 blocker or undecided external input. Use `blockedBy` for the initial check, then

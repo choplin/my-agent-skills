@@ -29,31 +29,54 @@ for available fields, and do not assemble a different document — the shape
 below is the contract this skill is written against.
 
 ```
-octa query <<'GRAPHQL'
-{
-  projects(limit: 100) { id name summary state stateType }
-  unfinished: issues(filter: { stateType: ["open", "in progress"] }, limit: 100) {
+octa query --variables '{"offset": 0}' <<'GRAPHQL'
+query Overview($offset: Int!) {
+  projects(offset: $offset, limit: 100) { id name summary stateType }
+  unfinished: issues(
+    filter: { stateType: ["open", "in progress"] }
+    offset: $offset
+    limit: 100
+  ) {
     number title state stateType updatedAt leased
     project { id }
     labels { name }
     blockedBy { number stateType }
   }
-  closed: issues(filter: { stateType: "closed" }, limit: 100) {
-    number
+  closed: issues(
+    filter: { stateType: "closed" }
+    offset: $offset
+    limit: 100
+  ) {
     project { id }
   }
 }
 GRAPHQL
 ```
 
-One response covers the whole report. `state` and `stateType` arrive together
-on every Issue, so no separate read of the state configuration is needed to
-turn a state into a count column; and the closed Issues arrive carrying their
-Project id, so no Project tally is needed either.
+Each response provides one page for all three report lists. Inspect its
+`errors`, then append `projects`, `unfinished`, and `closed` to their respective
+merged lists. If any list contains exactly 100 records, add 100 to `offset` and
+run the same fixed document again. Stop only when all three lists contain fewer
+than 100 records on the same response; short or empty pages from one list are
+still appended while another list continues. Merge every page before
+partitioning, counting, ordering, or reporting. `projects` and `closed` are the
+lists that realistically need more than one page.
 
-Retrieve and merge every page before processing the response, following the
-`octa` product skill's query mechanics. `projects` and `closed` are the lists
-that realistically need more than one page.
+Every selected field has a report consumer:
+
+- `projects.id` joins Issues to Project groups, `name` titles the group,
+  `summary` supplies its purpose line, and `stateType` excludes closed Projects;
+- unfinished Issue `number` and `title` identify it, `state` names its exact
+  lifecycle state, `stateType` supplies the count column, `updatedAt` orders and
+  dates it, `leased` reports ownership, `project.id` assigns its group,
+  `labels.name` supplies Type, and blocker `number` plus `stateType` identifies
+  blockers outside the closed type;
+- closed Issue `project.id` supplies each Project and No Project closed count.
+
+`state` and `stateType` arrive together on every unfinished Issue, so no
+separate read of the state configuration is needed to turn a state into a count
+column; and the closed Issues arrive carrying their Project id, so no Project
+tally is needed either.
 
 If `octa` is not on PATH, or the command fails because the working directory is
 not a Git repository octa knows, report that and stop rather than falling back
