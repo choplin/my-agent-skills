@@ -109,8 +109,10 @@ Choose autonomously from the deliverable:
   current-workspace path already handles that case.
 - design/research without repository changes: use the current workspace.
 
-For a new worktree, use a descriptive branch name with no octa number. Pass the
-local reference as opaque worktree association metadata, for example:
+When a new isolated worktree is needed, create it from the repository's normal
+target branch through `workflow-adapter-worktree-create`, using a descriptive
+branch name with no octa number. Pass the local reference as opaque worktree
+association metadata, for example:
 
 ```text
 octa:<repo>#<number> <title>
@@ -187,9 +189,10 @@ rather than re-picking one. Route by the artifact found at step 5:
 | None | Apply the Starting table above, but frame the remaining work from step 5 as the task, not the whole Issue |
 
 For an `impl` change, implement and verify without committing, pass the selected
-Issue's full record and retained lease into the execution flow, then read and
-apply `octa-base`'s `references/implementation-completion.md` from pre-commit
-review through its closing outcome. That procedure owns the review brief,
+Issue's full record, retained lease, and prepared workspace into the execution
+flow, then read and apply `octa-base`'s
+`references/implementation-completion.md` from pre-commit review through its
+closing outcome. That procedure owns the review brief,
 status transitions, feedback cycle, commit handoff, integration, completion
 comment, lease release, and cleanup; do not reproduce those branches here.
 Comments and reads need no lease, but every protected Issue mutation and

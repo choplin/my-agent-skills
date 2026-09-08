@@ -2,11 +2,11 @@
 name: orchestration-toolkit-execute
 description: >-
   Executes one groomed tracker Issue inline, with no delegation and no graph:
-  recovers the Issue's durable knowledge, prepares its worktree, implements and
-  commits in this session, decides reversible calls autonomously while parking
-  one-way doors, keeps checkpoint comments, runs risk-based adversarial review,
-  and advances status only as far as the integration gate permits. Applies when
-  the work unit is a single already-groomed Issue in the tracker.
+  recovers the Issue's durable knowledge, uses its prepared worktree, implements
+  and commits in this session, decides reversible calls autonomously while
+  parking one-way doors, keeps checkpoint comments, runs risk-based adversarial
+  review, and advances status only as far as the integration gate permits.
+  Applies when the work unit is a single already-groomed Issue in the tracker.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
 metadata:
   description-role: trigger
@@ -25,11 +25,11 @@ scheduling. A single node does not need a project control plane.
 Apply `workflow-adapter-tracker-read`, `workflow-adapter-tracker-comment`, and
 `workflow-adapter-tracker-transition` for Issue operations;
 `workflow-adapter-markdown-find` and `workflow-adapter-markdown-read` for
-durable knowledge; the matching `workflow-adapter-worktree-<operation>` skill
-for worktree operations; and `git-helpers-commit` for every commit. The calling
-provider start skill supplies its implementation-completion procedure and any
-protected mutation handle. If neither was supplied, return to that provider's
-start skill before execution rather than guessing lifecycle state.
+durable knowledge; and `git-helpers-commit` for every commit. The calling
+provider start skill supplies the prepared workspace, its
+implementation-completion procedure, and any protected mutation handle. If
+these were not supplied, return to that provider's start skill before execution
+rather than guessing lifecycle state.
 
 ## Invariants
 
@@ -95,14 +95,11 @@ Markdown provider for durable rationale, and the repository for actual
 behavior. A material contradiction is a Parking Lot entry, not something to
 resolve by preference.
 
-### 3. Prepare the workspace
+### 3. Use the prepared workspace
 
-Recover the Issue's worktree through `workflow-adapter-worktree-list` and
-`workflow-adapter-worktree-read`, or create it through
-`workflow-adapter-worktree-create`,
-based on the repository's normal target branch. Name the branch after the
-deliverable, never after the tracker identifier, and record the Issue as opaque
-association metadata on the worktree.
+Use the workspace supplied by the provider's start skill. Confirm it is the
+intended repository worktree, then continue without discovering or creating
+another one.
 
 ### 4. Open the run record
 

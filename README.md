@@ -141,7 +141,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - `workflow-adapter-tracker-create` ← inception-finalize, planning-toolkit
 - `workflow-adapter-markdown-create` ← design-note, inception-finalize, planning-toolkit, repository-context-base
 - `workflow-adapter-markdown-find` / `workflow-adapter-markdown-read` ← planning-toolkit, orchestration-toolkit-execute, repository-context-base
-- `workflow-adapter-worktree-list` / `workflow-adapter-worktree-read` ← octa, orchestration-toolkit-execute, git-helpers-squash-merge
+- `workflow-adapter-worktree-list` / `workflow-adapter-worktree-read` ← octa, git-helpers-squash-merge
 - `quick-code-review` ← code-review-session-import-ai
 - `artifact-review` ← code-review-session-import-ai, orchestration-toolkit-execute
 - `review-lenses` ← quick-code-review, artifact-review
@@ -182,7 +182,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - octa-base → **workflow-adapter-worktree-read**, **workflow-adapter-worktree-remove**
 - octa-overview → octa-base
 - octa-capture-feedback → octa-base
-- octa-start → octa-base, octa-handoff, **git-helpers-commit**, **workflow-adapter-worktree-resolve**, **workflow-adapter-worktree-list**
+- octa-start → octa-base, octa-handoff, **git-helpers-commit**, **workflow-adapter-worktree-resolve**, **workflow-adapter-worktree-list**, **workflow-adapter-worktree-create**
 - octa-groom → octa-base
 - octa-handoff → octa-base
 
@@ -193,7 +193,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - base → the matching **workflow-adapter-tracker-<operation>** and **workflow-adapter-markdown-<operation>** skills
 
 **orchestration-toolkit**
-- execute → **artifact-review**, **workflow-adapter-tracker-read**, **workflow-adapter-tracker-comment**, **workflow-adapter-tracker-transition**, **workflow-adapter-markdown-find**, **workflow-adapter-markdown-read**, **workflow-adapter-worktree-list**, **workflow-adapter-worktree-read**, **workflow-adapter-worktree-create**, the selected tracker provider's start/groom/handoff skills, **git-helpers-commit**
+- execute → **artifact-review**, **workflow-adapter-tracker-read**, **workflow-adapter-tracker-comment**, **workflow-adapter-tracker-transition**, **workflow-adapter-markdown-find**, **workflow-adapter-markdown-read**, the selected tracker provider's start/groom/handoff skills, **git-helpers-commit**
 
 **workflow-adapter contracts and implementations**
 - each `workflow-adapter-markdown-<operation>` skill → the matching installed implementation whose description selects the provider
