@@ -8,30 +8,27 @@ pass it to every protected Issue mutation.
 ## Pre-commit human review
 
 1. Finish the implementation and run the relevant checks without committing.
-2. Ask the user to review it with a compact, self-contained brief. It must make
-   sense without the earlier conversation or requiring the user to open octa:
-   - **Reference** — Issue number and title; Project or parent Issue when it
-     materially explains the scope. Keep octa references in the internal
-     review conversation, not in commits, branches, repository files, or forge
-     PR text.
-   - **Background / problem** — what user-visible or engineering problem made
-     the work necessary, including the relevant prior behavior.
-   - **Goal and acceptance** — the intended outcome and the Issue's checkable
-     done conditions; include important constraints or exclusions when they
-     shape the review.
-   - **Workspace** — absolute worktree path and work branch, or state that the
-     change was made directly in the current workspace.
-   - **Changes** — what changed, grouped by behavior rather than file list.
-   - **Verification** — checks run and their results; identify anything not run.
-   - **Review focus** — the concrete points the user should inspect or decide.
-     Tie each point to acceptance-critical behavior, a meaningful
-     implementation choice, a deviation from the Issue, or a risk-prone area;
-     name the relevant entry point when useful. Do not say only "review the
-     diff."
-   - **Risks / open points** — residual concerns or `None`.
-   Re-read the Issue before writing the brief if its context was not retained
-   through execution. Do not reduce background and goal to a generic one-line
-   purpose when the Issue contains enough detail to distinguish them.
+2. Before asking for approval, orient the user with enough relevant context to
+   review the implementation effectively. The account should be concise and
+   self-contained: bring forward the problem, intended behavior, and material
+   context needed to judge the result instead of making the user reconstruct
+   them from the Issue or discover the review questions from the diff. Choose
+   the structure and level of detail that best fit the change.
+
+   Explain the work in coherent change units rather than collapsing it into one
+   summary. Help the user understand what changed, why it was needed, how the
+   implementation realizes it, and what deserves scrutiny. Ground each
+   explanation in the corresponding change by weaving in whichever location is
+   most useful in context — for example a file and line, class, function, or
+   variable — without turning those references into an inventory.
+
+   Exercise judgment about supporting detail. Surface design decisions,
+   constraints, deviations, uncertainty, unverified critical behavior, and
+   risks when they affect review. Omit routine passing checks, pass counts,
+   workspace metadata, path or symbol dumps, lifecycle narration, and other
+   execution detail that does not help the user judge the change. Translate
+   implementation terminology into the behavior or risk it represents, and
+   end with the specific approval or decision needed from the user.
 3. Move the Issue to In Review with `issue set --as "In Review"` and the lease,
    then wait for explicit approval before invoking `git-helpers-commit`. Silence is not
    approval, and requesting implementation earlier is not approval of the
