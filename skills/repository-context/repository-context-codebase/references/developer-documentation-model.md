@@ -37,8 +37,9 @@ condition hold:
    - In `design/`, the claim is part of the exact current contract, rationale,
      rejected alternatives, or explanatory history for one design topic and is
      needed to implement, verify, or judge that topic.
-   - In the decision log, the claim records when a decision was made or changed
-     and points to the current document that owns the resulting rule.
+   - In the decision log, the claim is one concise record of what was decided,
+     why, and when, and points to the current document that owns the resulting
+     rule. It does not explain how the decision is implemented.
 
 Use the test at claim level. A useful section can still contain one line that
 does not earn its maintenance cost.
@@ -125,9 +126,9 @@ Attach current rationale to the choice it explains. For example:
 The first half is a boundary; the second makes the boundary predictable. Keep
 the rationale only while that reason remains true and relevant. Keep the
 current rule and rationale in their canonical design document. When the order
-of decisions has continuing value, record a concise chronological entry in the
+of decisions has continuing value, add a concise entry to the newest-first
 decision log and link back to that canonical document; do not make the log a
-second explanation of the current design.
+second explanation of the current design or its implementation.
 
 Use stable anchors such as `internal/orders`, `OrderRepository`, or a manifest
 name. Avoid line coordinates, commit-pinned links, and lists of every participant
@@ -198,10 +199,16 @@ current rule or the decision log that owns chronology.
 
 ### `docs/decision-log.md`: history
 
-Maintain a chronological table of decisions made or changed. Link each entry to
-the current document that owns the resulting rule. The log records when a
-decision happened and what it replaced; it does not become a second source of
-current design truth.
+Maintain one concise, newest-first table of what was decided and why. Each row
+records the date, the decision and its brief reason, what it superseded when
+relevant, and a link to the document that owns the resulting rule. Linked
+documents are rewritten in place and describe the current snapshot.
+
+Keep implementation details, procedures, edge cases, worked examples, and
+migration progress out of the log. Put current design detail in the linked
+document, implementation-local detail in code or reference documentation, and
+unfinished work in the tracker. The log preserves decision history; it is not a
+second source of current design or implementation truth.
 
 ### Single source of truth
 
@@ -215,8 +222,9 @@ does not restate the structural summary.
 Put a passage at the top level when a reader needs it to hold the shape of an
 architectural unit in mind. Put it in `design/` when the reader can understand
 the shape without it but needs it to implement, verify, or judge whether the
-rule should change. Put the timing of a decision in `decision-log.md`. Put an
-implementation gap or migration step in the work tracker.
+rule should change. Put a concise record of what was decided, why, and when in
+`decision-log.md`, but not how it is implemented. Put an implementation gap or
+migration step in the work tracker.
 
 Diagrams are optional. Use one when it makes a relationship, ownership model,
 or multi-step flow materially easier to understand than prose. Keep its source
@@ -256,8 +264,9 @@ implementation can:
 - verify that each design document treats one design topic in full: its precise
   rule, rationale, rejected alternatives, and only history that explains the
   current choice;
-- verify that the decision log records chronology and links to current truth
-  without restating it;
+- verify that the decision log is concise and newest-first, records what was
+  decided and why, and links to current truth without restating its design or
+  implementation details;
 - verify that implementation gaps and tentative proposals remain in the work
   tracker and that each settled claim has one canonical home;
 - state the system's structural priorities and core vocabulary;
