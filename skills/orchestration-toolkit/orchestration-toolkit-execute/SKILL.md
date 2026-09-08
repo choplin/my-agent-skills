@@ -15,7 +15,7 @@ metadata:
 # Execute one Issue
 
 One groomed Issue, one coherent change, driven through implementation and
-verification in this session. It reaches Done only when the selected provider's
+verification in this session. It reaches Done only when the applicable
 integration gate passes; otherwise it remains In Progress or In Review.
 
 The Issue already says **what** to build; this skill decides **how** and does it.
@@ -25,10 +25,9 @@ scheduling. A single node does not need a project control plane.
 Apply `workflow-adapter-tracker-read`, `workflow-adapter-tracker-comment`, and
 `workflow-adapter-tracker-transition` for Issue operations;
 `workflow-adapter-markdown-find` and `workflow-adapter-markdown-read` for
-durable knowledge; and `git-helpers-commit` for every commit. The calling
-provider start skill supplies the prepared workspace, its
-implementation-completion procedure, and any protected mutation handle. If
-these were not supplied, return to that provider's start skill before execution
+durable knowledge; and `git-helpers-commit` for every commit. Execution requires
+a prepared workspace, an implementation-completion procedure, and any protected
+mutation handle. If required execution context is missing, stop before execution
 rather than guessing lifecycle state.
 
 ## Invariants
@@ -73,13 +72,11 @@ status. Then confirm it is actually executable:
 - any `blocked by` relation is Done.
 
 If a blocker is open, stop and say so. If the requested outcome spans several
-dependent Issues, this is the wrong skill — return to the selected provider's
-groom skill or `planning-toolkit-plan` to expose an executable next Issue rather
-than widening this run.
+dependent Issues, this is the wrong skill — stop and report that grooming or
+planning must expose an executable next Issue rather than widening this run.
 
-Move the Issue to In Progress if it is not already. When entered from
-the selected provider's start skill, the status, coordination handle, and
-workspace are already prepared; do not redo them.
+Move the Issue to In Progress if it is not already. Reuse any supplied
+coordination handle and prepared workspace rather than reacquiring them.
 
 ### 2. Recover the knowledge surface
 
@@ -97,9 +94,8 @@ resolve by preference.
 
 ### 3. Use the prepared workspace
 
-Use the workspace supplied by the provider's start skill. Confirm it is the
-intended repository worktree, then continue without discovering or creating
-another one.
+Confirm the prepared workspace is the intended repository worktree, then use it
+without discovering or creating another one.
 
 ### 4. Open the run record
 
@@ -132,8 +128,8 @@ durable state, and a second copy on disk only goes stale.
 
 Work the Progress list top to bottom.
 
-- Implement and verify without committing; the caller-supplied completion
-  procedure owns the reviewed commit.
+- Implement and verify without committing; the supplied completion procedure
+  owns the reviewed commit.
 - Apply the decision split to every call that arises.
 - When a step is blocked only by a parked decision, skip it and continue.
 - Update the record at meaningful boundaries and before the session ends by
@@ -143,11 +139,10 @@ Work the Progress list top to bottom.
 
 If the Parking Lot fills faster than Progress — most steps need a parked decision
 — the Issue was not groomed enough to execute. Stop, post what you found, and
-route to the selected provider's groom skill when the requirements need
-settling, or to `inception` when the concept itself is unformed.
+report whether the requirements need grooming or the concept itself is unformed.
 
-If the run must pause mid-Issue, use the selected provider's handoff skill so a
-different session can resume from the Issue alone.
+If the run must pause mid-Issue, post a checkpoint and return a pause outcome so
+the surrounding workflow can perform any provider-specific handoff.
 
 ### 6. Verify
 
@@ -181,7 +176,7 @@ parked, what it blocks, the options, and your leaning. Decide them with the user
 move each resolution into the Decision Log, then finish the work that was blocked.
 
 When nothing remains open, assemble these Issue-specific inputs for the
-caller-supplied implementation-completion procedure:
+supplied implementation-completion procedure:
 
 - the acceptance table — each criterion mapped to observable evidence;
 - the prospective commit scope;
@@ -193,15 +188,15 @@ Apply that procedure from pre-commit review through its terminal outcome. It
 owns commit continuation, integration, tracker status, and cleanup; do not
 reproduce those branches here. Route each requested Issue operation through the
 matching `workflow-adapter-tracker-<operation>` skill, preserving any supplied
-mutation handle. Return the
-outcome to the caller after the procedure finishes or reaches an explicit stop.
+mutation handle. Return the outcome after the procedure finishes or reaches an
+explicit stop.
 
 ## When NOT to use
 
-- Several Issues with dependencies between them → the selected provider's groom
-  skill or `planning-toolkit-plan` to identify the next executable Issue.
+- Several Issues with dependencies between them → groom or plan the next
+  executable Issue first.
 - No Issue behind the work — an ad-hoc task to run autonomously → `exec-plan`.
-- The Issue's requirements are not settled → the selected provider's groom skill.
+- The Issue's requirements are not settled → groom the Issue first.
 - The concept itself is unformed → `inception`.
 - A trivial change with self-evident completion → just do it and note it on the Issue.
 

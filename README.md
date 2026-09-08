@@ -193,7 +193,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - base → the matching **workflow-adapter-tracker-<operation>** and **workflow-adapter-markdown-<operation>** skills
 
 **orchestration-toolkit**
-- execute → **artifact-review**, **workflow-adapter-tracker-read**, **workflow-adapter-tracker-comment**, **workflow-adapter-tracker-transition**, **workflow-adapter-markdown-find**, **workflow-adapter-markdown-read**, the selected tracker provider's start/groom/handoff skills, **git-helpers-commit**
+- execute → **artifact-review**, **workflow-adapter-tracker-read**, **workflow-adapter-tracker-comment**, **workflow-adapter-tracker-transition**, **workflow-adapter-markdown-find**, **workflow-adapter-markdown-read**, **git-helpers-commit**
 
 **workflow-adapter contracts and implementations**
 - each `workflow-adapter-markdown-<operation>` skill → the matching installed implementation whose description selects the provider

@@ -158,6 +158,12 @@ workflow.
   stages. Keep workflow-specific coupling only when a real dependency requires
   it; do not turn qualitative handoffs into schemas or mechanical validation
   merely to enforce this separation.
+- Keep shared domain knowledge and machinery separate from orchestration so each
+  stage remains independently effective. Direct the dependencies accordingly:
+  the orchestrator composes the stages, while stages may depend directly on
+  shared guidance such as a base skill for a common state model, terminology,
+  storage layout, CLI, or other foundation, without depending on the
+  orchestrator itself.
 - Include an order only where later work depends on earlier work.
 - Define handoffs, approval points, invariants, and stop conditions that must be
   shared across stages.
