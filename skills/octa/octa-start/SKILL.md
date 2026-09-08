@@ -73,19 +73,15 @@ selection first.
 ### 2. Confirm the selected Issue
 
 Read `octa issue show <number> --json`. Before changing state, lock, workspace,
-or files, show the number/title and re-establish enough context for a user who
-does not remember the Issue to judge what should happen next. Synthesize the
-current problem, its significance, and the intended outcome from the Issue and
-relevant repository evidence. Structure that explanation around the content so
-its relationships and relative importance are easy to grasp with low cognitive
-load; choose the presentation form in context. Do not dump the record or flatten
-it into an undifferentiated requirement list.
+or files, apply `octa-base`'s Issue decision brief so the user can judge whether
+to start the recorded work. Do not turn this confirmation into a newly invented
+implementation plan.
 
 For a Backlog selection, apply the `octa-base` self-completeness gate. Groom it
-in place before execution or route to `octa-groom`. Relate the proposed groomed
-interpretation to the context just established, making the intended change,
-material boundaries, and completion outcome easy to distinguish before asking
-for confirmation. Never treat rough capture as an implementation specification.
+in place before execution or route to `octa-groom`, using the same Issue
+decision brief for the proposal. The confirmation may cover both recording the
+presented definition and continuing into execution when both effects are stated
+explicitly. Never treat rough capture as an implementation specification.
 
 If any blocker outside the `closed` type remains, report it and do not start.
 

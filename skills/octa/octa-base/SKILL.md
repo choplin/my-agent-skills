@@ -84,6 +84,43 @@ asking for missing requirements? If not, leave it in Backlog.
 
 Backlog is rough capture and has no self-completeness bar.
 
+## Issue decision brief
+
+Before asking the user to approve a groomed Issue definition or start a ready
+Issue, present a concise, self-contained brief that lets them judge the work
+without reopening the Issue or reconstructing its meaning from repository
+evidence.
+
+Start with the Issue number and title. Add its Project, Milestone, or parent
+Issue when that context materially explains the scope. Then provide the content
+the decision depends on:
+
+- the current problem or behavior and why it matters;
+- the intended outcome;
+- the material scope, boundaries, inputs, and constraints;
+- the observable completion conditions and how relevant checks would establish
+  them; and
+- unresolved decisions, unsupported assumptions, or blockers, if any.
+
+These are content requirements, not required headings or a fixed order. Choose
+a structure proportional to the Issue and make the relationships among problem,
+outcome, scope, and completion easy to follow. Do not replace that account with
+an implementation-task, file, symbol, check, label, or lifecycle inventory.
+Mention repository locations only when they clarify scope, and mention workflow
+state or lease status only when it prevents the proposed action.
+
+For a grooming proposal, distinguish recorded facts from proposed
+interpretations. Also surface a proposed Type, split, dependency, or placement
+when it changes how the Issue will be defined or executed. Ask whether the
+presented definition should be recorded and moved to Todo. When grooming is a
+prerequisite to an Issue the user already selected through `octa-start`, the
+same confirmation may also authorize continuing into execution; state both
+effects explicitly.
+
+For an already groomed Issue selected through `octa-start`, preserve its
+recorded requirements rather than inventing an implementation plan. Ask only
+whether to start that Issue.
+
 ## Grouping and ordering
 
 Decide grouping and order independently:
