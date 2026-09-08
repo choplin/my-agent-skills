@@ -119,8 +119,8 @@ Before completing a write:
 2. confirm source anchors, document links, and diagram paths resolve;
 3. apply every completion criterion in the reference to the finished
    documentation set;
-4. read the entry path once from the perspective of a developer locating a
-   common change.
+4. read the entry path once from the perspective of a developer building an
+   accurate mental model of the system.
 
 Report the canonical entry-point path, the operation performed, the principal
 placement decisions, evidence examined, and any material area that could not be

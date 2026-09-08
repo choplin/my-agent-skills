@@ -81,16 +81,13 @@ at an external or user-visible entry, cross orchestration and policy, identify
 state transitions and side effects, and finish at observable output or failure.
 Choose flows for explanatory coverage, not feature coverage.
 
-### Change map
-
-For recurring classes of change, identify the owning concepts and components,
-the usual extension points, and the constraints to preserve. Do not turn this
-into a recipe for every possible task or duplicate contribution instructions.
-
 ## Conditional facets
 
 Add a focused section only when it materially changes the mental model:
 
+- a change map, only when a recurring class of change crosses several owners or
+  has non-obvious extension points and constraints that the other facets do not
+  already make clear;
 - data ownership and lifecycle;
 - external integration boundaries;
 - runtime or deployment topology;
@@ -175,8 +172,7 @@ A useful reading order for the entry point is:
 2. core concepts;
 3. component and ownership map;
 4. boundaries and invariants;
-5. representative flows;
-6. guidance for common changes.
+5. representative flows.
 
 ### `docs/design/`: one topic in full
 
@@ -273,8 +269,6 @@ implementation can:
 - identify the owner of the major decisions, state, and side effects;
 - predict the allowed direction across important boundaries;
 - trace at least one representative behavior end to end;
-- locate the starting points for a common change and name the invariants it must
-  preserve;
 - locate the exact contract and rationale for a design topic;
 - distinguish current design truth, decision history, and implementation work.
 
