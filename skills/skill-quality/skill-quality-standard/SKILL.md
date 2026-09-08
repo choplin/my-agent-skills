@@ -151,6 +151,13 @@ visible.
 A workflow skill should prescribe only the coordination that makes it a
 workflow.
 
+- Define each substantial stage around its own task and the minimum handoff its
+  consumers need. The orchestrator owns ordering, transitions, and invariants
+  across stages. A stage should normally depend only on its task inputs and any
+  shared base guidance, without needing to know its caller or neighboring
+  stages. Keep workflow-specific coupling only when a real dependency requires
+  it; do not turn qualitative handoffs into schemas or mechanical validation
+  merely to enforce this separation.
 - Include an order only where later work depends on earlier work.
 - Define handoffs, approval points, invariants, and stop conditions that must be
   shared across stages.
