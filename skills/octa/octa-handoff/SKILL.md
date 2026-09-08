@@ -1,6 +1,9 @@
 ---
 name: octa-handoff
-description: Records a self-complete handoff comment on an unfinished octa Issue so another session can resume the same work from its decisions, open questions, current state, and next step. Use at a session boundary while work remains In Progress.
+description: >-
+  Records the session-boundary handoff for an unfinished In Progress octa
+  Issue: a self-complete comment carrying its decisions, open questions,
+  current state, and next step into a later execution session.
 metadata:
   description-role: documentation
 ---

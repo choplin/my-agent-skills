@@ -1,11 +1,9 @@
 ---
 name: octa-start
 description: >-
-  Starts or resumes one octa Issue in the current Git repository: surfaces In
-  Progress work before Todo and Backlog, confirms the selection, claims it,
-  prepares or recovers a workspace, reconstructs prior work, and
-  carries it through the octa review and completion lifecycle. Use when picking
-  up repository work managed in octa.
+  Runs the execution phase for one selected octa Issue in the current Git
+  repository: confirms and claims the work, prepares or recovers its workspace,
+  reconstructs prior progress, and carries it through review and completion.
 metadata:
   description-role: documentation
 ---

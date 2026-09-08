@@ -1,6 +1,9 @@
 ---
 name: octa-groom
-description: Works through one active octa Project's Backlog oldest first, interactively turning rough items into self-complete Todo Issues, splitting oversized work and recording dependencies when needed. Use when preparing octa work for context-free execution.
+description: >-
+  Prepares one active octa Project's Backlog for context-free execution by
+  working oldest first with the user, producing self-complete Todo Issues and
+  splitting oversized work or recording dependencies when needed.
 metadata:
   description-role: documentation
 ---
@@ -89,9 +92,9 @@ For each pick:
    Issue.
 5. Add `--blocker` relations when completion order matters, passing
    `--lease "$LEASE"` to the protected `issue add` command.
-6. Assign exactly one Type label (`impl`, `design`, or `research`). Remove a
-   conflicting Type label first if the store's configuration predates
-   single-selection. Pass the same lease to label mutations.
+6. Assign exactly one Type label (`impl`, `design`, or `research`). If the Issue
+   currently has multiple Type labels, remove the conflicting labels first.
+   Pass the same lease to label mutations.
 7. Update the Issue body, relations, Project/Milestone, and labels with the
    same lease.
 8. Move it to Todo with `octa issue set <number> --as Todo --lease "$LEASE"`

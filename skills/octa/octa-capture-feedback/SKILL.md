@@ -1,11 +1,12 @@
 ---
 name: octa-capture-feedback
 description: >-
-  Captures one user-reported concern, friction point, bug observation, or
-  improvement idea as one repository-scoped octa Backlog Issue, asking only
-  for information that is necessary to preserve the report faithfully. Use
-  when a user notices something while using a product or tool and wants it
-  recorded in octa for later investigation or grooming.
+  Records one user-reported concern, friction point, bug observation, or
+  improvement idea at the feedback-capture entry point of the repository's
+  octa workflow, producing one faithful Backlog Issue with only the context
+  needed for later investigation or grooming.
+metadata:
+  description-role: documentation
 ---
 
 # Capture one feedback Issue

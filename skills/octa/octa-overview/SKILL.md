@@ -1,6 +1,9 @@
 ---
 name: octa-overview
-description: Gives a read-only snapshot of the current Git repository's octa work as a Markdown section per active Project plus Project-unassigned Issues, with open, in progress, and closed counts and a list of the unfinished Issues by most recent update. Use when deciding what is active or next without changing tracker state.
+description: >-
+  Gives the work-selection snapshot for the current Git repository's octa
+  workflow: a read-only Markdown section per active Project plus unassigned
+  Issues, with lifecycle counts and unfinished work ordered by recent activity.
 metadata:
   description-role: documentation
 ---
