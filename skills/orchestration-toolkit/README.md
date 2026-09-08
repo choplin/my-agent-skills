@@ -15,9 +15,10 @@ concept belongs in `inception`; an ad-hoc task with no tracker Issue belongs in
 ## Skill
 
 `orchestration-toolkit-execute` carries one groomed Issue to Done inline, with
-no delegation or dependency-graph control plane. It records reversible
-decisions in a Decision Log, parks one-way doors for one review pass, and uses
-risk-based adversarial review before applying the supplied completion procedure.
+no delegation or dependency-graph control plane. It handles routine judgment
+inline, records decisions when their consequence or continuation value warrants
+it, surfaces unresolved high-impact choices, and uses risk-based adversarial
+review before applying the supplied completion procedure.
 
 Several dependent Issues remain separate work units. Groom or plan the next
 executable Issue first; this group does not currently provide Project-wide

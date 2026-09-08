@@ -3,9 +3,10 @@ name: orchestration-toolkit-execute
 description: >-
   Executes one groomed tracker Issue inline, with no delegation and no graph:
   recovers the Issue's durable knowledge, uses its prepared worktree, implements
-  and commits in this session, decides reversible calls autonomously while
-  parking one-way doors, keeps checkpoint comments, runs risk-based adversarial
-  review, and advances status only as far as the integration gate permits.
+  and commits in this session, handles routine judgment inline, surfaces
+  consequential or continuity-relevant choices, keeps resumable checkpoint
+  comments, runs risk-based adversarial review, and advances status only as far
+  as the integration gate permits.
   Applies when the work unit is a single already-groomed Issue in the tracker.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Skill, AskUserQuestion
 metadata:
@@ -43,21 +44,25 @@ rather than guessing lifecycle state.
   and PR text.
 - Do not rewrite the Issue's requirements. Re-grooming is a separate operation.
 
-## The decision split
+## Decision handling
 
-The Issue fixes the What, but decisions still arise underneath it. Sort each one
-on two axes — **blast radius** (how much breaks if the call is wrong) and
-**reversibility** (how costly it is to undo).
+The Issue fixes the What, but implementation judgment still arises underneath
+it. Match the handling and record to the consequence of the call:
 
-- **Two-way door** (low blast radius AND easy to reverse) → decide it, record one
-  line in the Decision Log, keep moving.
-- **One-way door** (high blast radius OR hard to reverse) → do not guess. Add it
-  to the Parking Lot, skip the parts that depend on it, and keep driving the rest.
+- Make routine interpretive choices inline when the Issue and repository provide
+  enough context and the result is local and readily reversible. These choices
+  do not need individual classification or durable entries.
+- Record a resolved choice when its rationale would not be recoverable from the
+  code and another session needs it to review or continue the work.
+- Do not guess when a choice has material blast radius, is costly to reverse,
+  changes acceptance or constraints, or exposes an unresolved requirement.
+  Record the question, what it blocks, the viable options, and the current
+  evidence.
 
-Do not drip-feed questions while driving. A hard decision goes to the Parking Lot,
-not to the user; the Parking Lot is reviewed in one pass at the end. A wrong
-reversible call costs one cheap retry, so spend autonomy there; a wrong
-irreversible call can cost the whole run, so spend the user's attention there.
+Blast radius and reversibility are signals, not a form every decision must fill
+out. Requirement ambiguity and cross-session continuity matter too. Collect
+non-urgent unresolved questions for one review pass at a natural stopping point;
+stop immediately when continuing would risk safety or integrity.
 
 ## Workflow
 
@@ -89,8 +94,8 @@ needed to interpret scope, constraints, or acceptance.
 Note any contradiction between the Issue, durable knowledge, and the
 repository. The tracker is authoritative for current execution state, the
 Markdown provider for durable rationale, and the repository for actual
-behavior. A material contradiction is a Parking Lot entry, not something to
-resolve by preference.
+behavior. Treat a material contradiction as an unresolved question, not
+something to resolve by preference.
 
 ### 3. Use the prepared workspace
 
@@ -116,13 +121,16 @@ Use `workflow-adapter-tracker-comment` to post one comment on the Issue before d
 
 - [ ] <step>
 
-### Decision Log
+### Next
 
-### Parking Lot
+<the next concrete step>
 ```
 
 This is the running record. Do not also keep a local plan file: the Issue is the
 durable state, and a second copy on disk only goes stale.
+
+Add `### Decisions` or `### Unresolved questions` only when they contain
+information another session needs. Do not preserve empty headings as ceremony.
 
 ### 5. Drive inline
 
@@ -130,16 +138,21 @@ Work the Progress list top to bottom.
 
 - Implement and verify without committing; the supplied completion procedure
   owns the reviewed commit.
-- Apply the decision split to every call that arises.
-- When a step is blocked only by a parked decision, skip it and continue.
+- Make routine choices inline. Apply the decision-handling threshold when a
+  choice becomes consequential, requirement-sensitive, or important to
+  reconstructing the run.
+- When a step is blocked only by an unresolved question, skip it and continue
+  where that is safe.
 - Update the record at meaningful boundaries and before the session ends by
-  posting a fresh checkpoint comment — one current snapshot of Progress, Decision
-  Log, and Parking Lot, not an event log. Do not copy diffs or test output into
-  the tracker; git holds those. The record carries the judgment git cannot.
+  posting a fresh checkpoint comment — one current snapshot of completed and
+  current work, consequential decisions and rationale, unresolved questions,
+  and the next concrete step. Omit sections with no durable information. Do not
+  copy diffs or test output into the tracker; git holds those. The record carries
+  only the judgment and continuity context git cannot.
 
-If the Parking Lot fills faster than Progress — most steps need a parked decision
-— the Issue was not groomed enough to execute. Stop, post what you found, and
-report whether the requirements need grooming or the concept itself is unformed.
+If unresolved questions block most progress, the Issue was not groomed enough to
+execute. Stop, post what you found, and report whether the requirements need
+grooming or the concept itself is unformed.
 
 If the run must pause mid-Issue, post a checkpoint and return a pause outcome so
 the surrounding workflow can perform any provider-specific handoff.
@@ -171,16 +184,17 @@ them, and treat `inconclusive` as a coverage gap rather than a pass.
 
 ### 7. Close
 
-Bring the Parking Lot back in one pass: for each entry, the decision, why it was
-parked, what it blocks, the options, and your leaning. Decide them with the user,
-move each resolution into the Decision Log, then finish the work that was blocked.
+Bring unresolved questions back in one pass at a natural stopping point. For
+each, present what it blocks, the viable options, the evidence, and your leaning.
+Resolve them with the user, record rationale only when it remains important for
+review or continuation, then finish the work that was blocked.
 
 When nothing remains open, assemble these Issue-specific inputs for the
 supplied implementation-completion procedure:
 
 - the acceptance table — each criterion mapped to observable evidence;
 - the prospective commit scope;
-- autonomous decisions and their rationale;
+- consequential or continuity-relevant decisions and their rationale;
 - adversarial findings, or the recorded reason none were sought;
 - residual risks and verification gaps.
 
@@ -203,9 +217,11 @@ explicit stop.
 ## Success criteria
 
 - [ ] The Issue's acceptance was checked as executable before driving, and its blockers were Done.
-- [ ] The run record lives on the Issue and reconstructs Progress, Decision Log, and Parking Lot without conversation history.
-- [ ] Every decision was sorted by the two-axis split; no one-way door was resolved with a default.
-- [ ] The run advanced every Progress item not blocked by a parked decision, and the Parking Lot was reviewed in one pass.
+- [ ] Routine implementation judgment proceeded without unnecessary recording,
+      while consequential or requirement-sensitive decisions were not guessed.
+- [ ] The Issue record is sufficient to reconstruct completed and current work,
+      relevant rationale, unresolved questions, and the next step without
+      conversation history.
 - [ ] Independent adversarial review was run, or its absence was recorded with the risk assessment that justified it.
 - [ ] The completion note maps every acceptance criterion to observable evidence or an explicit gap.
 - [ ] A Done implementation is verified on its target branch, or its completion
