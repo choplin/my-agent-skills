@@ -65,6 +65,10 @@ Their presence is not evidence that the surrounding task is deterministic.
 | Keyword trigger | "Triggers on `code review`" | Matches words rather than user intent |
 | Negative catalog | "Not for tutorials, plans, or prose" | Makes adjacent work salient without defining the positive scope |
 | Reference without a load condition | "See references for details" | The model cannot decide when the context cost is justified |
+| Mixed-kind reference | One file holding a record schema and the procedure that writes it | Its readers differ, so neither can tell what binds them |
+| Kind-blind routing | "See `references/x.md`" for a definition the output must satisfy | Reads as optional background, so conformance becomes a judgment call |
+| Kind directory for one kind | `references/knowledge/` in a skill whose references are all knowledge | Adds a path level that distinguishes nothing |
+| Explanatory template | A file named `*-template.md` that mostly argues what a good answer looks like | Sits in `assets/` where nothing reads it for meaning |
 | Orphaned reference | Useful material never named by `SKILL.md` | The activated skill cannot discover it |
 
 When reviewing, prefer removing, merging, or generalizing misplaced content.

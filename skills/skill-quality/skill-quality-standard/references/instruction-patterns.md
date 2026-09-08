@@ -41,12 +41,12 @@ exists when the dependency is not obvious.
 
 ### Stage routing
 
-Keep the shared order and handoff contract in `SKILL.md`. Load a detailed stage
-reference only when that stage begins.
+Keep the shared order and handoff contract in `SKILL.md`. Load a stage's own
+procedure reference only when that stage begins.
 
 ```markdown
 1. Frame the decision and write `brief.md`.
-2. Before research, read `references/research.md`; use `brief.md` as its scope.
+2. Before research, read `references/procedures/research.md`; use `brief.md` as its scope.
 3. Synthesize the decision from the research artifact.
 ```
 

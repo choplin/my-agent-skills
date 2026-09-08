@@ -68,9 +68,10 @@ Use the least control that preserves the task's real requirements. Do not turn
 this classification into another schema, score, or decision tree that claims to
 settle contextual judgment mechanically.
 
-Read `references/skill-types.md` when the value source or role is unclear, or
-when reviewing the coverage and boundaries of a larger skill library. Its domain
-categories are examples for discovery, not required labels.
+Read `references/skill-types.md` when the value source or role is
+unclear, or when reviewing the coverage and boundaries of a larger skill
+library. Its domain categories are examples for discovery, not required
+labels.
 
 ## 2. Apply the common standard
 
@@ -169,8 +170,8 @@ workflow.
   shared across stages.
 - Leave the method inside a stage to the model when several approaches can work.
 - Keep a compact workflow inline. For substantial stages, keep only order and
-  handoff contracts in `SKILL.md`; route to one stage reference when that stage
-  begins.
+  handoff contracts in `SKILL.md`; route to that stage's own skill, or to one
+  procedure reference, when the stage begins.
 - Use a checklist only when persistent progress tracking prevents a real
   coordination failure. A numbered procedure is enough for most short flows.
 
@@ -199,16 +200,65 @@ Use progressive disclosure according to relevance, not file size alone:
 |-------|---------|
 | `description` | What the skill contributes and the context needed for its recorded trigger or documentation role |
 | `SKILL.md` | The direction, shared workflow spine, essential constraints, gotchas, and routing decisions needed whenever the skill runs |
-| `references/` | Domain, variant, or stage detail loaded only when a named decision or step requires it |
+| `references/` | Material loaded on demand at a named decision or step: knowledge the skill consults, procedures it runs, and contracts its work must satisfy |
 | `scripts/` | Deterministic operations executed without reproducing their logic in context |
-| `assets/` | Materials copied or transformed into the deliverable |
+| `assets/` | Materials copied or transformed into the deliverable, and verbatim material never read for guidance |
 
 Name each reference from `SKILL.md` at the point where it becomes relevant. Do
 not duplicate its contents in the body, eagerly load all references, or create a
 reference whose routing text costs more than the detail it contains.
 
-Keep a gotcha in `SKILL.md` when the model must know it before it could recognize
-the condition that makes it relevant.
+Keep a gotcha in `SKILL.md` when the model must know it before it could
+recognize the condition that makes it relevant.
+
+### Give every reference one kind
+
+A reference is read in one of three ways. The kind is not a label describing the
+subject matter; it is the contract the reader is placed under, so it decides how
+`SKILL.md` routes to the file and what a reader may do with what it finds there.
+
+| Kind | Directory when split | What it holds | The contract it puts the reader under |
+|------|-----------|---------------|----------------------------------------|
+| **Knowledge** | `references/knowledge/` | domain facts, models, catalogs, precedents, normative guidance | Consult the relevant part and judge in context. Partial reading is correct. Ignoring it costs quality, not validity. |
+| **Procedure** | `references/procedures/` | the steps the skill executes at one point in its flow | Enter it, work it in order against its inputs, and return its outcome. Skipping a step is a defect. |
+| **Contract** | `references/contracts/` | the definition a record, artifact, or external interface must satisfy | Conform to it. It binds every skill that reads or writes the thing it defines, so a deviation is a defect rather than a judgment call. |
+
+Every reference declares its kind in the sentence that routes to it, using the
+verb that kind takes: *read X when ...*, *apply X to ...*, *conform to X*. A
+reference whose kind cannot be recovered from that sentence leaves the reader to
+guess which contract applies to it.
+
+Separate the kinds into directories once a skill holds references of more than
+one kind, so the path carries the distinction the routing sentence makes. A
+skill whose references are all one kind gains nothing from the directory; leave
+them directly under `references/`.
+
+Where two kinds meet in one file, the readers differ — every participant
+conforms to a record schema, while only the writer runs the procedure that
+writes it — so make them separate references rather than one file under two
+contracts.
+
+A skill with a genuine fourth kind may name its own directory: a definition
+instantiated repeatedly per item rather than read once, for instance.
+
+A kind directory places its references two path levels below `SKILL.md`. Keep
+the chain flat in return: `SKILL.md` names the file directly instead of routing
+through an intermediate reference.
+
+### Keep a procedure in the skill unless an orchestrator sequences it
+
+A stage that an orchestrator sequences and hands off between belongs in its own
+skill (§3). Every other procedure stays inside the skill that runs it: a
+conditional branch, a host or platform variant, a subroutine that several
+sibling skills call. These have no independent trigger, and promoting them to
+skills puts a skill's internal dispatch into the skill namespace.
+
+### Keep judgment out of `assets/`
+
+`assets/` holds what is not read for meaning: a skeleton copied and filled,
+verbatim third-party text, an image, a data file. A file that mainly explains
+what a good answer looks like is knowledge however it is named; a file that
+supplies the shape and nothing else is an asset.
 
 ## 5. Write the description to its actual role
 
@@ -227,11 +277,11 @@ description.
 
 ## 6. Select structures after classification
 
-Read `references/instruction-patterns.md` only when the classification above
-shows that a concrete structure may help. Read `references/anti-patterns.md` when
-reviewing for excess or misplaced control. Read
-`references/agentskills-best-practices.md` only when these condensed rules leave
-an authoring question unresolved.
+Read `references/instruction-patterns.md` only when the
+classification above shows that a concrete structure may help. Read
+`references/anti-patterns.md` when reviewing for excess or misplaced
+control. Read `references/agentskills-best-practices.md` only when
+these condensed rules leave an authoring question unresolved.
 
 The available structures are not a checklist. The absence of a template,
 checklist, schema, script, or validation loop is not a defect unless the task's
