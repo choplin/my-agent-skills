@@ -74,9 +74,14 @@ For each pick:
 
 1. Read the full Issue and relevant repository evidence.
 2. Draft a self-complete body with What & why, Where, Inputs, Acceptance, and
-   Constraints, then propose it and confirm. Ask the user for whatever the
-   repository cannot supply, and never fill a missing what/why/acceptance with
-   an inference.
+   Constraints, then propose it and confirm. Assume the user does not remember
+   the Issue: re-establish the current problem, its significance, and intended
+   outcome before presenting the proposed groomed interpretation. Structure the
+   explanation around the content so its relationships and relative importance
+   are easy to grasp with low cognitive load; choose the presentation form in
+   context rather than exposing the body as an undifferentiated field or
+   requirement list. Ask the user for whatever the repository cannot supply,
+   and never fill a missing what/why/acceptance with an inference.
 3. Decide its true size. Keep one atomic deliverable, promote a small effort to
    parent plus sub-issues, or create a finite Project for a distinct outcome.
 4. Inspect `leased`. If another session holds a lease, skip the Issue. Otherwise
