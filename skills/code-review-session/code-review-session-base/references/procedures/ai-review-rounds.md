@@ -1,67 +1,8 @@
 # AI review rounds
 
-Use this procedure when `code-review-session-import-ai` obtains or imports AI
-findings. It preserves the provenance of each run without putting reviewer-specific
-bookkeeping in `review.md`.
-
-## Ledger
-
-Keep `{review_dir}/sources/ai.json` in this shape:
-
-```json
-{
-  "rounds": {
-    "1": {
-      "reviewer": "quick-code-review",
-      "mode": "full",
-      "scope": "current branch diff",
-      "base_sha": null,
-      "head_sha": "0123456789abcdef",
-      "target_fingerprint": "sha256:123456",
-      "context_fingerprint": "sha256:abcdef",
-      "previous_round": null,
-      "status": "completed",
-      "reason": null,
-      "new_items": [1, 2],
-      "matched_items": []
-    }
-  },
-  "items": {
-    "1": {
-      "round": "1",
-      "location": "src/example.ts:42",
-      "severity": "major",
-      "confidence": "high"
-    }
-  }
-}
-```
-
-Use the next positive integer key for every attempted round. Do not reuse keys.
-Allowed values are:
-
-- `mode`: `full`, `incremental`, `provided-findings`, or `skipped`;
-- `status`: `running`, `completed`, `failed`, or `skipped`.
-
-Record the exact scope description. Record `base_sha` and `head_sha` only when
-they can be resolved reliably; use `null` rather than guessing. These revision
-anchors do not fully identify a dirty working tree. Record a stable
-`target_fingerprint` over the exact artifact bytes or diff reviewed, including
-untracked files when they are in scope. Use `null` when the exact target cannot
-be captured reliably. `new_items` lists items created by the round.
-`matched_items` lists existing items that findings from this round duplicated.
-Omit an unavailable finding metadata value by using `null`.
-
-When non-code inputs can affect the review, record a stable
-`context_fingerprint` over the applicable constraints, direct or imported PR
-feedback, and terminal item decisions with their resolutions. Exclude open AI
-findings produced by the current round: merely recording a finding must not make
-an unchanged rerun look new. Use `null` when a stable fingerprint cannot be
-produced. Hash the canonical empty input when no non-code inputs apply; an
-unknown fingerprint cannot justify `skipped`.
-
-Items created by a round use `Source: ai:round/{round}` in `review.md`. Legacy
-items with `Source: ai` remain valid and are not rewritten.
+Apply this procedure when `code-review-session-import-ai` obtains or imports AI
+findings. Record every round in the ledger it defines: conform to
+`references/contracts/ai-ledger.md` for `{review_dir}/sources/ai.json`.
 
 ## Select the mode
 

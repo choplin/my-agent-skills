@@ -37,7 +37,7 @@ within a turn; the item's `Approach` field records the proposed response so a di
 ## Input
 
 - `review_dir` — where the record lives (default: standalone; see `code-review-session-base`
-  skill (`references/review-init-guide.md`)).
+  skill (`references/procedures/review-init-guide.md`)).
 - Direct feedback from the user during the session.
 
 ## Process
@@ -46,9 +46,9 @@ within a turn; the item's `Approach` field records the proposed response so a di
 
 Find `review.md` at `{review_dir}/review.md` (standalone: search
 `.agents/code-review-session/*/review.md`). If it does not exist, create it (via
-`code-review-session-base` skill (`references/review-init-guide.md`)) so direct feedback has a
+`code-review-session-base` skill (`references/procedures/review-init-guide.md`)) so direct feedback has a
 home. Normalize any legacy values (see `code-review-session-base` skill
-(`references/review-state.md`)).
+(`references/contracts/review-state.md`)).
 
 Present a short summary: how many items, how many `open`, grouped by `Source`.
 

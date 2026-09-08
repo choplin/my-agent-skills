@@ -19,7 +19,7 @@ setup cost. The result measures only what the named task set and signal can
 observe; it does not produce an overall quality judgment.
 
 > Load `skill-quality-base` for the run layout, `state.json`, and the scripts.
-> Load `skill-quality-base` (`references/verification-signals.md`) before
+> Load `skill-quality-base` (`references/knowledge/verification-signals.md`) before
 > designing the signal.
 
 ## When to use standalone
@@ -54,7 +54,7 @@ the split only matters when feeding `skill-quality-optimize`.
 ### 2. Design the verification signal
 
 Decide how each deliverable is judged **pass or fail**, following
-`skill-quality-base` (`references/verification-signals.md`): an **oracle**
+`skill-quality-base` (`references/knowledge/verification-signals.md`): an **oracle**
 (tests/reference/validator) or a **verification anchor** implemented as a
 mechanical checker. Write it to `<run-dir>/signal.md`.
 

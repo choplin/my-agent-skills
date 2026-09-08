@@ -45,7 +45,7 @@ You hold the **Facilitator** stance across the whole session, layered over which
 
 ## Phases and delegation
 
-Detail and per-phase methods live in `inception-base/references/phases.md`. Each phase is a skill you delegate to:
+Detail and per-phase methods live in `inception-base/references/contracts/phases.md`. Each phase is a skill you delegate to:
 
 | Phase | Skill | One-line stance |
 |-------|-------|-----------------|

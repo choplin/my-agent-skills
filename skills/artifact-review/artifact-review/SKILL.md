@@ -19,8 +19,8 @@ state.
 
 Require the `review-lenses` skill. If it is unavailable, stop before reviewing
 and tell the caller to install it; do not reconstruct or approximate its policy.
-Apply that skill, read `references/finding-policy.md` before planning, and read
-`references/lens-index.md` to select Lens IDs. Resolve those paths relative to
+Apply that skill, read `references/knowledge/finding-policy.md` before planning, and read
+`references/lenses/index.md` to select Lens IDs. Resolve those paths relative to
 the installed `review-lenses` skill. After selection, read only the corresponding
 Lens files linked by the index; do not load unselected Lens definitions.
 
@@ -112,7 +112,7 @@ artifact evidence and report the correction.
 
 ### 3. Select Lens IDs
 
-Use the `review-lenses` skill's `references/lens-index.md` in this order:
+Use the `review-lenses` skill's `references/lenses/index.md` in this order:
 
 1. include every caller-required Lens;
 2. include every Lens mandatory for the target kind or review scope;

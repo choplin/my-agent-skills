@@ -10,7 +10,7 @@ metadata:
 
 # Browser showcase capture
 
-Capture a controlled web-app story, not an incidental browser session. Use `showcase-capture-plan` first if the intended claim, states, or shot list is undecided. For the Playwright/Nix implementation pattern, read `references/playwright-recording.md`.
+Capture a controlled web-app story, not an incidental browser session. Use `showcase-capture-plan` first if the intended claim, states, or shot list is undecided. For the Playwright/Nix implementation pattern, apply `references/playwright-recording.md`.
 
 Own browser-specific state preparation, acquisition, state-preserving crop/resize/padding/export, and verification for both screenshots and video. Do not hand off merely because the requested artifact is a still. Treat the capture plan as the owner of the proof point, composition, target dimensions/format, and annotation intent.
 

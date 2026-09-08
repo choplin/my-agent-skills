@@ -50,18 +50,19 @@ tree is unclear. If `octa` is unavailable, stop; do not use another tracker.
 
 ## CLI contract
 
-Read [cli-contract.md](references/cli-contract.md) before using Issue leases,
-GraphQL queries, or Issue list state selectors. It records product mechanics
+Conform to [cli-contract.md](references/contracts/cli-contract.md) when using
+Issue leases, GraphQL queries, or Issue list state selectors. It records product mechanics
 only; this skill owns the lifecycle policy built on them.
 
 ## Required workflow configuration
 
-Read [workflow-configuration.md](references/workflow-configuration.md) before
+Read [workflow-configuration.md](references/knowledge/workflow-configuration.md) before
 first lifecycle use. States and labels are configured once for the whole octa
 store and govern every repository in it, so the six Issue states — Backlog,
 Todo, In Progress, In Review, Done, and Canceled — are the same everywhere and
-are named directly. octa's own seed is a smaller set, so a fresh store is
-brought to these six by that reference before lifecycle use. This convention
+are named directly. octa's own seed is a smaller set, so apply
+[store-setup.md](references/procedures/store-setup.md) to bring a fresh store to
+these six before lifecycle use. This convention
 prescribes no particular Project state set; the seeded one is left as it is.
 States carry no ordering; nothing about a state is derived from where it appears
 in `config issue state list`.
@@ -175,9 +176,9 @@ substituting another one. Apply transitions:
 
 ### Implementation completion procedure
 
-For every `impl` Issue, read and apply
-[implementation-completion.md](references/implementation-completion.md) from
-pre-commit review through its closing outcome. It is the single source of
+For every `impl` Issue, apply
+[implementation-completion.md](references/procedures/implementation-completion.md)
+from pre-commit review through its closing outcome. It is the single source of
 truth for the review brief, feedback cycle, commit-only exception, nested
 commit handoff, integration evidence, lease release, final status, and cleanup.
 Caller skills must invoke that procedure, not restate it.
@@ -211,18 +212,19 @@ the anchor and there is no local-file handoff fallback.
 
 ### Cleanup
 
-After Done, read [worktree-cleanup.md](references/worktree-cleanup.md). Remove an
+After Done, apply
+[worktree-cleanup.md](references/procedures/worktree-cleanup.md). Remove an
 isolated worktree and local work branch only after verifying integration,
 cleanliness, and identity.
 
 ### Worktree working directory
 
-After selecting an isolated worktree under Codex or Claude Code, read and apply
-[terminal-pane-cwd.md](references/terminal-pane-cwd.md). Under any other host,
-skip it.
+After selecting an isolated worktree under Codex or Claude Code, apply
+[terminal-pane-cwd.md](references/procedures/terminal-pane-cwd.md). Under any
+other host, skip it.
 
-Read [working-directory-model.md](references/working-directory-model.md) only
-when modifying or diagnosing these host procedures. Normal Issue execution does
+Read [working-directory-model.md](references/knowledge/working-directory-model.md)
+only when modifying or diagnosing these host procedures. Normal Issue execution does
 not need the directory and OSC 7 background it contains.
 
 ## Octa references stay local

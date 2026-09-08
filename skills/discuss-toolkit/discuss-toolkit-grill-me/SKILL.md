@@ -50,6 +50,6 @@ or `discuss-toolkit-grill-me` when they want a candidate direction challenged.
 The **Grilling** section is reproduced verbatim from Matt Pocock's `grilling`
 skill in [`mattpocock/skills`](https://github.com/mattpocock/skills). It is
 licensed under the MIT License; retain
-[`references/mattpocock-mit-license.md`](references/mattpocock-mit-license.md)
+[`assets/mattpocock-mit-license.md`](assets/mattpocock-mit-license.md)
 with copies or substantial portions. This version adds only the
 `discuss-toolkit-dig` gate, toolkit positioning, and the local stopping rule.

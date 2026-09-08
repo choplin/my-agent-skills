@@ -31,7 +31,7 @@ Everything the user thinks lands in **one thinking graph** (`graph.json`). The P
 ```
 .agents/inception/<topic-slug>/
 ├── graph.json        # the single source of truth (schema: schema/graph.schema.json)
-├── prd.md            # projection: foundational PRD (see references/prd-template.md)
+├── prd.md            # projection: foundational PRD (see references/knowledge/prd-standard.md)
 ├── decisions.md      # projection: Decision nodes with rejected alternatives
 ├── action-items.md   # projection: Action nodes
 └── open-questions.md  # projection: open discussion nodes by nextMove + deferred
@@ -47,7 +47,7 @@ All artifacts — every node's `content` and every PRD field — are written in 
 
 ## The PRD is foundational, not a summary
 
-`prd.md` is meant to be a long-term anchor — what a new contributor reads months later to understand what this is and why. It renders a full template (`references/prd-template.md`): Summary, Background, Problem, Purpose/Vision, Central question, Target users, Value proposition, Goals, Non-goals, plus Direction (decisions) / Risks / Open-by-design drawn from the graph. Live open questions stay in `open-questions.md`, not the PRD. **Unfilled sections render as `_not yet defined_`** — that is a signal to keep working, not to converge. Fill each PRD field from the user's own input via dig; never write the AI's guess into a PRD field. The session fields backing these sections are in the schema (`session.summary`, `session.problem`, …).
+`prd.md` is meant to be a long-term anchor — what a new contributor reads months later to understand what this is and why. It renders every PRD section, and `references/knowledge/prd-standard.md` records what a good answer to each looks like: Summary, Background, Problem, Purpose/Vision, Central question, Target users, Value proposition, Goals, Non-goals, plus Direction (decisions) / Risks / Open-by-design drawn from the graph. Live open questions stay in `open-questions.md`, not the PRD. **Unfilled sections render as `_not yet defined_`** — that is a signal to keep working, not to converge. Fill each PRD field from the user's own input via dig; never write the AI's guess into a PRD field. The session fields backing these sections are in the schema (`session.summary`, `session.problem`, …).
 
 ## Node / graph model
 
@@ -103,7 +103,7 @@ This is a hard rule, not a suggestion: a resolution built on an assumed answer l
 
 ## Phase model
 
-The session moves through phases; in each, the AI takes a different stance. The orchestrator estimates the phase and **proposes** transitions for the user to approve (it never switches silently). Full detail and per-phase methods: `references/phases.md`.
+The session moves through phases; in each, the AI takes a different stance. The orchestrator estimates the phase and **proposes** transitions for the user to approve (it never switches silently). Conform to `references/contracts/phases.md` for the phase values and their transitions.
 
 | Phase | session.phase | AI stance |
 |-------|---------------|-----------|

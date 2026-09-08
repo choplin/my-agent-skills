@@ -48,10 +48,11 @@ directory**): `` `code-review-session-base` skill (`references/<file>`) ``.
 
 | Resource | File | Used for |
 |----------|------|----------|
-| Review template | `references/review-template.md` | Creating `review.md` |
-| Review-state model | `references/review-state.md` | Item fields/statuses, review phase, source convention |
-| Review init guide | `references/review-init-guide.md` | Resolving `review_dir` and creating `review.md` |
-| AI review rounds | `references/ai-review-rounds.md` | Recording AI runs and selecting full, incremental, or skipped review |
+| Review template | `assets/review-template.md` | Fill it when creating `review.md` |
+| Review-state model | `references/contracts/review-state.md` | Conform to it for item fields/statuses, review phase, and the source convention |
+| AI round ledger | `references/contracts/ai-ledger.md` | Conform to it when reading or writing `sources/ai.json` |
+| Review init guide | `references/procedures/review-init-guide.md` | Apply it to resolve `review_dir` and create `review.md` |
+| AI review rounds | `references/procedures/ai-review-rounds.md` | Apply it to run an AI round and select full, incremental, or skipped review |
 
 ## Where the record lives (`review_dir`)
 
@@ -84,7 +85,7 @@ generic item. Each item references its source via a `Source` ref (e.g.
 source's own data.
 
 This keeps the item model small and lets each source bring arbitrary bookkeeping
-without polluting review state. See `references/review-state.md`.
+without polluting review state. See `references/contracts/review-state.md`.
 
 ## Extensibility
 

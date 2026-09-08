@@ -1,8 +1,8 @@
-# Foundational PRD Template
+# Foundational PRD Standard
 
 The inception PRD is meant to be a **long-term anchor** for a product/project — the document a new contributor reads months later to understand what this is and why. It is not a sprint summary. Do not converge it while it is thin; an unfilled section is a signal to keep working, not to ship.
 
-This template synthesizes common public PRD structures (Marty Cagan / SVPG, Amazon "Working Backwards" PR-FAQ, Lenny's PRD). Each section maps to a `session.*` field rendered by the CLI.
+This standard synthesizes common public PRD structures (Marty Cagan / SVPG, Amazon "Working Backwards" PR-FAQ, Lenny's PRD). Each section maps to a `session.*` field rendered by the CLI.
 
 > **Language: all PRD content is plain, clear English.** Short sentences, concrete nouns, no rhetorical flourish. Rhetoric reads as substance in prose but adds no information; plain English exposes thin thinking instead of hiding it. This applies to every node's `content` too.
 

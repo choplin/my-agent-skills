@@ -30,8 +30,8 @@ repository instructions, the current diff, public entry points, build/test
 commands, schema metadata, and generated SQL artifacts before editing.
 
 Load `codebase-structure-base`, read its
-`references/reviewability-goal.md`, `references/concept-model-template.md`, and
-`references/boundary-forces.md`, then inventory the relevant concepts. Read
+`references/knowledge/reviewability-goal.md`, `references/procedures/concept-model.md`, and
+`references/knowledge/boundary-forces.md`, then inventory the relevant concepts. Apply
 [the contract and invariant checklist](references/contract-invariant-checklist.md)
 before choosing extraction order.
 
@@ -66,7 +66,7 @@ query style when SQL changes.
 
 When an external integration combines native discovery or identity,
 application-specific projection, and coordinated persistence, read the
-`codebase-structure-base` skill's `references/integration-boundaries.md`.
+`codebase-structure-base` skill's `references/knowledge/integration-boundaries.md`.
 
 Put every write necessary to preserve one invariant in the same transaction.
 Review failure paths so a failed operation cannot leave an observable

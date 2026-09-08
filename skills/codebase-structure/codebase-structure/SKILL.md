@@ -14,8 +14,8 @@ metadata:
 # Codebase Structure
 
 Load the `codebase-structure-base` skill. Read its
-`references/reviewability-goal.md`, `references/concept-model-template.md`, and
-`references/boundary-forces.md` resources before selecting boundaries.
+`references/knowledge/reviewability-goal.md`, `references/procedures/concept-model.md`, and
+`references/knowledge/boundary-forces.md` resources before selecting boundaries.
 
 ## 1. Model concepts and use cases
 
@@ -50,7 +50,7 @@ capability.
 
 When an external integration combines external-system discovery or identity,
 application-specific selection or normalization, and coordinated persistence,
-read the base skill's `references/integration-boundaries.md`.
+read the base skill's `references/knowledge/integration-boundaries.md`.
 
 ## 3. Map the target structure
 

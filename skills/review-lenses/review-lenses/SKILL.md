@@ -19,14 +19,14 @@ Resolve every path below relative to this skill's installed directory.
 
 ## Common finding policy
 
-Read [references/finding-policy.md](references/finding-policy.md) before running
+Read [references/knowledge/finding-policy.md](references/knowledge/finding-policy.md) before running
 any Lens. It defines the evidence and actionability threshold, exclusions,
 severity meanings, and the boundary between findings, observations, and
 residual risk.
 
 ## Selecting Lenses
 
-Read [references/lens-index.md](references/lens-index.md) when the caller must
+Read [references/lenses/index.md](references/lenses/index.md) when the caller must
 select Lenses from target kind, scope, risk signals, or reviewer budget. The
 index owns selection and packing metadata and links every Lens definition.
 
@@ -39,23 +39,23 @@ of reviewer context is the reason the catalog is split.
 An ordinary code-change review always applies these four Lenses:
 
 - `code.functional-correctness` —
-  `references/lens-code-functional-correctness.md`
+  `references/lenses/code-functional-correctness.md`
 - `code.security-regression` —
-  `references/lens-code-security-regression.md`
+  `references/lenses/code-security-regression.md`
 - `code.performance-regression` —
-  `references/lens-code-performance-regression.md`
+  `references/lenses/code-performance-regression.md`
 - `code.maintainability-risk` —
-  `references/lens-code-maintainability-risk.md`
+  `references/lenses/code-maintainability-risk.md`
 
 Bundle them into one reviewer for a quick review. Assign them to separate fresh
 reviewers when a rigorous artifact review has enough capacity. Both modes apply
-the same `references/finding-policy.md`; presentation and aggregation may differ.
+the same `references/knowledge/finding-policy.md`; presentation and aggregation may differ.
 
 ## Resource contract
 
 - `finding-policy.md` decides what qualifies for reporting; Lens files decide
   what to inspect.
-- `lens-index.md` is the sole owner of scope, mandatory conditions, triggers,
+- `lenses/index.md` is the sole owner of scope, mandatory conditions, triggers,
   effort, packing groups, and Lens-to-file mappings.
 - Individual Lens files own objective, required inputs, checks, non-goals, and
   severity guidance. Do not duplicate selection metadata in them.

@@ -37,17 +37,17 @@ against the shared domain and use-case model from static evidence. Do not
 minimize essential domain complexity; minimize ambiguous ownership, hidden
 connections, vocabulary drift, and unjustified indirection.
 
-Read `references/reviewability-goal.md` before choosing between otherwise valid
-structures.
+Read `references/knowledge/reviewability-goal.md` before choosing between
+otherwise valid structures.
 
 ## Shared resources
 
 | Resource | Load when |
 | --- | --- |
-| `references/reviewability-goal.md` | Designing, reviewing, or comparing structures |
-| `references/concept-model-template.md` | Modeling a target or mapping an implementation before structural decisions |
-| `references/boundary-forces.md` | Choosing or reviewing ownership, capability, consistency, resource, representation, or module boundaries |
-| `references/integration-boundaries.md` | An external integration combines native knowledge, application projection, and persistence coordination |
+| `references/knowledge/reviewability-goal.md` | Read when designing, reviewing, or comparing structures |
+| `references/procedures/concept-model.md` | Apply when modeling a target or mapping an implementation before structural decisions |
+| `references/knowledge/boundary-forces.md` | Read when choosing or reviewing ownership, capability, consistency, resource, representation, or module boundaries |
+| `references/knowledge/integration-boundaries.md` | Read when an external integration combines native knowledge, application projection, and persistence coordination |
 
 Other skills refer to these as the `codebase-structure-base` skill's
 `references/<file>` resource. Load only the resources required by the current

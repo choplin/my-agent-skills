@@ -45,7 +45,8 @@ Source placement alone is not evidence of encapsulation.
 
 When an external integration combines external-system-native knowledge,
 application-specific projection, and coordinated persistence, read the
-`codebase-structure-base` skill's `references/integration-boundaries.md`.
+`codebase-structure-base` skill's
+`references/knowledge/integration-boundaries.md`.
 
 Confirm that the use-case owner invokes the external capability and controls
 coupled writes, transaction scope, and its observable result. Treat a

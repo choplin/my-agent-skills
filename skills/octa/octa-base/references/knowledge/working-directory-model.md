@@ -2,7 +2,7 @@
 
 Read this reference only when modifying or diagnosing octa's host-specific
 working-directory procedures. Normal Issue execution uses
-[terminal-pane-cwd.md](terminal-pane-cwd.md) instead.
+`references/procedures/terminal-pane-cwd.md` instead.
 
 ## Session and tool working directories
 

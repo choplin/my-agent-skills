@@ -24,7 +24,7 @@ Own visible-screen state preparation, acquisition, state-preserving crop/resize/
 
 ## Capture the planned take
 
-On macOS, read `references/macos-capture.md` before choosing an acquisition path. Prefer CleanShot X when it is already installed and enabled; use its URL scheme for the operations it exposes, then fall back to macOS-native capture when CleanShot is unavailable or cannot satisfy the planned take. Do not install or enable a capture tool without approval.
+On macOS, apply `references/macos-capture.md` when choosing an acquisition path. Prefer CleanShot X when it is already installed and enabled; use its URL scheme for the operations it exposes, then fall back to macOS-native capture when CleanShot is unavailable or cannot satisfy the planned take. Do not install or enable a capture tool without approval.
 
 Use the operating system's accessible screenshot/screen-recording tool or an available screen-capture integration. Request needed permissions through the normal UI; do not bypass privacy or OS security controls.
 

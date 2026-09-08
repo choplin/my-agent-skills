@@ -1,7 +1,7 @@
 ---
 title: "Skill-First Distribution Architecture"
 created: 2026-06-22
-updated: 2026-09-07
+updated: 2026-09-08
 ---
 
 # Skill-First Distribution Architecture
@@ -131,6 +131,18 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
    `nix develop` else aggregated fail) is specified in
    [skill-runtime-and-dependencies.md](./skill-runtime-and-dependencies.md).
 
+8. **Every reference declares its kind.** A `references/` file is read in one of
+   three ways, and `SKILL.md` says which with the verb that routes to it:
+   *knowledge* to consult (*read X when …*), a *procedure* to run (*apply X
+   to …*), or a *contract* to conform to (*conform to X*). A skill holding more
+   than one kind separates them into `references/knowledge/`,
+   `references/procedures/`, and `references/contracts/`; a single-kind skill
+   leaves its files directly under `references/`. Material that is not read for
+   meaning — a skeleton filled in, verbatim third-party text, an image — lives in
+   `assets/`. A procedure becomes its own skill only when an orchestrator
+   sequences it as a stage. Full normative treatment: the
+   `skill-quality-standard` skill.
+
 ## Related policies
 
 - **Descriptions** — what a `description` is for, and how the two invocation
@@ -152,6 +164,11 @@ namespace by **baking a `<group>-` prefix into the flat `name`**:
 
 ## History
 
+- **2026-09-08** — Added convention 8, the reference-kind rule, after the
+  `references/` layer was found to be defined only by when it loads. Knowledge,
+  procedures, contracts, and deliverable templates had become
+  indistinguishable to both a later reader and a routed model, so the kind is
+  now declared by the routing verb and, in multi-kind skills, by the directory.
 - **2026-09-07** — Moved qualitative skill-content requirements into the
   dedicated `skill-quality-standard`. Model-judged review applies that standard
   by default; quantitative improvement remains a separate path for outputs with

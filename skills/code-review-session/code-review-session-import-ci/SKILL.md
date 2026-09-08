@@ -20,7 +20,7 @@ The generic item goes into `review.md`; CI-specific data goes into a separate
 ## Input
 
 - `review_dir` — where the record lives (default: standalone; see `code-review-session-base`
-  skill (`references/review-init-guide.md`)).
+  skill (`references/procedures/review-init-guide.md`)).
 - CI checks for the current branch / PR (default source: GitHub checks via `gh`).
 
 ## Process

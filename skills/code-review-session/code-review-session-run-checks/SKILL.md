@@ -25,7 +25,7 @@ of this skill's job; importing CI results is not.
 ## Input
 
 - `review_dir` — where the record lives (default: standalone; see
-  `code-review-session-base` skill (`references/review-init-guide.md`)).
+  `code-review-session-base` skill (`references/procedures/review-init-guide.md`)).
 - `checks` — the commands to run. When the caller provides none, use the project's
   obvious ones (its Makefile targets, package scripts, or the commands named in
   `CLAUDE.md` / `AGENTS.md` / the README). State which commands were chosen.
@@ -35,7 +35,7 @@ of this skill's job; importing CI results is not.
 ### 1. Resolve the record
 
 Resolve `review_dir` and ensure `review.md` exists (create via
-`code-review-session-base` skill (`references/review-init-guide.md`) if not).
+`code-review-session-base` skill (`references/procedures/review-init-guide.md`) if not).
 
 ### 2. Run each check
 
@@ -57,7 +57,7 @@ passes does **not** resolve its existing item — resolution is
 For each failing check:
 
 1. **Item in `review.md`** (see `code-review-session-base` skill
-   (`references/review-state.md`)):
+   (`references/contracts/review-state.md`)):
    - **Source**: `check:{command}`
    - **Status**: `open`
    - **Detail**: the command, its exit code, and the output excerpt

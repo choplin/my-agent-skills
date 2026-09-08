@@ -49,7 +49,7 @@ this family enforces — do not shortcut them:
    self-verifier drove pass rate down 82.7% → 78.0% over more rounds). If you
    cannot build a signal that mechanically discriminates good output from bad,
    **do not run the quantitative path** — use `skill-quality-review` for a
-   qualitative assessment. See `references/verification-signals.md`.
+   qualitative assessment. See `references/knowledge/verification-signals.md`.
 2. **Isolate the oracle; gate on held-out.** Edits are proposed from *train*
    trajectories; whether an edit is kept is decided only by its score on a
    *held-out* task split the improver never sees. Training on your test set
@@ -67,7 +67,8 @@ this family enforces — do not shortcut them:
 
 A run lives in one directory. `state.json` is the bookkeeping + gate record; the
 agent writes the human-readable artifacts (versions, traces, evals) around it.
-Full schema, layout, and stop conditions: `references/state-schema.md`.
+Conform to `references/contracts/state-schema.md` for the full schema, layout,
+and stop conditions.
 
 ```
 <run-dir>/
@@ -94,7 +95,8 @@ mechanical parts are script-enforced, never model-asserted.
 - `scripts/test.sh` — exercise the split-isolation, complete-recording, and gate
   preconditions. Run it when changing the loop scripts.
 
-See `references/state-schema.md` for exact invocations of the loop scripts.
+Apply `references/procedures/loop-scripts.md` for the exact loop-script
+invocations.
 
 ## Graceful fallback
 

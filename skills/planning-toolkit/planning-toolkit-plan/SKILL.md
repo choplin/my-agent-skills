@@ -61,7 +61,7 @@ rather than conceptually open, use `discuss-toolkit-dig`.
   is unavailable, finish a
   concrete proposal but report that registration remains incomplete.
 
-Read [references/output-contract.md](references/output-contract.md) before
+Apply [references/output-contract.md](references/output-contract.md) when
 drafting the proposal or writing either system.
 
 ## Workflow

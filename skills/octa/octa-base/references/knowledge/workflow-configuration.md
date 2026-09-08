@@ -4,7 +4,8 @@ Read this before first lifecycle use of an octa store. States, labels, and
 label groups are configured once for the whole store and govern every
 repository in it; `octa config` rejects `--repo` and `--all-repos`. A rename or
 deletion here moves or retires Issues in every repository, so inspect before
-changing anything.
+changing anything. Apply `references/procedures/store-setup.md` to bring an
+unconfigured store to the convention described here.
 
 ## Issue states
 
@@ -39,37 +40,6 @@ Two `in progress` states are intentional: In Progress is work and In Review is
 review, and only their names say which is which. Two `closed` states are
 intentional for the same reason: Done and Canceled are both closed, and the
 name carries why.
-
-### Bringing a store to it
-
-A store with no configured states is seeded with `open`, `in progress`,
-`closed`, and `not planned`, one default per type. Seeding runs only when no
-state is configured at all, so a customized store keeps exactly the states it
-has. Rename the seeded states into the set above rather than stacking
-near-duplicates beside them:
-
-```sh
-octa config issue state set "open" --name Backlog          # renaming moves its Issues too
-octa config issue state set "in progress" --name "In Progress"
-octa config issue state set "closed" --name Done
-octa config issue state set "not planned" --name Canceled
-octa config issue state create Todo --type open
-octa config issue state create "In Review" --type "in progress"
-```
-
-Renaming carries each type's existing default with it, so Backlog, In Progress,
-and Done end up as the defaults without a further command.
-
-For a store that already holds other states, rename where the target name is
-free and delete with `--move-to` where it collides with a state the store
-already has:
-
-```sh
-octa config issue state delete <old> --move-to <new>  # --move-to is required while Issues remain
-```
-
-The schema refuses to delete a state that still holds Issues without
-`--move-to`, and deleting a state never deletes Issues.
 
 ### Types and their defaults
 
@@ -126,14 +96,9 @@ the seeded set alone unless a repository needs more.
 
 ## Type labels
 
-Inspect first, then create missing Issue definitions:
-
-```sh
-octa config issue label-group create Type --selection single
-octa config issue label create impl --group Type
-octa config issue label create design --group Type
-octa config issue label create research --group Type
-```
+The Type group carries `impl`, `design`, and `research`. Apply
+`references/procedures/store-setup.md` to create them in a store that lacks
+them.
 
 Labels are store-wide, and the record they classify is part of the command
 name: `octa config issue label ...` and `octa config project label ...`. Do

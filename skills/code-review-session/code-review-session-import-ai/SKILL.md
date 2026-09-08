@@ -38,7 +38,7 @@ records them.
 ## Input
 
 - `review_dir` — where the record lives (default: standalone; see
-  `code-review-session-base` skill (`references/review-init-guide.md`)).
+  `code-review-session-base` skill (`references/procedures/review-init-guide.md`)).
 - `scope` — the change to review (default: current branch diff).
 - `reviewer` — optional; which reviewer to invoke (default
   `quick-code-review`).
@@ -51,9 +51,11 @@ records them.
 ### 1. Resolve the record
 
 Resolve `review_dir` and ensure `review.md` exists (create via
-`code-review-session-base` skill (`references/review-init-guide.md`) if not).
-Read `code-review-session-base` skill (`references/ai-review-rounds.md`) and
-load or initialize `{review_dir}/sources/ai.json`.
+`code-review-session-base` skill (`references/procedures/review-init-guide.md`) if not).
+Apply `code-review-session-base` skill
+(`references/procedures/ai-review-rounds.md`), conforming to its ledger
+(`references/contracts/ai-ledger.md`), and load or initialize
+`{review_dir}/sources/ai.json`.
 
 ### 2. Plan the round
 
@@ -81,7 +83,7 @@ If the reviewer fails or its output cannot be normalized, record the round as
 ### 4. Record findings and finish the round
 
 For each finding, append an item to `review.md` under `## Items` (see
-`code-review-session-base` skill (`references/review-state.md`)):
+`code-review-session-base` skill (`references/contracts/review-state.md`)):
 
 - **Source**: `ai:round/{round}`
 - **Status**: `open`

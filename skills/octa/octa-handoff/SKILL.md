@@ -13,7 +13,7 @@ The Issue remains In Progress.
 Do not use this flow after implementation review has started. Feedback,
 corrections, approval, commit, and integration keep that Issue in the review
 state unless the user explicitly sends it back to working; continue through
-`octa-base`'s `references/implementation-completion.md` instead. A review or
+`octa-base`'s `references/procedures/implementation-completion.md` instead. A review or
 integration wait that has not closed the Issue may release its lease for a later
 explicit resume, but it is not an In Progress handoff.
 

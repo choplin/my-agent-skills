@@ -128,7 +128,7 @@ Issue comments; recover plausible existing work before creating a replacement
 workspace.
 
 After selecting or recovering an isolated worktree, and only under Codex or
-Claude Code, apply `octa-base`'s `references/terminal-pane-cwd.md` before
+Claude Code, apply `octa-base`'s `references/procedures/terminal-pane-cwd.md` before
 reading, editing, or running commands for the Issue. Retain the safe return
 directory only in live session context for later cleanup. Under any other host,
 skip this procedure.
@@ -191,7 +191,7 @@ rather than re-picking one. Route by the artifact found at step 5:
 For an `impl` change, implement and verify without committing, pass the selected
 Issue's full record, retained lease, and prepared workspace into the execution
 flow, then read and apply `octa-base`'s
-`references/implementation-completion.md` from pre-commit review through its
+`references/procedures/implementation-completion.md` from pre-commit review through its
 closing outcome. That procedure owns the review brief,
 status transitions, feedback cycle, commit handoff, integration, completion
 comment, lease release, and cleanup; do not reproduce those branches here.

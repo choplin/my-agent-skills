@@ -19,11 +19,11 @@ Require the `review-lenses` skill. If it is unavailable, stop before reviewing
 and tell the caller to install it; do not reconstruct or approximate its policy.
 Apply that skill and read:
 
-- `references/finding-policy.md`;
-- `references/lens-code-functional-correctness.md`;
-- `references/lens-code-security-regression.md`;
-- `references/lens-code-performance-regression.md`;
-- `references/lens-code-maintainability-risk.md`.
+- `references/knowledge/finding-policy.md`;
+- `references/lenses/code-functional-correctness.md`;
+- `references/lenses/code-security-regression.md`;
+- `references/lenses/code-performance-regression.md`;
+- `references/lenses/code-maintainability-risk.md`.
 
 Resolve those paths relative to the installed `review-lenses` skill.
 

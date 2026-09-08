@@ -46,7 +46,7 @@ Decide whether an input gesture is itself part of the proof. If the claim is tha
 
 ## Produce the plan
 
-Use the templates in `references/capture-plan-template.md`. Create a concise plan containing:
+Fill the templates in `assets/capture-plan-template.md`. Create a concise plan containing:
 
 - **Video**: target duration; a beat-by-beat script with on-screen action, spoken/narration copy when applicable, expected state, evidence shown, hold/transition timing, and capture surface.
 - **Stills**: a shot list with the exact scene, visible proof point, framing/crop, target dimensions or aspect ratio, output format, any intended annotation or composition, capture surface, and selected annotation tool when needed.

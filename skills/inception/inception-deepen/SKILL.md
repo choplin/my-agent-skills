@@ -12,7 +12,7 @@ metadata:
 
 # Inception — Deepen (深掘り)
 
-> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Phase map: `inception-base/references/phases.md`.
+> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Phase map: `inception-base/references/contracts/phases.md`.
 
 **Stance: adversarial. Attack premises; be the devil's advocate.** Drain the queue one foundational point at a time, but pressure-test before closing. This is where thinking actually advances.
 

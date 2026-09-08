@@ -159,8 +159,8 @@ document.
 
 ### 6. Design executable phases
 
-Read [the instruction template](references/refactor-instructions-template.md)
-before drafting. Tailor every section to the repository; remove template
+Fill [the instruction template](assets/refactor-instructions-template.md)
+when drafting. Tailor every section to the repository; remove template
 prompts and placeholders.
 
 Order phases by dependency and reversibility:

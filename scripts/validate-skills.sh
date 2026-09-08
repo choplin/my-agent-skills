@@ -83,7 +83,7 @@ while IFS= read -r skill_dir; do
     --strict \
     --allow-extra-frontmatter \
     --allow-dirs=agents,schema \
-    --allow-nested-paths=references/common,references/en,references/ja \
+    --allow-nested-paths=references/common,references/en,references/ja,references/knowledge,references/procedures,references/contracts,references/lenses \
     ${validator_args[@]+"${validator_args[@]}"} || validation_exit=1
 done < <(list_skill_dirs)
 

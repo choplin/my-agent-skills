@@ -12,14 +12,14 @@ metadata:
 
 # Inception — Converge (収束)
 
-> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Phase map: `inception-base/references/phases.md`.
+> Assumes `inception-base` is loaded (graph model, CLI, dig rule). Phase map: `inception-base/references/contracts/phases.md`.
 
 **Stance: synthesize.** Pull the resolved graph into a footing the user can act on.
 
 ## How to run it
 
 - Summarize the through-line from central question to decisions. Surface **tradeoffs** across decisions and sequence the `Action` nodes.
-- **Complete the foundational PRD.** Sharpen `session.valueProposition`, `session.goal`, and `session.nonGoals` as decisions land. The PRD is a long-term anchor, not a summary — don't converge it while sections are thin (`inception-base/references/prd-template.md`).
+- **Complete the foundational PRD.** Sharpen `session.valueProposition`, `session.goal`, and `session.nonGoals` as decisions land. The PRD is a long-term anchor, not a summary — don't converge it while sections are thin (`inception-base/references/knowledge/prd-standard.md`).
 - Ensure the `Decision` nodes collectively tell a consistent story. If a decision implies an action no one captured, add the `Action` node.
 - Name what is deliberately deferred and why (`deferred` status + `deferReason`), so it reads as a choice, not an omission.
 - Run `render` and walk the user through `prd.md`, `decisions.md`, `action-items.md`, `open-questions.md`.

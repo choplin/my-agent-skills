@@ -23,7 +23,7 @@ score, and does not imply that a skill guarantees behavior.
 Run a static review for every target. Add:
 
 - **family** when the user names a cooperating skill family or repository scope;
-  read `references/family-review.md` before reviewing;
+  apply `references/family-review.md` before reviewing;
 - **deliverable** when the skill can be run safely on a few realistic tasks and
   its output can be meaningfully inspected.
 

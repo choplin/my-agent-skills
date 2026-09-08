@@ -18,9 +18,9 @@ metadata:
 Apply the shared delivery model before running another `planning-toolkit-*`
 workflow. This skill owns vocabulary and invariants; caller skills own actions.
 
-Read [references/delivery-model.md](references/delivery-model.md) in full before
-creating or interpreting a Project, assigning readiness, or handing work to
-another Planning Toolkit skill.
+Conform to [references/delivery-model.md](references/delivery-model.md), reading
+it in full before creating or interpreting a Project, assigning readiness, or
+handing work to another Planning Toolkit skill.
 
 ## Ownership
 

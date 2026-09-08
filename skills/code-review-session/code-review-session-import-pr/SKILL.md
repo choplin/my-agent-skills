@@ -20,7 +20,7 @@ so PR bookkeeping never mixes into review state.
 ## Input
 
 - `review_dir` — where the record lives (default: standalone; see `code-review-session-base`
-  skill (`references/review-init-guide.md`)).
+  skill (`references/procedures/review-init-guide.md`)).
 - An open PR on the current branch.
 
 ## Process
@@ -28,7 +28,7 @@ so PR bookkeeping never mixes into review state.
 ### 1. Resolve the record and PR
 
 1. Resolve `review_dir`; ensure `review.md` exists (create via `code-review-session-base`
-   skill (`references/review-init-guide.md`) if not).
+   skill (`references/procedures/review-init-guide.md`) if not).
 2. **Find the open PR**: `gh pr view --json number,url,state` for the current branch.
    If none or not OPEN/DRAFT: stop and report "No open PR found for the current branch."
 3. **Derive owner/repo**: `gh repo view --json nameWithOwner --jq '.nameWithOwner'`.
@@ -66,7 +66,7 @@ Wait for confirmation.
 
 For each new comment:
 
-1. **Item in `review.md`** (see `code-review-session-base` skill (`references/review-state.md`)):
+1. **Item in `review.md`** (see `code-review-session-base` skill (`references/contracts/review-state.md`)):
    - **Source**: `pr:comment/{commentId}`
    - **Status**: `open`
    - **Detail**: the comment body (and, for inline, `{path} L{line}`)

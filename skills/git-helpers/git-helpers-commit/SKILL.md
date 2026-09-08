@@ -36,7 +36,7 @@ changes only to detect omissions or accidental scope. Stop if the staged scope
 is empty. If it contains independent concerns that cannot be truthfully
 summarized as one outcome, explain the split and ask how to proceed.
 
-For an amend, squash, or rebase, read
+For an amend, squash, or rebase, apply
 `references/history-rewrites.md` before inspecting the effective change or
 writing the message.
 
@@ -90,7 +90,7 @@ checks, execute without another confirmation and without changing the staged
 scope.
 
 Use one `git commit -m` argument per paragraph. If the message contains bullets,
-backticks, `$`, quotes, or other shell-sensitive content, read
+backticks, `$`, quotes, or other shell-sensitive content, apply
 `references/message-transport.md` before executing. Never encode newlines as
 literal `\n` or `\n\n` in a commit-message argument or file.
 

@@ -16,15 +16,15 @@ Perform a read-only structural review. Do not turn findings into file changes,
 external writes, or a migration unless the user separately authorizes that work.
 
 Load the `codebase-structure-base` skill. Read its
-`references/reviewability-goal.md` and `references/boundary-forces.md`
-resources, then read
+`references/knowledge/reviewability-goal.md` and `references/knowledge/boundary-forces.md`
+resources, then apply
 [the structure review checklist](references/structure-review-checklist.md).
 
 ## 1. Establish the review model
 
 Identify the target concepts, use cases, public surfaces, external systems,
 shared resources, persistence operations, and composition roots. Use the base
-skill's `references/concept-model-template.md` when the shared model is absent
+skill's `references/procedures/concept-model.md` when the shared model is absent
 or too implicit to review ownership and traceability.
 
 Distinguish observed evidence from assumptions. Record missing source, tests,
@@ -39,7 +39,7 @@ without a representative driver.
 
 For external integrations that combine native discovery or identity,
 application-specific projection, and persistence coordination, also read the
-base skill's `references/integration-boundaries.md`.
+base skill's `references/knowledge/integration-boundaries.md`.
 
 ## 3. Review observable structure
 

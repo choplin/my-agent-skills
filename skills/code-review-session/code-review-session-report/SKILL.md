@@ -26,7 +26,7 @@ on.
 
 1. Find `review.md` at `{review_dir}/review.md` (standalone: search
    `.agents/code-review-session/*/review.md`). Normalize legacy values (see `code-review-session-base`
-   skill (`references/review-state.md`)).
+   skill (`references/contracts/review-state.md`)).
 2. Aggregate items by `Status` and by `Source`.
 3. Emit the summary (below). If the caller is a driving workflow, this is the value it
    consumes to drive its own next step; if standalone, present it to the user.

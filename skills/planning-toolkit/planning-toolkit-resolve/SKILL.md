@@ -65,7 +65,7 @@ driven or certified READY. If the Markdown adapter is unavailable, stop before
 resolving an item whose acceptance requires a durable finding or decision
 record.
 
-Read [references/resolution-records.md](references/resolution-records.md) before
+Apply [references/resolution-records.md](references/resolution-records.md) when
 executing an issue, asking for a human decision, or reporting readiness.
 
 ## Workflow

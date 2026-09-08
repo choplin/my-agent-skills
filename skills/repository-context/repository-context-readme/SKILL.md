@@ -65,8 +65,8 @@ Agree on the coverage boundary before drafting when it would materially change t
 
 ## Choose the opening pattern
 
-Read `references/readme-patterns.md` in full, then choose one opening pattern
-after inspecting the product and repository tone:
+Read `references/knowledge/readme-patterns.md` in full, then choose one opening
+pattern after inspecting the product and repository tone:
 
 - **Description-led:** lead with one concise sentence that identifies the
   product, primary user, and outcome. Use this when a separate tagline would
@@ -84,12 +84,12 @@ repository convention, but do not wait for a canonical tagline or finished
 hero image to appear on its own: create what the selected pattern requires through
 the agreement and visual workflows below.
 
-For a text or visual hero, read `references/tagline.md` in full and follow its
-evidence, candidate, agreement, and placement workflow. Do not draft the hero
-until the tagline is settled.
+For a text or visual hero, apply `references/procedures/tagline.md` in full,
+following its evidence, candidate, agreement, and placement workflow. Do not
+draft the hero until the tagline is settled.
 
-For a visual hero, also read `references/hero-image.md` in full and follow its
-brief, approval, production, and verification workflow.
+For a visual hero, also apply `references/procedures/hero-image.md` in full,
+following its brief, approval, production, and verification workflow.
 
 For a description-led opening, draft and verify the opening sentence as product
 description rather than manufacturing a separate slogan. Do not format a
@@ -98,7 +98,7 @@ callouts.
 
 ## Design the information architecture
 
-Use `references/readme-patterns.md` to select only the sections justified by the product. Adapt the order to the reader's decision journey; do not copy a maximal template.
+Use `references/knowledge/readme-patterns.md` to select only the sections justified by the product. Adapt the order to the reader's decision journey; do not copy a maximal template.
 
 Assign every user-facing section one primary stage and order sections by stage:
 
@@ -168,7 +168,7 @@ When revising an existing README, make the smallest coherent edit that fixes the
 
 Validate factual claims against the repository. Run the documented happy path when safe and practical. At minimum, verify referenced files, anchors, commands, package names, environment variables, and version requirements.
 
-Review the positioning claims, differentiation claims, structure, visual proof, and first-success path using the checklist in `references/readme-patterns.md`. Report any command or claim that could not be verified.
+Review the positioning claims, differentiation claims, structure, visual proof, and first-success path using the checklist in `references/knowledge/readme-patterns.md`. Report any command or claim that could not be verified.
 
 Read the finished README from the top once as a continuous journey. Confirm that each section advances the reader to the next agreed stage, no later-stage detail interrupts activation, and the ending routes readers to material outside the README's coverage.
 
