@@ -17,7 +17,9 @@ caller-owned fields.
 
 ## Readiness
 
-Apply `octa-base` and its CLI and workflow-configuration references. Use the repository-local `octa` CLI. If the configured repository or required command is unavailable, return `readiness-failure`; never groom records or select another provider.
+Apply `octa-base`. Use the repository-local `octa` CLI. If the configured
+repository or required command is unavailable, return `readiness-failure`;
+never groom records or select another provider.
 
 ## Apply
 

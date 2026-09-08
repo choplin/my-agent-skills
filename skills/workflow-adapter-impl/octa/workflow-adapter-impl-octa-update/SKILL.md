@@ -17,11 +17,17 @@ caller-owned fields.
 
 ## Readiness
 
-Apply `octa-base` and its CLI and workflow-configuration references. Use the repository-local `octa` CLI. If the configured repository or required command is unavailable, return `readiness-failure`; never groom records or select another provider.
+Apply `octa-base`. Use the repository-local `octa` CLI. If the configured
+repository or required command is unavailable, return `readiness-failure`;
+never groom records or select another provider.
 
 ## Apply
 
-Apply only named changes and preserve all other fields. Use a supplied Issue lease when required; never acquire a second lease. Return `coordination-required` without a required lease and `coordination-conflict` when another lease is active. Re-read and verify.
+Before mapping a work type, read `octa-base`'s
+`references/knowledge/workflow-configuration.md`. Apply only named changes and
+preserve all other fields. Use a supplied Issue lease when required; never
+acquire a second lease. Return `coordination-required` without a required lease
+and `coordination-conflict` when another lease is active. Re-read and verify.
 
 Return `octa` as `provider`. In `value.record`, use the octa repository identity
 as `repository`, a record number or ID as `locator`, and keep provider-only

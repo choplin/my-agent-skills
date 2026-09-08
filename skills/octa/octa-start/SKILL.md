@@ -2,8 +2,8 @@
 name: octa-start
 description: >-
   Starts or resumes one octa Issue in the current Git repository: surfaces In
-  Progress work before Todo and Backlog, confirms the selection, atomically
-  claims it, prepares or recovers a workspace, reconstructs prior work, and
+  Progress work before Todo and Backlog, confirms the selection, claims it,
+  prepares or recovers a workspace, reconstructs prior work, and
   carries it through the octa review and completion lifecycle. Use when picking
   up repository work managed in octa.
 metadata:
@@ -39,10 +39,9 @@ then fetch Issue candidate context in one read:
 }
 ```
 
-The filter already excludes the `closed` type. Run it with `octa query`, inspect
-the response `errors`, and paginate with `offset` when more than 100 Issues
-exist. Exclude In Review Issues, then present two sections across every Project
-and No Project:
+Run the document with `octa query`. Retrieve and merge every page by following
+the `octa` product skill's query mechanics. Exclude In Review Issues, then
+present two sections across every Project and No Project:
 
 1. **In flight** — In Progress Issues first, most recently updated first. These
    are resume candidates.
@@ -75,15 +74,12 @@ If any blocker outside the `closed` type remains, report it and do not start.
 
 ### 3. Claim ownership
 
-Read `octa-base`'s CLI contract reference, then inspect the selected Issue's
-`leased` boolean:
+Inspect the selected Issue's `leased` boolean before acquiring its lease:
 
 - false: acquire a new lease and retain its ID in the live session;
-- true and this live session already retains the matching lease ID: resume
-  without retrying the non-idempotent acquisition;
+- true and this live session already retains the matching lease ID: resume;
 - true without the lease ID retained by this live session: stop and report
-  contention. The CLI does not expose the holder or lease ID. Do not
-  force-release it.
+  contention. Do not force-release it.
 
 For an unleased Issue, capture the one-time lease ID:
 
@@ -91,12 +87,11 @@ For an unleased Issue, capture the one-time lease ID:
 
 If acquisition races and fails, re-read the Issue and report that it is now
 leased. On a new start, move the Issue to In Progress with
-`octa issue start <number> --lease "$LEASE"`, which resolves to the
-`in progress` default. A resume already in that state needs no transition.
+`octa issue start <number> --lease "$LEASE"`. A resume already in that state
+needs no transition.
 
-The lease ID is a non-secret coordination handle and may appear in tool output
-and command arguments. Never put it in an Issue comment, worktree association
-metadata, repository file, commit, or user-facing report.
+Never put the lease ID in an Issue comment, worktree association metadata,
+repository file, commit, or user-facing report.
 
 ### 4. Prepare or recover the workspace
 
@@ -123,8 +118,8 @@ lease ID.
 
 On resume, use `workflow-adapter-worktree-list` to list exact association-metadata
 matches before creating anything. If exactly one matches, use it. With several,
-ask. With none, inspect current branch, status, commits, octa PR records, and
-Issue comments; recover plausible existing work before creating a replacement
+ask. With none, inspect current branch, status, commits, Issue comments, and any
+linked forge PR; recover plausible existing work before creating a replacement
 workspace.
 
 After selecting or recovering an isolated worktree, and only under Codex or
@@ -139,7 +134,7 @@ Before touching files, read:
 
 - the newest Handoff note, then earlier Issue comments;
 - Git status, commits against the target branch, staged/unstaged changes;
-- linked octa PR records and their comments;
+- linked forge PRs recorded in Issue comments, when present;
 - the in-flight execution artifact left by whichever mode was running:
   - `orchestration-toolkit-execute` — its run record, kept as checkpoint
     comments on this Issue; there is no local file;
@@ -195,10 +190,9 @@ flow, then read and apply `octa-base`'s
 closing outcome. That procedure owns the review brief,
 status transitions, feedback cycle, commit handoff, integration, completion
 comment, lease release, and cleanup; do not reproduce those branches here.
-Comments and reads need no lease, but every protected Issue mutation and
-Issue–PR link change does. When the procedure returns Done, continue with step
-8. Otherwise report the exact unresolved gate or explicit commit-only outcome
-it returned.
+Use the retained lease for every operation the `octa` product skill marks as
+protected. When the procedure returns Done, continue with step 8. Otherwise
+report the exact unresolved gate or explicit commit-only outcome it returned.
 
 This lane covers only design/research whose deliverable stays outside the
 repository. Such work records its result and acceptance evidence in the Issue.

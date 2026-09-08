@@ -63,9 +63,9 @@ gaps before posting.
 
 ### 4. Post and release ownership
 
-Post the comment without a lease because comments are unprotected:
+Post the comment:
 
-    octa issue comment <number> --body <note>
+    octa issue comment add <number> --body <note>
 
 Keep the Issue In Progress. If another session may resume it, release ownership
 with the lease ID retained by this live session:

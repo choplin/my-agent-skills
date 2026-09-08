@@ -12,15 +12,15 @@ metadata:
 
 # Octa operating conventions
 
+Apply the external `octa` skill for CLI commands, JSON shapes, GraphQL
+mechanics, state-command semantics, Issue lease requirements, and repository
+scope. This skill defines the workflow policy built on that product behavior.
+
 Use octa as the durable, repository-scoped work record for solo development
 across agents and sessions. octa stores coordination data locally; Git stores
-code and diffs. Run commands inside the target Git repository and prefer
-`--json` for machine-readable output.
-
-Run documented commands without checking `--help`. Check the narrowest relevant
-`--help` only for an undocumented command or option, a suspected CLI mismatch,
-or after a documented command fails. Run `octa --help` only when the command
-tree is unclear. If `octa` is unavailable, stop; do not use another tracker.
+code and diffs. Follow the external `octa` skill for command discovery and
+machine-readable output. If `octa` is unavailable, stop; do not use another
+tracker.
 
 ## Route recurring work
 
@@ -37,35 +37,34 @@ tree is unclear. If `octa` is unavailable, stop; do not use another tracker.
 
 | Primitive | Treatment |
 |---|---|
-| Repository | The Git common directory is the scope of Issues, Projects, PRs, and Wiki pages. Worktrees of one repository share octa data. Do not add Repo labels. |
-| Project | A finite outcome that can complete, never a permanent repository bucket. A Project carries a configured state whose `type` — `open` or `closed` — decides whether it is still active. Project states are configured separately from Issue states and their axis is unrelated to Issue state types. |
+| Repository | The durable work scope. Do not add Repo labels. |
+| Project | A finite outcome that can complete, never a permanent repository bucket. |
 | Milestone | An ordered phase within a Project. Add only when the outcome has distinct stages. |
 | Issue | One atomic deliverable: one coherent code change, one decision, or one research result. It may exist without a Project. |
 | Parent/sub-issue | Use only for a small effort containing a few atomic deliverables. Do not use hierarchy for execution order. |
 | Relations | Use `blocked by` for required order and `related` for non-ordering context. |
-| Pull Request | A local branch-associated discussion record. Git remains authoritative for commits, diffs, and forge integration. PR use is optional; integration evidence is not. |
-| Label | Opaque classification defined once for the whole octa store, not per repository. Use the `Type` single-select group described below; do not build repo identity into labels. |
-| Ordering | octa stores no priority and no state ordinal. Rank work by resolved blockers, Project and Milestone placement, and Issue number as creation order. |
-| Lease | Non-expiring coordination handle that atomically claims an Issue for one active session. It is not a security credential or a status. |
+| Forge PR | Optional integration and review artifact. Git remains authoritative for commits and diffs; integration evidence is required whether or not a forge PR is used. |
+| Label | Global classification shared across repositories. Use the `Type` single-select group described below; do not build repo identity into labels. |
+| Ordering | Rank work by resolved blockers, Project and Milestone placement, and Issue number as creation order. |
+| Lease | Ownership of one Issue by one active session. It is not a lifecycle status; retain and release it according to this workflow. |
 
-## CLI contract
+## Product boundary
 
-Conform to [cli-contract.md](references/contracts/cli-contract.md) when using
-Issue leases, GraphQL queries, or Issue list state selectors. It records product mechanics
-only; this skill owns the lifecycle policy built on them.
+Treat the external `octa` skill and the CLI's narrow help as the product
+contract. Do not restate general command, query, state, lease, JSON, scope, or
+storage mechanics in this skill family. Keep concrete commands and GraphQL
+documents here only when they express a workflow step; the workflow skill that
+consumes a query owns that document and its result interpretation.
 
 ## Required workflow configuration
 
 Read [workflow-configuration.md](references/knowledge/workflow-configuration.md) before
-first lifecycle use. States and labels are configured once for the whole octa
-store and govern every repository in it, so the six Issue states — Backlog,
-Todo, In Progress, In Review, Done, and Canceled — are the same everywhere and
-are named directly. octa's own seed is a smaller set, so apply
+first lifecycle use. Configure the six global Issue states — Backlog, Todo, In
+Progress, In Review, Done, and Canceled — by name for the store. Apply
 [store-setup.md](references/procedures/store-setup.md) to bring a fresh store to
-these six before lifecycle use. This convention
-prescribes no particular Project state set; the seeded one is left as it is.
-States carry no ordering; nothing about a state is derived from where it appears
-in `config issue state list`.
+this configuration before lifecycle use. This convention prescribes no
+particular Project state set; retain the product defaults unless another
+distinction is needed. State list order carries no workflow meaning.
 
 ## Todo authoring standard
 
@@ -109,9 +108,9 @@ parent/sub-issue is mutable while an Issue cannot become a Project:
 
 ## Type labels
 
-One Issue label group `Type` with single selection governs the whole store and
-holds these labels. Type carries two things at once: the atomic-deliverable unit
-and which model executes the Issue.
+One global Issue label group `Type` with single selection holds these labels.
+Type carries two things at once: the atomic-deliverable unit and which model
+executes the Issue.
 
 - `impl` — repository change intended for commit or integration. Convergent and
   groomable to self-completeness, so it executes on the cheap model.
@@ -145,14 +144,10 @@ usage shows how often `impl` Issues need it.
 | Done | closed (default) | Accepted and integrated/shipped when applicable. |
 | Canceled | closed | Dropped or superseded. |
 
-A state carries exactly one classification, its `type`, and octa models no
-gradation within a type. The type is the coarse axis every read and every
-transition verb works on; only the state name distinguishes Backlog from Todo,
-In Progress from In Review, or Done from Canceled. `issue list` selects by
-`--state-type` on the type, by `--state <names>` on exact names, or by `--all`;
-the three are mutually exclusive, and no selector at all hides the `closed`
-type. If the store is missing one of these six states, report that instead of
-substituting another one. Apply transitions:
+Use the exact names and type mapping above; only the state name distinguishes
+Backlog from Todo, In Progress from In Review, or Done from Canceled in this
+workflow. If the store is missing one of these six states, report that
+instead of substituting another one. Apply transitions:
 
 - Capture into Backlog with `issue open`, which resolves to the `open` default.
 - Groom Backlog to Todo only after the authoring gate passes, using
@@ -161,8 +156,7 @@ substituting another one. Apply transitions:
   `issue start` and that lease ID.
 - Move In Progress to In Review with `issue set --as "In Review"` when
   presenting an implementation for human review or when an integration PR is
-  open. `issue start` has no `--as`, so In Review is reached through the
-  unconstrained move.
+  open.
 - Keep an `impl` Issue In Review through feedback, corrections, approval,
   commit, and integration. Return it to In Progress only when the user
   explicitly sends it back.
@@ -227,40 +221,10 @@ Read [working-directory-model.md](references/knowledge/working-directory-model.m
 only when modifying or diagnosing these host procedures. Normal Issue execution does
 not need the directory and OSC 7 background it contains.
 
-## Octa references stay local
+## Tracker references stay local
 
 Issue numbers are repository-local coordination references. Keep them in octa
 comments, local session context, and worktree association metadata. Do not put
-octa Issue or PR numbers into commits, branch names, repository files, or forge
-PR text. If a forge PR is used, record its URL in an octa Issue or PR comment so
-the durable link points from the local tracker to the external artifact.
-
-## Core CLI mapping
-
-Run these invocations directly:
-
-```sh
-octa project list --active --json
-octa project show <project> --json
-octa issue list --all --json
-octa issue list --state Backlog --project <project> --json
-octa issue list --state-type "open,in progress" --json
-octa issue list --unblocked --json
-octa issue show <number> --json
-octa issue open --title <title> --body <body> --json
-octa issue comment <number> --body <text>
-LEASE=$(octa issue lock <number>)
-octa issue set <number> --body <body> --project <project> --lease "$LEASE"
-octa issue add <number> --label <label> --lease "$LEASE"
-octa issue add <number> --blocker <blocker-number> --lease "$LEASE"
-octa issue set <number> --as Todo --lease "$LEASE"
-octa issue start <number> --lease "$LEASE"
-octa issue close <number> --lease "$LEASE"
-octa issue unlock <number> --lease "$LEASE"
-```
-
-Never scrape human-readable tables when JSON is available. Inspect before
-mutating, and keep record updates scoped to the current repository. `octa
-config` is the exception: it edits the store-wide configuration and rejects
-`--repo` and `--all-repos`, so a rename or deletion there reaches every
-repository's Issues.
+octa Issue numbers into commits, branch names, repository files, or forge PR
+text. If a forge PR is used, record its URL in an octa Issue comment so the
+durable link points from the local tracker to the external artifact.

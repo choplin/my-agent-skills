@@ -3,7 +3,7 @@
 Read and apply this procedure from before committing an `impl` Issue until it
 reaches Done or a genuine external, permission, safety, or materially ambiguous
 integration gate stops progress. Retain the Issue's live lease ID throughout;
-pass it to every protected Issue mutation and Issue–PR link change.
+pass it to every protected Issue mutation.
 
 ## Pre-commit human review
 
@@ -46,7 +46,7 @@ pass it to every protected Issue mutation and Issue–PR link change.
    verify the target branch, post or finish the completion comment, close the
    Issue to Done with `issue close`, release the lease normally, and apply
    `worktree-cleanup.md`. Select the integration path from repository
-   conventions and existing Git, octa PR, and forge PR artifacts; do not stop
+   conventions and existing Git and forge PR artifacts; do not stop
    merely to offer it as a next action. Continue until Done or a genuine
    external, permission, safety, or materially ambiguous integration gate
    blocks progress, then return that exact outcome to the caller.
@@ -73,9 +73,8 @@ pass it to every protected Issue mutation and Issue–PR link change.
      direct commit on target → Done;
    - intentionally unintegrated deliverable → Done only after explicit user
      acceptance recorded in the completion comment.
-4. Do not infer integration from cleanliness, a pushed branch, approval, a
-   closed octa PR record, or commit existence alone. Verify forge metadata or
-   target branch history/tree.
+4. Do not infer integration from cleanliness, a pushed branch, approval, or
+   commit existence alone. Verify forge metadata or target branch history/tree.
 5. Record target branch and evidence in the Issue completion comment. Keep octa
    numbers out of Git artifacts.
 

@@ -17,11 +17,14 @@ caller-owned fields.
 
 ## Readiness
 
-Apply `octa-base` and its CLI and workflow-configuration references. Use the repository-local `octa` CLI. If the configured repository or required command is unavailable, return `readiness-failure`; never groom records or select another provider.
+Apply `octa-base`. Use the repository-local `octa` CLI. If the configured
+repository or required command is unavailable, return `readiness-failure`;
+never groom records or select another provider.
 
 ## Apply
 
-Use JSON CLI output or the read-only GraphQL schema to read the exact locator. Honor the requested kind and fields, and inspect GraphQL `errors` even after a successful process exit.
+Use the `octa` product skill to choose JSON CLI output or the read-only GraphQL
+schema and read the exact locator. Honor the requested kind and fields.
 
 Return `octa` as `provider`. In `value.record`, use the octa repository identity
 as `repository`, a record number or ID as `locator`, and keep provider-only

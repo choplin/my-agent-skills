@@ -179,7 +179,7 @@ skill not vendored in this repo. Within a group, `base` is that group's `*-base`
 - squash-merge → commit, **workflow-adapter-worktree-list**, **workflow-adapter-worktree-remove**
 
 **octa**
-- octa-base → **workflow-adapter-worktree-read**, **workflow-adapter-worktree-remove**
+- octa-base → `octa` (ext; Octa), **workflow-adapter-worktree-read**, **workflow-adapter-worktree-remove**
 - octa-overview → octa-base
 - octa-capture-feedback → octa-base
 - octa-start → octa-base, octa-handoff, **git-helpers-commit**, **workflow-adapter-worktree-resolve**, **workflow-adapter-worktree-list**, **workflow-adapter-worktree-create**

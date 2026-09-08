@@ -51,10 +51,9 @@ on every Issue, so no separate read of the state configuration is needed to
 turn a state into a count column; and the closed Issues arrive carrying their
 Project id, so no Project tally is needed either.
 
-Inspect the response `errors` before consuming `data`; the process can exit
-successfully on a failed operation. When a list comes back holding exactly 100
-entries, re-run that one list with `offset` until it returns fewer, and merge —
-`projects` and `closed` are the ones that realistically overflow.
+Retrieve and merge every page before processing the response, following the
+`octa` product skill's query mechanics. `projects` and `closed` are the lists
+that realistically need more than one page.
 
 If `octa` is not on PATH, or the command fails because the working directory is
 not a Git repository octa knows, report that and stop rather than falling back

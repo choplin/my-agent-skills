@@ -17,11 +17,18 @@ caller-owned fields.
 
 ## Readiness
 
-Apply `octa-base` and its CLI and workflow-configuration references. Use the repository-local `octa` CLI. If the configured repository or required command is unavailable, return `readiness-failure`; never groom records or select another provider.
+Apply `octa-base`. Use the repository-local `octa` CLI. If the configured
+repository or required command is unavailable, return `readiness-failure`;
+never groom records or select another provider.
 
 ## Apply
 
-Create only Projects, Milestones, and Issues supported by the contract, with exactly the supplied fields and placement. Map work type only to the configured type label. Return any unrepresentable field as `unsupported`. Re-read and verify the created record.
+Before mapping a work type, read `octa-base`'s
+`references/knowledge/workflow-configuration.md`. Create only Projects,
+Milestones, and Issues supported by the contract, with exactly the supplied
+fields and placement. Map work type only to the configured type label. Return
+any unrepresentable field as `unsupported`. Re-read and verify the created
+record.
 
 Return `octa` as `provider`. In `value.record`, use the octa repository identity
 as `repository`, a record number or ID as `locator`, and keep provider-only

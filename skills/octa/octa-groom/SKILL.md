@@ -8,7 +8,7 @@ metadata:
 # Groom an octa Backlog
 
 Apply `octa-base`, especially its Todo authoring standard, grouping rules, Type
-labels, state mapping, and lease contract.
+labels, and state mapping.
 
 ## Flow
 
@@ -38,12 +38,12 @@ query GroomQueue($projectId: Int!) {
 }
 ```
 
-Run it with `octa query --variables '{"projectId": <id>}'`, inspect the response
-`errors`, and paginate when more than 100 Issues exist. octa records no
-priority, so order by Issue number, oldest first, and let the Milestone
-placement and blocker graph override that where they say more. Show number,
-title, and Type label when present; show untyped Issues explicitly rather than
-inferring a Type. If empty, say so and stop.
+Run it with `octa query --variables '{"projectId": <id>}'`. Retrieve and merge
+every page by following the `octa` product skill's query mechanics. Order by
+Issue number, oldest first, and let the Milestone placement and blocker graph
+override that where they say more. Show number, title, and Type label when
+present; show untyped Issues explicitly rather than inferring a Type. If empty,
+say so and stop.
 
 An Issue is not groomable when its description depends on an unresolved
 blocker or undecided external input. Use `blockedBy` for the initial check, then
@@ -70,8 +70,7 @@ For each pick:
    parent plus sub-issues, or create a finite Project for a distinct outcome.
 4. Inspect `leased`. If another session holds a lease, skip the Issue. Otherwise
    capture `LEASE=$(octa issue lock <number>)` before changing the existing
-   Issue. The lease ID is a non-secret coordination handle that may appear in
-   tool output and command arguments.
+   Issue.
 5. Add `--blocker` relations when completion order matters, passing
    `--lease "$LEASE"` to the protected `issue add` command.
 6. Assign exactly one Type label (`impl`, `design`, or `research`). Remove a
@@ -80,10 +79,8 @@ For each pick:
 7. Update the Issue body, relations, Project/Milestone, and labels with the
    same lease.
 8. Move it to Todo with `octa issue set <number> --as Todo --lease "$LEASE"`
-   only after the fresh-agent self-completeness check passes. Backlog and Todo
-   are both the `open` type, so `issue set --as` is the move that reaches it.
-   Otherwise leave it Backlog and comment with the missing decision/input;
-   comments need no lease.
+   only after the fresh-agent self-completeness check passes. Otherwise leave
+   it Backlog and comment with the missing decision/input.
 9. Release the lease normally whether the Issue reached Todo or remained
    Backlog. Never record the lease ID in durable artifacts or use force
    recovery as routine groom cleanup.

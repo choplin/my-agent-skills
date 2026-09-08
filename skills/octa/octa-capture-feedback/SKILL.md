@@ -92,9 +92,9 @@ Create the Issue with:
 octa issue open --title <title> --body <body> --json
 ```
 
-The command resolves to Backlog, the configured `open` default. Do not pass
-`--as Todo`. Add `--project <project>` only when the placement rule in step 1
-is satisfied. Issue creation needs no lease.
+This workflow configures Backlog as the creation default. Do not pass `--as
+Todo`. Add `--project <project>` only when the placement rule in step 1 is
+satisfied.
 
 Leave the Issue without a Type label by default. `impl`, `design`, and
 `research` classify an executable deliverable, and assigning one belongs to
