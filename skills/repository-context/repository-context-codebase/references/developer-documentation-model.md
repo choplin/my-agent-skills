@@ -8,8 +8,7 @@ documentation, a file catalog, an issue tracker, or a collection of ADRs.
 ## Contents
 
 - [The inclusion test](#the-inclusion-test)
-- [Comprehension facets](#comprehension-facets)
-- [Conditional facets](#conditional-facets)
+- [Compose the top-level mental model](#compose-the-top-level-mental-model)
 - [What to leave out](#what-to-leave-out)
 - [Evidence and rationale](#evidence-and-rationale)
 - [Documentation structure](#documentation-structure)
@@ -44,56 +43,40 @@ condition hold:
 Use the test at claim level. A useful section can still contain one line that
 does not earn its maintenance cost.
 
-## Comprehension facets
+## Compose the top-level mental model
 
-These are facets of the mental model, not mandatory headings. Combine, rename,
-or omit them when the repository makes a facet trivial.
+The top level is a compressed explanation of an architectural unit: enough of
+its purpose, shape, relationships, and governing constraints for a developer to
+reason about it without reconstructing those connections from code. It is not a
+coverage report or a fixed section template.
 
-### Purpose and design priorities
+Choose the elements that make that mental model coherent for the documented
+unit. Use the inclusion test for each claim, combine related elements under
+natural headings, and omit an element when it adds no material understanding.
+The following are reasoning lenses; they do not define a coverage checklist or
+section taxonomy:
 
-State the system or subsystem role and the qualities that actually shape its
-structure. Name trade-offs concretely: for example, deterministic local
-execution over horizontal scale, or centralized policy over extension freedom.
-Do not repeat product positioning from the README.
+- **Purpose and design priorities** — state the unit's role and the qualities or
+  trade-offs that actually shape it. Do not repeat product positioning from the
+  README.
+- **Core concepts** — define the small vocabulary needed to reason about the
+  unit and connect it to code representations where the mapping is not obvious.
+- **Components and ownership** — map the important components and the decisions,
+  state, capabilities, or side effects each owns. Explain a boundary's reason
+  when it still constrains change.
+- **Boundaries, dependencies, and invariants** — explain allowed dependency
+  directions, prohibited coupling, data ownership, side-effect boundaries, and
+  rules that must remain true.
+- **Representative flows** — trace only the end-to-end behavior needed to make
+  the architecture legible, from an external entry through state transitions
+  and side effects to observable output or failure.
 
-### Core concepts
-
-Define the small vocabulary needed to reason about the system. Relate domain
-concepts to their code representations where the mapping is not obvious. Avoid
-a glossary of every type.
-
-### Components and ownership
-
-Map the major components and the decisions, state, or capabilities each owns.
-Explain why a boundary exists when that reason still constrains changes. Use
-directories and important symbols as anchors, not as the organizing principle.
-
-### Boundaries, dependencies, and invariants
-
-State allowed dependency directions, prohibited coupling, side-effect
-boundaries, data ownership, and rules that must remain true. Prefer rules a
-developer can apply to a new change over descriptions of today's imports.
-
-### Representative flows
-
-Trace only the few end-to-end paths that make the architecture legible. Start
-at an external or user-visible entry, cross orchestration and policy, identify
-state transitions and side effects, and finish at observable output or failure.
-Choose flows for explanatory coverage, not feature coverage.
-
-## Conditional facets
-
-Add a focused section only when it materially changes the mental model:
-
-- a change map, only when a recurring class of change crosses several owners or
-  has non-obvious extension points and constraints that the other facets do not
-  already make clear;
-- data ownership and lifecycle;
-- external integration boundaries;
-- runtime or deployment topology;
-- security and trust boundaries;
-- concurrency, consistency, or failure semantics;
-- generated-code or build-time boundaries.
+Other relationships may carry the mental model for a particular unit: data
+lifecycle, external integrations, runtime topology, security and trust,
+concurrency and failure semantics, or generated-code boundaries. A change map
+earns inclusion only when a recurring change crosses several owners or has
+non-obvious extension points and constraints that the rest of the explanation
+does not already reveal.
 
 ## What to leave out
 
@@ -166,13 +149,10 @@ it with temporary implementation gaps; track those as work. Do not use it to
 defend the chosen shape against rejected alternatives; that rationale belongs
 to the relevant design topic.
 
-A useful reading order for the entry point is:
-
-1. summary and design priorities;
-2. core concepts;
-3. component and ownership map;
-4. boundaries and invariants;
-5. representative flows.
+Order the selected material by explanatory dependency. Usually orient the
+reader to purpose and priorities before introducing the concepts and ownership
+needed to understand any boundaries or flows. This is a reading direction, not
+a required section sequence.
 
 ### `docs/design/`: one topic in full
 
@@ -231,6 +211,11 @@ with the documentation and verify it whenever the described structure changes.
 The documentation describes established architecture and current design rules.
 Therefore:
 
+- treat an update as a consistency-preserving change to the canonical
+  documentation set, not as an additive patch;
+- follow an affected subject through architectural summaries, design topics,
+  decision-log links, terminology, and cross-references, then reconcile every
+  place whose meaning, placement, or currentness changed;
 - change a documented claim in the same changeset as the decision that
   invalidates it;
 - rewrite or remove superseded material rather than retaining before/after
@@ -265,10 +250,8 @@ implementation can:
   implementation details;
 - verify that implementation gaps and tentative proposals remain in the work
   tracker and that each settled claim has one canonical home;
-- state the system's structural priorities and core vocabulary;
-- identify the owner of the major decisions, state, and side effects;
-- predict the allowed direction across important boundaries;
-- trace at least one representative behavior end to end;
+- form a coherent mental model of each documented unit from the elements that
+  materially explain its purpose, shape, relationships, and constraints;
 - locate the exact contract and rationale for a design topic;
 - distinguish current design truth, decision history, and implementation work.
 

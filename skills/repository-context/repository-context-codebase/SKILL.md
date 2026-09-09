@@ -48,8 +48,8 @@ one the repository has already established.
 Read repository instructions and inventory the existing README, developer docs,
 architecture documents, ADRs, manifests, module boundaries, generated-code
 markers, entry points, configuration, and representative tests. Load an
-installed `lang-reference-<language>` skill for the dominant implementation
-language when available.
+installed `lang-reference-<language>` skill only when a material architectural
+claim depends on language semantics or language-specific repository conventions.
 
 Start broad and shallow. Identify the smallest set of components and flows that
 reveals:
@@ -84,27 +84,29 @@ it still explains a binding choice, constraint, or trade-off.
 
 Apply the reference's documentation structure and placement test. Extend the
 repository's existing equivalents; when none exist, use the reference's default
-shape. Use its claim-level inclusion test and comprehension facets as selection
-tools, not mandatory headings. Prefer stable repository-relative paths and
-symbols over line numbers, commit-pinned links, or exhaustive file lists.
+shape. Use its claim-level inclusion test and mental-model lenses to select
+content, not to manufacture headings. Prefer stable repository-relative paths
+and symbols over line numbers, commit-pinned links, or exhaustive file lists.
 
 ## Author or review
 
 For **Create**, write the smallest documentation set that meets the
-comprehension criteria and makes the layers unambiguous. For **Refresh**, verify
-every material existing claim, remove obsolete narration, merge duplicate
-explanations, and add only newly necessary context. Preserve the documents'
-established vocabulary and useful reading path.
+comprehension criteria and makes the layers unambiguous. For **Refresh**, apply
+the reference's maintenance contract across the canonical documentation set.
+Follow the changed subject through related documents and leave the set as one
+coherent current state; an accurate addition alone is not a complete refresh.
 
 For **Review**, return prioritized findings. For each one, state the unsupported
 or missing claim, current repository evidence, its effect on developer
 understanding or safe change, and the smallest correction. Do not turn style
 preferences into architecture findings.
 
-Add a diagram only when a relationship, ownership model, or multi-step flow is
-materially harder to understand in prose. First define and obtain approval for
-its communication brief and intended document placement. Then apply
-`repository-context-pen-design`; do not improvise its visual workflow here.
+When a relationship, ownership model, or multi-step flow is materially harder
+to understand in prose, establish what the visual must communicate, its
+evidence, and its document placement. Then read
+[references/visual-production-routing.md](references/visual-production-routing.md)
+to select a production path; load production skills only after selecting that
+path.
 
 If the main README needs a substantial content or reader-journey revision, apply
 `repository-context-readme`. A small, factual link to the canonical developer
